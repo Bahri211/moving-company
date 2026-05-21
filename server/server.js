@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 const path = require('path');
 
 const app = express();
@@ -24,19 +24,7 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp.office365.com',
-  port: 587,
-  secure: false,
-  family: 4,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
-  socketTimeout: 10000,
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 app.post('/api/quote', async (req, res) => {
   const { from, to, size, date, name, email, phone, smsConsent, notes } = req.body;
@@ -66,13 +54,17 @@ Submitted:  ${new Date().toLocaleString('en-US', { timeZone: 'America/New_York' 
   `.trim();
 
   try {
-    await transporter.sendMail({
-      from: `"Cross-Country Movers Website" <${process.env.EMAIL_USER}>`,
+    const { error } = await resend.emails.send({
+      from: 'Cross-Country Movers <onboarding@resend.dev>',
       to: process.env.TO_EMAIL || 'contact@50statemovers.com',
-      replyTo: email,
+      reply_to: email,
       subject: `New Quote Request — ${name} (${from} → ${to})`,
       text,
     });
+    if (error) {
+      console.error('Resend error:', error);
+      return res.status(500).json({ error: 'Failed to send. Please call us directly.' });
+    }
     res.json({ success: true });
   } catch (err) {
     console.error('Email send error:', err);
