@@ -32,6 +32,9 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
 });
 
 app.post('/api/quote', async (req, res) => {
@@ -71,7 +74,7 @@ Submitted:  ${new Date().toLocaleString('en-US', { timeZone: 'America/New_York' 
     });
     res.json({ success: true });
   } catch (err) {
-    console.error('Email send error:', err.message);
+    console.error('Email send error:', err);
     res.status(500).json({ error: 'Failed to send. Please call us directly.' });
   }
 });
