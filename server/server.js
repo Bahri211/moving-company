@@ -1,11 +1,22 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const nodemailer = require('nodemailer');
 const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const allowedOrigins = [
+  'https://moving-company-drab.vercel.app',
+];
+
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+    cb(new Error('Not allowed by CORS'));
+  },
+}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..')));
 
