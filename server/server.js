@@ -55,7 +55,7 @@ Submitted:  ${new Date().toLocaleString('en-US', { timeZone: 'America/New_York' 
 
   try {
     const { error } = await resend.emails.send({
-      from: 'Cross-Country Movers <onboarding@resend.dev>',
+      from: 'Cross-Country Movers <contact@50statemovers.com>',
       to: process.env.TO_EMAIL || 'contact@50statemovers.com',
       reply_to: email,
       subject: `New Quote Request — ${name} (${from} → ${to})`,
