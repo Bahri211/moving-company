@@ -40,6 +40,7 @@
 <nav class="topnav">
   <a href="#" class="logo" aria-label="Cross-Country Movers home">
     <img src="assets/images/48-state-movers-logo-removebg-preview.png" alt="Cross-Country Movers" class="logo-img" />
+    <span class="logo-name">Cross-Country Movers</span>
   </a>
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
@@ -681,7 +682,7 @@
     if (this.checked) document.getElementById('sms-error').textContent = '';
   });
 
-  function submitQuote(e) {
+  async function submitQuote(e) {
     e.preventDefault();
     const form = e.target;
     const from = document.getElementById('qf-from').value;
@@ -711,15 +712,91 @@
     btn.textContent = 'Sending…';
     btn.disabled = true;
 
-    setTimeout(() => {
-      form.innerHTML = `
-        <div class="form-success">
-          <div class="success-icon">✓</div>
-          <h3>Quote request received!</h3>
-          <p>We'll send you a detailed, fixed quote same day.<br>In the meantime, feel free to call <a href="tel:+18005550142">(800) 555-0142</a>.</p>
-        </div>
-      `;
-    }, 800);
+    function showSubmitError(msg) {
+      let errDiv = form.querySelector('.form-submit-error');
+      if (!errDiv) {
+        errDiv = document.createElement('div');
+        errDiv.className = 'form-submit-error';
+        btn.insertAdjacentElement('beforebegin', errDiv);
+      }
+      errDiv.textContent = msg;
+      btn.textContent = 'Request a free quote →';
+      btn.disabled = false;
+    }
+
+    try {
+      const res = await fetch('/api/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from,
+          to,
+          size: document.getElementById('qf-size').value,
+          date: document.getElementById('qf-date').value,
+          name,
+          email,
+          phone,
+          smsConsent: smsConsent.checked,
+          notes: document.getElementById('qf-notes').value.trim(),
+        }),
+      });
+
+      if (res.ok) {
+        form.innerHTML = `
+          <div class="form-success">
+            <div class="success-icon">✓</div>
+            <h3>Quote request received!</h3>
+            <p>We'll send you a detailed, fixed quote same day.<br>In the meantime, feel free to call <a href="tel:+18005550142">(800) 555-0142</a>.</p>
+          </div>
+        `;
+      } else {
+        const data = await res.json().catch(() => ({}));
+        showSubmitError(data.error || 'Something went wrong. Please try again or call us.');
+      }
+    } catch {
+      showSubmitError('Could not connect to server. Please call us at (800) 555-0142.');
+    }
+  }
+
+  // Nav scroll shadow
+  const nav = document.querySelector('.topnav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 24);
+  }, { passive: true });
+
+  // Scroll reveal
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const staggerSelectors = ['.trust-item', '.service-card', '.process-step', '.gallery-item', '.footer-col', '.faq-item'];
+    staggerSelectors.forEach(sel => {
+      document.querySelectorAll(sel).forEach(el => {
+        const siblings = [...el.parentElement.children].filter(c => c.matches(sel));
+        const idx = siblings.indexOf(el);
+        if (idx > 0) el.style.transitionDelay = `${Math.min(idx * 0.09, 0.36)}s`;
+      });
+    });
+
+    const revealTargets = document.querySelectorAll(
+      '.section-header, .trust-item, .service-card, .process-step, .gallery-item, .faq-item, .footer-brand, .footer-col, .cs-text, .cs-ctas, .states-grid'
+    );
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+
+    revealTargets.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        el.classList.add('reveal', 'visible');
+      } else {
+        el.classList.add('reveal');
+        revealObserver.observe(el);
+      }
+    });
   }
 </script>
 
