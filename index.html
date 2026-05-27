@@ -236,7 +236,7 @@
     <h2>Moving to or from <em>the Continental USA.</em></h2>
     <p>From Maine to California, Texas to Washington — wherever you're headed in the Continental US, we have a crew ready for you.</p>
   </div>
-  <div class="states-grid">
+  <div class="states-grid" id="states-grid">
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Alabama</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Arizona</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Arkansas</div>
@@ -287,6 +287,7 @@
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Wyoming</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Washington D.C.</div>
   </div>
+  <button class="states-toggle" id="states-toggle" onclick="toggleStates()" aria-expanded="false">Show all 48 states ↓</button>
 </section>
 
 <!-- SERVICES -->
@@ -798,6 +799,14 @@
         revealObserver.observe(el);
       }
     });
+  }
+
+  function toggleStates() {
+    const grid = document.getElementById('states-grid');
+    const btn = document.getElementById('states-toggle');
+    const expanded = grid.classList.toggle('expanded');
+    btn.setAttribute('aria-expanded', expanded);
+    btn.textContent = expanded ? 'Show less ↑' : 'Show all 48 states ↓';
   }
 </script>
 
