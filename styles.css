@@ -929,15 +929,22 @@ section { padding: 6rem 2rem; }
 .cs-phone:hover { background: var(--accent-deep); }
 
 .cs-email {
-  display: block;
-  text-align: center;
-  color: #b8ae9e;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: transparent;
+  color: var(--paper);
   text-decoration: none;
-  font-size: 0.9rem;
-  transition: color 0.3s;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.9rem 1.75rem;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  transition: border-color 0.3s, background 0.3s;
+  white-space: nowrap;
 }
 
-.cs-email:hover { color: var(--paper); }
+.cs-email:hover { border-color: var(--paper); background: rgba(255,255,255,0.06); }
 
 /* Quote form */
 .quote-form {
