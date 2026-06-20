@@ -53,7 +53,7 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
       (888) 505-1086
     </a>
-    <a href="#get-quote" class="nav-cta">Get a free quote</a>
+    <a href="#contact" class="nav-cta">Get a free quote</a>
     <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
       <span></span>
     </button>
@@ -71,7 +71,7 @@
   </ul>
   <div class="mobile-menu-ctas">
     <a href="tel:+18885051086" class="call">Call (888) 505-1086</a>
-    <a href="#get-quote" class="quote">Get a free quote</a>
+    <a href="#contact" class="quote">Get a free quote</a>
   </div>
 </div>
 
@@ -110,104 +110,6 @@
     </div>
   </div>
 
-  <div class="hero-form-wrap fade-in delay-2" id="get-quote">
-    <div class="hero-form-header">
-      <h3>Get a free quote</h3>
-      <p>Fixed price · no hidden fees · reply within same day</p>
-    </div>
-    <form class="quote-form" id="quote-form" onsubmit="submitQuote(event)" novalidate>
-      <div class="form-row form-row-2">
-        <div>
-          <label for="qf-from">Moving from</label>
-          <select id="qf-from">
-            <option value="">State…</option>
-            <option>Alabama</option><option>Arizona</option><option>Arkansas</option>
-            <option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option>
-            <option>Florida</option><option>Georgia</option><option>Idaho</option>
-            <option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option>
-            <option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option>
-            <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
-            <option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option>
-            <option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option>
-            <option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
-            <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
-            <option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option>
-            <option>Vermont</option><option>Virginia</option><option>Washington</option><option>Washington D.C.</option>
-            <option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option>
-          </select>
-          <div class="field-error" id="error-from" role="alert"></div>
-        </div>
-        <div>
-          <label for="qf-to">Moving to</label>
-          <select id="qf-to">
-            <option value="">State…</option>
-            <option>Alabama</option><option>Arizona</option><option>Arkansas</option>
-            <option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option>
-            <option>Florida</option><option>Georgia</option><option>Idaho</option>
-            <option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option>
-            <option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option>
-            <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
-            <option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option>
-            <option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option>
-            <option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
-            <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
-            <option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option>
-            <option>Vermont</option><option>Virginia</option><option>Washington</option><option>Washington D.C.</option>
-            <option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option>
-          </select>
-          <div class="field-error" id="error-to" role="alert"></div>
-        </div>
-      </div>
-      <div class="form-row form-row-2">
-        <div>
-          <label for="qf-size">Home size</label>
-          <select id="qf-size">
-            <option value="">Size…</option>
-            <option>Studio</option>
-            <option>1 Bedroom</option>
-            <option>2 Bedrooms</option>
-            <option>3 Bedrooms</option>
-            <option>4+ Bedrooms</option>
-            <option>Office / Commercial</option>
-          </select>
-        </div>
-        <div>
-          <label for="qf-date">Planned move date</label>
-          <input type="date" id="qf-date" />
-        </div>
-      </div>
-      <div class="form-row">
-        <label for="qf-name">Your name</label>
-        <input type="text" id="qf-name" placeholder="Jane Doe" />
-        <div class="field-error" id="error-name" role="alert"></div>
-      </div>
-      <div class="form-row">
-        <label for="qf-email">Email address</label>
-        <input type="email" id="qf-email" placeholder="jane@example.com" />
-        <div class="field-error" id="error-email" role="alert"></div>
-      </div>
-      <div class="form-row">
-        <label for="qf-phone">Phone number</label>
-        <input type="tel" id="qf-phone" placeholder="(555) 000-0000" />
-        <div class="field-error" id="error-phone" role="alert"></div>
-      </div>
-      <div class="form-row-consent">
-        <label class="sms-consent-label" for="qf-sms">
-          <span class="sms-checkbox-wrap">
-            <input type="checkbox" id="qf-sms" />
-            <span class="sms-checkbox-box" aria-hidden="true"></span>
-          </span>
-          <span class="sms-consent-text">I agree to receive SMS messages from 50STATEMOVERS INC about my quote and move details. Message frequency varies. Message &amp; data rates may apply. Reply STOP to opt out at any time. See our <a href="privacy-policy.html" target="_blank">Privacy Policy</a>.</span>
-        </label>
-        <div class="sms-error" id="sms-error" role="alert"></div>
-      </div>
-      <div class="form-row">
-        <label for="qf-notes">Special items or notes</label>
-        <input type="text" id="qf-notes" placeholder="Piano, antiques, oversized furniture…" />
-      </div>
-      <button type="submit" class="form-submit">Request a free quote →</button>
-    </form>
-  </div>
 </header>
 
 <!-- TRUST BAR -->
@@ -658,7 +560,7 @@
     <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
     Call us
   </a>
-  <a href="#get-quote" class="quote">
+  <a href="#contact" class="quote">
     Get free quote
     <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
   </a>
@@ -694,100 +596,6 @@
       btn.setAttribute('aria-expanded', isOpen);
     });
   });
-
-  function setError(id, msg) {
-    const el = document.getElementById(id);
-    if (el) el.textContent = msg;
-  }
-  function clearError(id) {
-    const el = document.getElementById(id);
-    if (el) el.textContent = '';
-  }
-
-  document.getElementById('qf-from').addEventListener('change', () => clearError('error-from'));
-  document.getElementById('qf-to').addEventListener('change', () => clearError('error-to'));
-  document.getElementById('qf-name').addEventListener('input', () => clearError('error-name'));
-  document.getElementById('qf-email').addEventListener('input', () => clearError('error-email'));
-  document.getElementById('qf-phone').addEventListener('input', () => clearError('error-phone'));
-  document.getElementById('qf-sms').addEventListener('change', function () {
-    if (this.checked) document.getElementById('sms-error').textContent = '';
-  });
-
-  async function submitQuote(e) {
-    e.preventDefault();
-    const form = e.target;
-    const from = document.getElementById('qf-from').value;
-    const to = document.getElementById('qf-to').value;
-    const name = document.getElementById('qf-name').value.trim();
-    const email = document.getElementById('qf-email').value.trim();
-    const phone = document.getElementById('qf-phone').value.trim();
-    const smsConsent = document.getElementById('qf-sms');
-    const smsError = document.getElementById('sms-error');
-
-    let valid = true;
-
-    if (!from) { setError('error-from', 'Please select your origin state.'); valid = false; } else clearError('error-from');
-    if (!to)   { setError('error-to', 'Please select your destination state.'); valid = false; } else clearError('error-to');
-    if (!name) { setError('error-name', 'Please enter your name.'); valid = false; } else clearError('error-name');
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError('error-email', 'Please enter a valid email address.'); valid = false; } else clearError('error-email');
-    if (!phone) { setError('error-phone', 'Please enter your phone number.'); valid = false; } else clearError('error-phone');
-    if (!smsConsent.checked) { smsError.textContent = 'Please agree to receive text messages to continue.'; valid = false; } else { smsError.textContent = ''; }
-
-    if (!valid) {
-      const firstError = form.querySelector('.field-error:not(:empty), .sms-error:not(:empty)');
-      if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      return;
-    }
-
-    const btn = form.querySelector('.form-submit');
-    btn.textContent = 'Sending…';
-    btn.disabled = true;
-
-    function showSubmitError(msg) {
-      let errDiv = form.querySelector('.form-submit-error');
-      if (!errDiv) {
-        errDiv = document.createElement('div');
-        errDiv.className = 'form-submit-error';
-        btn.insertAdjacentElement('beforebegin', errDiv);
-      }
-      errDiv.textContent = msg;
-      btn.textContent = 'Request a free quote →';
-      btn.disabled = false;
-    }
-
-    try {
-      const res = await fetch('https://moving-company-rmrj.onrender.com/api/quote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          from,
-          to,
-          size: document.getElementById('qf-size').value,
-          date: document.getElementById('qf-date').value,
-          name,
-          email,
-          phone,
-          smsConsent: smsConsent.checked,
-          notes: document.getElementById('qf-notes').value.trim(),
-        }),
-      });
-
-      if (res.ok) {
-        form.innerHTML = `
-          <div class="form-success">
-            <div class="success-icon">✓</div>
-            <h3>Quote request received!</h3>
-            <p>We'll send you a detailed, fixed quote same day.<br>In the meantime, feel free to call <a href="tel:+18885051086">(888) 505-1086</a>.</p>
-          </div>
-        `;
-      } else {
-        const data = await res.json().catch(() => ({}));
-        showSubmitError(data.error || 'Something went wrong. Please try again or call us.');
-      }
-    } catch {
-      showSubmitError('Could not connect to server. Please call us at (888) 505-1086.');
-    }
-  }
 
   // Nav scroll shadow
   const nav = document.querySelector('.topnav');
