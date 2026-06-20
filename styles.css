@@ -946,6 +946,17 @@ section { padding: 6rem 2rem; }
 
 .cs-email:hover { border-color: var(--paper); background: rgba(255,255,255,0.06); }
 
+.contact-form-grid {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.contact-form-grid .cs-text { margin-bottom: 2rem; }
+
 /* Quote form */
 .quote-form {
   background: var(--paper);
@@ -996,6 +1007,22 @@ section { padding: 6rem 2rem; }
 
 .form-row input:focus,
 .form-row select:focus { border-bottom-color: var(--accent); }
+
+.form-row textarea {
+  width: 100%;
+  padding: 0.7rem 0;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  background: transparent;
+  color: var(--ink);
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.3s;
+  min-height: 100px;
+}
+.form-row textarea:focus { border-bottom-color: var(--accent); }
 
 .form-submit {
   width: 100%;
@@ -1338,6 +1365,7 @@ footer {
   /* ── Contact strip ── */
   .contact-strip { padding: 2.5rem 1.25rem; }
   .contact-strip-inner { flex-direction: column; align-items: stretch; gap: 1.5rem; }
+  .contact-form-grid { grid-template-columns: 1fr; gap: 2rem; }
   .cs-ctas { display: flex; flex-direction: column; gap: 0.75rem; }
   .cs-phone { justify-content: center; width: 100%; }
   .cs-email { text-align: center; }

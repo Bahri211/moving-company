@@ -1,0 +1,7 @@
+{
+  "name": "moving-website",
+  "version": "1.0.0",
+  "dependencies": {
+    "resend": "^6.14.0"
+  }
+}
