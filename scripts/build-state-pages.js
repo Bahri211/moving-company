@@ -381,6 +381,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'AW-18314228447');
+  gtag('config', 'G-B6XLJ853G1');
 </script>
 
 <meta charset="UTF-8" />

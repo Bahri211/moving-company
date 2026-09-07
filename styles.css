@@ -662,13 +662,29 @@ section { padding: 6rem 2rem; }
 /* ── road ── */
 .road path { fill: none; }
 
-.road-casing  { stroke: var(--line); stroke-width: 22; stroke-linecap: round; opacity: 0.55; }
-.road-surface { stroke: var(--paper); stroke-width: 17; stroke-linecap: round; }
+/* A thick white ribbon reads as clip-art on this warm ground. The route is a
+   soft bed with a dashed centre and an accent line for the travelled part —
+   closer to a route map than a cartoon road. */
+.road-shadow { display: none; }
+
+.road-casing {
+  stroke: rgba(26, 23, 19, 0.055);
+  stroke-width: 13;
+  stroke-linecap: round;
+}
+
+.road-surface {
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+
 
 .road-centre {
-  stroke: var(--line);
-  stroke-width: 2;
-  stroke-dasharray: 10 14;
+  stroke: #b9ab92;
+  stroke-width: 1.5;
+  stroke-dasharray: 7 11;
   stroke-linecap: round;
   animation: roadDashes 0.9s linear infinite;
 }
@@ -676,42 +692,93 @@ section { padding: 6rem 2rem; }
 /* The travelled part of the road. 1034 = the path's length in user units. */
 .road-done {
   stroke: var(--accent);
-  stroke-width: 4;
+  stroke-width: 3.5;
   stroke-linecap: round;
   stroke-dasharray: 1034;
   stroke-dashoffset: 1034;
   animation: roadDraw var(--route-dur) linear infinite;
 }
 
-/* ── milestones ── */
+/* ── milestones ──
+   Each has its own keyframes rather than a shared one offset by delay: a
+   negative delay starts the animation mid-timeline, which left every
+   milestone lit from t=0, before the truck had reached it. Explicit
+   percentages also let them all reset together at 96%, inside the truck's
+   fade-out, so the loop restart stays invisible. */
 .ms-dot {
   fill: var(--paper);
   stroke: var(--line);
-  stroke-width: 2.5;
+  stroke-width: 2;
   transform-box: fill-box;
   transform-origin: center;
-  animation: milestoneLight var(--route-dur) linear infinite;
-  animation-delay: calc(var(--route-dur) * (var(--at) - 1));
 }
 
 .ms-text {
   fill: var(--muted);
+  paint-order: stroke;
+  stroke: var(--paper-warm);
+  stroke-width: 5px;
+  stroke-linejoin: round;
   font-family: 'Inter', sans-serif;
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-anchor: middle;
-  animation: milestoneText var(--route-dur) linear infinite;
-  animation-delay: calc(var(--route-dur) * (var(--at) - 1));
+}
+
+.ms-1 .ms-dot  { animation: msDot1  var(--route-dur) linear infinite; }
+.ms-2 .ms-dot  { animation: msDot2  var(--route-dur) linear infinite; }
+.ms-3 .ms-dot  { animation: msDot3  var(--route-dur) linear infinite; }
+.ms-1 .ms-text { animation: msText1 var(--route-dur) linear infinite; }
+.ms-2 .ms-text { animation: msText2 var(--route-dur) linear infinite; }
+.ms-3 .ms-text { animation: msText3 var(--route-dur) linear infinite; }
+
+@keyframes msDot1 {
+  0%, 29% { fill: var(--paper); stroke: var(--line); transform: scale(1); }
+  32%     { fill: var(--accent); stroke: var(--accent); transform: scale(1.55); }
+  36%, 94% { fill: var(--accent); stroke: var(--accent); transform: scale(1.15); }
+  97%, 100% { fill: var(--paper); stroke: var(--line); transform: scale(1); }
+}
+@keyframes msDot2 {
+  0%, 40% { fill: var(--paper); stroke: var(--line); transform: scale(1); }
+  43%     { fill: var(--accent); stroke: var(--accent); transform: scale(1.55); }
+  47%, 94% { fill: var(--accent); stroke: var(--accent); transform: scale(1.15); }
+  97%, 100% { fill: var(--paper); stroke: var(--line); transform: scale(1); }
+}
+@keyframes msDot3 {
+  0%, 51% { fill: var(--paper); stroke: var(--line); transform: scale(1); }
+  54%     { fill: var(--accent); stroke: var(--accent); transform: scale(1.55); }
+  58%, 94% { fill: var(--accent); stroke: var(--accent); transform: scale(1.15); }
+  97%, 100% { fill: var(--paper); stroke: var(--line); transform: scale(1); }
+}
+@keyframes msText1 {
+  0%, 30% { fill: var(--muted); }
+  33%, 94% { fill: var(--accent); }
+  97%, 100% { fill: var(--muted); }
+}
+@keyframes msText2 {
+  0%, 41% { fill: var(--muted); }
+  44%, 94% { fill: var(--accent); }
+  97%, 100% { fill: var(--muted); }
+}
+@keyframes msText3 {
+  0%, 52% { fill: var(--muted); }
+  55%, 94% { fill: var(--accent); }
+  97%, 100% { fill: var(--muted); }
 }
 
 /* ── endpoints ── */
 .ep-disc { fill: var(--navy); }
+.endpoint circle.ep-disc { r: 21; }
 .endpoint-end .ep-disc { fill: var(--accent); }
 .ep-glyph { fill: var(--paper); }
 
 .ep-label {
   fill: var(--muted);
+  paint-order: stroke;
+  stroke: var(--paper-warm);
+  stroke-width: 5px;
+  stroke-linejoin: round;
   font-family: 'Inter', sans-serif;
   font-size: 15px;
   font-weight: 600;
@@ -763,10 +830,31 @@ section { padding: 6rem 2rem; }
 .route-truck-bob { animation: truckBob 1.9s ease-in-out infinite; }
 
 .truck-body   { fill: var(--navy); }
+/* Inset panel catches a highlight, so the trailer reads as a box, not a slab */
 .truck-stripe { fill: var(--accent); }
-.truck-cab    { fill: var(--accent); }
-.truck-window { fill: rgba(245, 240, 232, 0.9); }
-.truck-bumper { fill: var(--ink); }
+.truck-cab    { fill: var(--navy); }
+.truck-window { fill: rgba(245, 240, 232, 0.92); }
+.truck-light  { fill: #ffd88a; }
+.truck-stack  { fill: var(--ink); opacity: 0.75; }
+
+/* Sits under the wheels and rides the road with the truck */
+.truck-shadow { opacity: 0.9; }
+
+/* transform-box: fill-box measures the group's bounding box, and a bbox that
+   changed as children animated would drag the offset-path anchor with it.
+   This invisible rect fixes the box; its bottom edge is the wheel contact. */
+.truck-bounds { fill: none; stroke: none; }
+
+/* Puffs as it pulls away, gone once it's cruising */
+.truck-exhaust circle {
+  fill: rgba(26, 23, 19, 0.15);
+  opacity: 0;
+  animation: exhaustPuff var(--route-dur) linear infinite;
+}
+/* Three puffs already sit at rising positions and sizes, so fading them in
+   sequence reads as smoke without touching geometry. */
+.truck-exhaust circle:nth-child(2) { animation-delay: calc(var(--route-dur) * 0.012); }
+.truck-exhaust circle:nth-child(3) { animation-delay: calc(var(--route-dur) * 0.024); }
 
 .truck-brand {
   fill: var(--paper);
@@ -775,8 +863,7 @@ section { padding: 6rem 2rem; }
   font-weight: 700;
 }
 
-.truck-brand-1 { font-size: 13px; letter-spacing: 0.02em; }
-.truck-brand-2 { font-size: 10px; letter-spacing: 0.22em; fill: rgba(245, 240, 232, 0.85); }
+.truck-brand { font-size: 8.5px; letter-spacing: 0.02em; }
 
 .truck-wheel {
   transform-box: fill-box;
@@ -784,17 +871,18 @@ section { padding: 6rem 2rem; }
   animation: wheelSpin var(--route-dur) linear infinite;
 }
 
-.truck-wheel circle { fill: var(--ink); }
+.truck-wheel .tyre { fill: var(--ink); }
 .truck-wheel .hub { fill: var(--paper-warm); }
-.truck-wheel .spoke { stroke: rgba(245, 240, 232, 0.28); stroke-width: 1.2; }
+.truck-wheel .spoke { stroke: rgba(245, 240, 232, 0.3); stroke-width: 0.9; }
 
 /* ── keyframes ── */
 @keyframes routeDrive {
   0%   { offset-distance: 0%;   opacity: 0; animation-timing-function: ease-out; }
   6%   { offset-distance: 0%;   opacity: 1; animation-timing-function: var(--route-ease); }
-  76%  { offset-distance: 100%; opacity: 1; }
-  90%  { offset-distance: 100%; opacity: 1; animation-timing-function: ease-in; }
-  96%  { offset-distance: 100%; opacity: 0; }
+  /* stops just short of the pin — parked at the door, not on top of it */
+  76%  { offset-distance: 93%; opacity: 1; }
+  90%  { offset-distance: 93%; opacity: 1; animation-timing-function: ease-in; }
+  96%  { offset-distance: 93%; opacity: 0; }
   100% { offset-distance: 0%;   opacity: 0; }
 }
 
@@ -826,22 +914,6 @@ section { padding: 6rem 2rem; }
   100%   { transform: rotate(1800deg); }
 }
 
-/* Milestones are delayed by their own --at, so each lights as the truck reaches it */
-@keyframes milestoneLight {
-  0%, 0.1% { fill: var(--paper); stroke: var(--line); transform: scale(1); }
-  2%       { fill: var(--accent); stroke: var(--accent); transform: scale(1.5); }
-  6%       { fill: var(--accent); stroke: var(--accent); transform: scale(1.15); }
-  92%      { fill: var(--accent); stroke: var(--accent); transform: scale(1.15); }
-  100%     { fill: var(--paper); stroke: var(--line); transform: scale(1); }
-}
-
-@keyframes milestoneText {
-  0%, 0.1% { fill: var(--muted); }
-  3%       { fill: var(--accent); }
-  92%      { fill: var(--accent); }
-  100%     { fill: var(--muted); }
-}
-
 @keyframes ringPulse {
   0%, 74% { transform: scale(0.6); opacity: 0; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
   79%     { transform: scale(1); opacity: 0.7; }
@@ -864,6 +936,14 @@ section { padding: 6rem 2rem; }
   93%     { stroke-dashoffset: 0;  opacity: 1; }
   96%     { stroke-dashoffset: 0;  opacity: 0; }
   100%    { stroke-dashoffset: 30; opacity: 0; }
+}
+
+/* A short burst as it pulls away from the origin, then nothing */
+@keyframes exhaustPuff {
+  0%, 5% { opacity: 0; }
+  9%     { opacity: 0.85; }
+  17%    { opacity: 0; }
+  100%   { opacity: 0; }
 }
 
 @keyframes truckBob {
