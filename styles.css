@@ -251,13 +251,14 @@ body.menu-open .mobile-menu { transform: translateX(0); }
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1.02fr;
-  grid-template-rows: auto auto auto auto;
+  grid-template-rows: auto auto auto auto auto;
   /* The stat cards run the full width so the form column only has to match the
-     copy + video, instead of spanning a row it can't fill. */
+     left stack, instead of spanning a row it can't fill. */
   grid-template-areas:
     "content form"
-    "lede    form"
+    "phone   form"
     "media   form"
+    "lede    form"
     "cards   cards";
   column-gap: 2.25rem;
   row-gap: 1.75rem;
@@ -267,6 +268,7 @@ body.menu-open .mobile-menu { transform: translateX(0); }
 }
 
 .hero-content    { grid-area: content; }
+.hero-phone      { grid-area: phone; justify-self: start; }
 .hero-lede       { grid-area: lede; }
 .hero-truck-img  { grid-area: media; align-self: stretch; }
 .hero-stat-cards { grid-area: cards; }
@@ -304,6 +306,43 @@ body.menu-open .mobile-menu { transform: translateX(0); }
 }
 
 .eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
+
+/* Call link sitting above the video */
+.hero-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.5rem 1.2rem 0.5rem 0.5rem;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--paper);
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-deep) 100%);
+  box-shadow: 0 12px 26px -14px rgba(63, 174, 107, 0.9);
+  transition: transform 0.25s, box-shadow 0.3s, filter 0.3s;
+}
+
+.hero-phone:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: 0 18px 32px -16px rgba(63, 174, 107, 0.95);
+}
+
+.hp-icon {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+  transition: transform 0.3s;
+}
+
+.hero-phone:hover .hp-icon { transform: scale(1.08) rotate(-8deg); }
+
+.hp-text { display: flex; flex-direction: column; line-height: 1.2; }
+.hp-num { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; }
+.hp-note { font-size: 0.67rem; letter-spacing: 0.06em; color: rgba(255, 255, 255, 0.85); }
 
 /* Hero headline + truck wrapper */
 .hero-headline-wrap {
@@ -1847,6 +1886,10 @@ footer {
 
 .footer-col a:hover { color: var(--paper); }
 
+/* Phone numbers pick up the "call" green used by the sticky bar */
+.footer-col a.footer-phone { color: var(--green); font-weight: 600; }
+.footer-col a.footer-phone:hover { color: #6ecb92; }
+
 .footer-bottom {
   max-width: 1300px;
   margin: 0 auto;
@@ -2185,6 +2228,8 @@ footer {
       "media"
       "lede"
       "cards";
+    /* No call pill here: it costs ~45px above the fold, and the sticky bar
+       already carries the number on a phone. */
     padding: var(--nav-h) 1.25rem 1.75rem;
     min-height: auto;
     row-gap: 0.85rem;
@@ -2195,6 +2240,8 @@ footer {
   .hero-truck-img img, .hero-truck-img video { height: 180px; min-height: 0; }
   .hero-truck-img { border-radius: 18px; }
   .hero-headline-wrap { gap: 0; margin-bottom: 0; }
+  .hero-phone { display: none; }
+
   .eyebrow {
     margin-bottom: 0.5rem;
     font-size: 0.58rem;
@@ -2234,9 +2281,13 @@ footer {
   }
   .form-assurances li { font-size: 0.62rem; gap: 0.25rem; line-height: 1.25; }
   .form-assurances svg { width: 10px; height: 10px; margin-top: 0.12rem; }
+  /* "Special items or notes" is the longest label and was the ceiling on this
+     size — it drops its tail on mobile so every label can go up together. */
+  .lbl-tail { display: none; }
+
   .form-row label {
-    font-size: 0.83rem;
-    margin-bottom: 0.2rem;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2436,7 +2487,7 @@ footer {
   .form-row { margin-bottom: 0.45rem; }
   .hero-form-header h3 { font-size: 1.02rem; }
   .form-row-2 { gap: 0.45rem; }
-  .form-row label { font-size: 0.78rem; }
+  .form-row label { font-size: 0.88rem; }
   .form-row input, .form-row select { padding: 0.45rem 0.55rem; }
   .form-row select { background-position: right 0.5rem center; padding-right: 1.5rem; }
   .hero-call-strip { padding: 1.3rem 0.95rem 0.8rem; gap: 0.6rem; }
