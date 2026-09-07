@@ -18,7 +18,10 @@ app.use(cors({
   },
 }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '..')));
+// `extensions: ['html']` mirrors Vercel's `cleanUrls: true` (see vercel.json),
+// so extensionless URLs like /privacy-policy and /terms-of-service resolve to
+// their .html files locally the same way they do in production.
+app.use(express.static(path.join(__dirname, '..'), { extensions: ['html'] }));
 
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
