@@ -128,13 +128,22 @@ nav.topnav.scrolled {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--green);
+  color: var(--paper);
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-deep) 100%);
+  padding: 0.6rem 1.15rem;
+  border-radius: 999px;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 600;
+  box-shadow: 0 10px 22px -12px rgba(63, 174, 107, 0.9);
+  transition: filter 0.3s, transform 0.25s, box-shadow 0.3s;
 }
 
-.nav-phone:hover { color: var(--green-deep); }
+.nav-phone:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 26px -12px rgba(63, 174, 107, 0.95);
+}
 
 .nav-cta {
   background: var(--ink);
@@ -452,53 +461,6 @@ body.menu-open .mobile-menu { transform: translateX(0); }
   stroke-width: 3;
   stroke-linecap: round;
   stroke-linejoin: round;
-}
-
-/* Navy strip tucked under the card — grounds the column and gives the
-   phone-first visitor somewhere to go. */
-.hero-call-strip {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  margin-top: -18px;
-  padding: 1.6rem 1.6rem 1.15rem;
-  border-radius: 0 0 20px 20px;
-  background: linear-gradient(120deg, var(--blue) 0%, var(--blue-deep) 100%);
-  color: var(--paper);
-  text-decoration: none;
-  position: relative;
-  z-index: 1;
-  transition: background 0.3s, filter 0.3s, transform 0.3s;
-}
-
-.hero-call-strip:hover { filter: brightness(1.12); }
-
-.hcs-icon {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--accent);
-  color: var(--paper);
-  flex-shrink: 0;
-  transition: transform 0.3s;
-}
-
-.hero-call-strip:hover .hcs-icon { transform: scale(1.08) rotate(-8deg); }
-
-.hcs-text { display: flex; flex-direction: column; line-height: 1.25; flex: 1; min-width: 0; }
-.hcs-label { font-size: 0.7rem; color: var(--blue-text); letter-spacing: 0.02em; }
-.hcs-num { font-size: 1.02rem; font-weight: 600; letter-spacing: -0.01em; }
-
-.hcs-hours {
-  font-size: 0.66rem;
-  line-height: 1.35;
-  color: var(--blue-text);
-  text-align: right;
-  flex-shrink: 0;
-  padding-left: 0.6rem;
-  border-left: 1px solid var(--blue-line);
 }
 
 .hero-form-header {
@@ -1924,8 +1886,7 @@ footer {
 .form-enter .hero-form-header,
 .form-enter .quote-form > div,
 .form-enter .form-submit,
-.form-enter .form-assurances,
-.form-enter .hero-call-strip {
+.form-enter .form-assurances {
   animation: formFieldIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
@@ -1940,7 +1901,6 @@ footer {
 .form-enter .quote-form > div:nth-of-type(5) { animation-delay: 0.78s; }
 .form-enter .form-submit                  { animation-delay: 0.85s; }
 .form-enter .form-assurances              { animation-delay: 0.92s; }
-.form-enter .hero-call-strip              { animation-delay: 0.99s; }
 
 @keyframes formFieldIn {
   from { opacity: 0; transform: translateY(10px); }
@@ -2170,9 +2130,6 @@ footer {
   .form-assurances { margin-top: 0.55rem; padding-top: 0.55rem; gap: 0.3rem 1rem; }
   .form-assurances li { font-size: 0.72rem; }
 
-  .hero-call-strip { padding: 1.4rem 1.4rem 0.9rem; }
-  .hcs-icon { width: 32px; height: 32px; }
-  .hcs-num { font-size: 0.95rem; }
 
   .hero-truck-img img,
   .hero-truck-img video { min-height: 200px; }
@@ -2249,10 +2206,6 @@ footer {
   .ht-item { flex: 0 0 auto; }
   .hero-form-col { max-width: none; margin-left: 0; }
   .hero-form-wrap { position: static; padding: 0.95rem 1rem; border-radius: 15px; }
-  .hero-call-strip { border-radius: 0 0 15px 15px; padding: 1.35rem 1.05rem 0.85rem; gap: 0.7rem; }
-  .hcs-icon { width: 32px; height: 32px; }
-  .hcs-num { font-size: 0.95rem; }
-  .hcs-label { font-size: 0.66rem; }
   .hero-form-header { margin-bottom: 0.45rem; padding-bottom: 0.4rem; }
   .hero-form-header h3 { font-size: 1.05rem; }
   /* Marketing subline is the first thing to go: on a 393px screen the submit
@@ -2327,7 +2280,7 @@ footer {
 
   .form-submit { padding: 0.7rem 1rem; font-size: 0.9rem; min-height: 46px; margin-top: 0.5rem; }
 
-  .hero h1 { margin-bottom: 0.75rem; }
+  .hero h1 { margin-bottom: 0.75rem; font-size: clamp(1.9rem, 6.2vw, 3rem); line-height: 1; }
   /* Sits right under the clip and hangs off an accent rule, like a caption */
   .hero-lede {
     margin-top: -0.5rem;
@@ -2475,7 +2428,7 @@ footer {
 
 /* ——— SMALL PHONE (≤ 480px) ——— */
 @media (max-width: 480px) {
-  .hero h1 { font-size: clamp(1.4rem, 6.6vw, 2.1rem); line-height: 1; }
+  .hero h1 { font-size: clamp(1.6rem, 7.8vw, 2.3rem); line-height: 1; }
   .eyebrow { font-size: 0.58rem; letter-spacing: 0.05em; }
   .hero-form-wrap { padding: 0.85rem 0.9rem; }
   .hero-form-header h3 { font-size: 1rem; }
@@ -2485,8 +2438,6 @@ footer {
   .form-row label { font-size: 0.88rem; }
   .form-row input, .form-row select { padding: 0.45rem 0.55rem; }
   .form-row select { background-position: right 0.5rem center; padding-right: 1.5rem; }
-  .hero-call-strip { padding: 1.3rem 0.95rem 0.8rem; gap: 0.6rem; }
-  .hcs-hours { display: none; }
   .hero-card { flex: 0 0 140px; }
 
   .trust-bar { gap: 0.85rem 0.5rem; padding: 1.25rem 0.85rem; }
