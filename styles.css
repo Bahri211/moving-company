@@ -244,7 +244,7 @@ body.menu-open .mobile-menu { transform: translateX(0); }
 /* ——— HERO ——— */
 .hero {
   min-height: 100vh;
-  padding: calc(var(--nav-h) + 2rem) 2rem 4rem;
+  padding: calc(var(--nav-h) + 1rem) 2rem 4rem;
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1.02fr;
@@ -1993,7 +1993,7 @@ footer {
   nav.topnav { padding: 0.9rem 1.5rem; }
 
   .hero {
-    padding: calc(var(--nav-h) + 1.75rem) 1.5rem 3rem;
+    padding: calc(var(--nav-h) + 1.25rem) 1.5rem 3rem;
     column-gap: 1.75rem;
     row-gap: 2rem;
   }
@@ -2026,22 +2026,23 @@ footer {
   .hero {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
-    /* Form first: on a phone the visitor should land on it, not scroll to it.
-       The copy still renders, just below the video. */
+    /* Video then form, with the copy after them: the headline block and the
+       clip are kept short enough that the form's header and first fields are
+       still on screen when the page loads. */
     grid-template-areas:
       "content"
-      "form"
       "media"
+      "form"
       "lede"
       "cards";
-    padding: calc(var(--nav-h) + 1.5rem) 1.25rem 1.75rem;
+    padding: calc(var(--nav-h) + 0.75rem) 1.25rem 1.75rem;
     min-height: auto;
-    row-gap: 1.1rem;
+    row-gap: 0.95rem;
   }
 
   .hero::before { width: 100%; opacity: 0.4; }
   .hero-truck-img { align-self: start; }
-  .hero-truck-img img, .hero-truck-img video { height: 175px; min-height: 0; }
+  .hero-truck-img img, .hero-truck-img video { height: 142px; min-height: 0; }
   .hero-truck-img { border-radius: 18px; }
   .hero-headline-wrap { gap: 0; margin-bottom: 0; }
   .eyebrow { margin-bottom: 0.7rem; font-size: 0.68rem; letter-spacing: 0.12em; }
@@ -2114,11 +2115,8 @@ footer {
   .form-submit { padding: 0.7rem 1rem; font-size: 0.9rem; min-height: 46px; margin-top: 0.65rem; }
 
   .hero h1 { margin-bottom: 0.75rem; }
-  /* The copy follows the video here, so tie the two together: pull it up
-     tight against the frame and hang it off an accent rule, like a caption.
-     (On desktop the copy sits above the video, where this would read wrong.) */
+  /* Reads as a note on the pair above it, not as a second headline */
   .hero-lede {
-    margin-top: -0.6rem;
     padding-left: 0.9rem;
     border-left: 2px solid var(--accent);
   }
