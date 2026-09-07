@@ -305,6 +305,9 @@ body.menu-open .mobile-menu { transform: translateX(0); }
 
 .eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
 
+/* Credential line + call pill. Stacked on desktop, one row on mobile. */
+.hero-topline { display: block; }
+
 /* Phone number at the top of the hero */
 .hero-phone {
   display: inline-flex;
@@ -2086,10 +2089,35 @@ footer {
   .hero-truck-img img, .hero-truck-img video { height: 180px; min-height: 0; }
   .hero-truck-img { border-radius: 18px; }
   .hero-headline-wrap { gap: 0; margin-bottom: 0; }
-  .eyebrow { margin-bottom: 0.4rem; font-size: 0.62rem; letter-spacing: 0.07em; gap: 0.5rem; }
-  .hero-phone { margin-bottom: 0.7rem; padding: 0.3rem 0.9rem 0.3rem 0.3rem; gap: 0.5rem; }
-  .hp-icon { width: 25px; height: 25px; }
-  .hp-num { font-size: 0.9rem; }
+  /* Credential line and call pill share one row — stacked, they cost ~90px
+     of the space the submit button needs to clear the fold. */
+  .hero-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .eyebrow {
+    margin-bottom: 0;
+    font-size: 0.56rem;
+    letter-spacing: 0.05em;
+    gap: 0.4rem;
+    line-height: 1.25;
+    min-width: 0;
+  }
+  .eyebrow::before { display: none; }
+  .eb-usdot { display: none; }
+
+  .hero-phone {
+    margin-bottom: 0;
+    padding: 0.28rem 0.8rem 0.28rem 0.28rem;
+    gap: 0.45rem;
+    flex-shrink: 0;
+  }
+  .hp-icon { width: 24px; height: 24px; }
+  .hp-num { font-size: 0.86rem; }
   .hp-note { display: none; }
   .hero-trust { gap: 0.45rem 0.9rem; font-size: 0.78rem; margin-bottom: 0.25rem; }
   .ht-item { flex: 0 0 auto; }
@@ -2099,29 +2127,30 @@ footer {
   .hcs-icon { width: 32px; height: 32px; }
   .hcs-num { font-size: 0.95rem; }
   .hcs-label { font-size: 0.66rem; }
-  .hero-form-header { margin-bottom: 0.55rem; padding-bottom: 0.45rem; }
+  .hero-form-header { margin-bottom: 0.45rem; padding-bottom: 0.4rem; }
   .hero-form-header h3 { font-size: 1.05rem; }
   /* Marketing subline is the first thing to go: on a 393px screen the submit
      button clearing the fold matters more than a strapline. */
   .hero-form-header p { display: none; }
   .quote-form { padding: 0; border: none; background: transparent; border-radius: 0; }
-  .form-row { margin-bottom: 0.5rem; }
+  .form-row { margin-bottom: 0.45rem; }
 
   .form-row-2 { grid-template-columns: 1fr 1fr; gap: 0.55rem; }
 
-  /* Flow inline and wrap — three stacked rows ate too much height */
+  /* Two fixed columns so the pair always sits side by side — flex-wrap put
+     them on separate lines as soon as the second one ran long. */
   .form-assurances {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 0.75rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
     margin-top: 0.6rem;
     padding-top: 0.55rem;
   }
-  .form-assurances li { font-size: 0.69rem; gap: 0.28rem; }
-  .form-assurances svg { width: 10px; height: 10px; margin-top: 0.2rem; }
+  .form-assurances li { font-size: 0.64rem; gap: 0.25rem; line-height: 1.3; }
+  .form-assurances svg { width: 10px; height: 10px; margin-top: 0.15rem; }
   .form-row label {
-    font-size: 0.72rem;
-    margin-bottom: 0.15rem;
+    font-size: 0.69rem;
+    margin-bottom: 0.12rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2132,11 +2161,11 @@ footer {
   .form-row input,
   .form-row select {
     font-size: 1rem;
-    padding: 0.4rem 0.6rem;
+    padding: 0.35rem 0.6rem;
     background: var(--paper-warm);
     border: 1px solid var(--line);
     border-radius: 8px;
-    min-height: 38px;
+    min-height: 36px;
   }
 
   .form-row select { background-position: right 0.6rem center; padding-right: 1.8rem; }
@@ -2157,8 +2186,8 @@ footer {
   .field-error:empty { display: none; }
   .field-error { margin-top: 0.2rem; font-size: 0.7rem; }
 
-  .form-row-consent { margin-top: 0.15rem; margin-bottom: 0.25rem; }
-  .sms-consent-text { font-size: 0.67rem; line-height: 1.35; }
+  .form-row-consent { margin-top: 0.1rem; margin-bottom: 0.2rem; }
+  .sms-consent-text { font-size: 0.62rem; line-height: 1.3; }
   .sms-checkbox-wrap, .sms-checkbox-box { width: 18px; height: 18px; }
   .sms-checkbox-box::after { margin: 2px 0 0 4px; }
   .sms-consent-label { gap: 0.6rem; padding: 0; }
@@ -2437,7 +2466,7 @@ footer {
 
 /* ——— SMALL PHONE (≤ 480px) ——— */
 @media (max-width: 480px) {
-  .hero h1 { font-size: clamp(1.5rem, 7.2vw, 2.3rem); line-height: 1; }
+  .hero h1 { font-size: clamp(1.4rem, 6.6vw, 2.1rem); line-height: 1; }
   .eyebrow { font-size: 0.58rem; letter-spacing: 0.05em; }
   .hero-form-wrap { padding: 0.85rem 0.9rem; }
   .hero-form-header h3 { font-size: 1rem; }
