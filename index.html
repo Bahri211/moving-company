@@ -176,16 +176,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <source src="assets/video/Movers_loading_furniture_onto_truck_202609070457.mp4" type="video/mp4" />
       <img src="assets/images/hero-poster.jpg" alt="50STATEMOVERS crew loading furniture onto the truck" />
     </video>
-
-    <a href="tel:+18885051086" class="video-call-btn">
-      <span class="vcb-icon" aria-hidden="true">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-      </span>
-      <span class="vcb-text">
-        <span class="vcb-label">Speak to a mover</span>
-        <span class="vcb-num">(888) 505-1086</span>
-      </span>
-    </a>
   </div>
 
   <div class="hero-stat-cards fade-in delay-3">
@@ -361,6 +351,73 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2>Moving to or from <em>the Continental USA.</em></h2>
     <p>From Maine to California, Texas to Washington — wherever you're headed in the Continental US, we have a crew ready for you.</p>
   </div>
+  <div class="route-anim">
+    <svg viewBox="0 0 1200 300" role="img"
+         aria-label="A 50State Movers truck driving the route from your old home to your new one: packed, on the road, delivered">
+
+      <!-- ── road ── -->
+      <g class="road">
+        <path class="road-casing"  d="M 90 205 C 330 205, 420 100, 640 100 S 950 140, 1110 120" />
+        <path class="road-surface" d="M 90 205 C 330 205, 420 100, 640 100 S 950 140, 1110 120" />
+        <path class="road-centre"  d="M 90 205 C 330 205, 420 100, 640 100 S 950 140, 1110 120" />
+        <path class="road-done"    d="M 90 205 C 330 205, 420 100, 640 100 S 950 140, 1110 120" />
+      </g>
+
+      <!-- ── milestones, lit as the truck passes ── -->
+      <g class="milestone" style="--at: 0.301">
+        <circle class="ms-dot" cx="344" cy="162" r="7" />
+        <text class="ms-text" x="344" y="196">PACKED</text>
+      </g>
+      <g class="milestone" style="--at: 0.410">
+        <circle class="ms-dot" cx="594" cy="102" r="7" />
+        <text class="ms-text" x="594" y="78">ON THE ROAD</text>
+      </g>
+      <g class="milestone" style="--at: 0.519">
+        <circle class="ms-dot" cx="852" cy="113" r="7" />
+        <text class="ms-text" x="852" y="147">DELIVERED</text>
+      </g>
+
+      <!-- ── origin ── -->
+      <g class="endpoint">
+        <circle class="ep-disc" cx="90" cy="205" r="26" />
+        <path class="ep-glyph" d="M78 205l12-10 12 10v14h-9v-9h-6v9h-9v-14Z" />
+        <text class="ep-label" x="90" y="262">YOUR OLD PLACE</text>
+      </g>
+
+      <!-- ── destination ── -->
+      <g class="endpoint endpoint-end">
+        <circle class="ep-ring" cx="1110" cy="120" r="26" />
+        <circle class="ep-disc" cx="1110" cy="120" r="26" />
+        <path class="ep-glyph" d="M1098 120l12-10 12 10v14h-9v-9h-6v9h-9v-14Z" />
+        <path class="ep-check" d="M1100 120l7 7 14-14" />
+        <text class="ep-label" x="1110" y="177">YOUR NEW PLACE</text>
+      </g>
+
+      <!-- ── truck: rides the road via offset-path, tilting with the curve ── -->
+      <g class="route-truck">
+        <g class="route-truck-bob">
+          <rect class="truck-body" x="0" y="0" width="82" height="46" rx="6" />
+          <rect class="truck-stripe" x="7" y="24" width="68" height="3" rx="1.5" />
+          <text class="truck-brand truck-brand-1" x="41" y="20">50STATE</text>
+          <text class="truck-brand truck-brand-2" x="41" y="39">MOVERS</text>
+          <path class="truck-cab" d="M82 12h20l15 19v15H82V12Z" />
+          <path class="truck-window" d="M85 15h14l11 15H85V15Z" />
+          <rect class="truck-bumper" x="112" y="42" width="7" height="5" rx="2" />
+          <g class="truck-wheel">
+            <circle cx="22" cy="50" r="11" />
+            <path class="spoke" d="M22 41.5v17M13.5 50h17" />
+            <circle class="hub" cx="22" cy="50" r="3.5" />
+          </g>
+          <g class="truck-wheel">
+            <circle cx="99" cy="50" r="11" />
+            <path class="spoke" d="M99 41.5v17M90.5 50h17" />
+            <circle class="hub" cx="99" cy="50" r="3.5" />
+          </g>
+        </g>
+      </g>
+    </svg>
+  </div>
+
   <div class="states-grid" id="states-grid">
     <a class="state-item" href="/moving-from-alabama/"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Alabama</a>
     <a class="state-item" href="/moving-from-arizona/"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Arizona</a>

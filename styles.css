@@ -338,15 +338,12 @@ body.menu-open .mobile-menu { transform: translateX(0); }
   transform: scale(1.04);
 }
 
-/* Vignette top and bottom: the top half keeps the call button legible over any
-   frame of the clip, the bottom settles the video into the page. */
+/* Light vignette so the clip settles into the page instead of floating */
 .hero-truck-img::after {
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(to bottom, rgba(12, 26, 43, 0.42) 0%, transparent 32%),
-    linear-gradient(to top, rgba(12, 26, 43, 0.22) 0%, transparent 40%);
+  background: linear-gradient(to top, rgba(12, 26, 43, 0.22), transparent 40%);
   pointer-events: none;
 }
 
@@ -368,59 +365,6 @@ body.menu-open .mobile-menu { transform: translateX(0); }
   margin-bottom: 1.1rem;
   line-height: 1.7;
 }
-
-/* Call CTA floating on the video */
-.video-call-btn {
-  position: absolute;
-  top: 1.1rem;
-  left: 1.1rem;
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0.5rem 1.1rem 0.5rem 0.5rem;
-  border-radius: 999px;
-  text-decoration: none;
-  color: var(--paper);
-  background: rgba(12, 26, 43, 0.55);
-  border: 1px solid rgba(245, 240, 232, 0.22);
-  backdrop-filter: blur(10px) saturate(140%);
-  -webkit-backdrop-filter: blur(10px) saturate(140%);
-  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.6);
-  transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-}
-
-.video-call-btn:hover {
-  background: rgba(12, 26, 43, 0.72);
-  border-color: rgba(245, 240, 232, 0.4);
-  transform: translateY(-2px);
-  box-shadow: 0 16px 36px -14px rgba(0, 0, 0, 0.7);
-}
-
-.vcb-icon {
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--accent);
-  color: var(--paper);
-  flex-shrink: 0;
-  transition: transform 0.3s;
-}
-
-.video-call-btn:hover .vcb-icon { transform: scale(1.08) rotate(-8deg); }
-
-.vcb-text { display: flex; flex-direction: column; line-height: 1.2; }
-
-.vcb-label {
-  font-size: 0.63rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: rgba(245, 240, 232, 0.7);
-}
-
-.vcb-num { font-size: 0.95rem; font-weight: 600; letter-spacing: -0.01em; }
 
 /* Hero trust bar */
 .hero-trust {
@@ -720,6 +664,247 @@ section { padding: 6rem 2rem; }
 
 /* ——— COVERAGE ——— */
 .coverage-section { background: var(--paper-warm); }
+
+/* ——— ROUTE ANIMATION ———
+   The truck rides the road itself via offset-path, so it banks with the curve
+   instead of sliding along a straight line. One 10s cycle:
+     0–6%    fades in at the origin
+     6–70%   drives, easing away from A and settling into B; milestones light
+             as it passes them
+     70–88%  parked — wheels stop, the destination flips to a check, ring pulses
+     88–100% fades out, and the reset happens off-screen so the loop is seamless
+   Everything shares --route-dur and --route-ease, so the truck, the road fill
+   and the wheel rotation stay locked to one another. */
+.route-anim {
+  --route-dur: 10s;
+  /* Symmetric ease-in-out: at half the drive time the truck is at the halfway
+     point. The previous curve covered 74% of the road in the first half and
+     then crawled — that lopsidedness was the jerk. */
+  --route-ease: cubic-bezier(0.45, 0.05, 0.55, 0.95);
+  --road: M 90 205 C 330 205, 420 100, 640 100 S 950 140, 1110 120;
+  max-width: 1150px;
+  margin: 0 auto 2.75rem;
+}
+
+.route-anim svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+  shape-rendering: geometricPrecision;
+}
+
+/* ── road ── */
+.road path { fill: none; }
+
+.road-casing  { stroke: var(--line); stroke-width: 22; stroke-linecap: round; opacity: 0.55; }
+.road-surface { stroke: var(--paper); stroke-width: 17; stroke-linecap: round; }
+
+.road-centre {
+  stroke: var(--line);
+  stroke-width: 2;
+  stroke-dasharray: 10 14;
+  stroke-linecap: round;
+  animation: roadDashes 0.9s linear infinite;
+}
+
+/* The travelled part of the road. 1034 = the path's length in user units. */
+.road-done {
+  stroke: var(--accent);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 1034;
+  stroke-dashoffset: 1034;
+  animation: roadDraw var(--route-dur) linear infinite;
+}
+
+/* ── milestones ── */
+.ms-dot {
+  fill: var(--paper);
+  stroke: var(--line);
+  stroke-width: 2.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: milestoneLight var(--route-dur) linear infinite;
+  animation-delay: calc(var(--route-dur) * (var(--at) - 1));
+}
+
+.ms-text {
+  fill: var(--muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-anchor: middle;
+  animation: milestoneText var(--route-dur) linear infinite;
+  animation-delay: calc(var(--route-dur) * (var(--at) - 1));
+}
+
+/* ── endpoints ── */
+.ep-disc { fill: var(--navy); }
+.endpoint-end .ep-disc { fill: var(--accent); }
+.ep-glyph { fill: var(--paper); }
+
+.ep-label {
+  fill: var(--muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-anchor: middle;
+}
+
+/* On arrival the destination house swaps for a tick */
+.endpoint-end .ep-glyph { animation: glyphOut var(--route-dur) linear infinite; }
+
+.ep-check {
+  fill: none;
+  stroke: var(--paper);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  opacity: 0;
+  animation: checkDraw var(--route-dur) linear infinite;
+}
+
+.ep-ring {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: ringPulse var(--route-dur) linear infinite;
+}
+
+/* ── truck ── */
+.route-truck {
+  offset-path: path("M 90 205 C 330 205, 420 100, 640 100 S 950 140, 1110 120");
+  offset-rotate: auto;
+  /* anchors the wheels' contact point to the road */
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  will-change: offset-distance;
+  animation: routeDrive var(--route-dur) linear infinite;
+}
+
+/* Straight-line fallback where offset-path is unsupported */
+@supports not (offset-path: path("M 0 0 L 1 1")) {
+  .route-truck { animation-name: routeDriveFlat; }
+}
+
+.route-truck-bob { animation: truckBob 1.9s ease-in-out infinite; }
+
+.truck-body   { fill: var(--navy); }
+.truck-stripe { fill: var(--accent); }
+.truck-cab    { fill: var(--accent); }
+.truck-window { fill: rgba(245, 240, 232, 0.9); }
+.truck-bumper { fill: var(--ink); }
+
+.truck-brand {
+  fill: var(--paper);
+  font-family: 'Inter', sans-serif;
+  text-anchor: middle;
+  font-weight: 700;
+}
+
+.truck-brand-1 { font-size: 13px; letter-spacing: 0.02em; }
+.truck-brand-2 { font-size: 10px; letter-spacing: 0.22em; fill: rgba(245, 240, 232, 0.85); }
+
+.truck-wheel {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wheelSpin var(--route-dur) linear infinite;
+}
+
+.truck-wheel circle { fill: var(--ink); }
+.truck-wheel .hub { fill: var(--paper-warm); }
+.truck-wheel .spoke { stroke: rgba(245, 240, 232, 0.28); stroke-width: 1.2; }
+
+/* ── keyframes ── */
+@keyframes routeDrive {
+  0%   { offset-distance: 0%;   opacity: 0; animation-timing-function: ease-out; }
+  6%   { offset-distance: 0%;   opacity: 1; animation-timing-function: var(--route-ease); }
+  76%  { offset-distance: 100%; opacity: 1; }
+  90%  { offset-distance: 100%; opacity: 1; animation-timing-function: ease-in; }
+  96%  { offset-distance: 100%; opacity: 0; }
+  100% { offset-distance: 0%;   opacity: 0; }
+}
+
+@keyframes routeDriveFlat {
+  0%   { transform: translate(90px, 205px); opacity: 0; }
+  6%   { transform: translate(90px, 205px); opacity: 1; animation-timing-function: var(--route-ease); }
+  76%  { transform: translate(1050px, 120px); opacity: 1; }
+  90%  { transform: translate(1050px, 120px); opacity: 1; }
+  96%  { transform: translate(1050px, 120px); opacity: 0; }
+  100% { transform: translate(90px, 205px); opacity: 0; }
+}
+
+@keyframes roadDraw {
+  0%   { stroke-dashoffset: 1034; opacity: 0; }
+  6%   { stroke-dashoffset: 1034; opacity: 1; animation-timing-function: var(--route-ease); }
+  76%  { stroke-dashoffset: 0;    opacity: 1; }
+  90%  { stroke-dashoffset: 0;    opacity: 1; animation-timing-function: ease-in; }
+  96%  { stroke-dashoffset: 0;    opacity: 0; }
+  100% { stroke-dashoffset: 1034; opacity: 0; }
+}
+
+@keyframes roadDashes { to { stroke-dashoffset: -24; } }
+
+/* Eight turns spread across the drive phase on the truck's easing, so the
+   wheels accelerate with it — and stop dead once it parks. */
+@keyframes wheelSpin {
+  0%, 6% { transform: rotate(0deg); animation-timing-function: var(--route-ease); }
+  76%    { transform: rotate(1800deg); }
+  100%   { transform: rotate(1800deg); }
+}
+
+/* Milestones are delayed by their own --at, so each lights as the truck reaches it */
+@keyframes milestoneLight {
+  0%, 0.1% { fill: var(--paper); stroke: var(--line); transform: scale(1); }
+  2%       { fill: var(--accent); stroke: var(--accent); transform: scale(1.5); }
+  6%       { fill: var(--accent); stroke: var(--accent); transform: scale(1.15); }
+  92%      { fill: var(--accent); stroke: var(--accent); transform: scale(1.15); }
+  100%     { fill: var(--paper); stroke: var(--line); transform: scale(1); }
+}
+
+@keyframes milestoneText {
+  0%, 0.1% { fill: var(--muted); }
+  3%       { fill: var(--accent); }
+  92%      { fill: var(--accent); }
+  100%     { fill: var(--muted); }
+}
+
+@keyframes ringPulse {
+  0%, 74% { transform: scale(0.6); opacity: 0; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+  79%     { transform: scale(1); opacity: 0.7; }
+  90%     { transform: scale(2.1); opacity: 0; }
+  100%    { transform: scale(2.1); opacity: 0; }
+}
+
+@keyframes glyphOut {
+  0%, 75% { opacity: 1; }
+  79%     { opacity: 0; }
+  94%     { opacity: 0; }
+  97%     { opacity: 1; }
+  100%    { opacity: 1; }
+}
+
+@keyframes checkDraw {
+  0%, 76% { stroke-dashoffset: 30; opacity: 0; }
+  79%     { stroke-dashoffset: 30; opacity: 1; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+  85%     { stroke-dashoffset: 0;  opacity: 1; }
+  93%     { stroke-dashoffset: 0;  opacity: 1; }
+  96%     { stroke-dashoffset: 0;  opacity: 0; }
+  100%    { stroke-dashoffset: 30; opacity: 0; }
+}
+
+@keyframes truckBob {
+  0%, 100% { transform: translateY(0.4px); }
+  50%      { transform: translateY(-0.9px); }
+}
 
 .states-grid {
   max-width: 1100px;
@@ -1777,6 +1962,21 @@ footer {
     transition-duration: 0.01ms !important;
   }
   html { scroll-behavior: auto; }
+
+  .float,
+  .route-truck-bob,
+  .truck-wheel,
+  .road-centre,
+  .ms-dot,
+  .ms-text,
+  .ep-ring { animation: none !important; }
+
+  .route-truck { animation: none !important; offset-distance: 100%; opacity: 1; }
+  .road-done { animation: none !important; stroke-dashoffset: 0; opacity: 1; }
+  .ms-dot { fill: var(--accent); stroke: var(--accent); }
+  .ms-text { fill: var(--accent); }
+  .endpoint-end .ep-glyph { animation: none !important; opacity: 0; }
+  .ep-check { animation: none !important; stroke-dashoffset: 0; opacity: 1; }
 }
 
 /* ——— SCROLL REVEAL ——— */
@@ -1834,58 +2034,57 @@ footer {
       "media"
       "lede"
       "cards";
-    padding: calc(var(--nav-h) + 1.75rem) 1.25rem 2rem;
+    padding: calc(var(--nav-h) + 1.5rem) 1.25rem 1.75rem;
     min-height: auto;
-    row-gap: 1.25rem;
+    row-gap: 1.1rem;
   }
 
   .hero::before { width: 100%; opacity: 0.4; }
   .hero-truck-img { align-self: start; }
-  .hero-truck-img img, .hero-truck-img video { height: 190px; min-height: 0; }
+  .hero-truck-img img, .hero-truck-img video { height: 175px; min-height: 0; }
   .hero-truck-img { border-radius: 18px; }
   .hero-headline-wrap { gap: 0; margin-bottom: 0; }
-  .eyebrow { margin-bottom: 0.85rem; font-size: 0.7rem; letter-spacing: 0.12em; }
-  .video-call-btn { top: 0.7rem; left: 0.7rem; padding: 0.4rem 0.9rem 0.4rem 0.4rem; gap: 0.55rem; }
-  .vcb-icon { width: 26px; height: 26px; }
-  .vcb-label { font-size: 0.58rem; letter-spacing: 0.1em; }
-  .vcb-num { font-size: 0.85rem; }
+  .eyebrow { margin-bottom: 0.7rem; font-size: 0.68rem; letter-spacing: 0.12em; }
   .hero-trust { gap: 0.45rem 0.9rem; font-size: 0.78rem; margin-bottom: 0.25rem; }
   .ht-item { flex: 0 0 auto; }
   .hero-form-col { max-width: none; margin-left: 0; }
-  .hero-form-wrap { position: static; padding: 1.15rem 1.2rem; border-radius: 16px; }
-  .hero-call-strip { border-radius: 0 0 16px 16px; padding: 1.5rem 1.1rem 1rem; }
-  .hero-form-header { margin-bottom: 0.85rem; padding-bottom: 0.7rem; }
-  .hero-form-header h3 { font-size: 1.15rem; }
-  .hero-form-header p { font-size: 0.75rem; }
+  .hero-form-wrap { position: static; padding: 1rem 1.05rem; border-radius: 15px; }
+  .hero-call-strip { border-radius: 0 0 15px 15px; padding: 1.35rem 1.05rem 0.85rem; gap: 0.7rem; }
+  .hcs-icon { width: 32px; height: 32px; }
+  .hcs-num { font-size: 0.95rem; }
+  .hcs-label { font-size: 0.66rem; }
+  .hero-form-header { margin-bottom: 0.7rem; padding-bottom: 0.55rem; }
+  .hero-form-header h3 { font-size: 1.08rem; }
+  .hero-form-header p { font-size: 0.72rem; }
   .quote-form { padding: 0; border: none; background: transparent; border-radius: 0; }
-  .form-row { margin-bottom: 0.75rem; }
+  .form-row { margin-bottom: 0.6rem; }
 
   /* Short selects stay paired; free-text fields get the full width */
-  .form-row-2 { grid-template-columns: 1fr 1fr; gap: 0.65rem; }
-  .form-row-2.stack-mobile { grid-template-columns: 1fr; gap: 0.75rem; }
+  .form-row-2 { grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+  .form-row-2.stack-mobile { grid-template-columns: 1fr; gap: 0.6rem; }
 
   /* Flow inline and wrap — three stacked rows ate too much height */
   .form-assurances {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.3rem 0.85rem;
-    margin-top: 0.75rem;
-    padding-top: 0.7rem;
+    gap: 0.25rem 0.75rem;
+    margin-top: 0.6rem;
+    padding-top: 0.55rem;
   }
-  .form-assurances li { font-size: 0.71rem; gap: 0.3rem; }
-  .form-assurances svg { width: 11px; height: 11px; margin-top: 0.18rem; }
-  .form-row label { font-size: 0.8rem; margin-bottom: 0.25rem; }
+  .form-assurances li { font-size: 0.69rem; gap: 0.28rem; }
+  .form-assurances svg { width: 10px; height: 10px; margin-top: 0.2rem; }
+  .form-row label { font-size: 0.76rem; margin-bottom: 0.2rem; }
 
   /* Boxed fields on touch: a 1px underline is a poor tap target.
      16px font is required or iOS zooms the page on focus. */
   .form-row input,
   .form-row select {
     font-size: 1rem;
-    padding: 0.55rem 0.7rem;
+    padding: 0.45rem 0.65rem;
     background: var(--paper-warm);
     border: 1px solid var(--line);
-    border-radius: 9px;
-    min-height: 42px;
+    border-radius: 8px;
+    min-height: 40px;
   }
 
   .form-row select { background-position: right 0.6rem center; padding-right: 1.8rem; }
@@ -1904,14 +2103,15 @@ footer {
   .form-row select:hover { border-color: var(--muted); border-bottom-color: var(--muted); }
 
   .field-error:empty { display: none; }
-  .field-error { margin-top: 0.3rem; }
+  .field-error { margin-top: 0.2rem; font-size: 0.7rem; }
 
-  .sms-consent-text { font-size: 0.73rem; line-height: 1.45; }
-  .sms-checkbox-wrap, .sms-checkbox-box { width: 20px; height: 20px; }
-  .sms-checkbox-box::after { margin: 3px 0 0 5px; }
-  .sms-consent-label { gap: 0.7rem; padding: 0.15rem 0; }
+  .form-row-consent { margin-top: 0.2rem; margin-bottom: 0.35rem; }
+  .sms-consent-text { font-size: 0.7rem; line-height: 1.4; }
+  .sms-checkbox-wrap, .sms-checkbox-box { width: 18px; height: 18px; }
+  .sms-checkbox-box::after { margin: 2px 0 0 4px; }
+  .sms-consent-label { gap: 0.6rem; padding: 0; }
 
-  .form-submit { padding: 0.8rem 1rem; font-size: 0.92rem; min-height: 48px; margin-top: 0.8rem; }
+  .form-submit { padding: 0.7rem 1rem; font-size: 0.9rem; min-height: 46px; margin-top: 0.65rem; }
 
   .hero h1 { margin-bottom: 0.75rem; }
   /* The copy follows the video here, so tie the two together: pull it up
@@ -1936,7 +2136,7 @@ footer {
     scrollbar-width: none;
   }
   .hero-stat-cards::-webkit-scrollbar { display: none; }
-  .hero-card { flex: 0 0 155px; border-radius: 16px; padding: 1.1rem 1rem; }
+  .hero-card { flex: 0 0 148px; border-radius: 15px; padding: 1rem 0.95rem; }
   .hc-val { font-size: 1.5rem; }
 
   /* ── Trust bar ── */
@@ -1967,6 +2167,15 @@ footer {
   }
   .sn-text { font-size: 0.85rem; }
   .sn-link { font-size: 0.85rem; }
+
+  /* ── Route animation ── */
+  .route-anim { margin-bottom: 1.5rem; }
+  .ep-label { font-size: 26px; letter-spacing: 0.1em; }
+  .ms-text { font-size: 24px; letter-spacing: 0.1em; }
+  .road-casing { stroke-width: 26; }
+  .road-surface { stroke-width: 20; }
+  .road-done { stroke-width: 6; }
+  .ms-dot { r: 9; }
 
   /* ── Coverage / States — 3 columns ── */
   .states-grid { grid-template-columns: repeat(3, 1fr); gap: 0.35rem; }
@@ -2179,10 +2388,13 @@ footer {
 /* ——— SMALL PHONE (≤ 480px) ——— */
 @media (max-width: 480px) {
   .hero h1 { font-size: clamp(2.1rem, 9vw, 2.8rem); }
-  .hero-form-wrap { padding: 1rem 1.05rem; }
-  .hero-call-strip { padding: 1.45rem 1rem 0.95rem; gap: 0.65rem; }
+  .hero-form-wrap { padding: 0.9rem 0.95rem; }
+  .hero-form-header h3 { font-size: 1.02rem; }
+  .form-row-2 { gap: 0.5rem; }
+  .form-row label { font-size: 0.74rem; }
+  .hero-call-strip { padding: 1.3rem 0.95rem 0.8rem; gap: 0.6rem; }
   .hcs-hours { display: none; }
-  .hero-card { flex: 0 0 145px; }
+  .hero-card { flex: 0 0 140px; }
 
   .trust-bar { gap: 1rem 0.75rem; }
 
