@@ -23,6 +23,20 @@
     });
   }
 
+  // SMS consent: the short line carries the load-bearing disclosure, the rest
+  // expands. Desktop CSS shows it all and hides this button.
+  var smsToggle = document.getElementById('sms-toggle');
+  var smsMore = document.getElementById('sms-more');
+  if (smsToggle && smsMore) {
+    smsToggle.addEventListener('click', function (e) {
+      e.preventDefault();
+      var open = smsMore.hasAttribute('hidden');
+      if (open) { smsMore.removeAttribute('hidden'); } else { smsMore.setAttribute('hidden', ''); }
+      smsToggle.setAttribute('aria-expanded', String(open));
+      smsToggle.textContent = open ? 'Show less' : 'Read more';
+    });
+  }
+
   document.querySelectorAll('.faq-q').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var isOpen = btn.parentElement.classList.toggle('open');
