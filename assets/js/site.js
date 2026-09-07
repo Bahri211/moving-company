@@ -125,14 +125,14 @@
           '<div class="success-icon">✓</div>' +
           '<h3>Quote request received!</h3>' +
           '<p>We\'ll send you a detailed, fixed quote same day.<br>In the meantime, feel free to call ' +
-          '<a href="tel:+18885051086">(888) 505-1086</a>.</p></div>';
+          '<a href="tel:+18885051086">+1 (888) 505-1086</a>.</p></div>';
         return;
       }
       return res.json().catch(function () { return {}; }).then(function (data) {
         showSubmitError(data.error || 'Something went wrong. Please try again or call us.');
       });
     }).catch(function () {
-      showSubmitError('Could not connect. Please call us at (888) 505-1086.');
+      showSubmitError('Could not connect. Please call us at +1 (888) 505-1086.');
     });
   });
 
