@@ -1458,7 +1458,10 @@ section { padding: 6rem 2rem; }
   box-shadow: 0 1px 0 0 var(--accent);
 }
 
-.form-row:focus-within label { color: var(--accent); }
+/* Only the focused field's own label highlights. Paired rows wrap each field
+   in its own div, so `.form-row:focus-within label` lit both of them. */
+.form-row > div:focus-within > label,
+.form-row:focus-within > label { color: var(--accent); }
 
 .form-row textarea {
   width: 100%;
@@ -1894,6 +1897,9 @@ footer {
     box-shadow: 0 0 0 3px rgba(200, 85, 44, 0.12);
   }
 
+  .form-row > div:focus-within > label,
+  .form-row:focus-within > label { color: var(--ink); }
+
   .form-row input:hover,
   .form-row select:hover { border-color: var(--muted); border-bottom-color: var(--muted); }
 
@@ -1908,7 +1914,16 @@ footer {
   .form-submit { padding: 0.8rem 1rem; font-size: 0.92rem; min-height: 48px; margin-top: 0.8rem; }
 
   .hero h1 { margin-bottom: 0.75rem; }
-  .hero-lede > p { font-size: 0.95rem; margin-bottom: 0.75rem; }
+  /* The copy follows the video here, so tie the two together: pull it up
+     tight against the frame and hang it off an accent rule, like a caption.
+     (On desktop the copy sits above the video, where this would read wrong.) */
+  .hero-lede {
+    margin-top: -0.6rem;
+    padding-left: 0.9rem;
+    border-left: 2px solid var(--accent);
+  }
+  .hero-lede > p { font-size: 0.92rem; margin-bottom: 0.6rem; color: var(--ink-soft); }
+  .hero-lede .hero-trust { margin-bottom: 0; }
 
   /* Stat cards — horizontal scroll strip */
   .hero-stat-cards {
