@@ -69,7 +69,7 @@ module.exports = [
     { q: "Do you handle military moves from Fort Riley?", a: "Yes. PCS moves need a fixed delivery date rather than a spread, plus weight tickets and documentation for reimbursement. We run those as dedicated shipments and provide the paperwork. Book early — May through July is saturated." },
     { q: "How long does a move from Kansas to Colorado take?", a: "Wichita or Kansas City to Denver is 520 to 600 miles, generally 2 to 5 days consolidated or next-day dedicated. Winter deliveries into the Colorado mountains can add a contingency day for pass conditions." },
     { q: "Will spring storms delay my Kansas move?", a: "Possibly by hours. April through June is the active severe-weather window and we will not run a loaded trailer into a tornado-warned area. Multi-day delays are rare; if your schedule has no slack, a fall move avoids the question." },
-    { q: "Are movers in Kansas licensed by the state?", a: "Movers operating solely within Kansas are regulated by the Kansas Corporation Commission. For any interstate move, the federal FMCSA credential is what matters — check for an active USDOT and MC number. Ours are USDOT #4575745 and MC-18020728." }
+    { q: "Are movers in Kansas licensed by the state?", a: "Movers operating solely within Kansas are regulated by the Kansas Corporation Commission. For any interstate move, the federal FMCSA credential is what matters — check for an active USDOT and MC number. Ours are USDOT #4575745 and MC-1820728." }
   ]
 },
 {

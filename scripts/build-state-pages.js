@@ -21,7 +21,7 @@ const PHONE_DISPLAY = '+1 (888) 505-1086';
 const PHONE_HREF = '+18885051086';
 const EMAIL = 'contact@50statemovers.com';
 const USDOT = '4575745';
-const MC = 'MC-18020728';
+const MC = 'MC-1820728';
 const BUILT = new Date().toISOString().slice(0, 10);
 
 /* ---------------------------------------------------------------- helpers */

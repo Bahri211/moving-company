@@ -93,7 +93,7 @@ module.exports = [
     { q: "Do I need a permit to move in Hoboken or Jersey City?", a: "Yes. Both require a posted street-occupancy permit to reserve curb space for the truck, and most buildings additionally require a certificate of insurance and a reserved freight elevator. We handle all of it, but it needs about a week." },
     { q: "How long does a move from New Jersey to North Carolina take?", a: "Roughly 500 to 650 miles depending on destination — 2 to 5 days consolidated or next-day dedicated. On short-haul lanes like this, a dedicated truck gives you a delivery date rather than a spread." },
     { q: "Why can't the truck use the Garden State Parkway?", a: "Commercial vehicles are prohibited on large sections of the Parkway. Moving trucks route via the New Jersey Turnpike, I-287, and state highways instead, which adds time to Shore-bound moves, particularly in summer." },
-    { q: "Are moving companies in New Jersey licensed?", a: "Intrastate movers must be licensed by the New Jersey Division of Consumer Affairs. For interstate moves, the federal FMCSA credential governs — verify an active USDOT and MC number. Ours are USDOT #4575745 and MC-18020728." }
+    { q: "Are moving companies in New Jersey licensed?", a: "Intrastate movers must be licensed by the New Jersey Division of Consumer Affairs. For interstate moves, the federal FMCSA credential governs — verify an active USDOT and MC number. Ours are USDOT #4575745 and MC-1820728." }
   ]
 },
 {
