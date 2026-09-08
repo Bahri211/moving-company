@@ -23,6 +23,13 @@
     });
   }
 
+  // Hero video: a looping background clip is motion, so honour the OS setting
+  var heroVideo = document.getElementById('hero-video');
+  if (heroVideo && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    heroVideo.removeAttribute('autoplay');
+    heroVideo.pause();
+  }
+
   // SMS consent: the short line carries the load-bearing disclosure, the rest
   // expands. Desktop CSS shows it all and hides this button.
   var smsToggle = document.getElementById('sms-toggle');

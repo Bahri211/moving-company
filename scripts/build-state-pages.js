@@ -110,12 +110,8 @@ const TRUST_BAR = `<div class="trust-bar">
     <div class="trust-label">Fixed-Price Moves</div>
   </div>
   <div class="trust-item">
-    <div class="trust-number serif">Fully</div>
-    <div class="trust-label">Licensed &amp; Insured</div>
-  </div>
-  <div class="trust-item">
-    <div class="trust-number serif">$1M</div>
-    <div class="trust-label">Insurance coverage</div>
+    <div class="trust-number serif">0.3%</div>
+    <div class="trust-label">Damage claim rate</div>
   </div>
   <div class="trust-item">
     <div class="trust-number serif">24/7</div>
@@ -123,21 +119,135 @@ const TRUST_BAR = `<div class="trust-bar">
   </div>
 </div>`;
 
+// Hero video, route animation and the services closing line are lifted from
+// index.html so the state pages and the homepage stay one design.
+const HERO_VIDEO = `  <div class="hero-truck-img fade-in delay-3">
+    <video
+      id="hero-video"
+      autoplay muted loop playsinline
+      preload="metadata"
+      poster="/assets/images/hero-poster.jpg"
+      aria-label="50STATEMOVERS crew loading furniture onto the truck">
+      <source src="/assets/video/Movers_loading_furniture_onto_truck_202609070457.mp4" type="video/mp4" />
+      <img src="/assets/images/hero-poster.jpg" alt="50STATEMOVERS crew loading furniture onto the truck" />
+    </video>
+  </div>`;
+
+const ROUTE_ANIM = `  <div class="route-anim">
+    <svg viewBox="0 38 1200 246" role="img"
+         aria-label="A 50State Movers truck driving the route from your old home to your new one: packed, on the road, delivered">
+
+      <defs>
+        <linearGradient id="roadFade" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="var(--line)" stop-opacity="0.5" />
+          <stop offset="0.5" stop-color="var(--line)" stop-opacity="0.75" />
+          <stop offset="1" stop-color="var(--line)" stop-opacity="0.5" />
+        </linearGradient>
+        <radialGradient id="truckShadow">
+          <stop offset="0" stop-color="#1a1713" stop-opacity="0.34" />
+          <stop offset="1" stop-color="#1a1713" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+
+      <!-- ── road ── -->
+      <g class="road">
+        <path class="road-shadow"  d="M 90 205 C 330 205, 420 100, 640 100 S 950 140, 1110 120" />
+        <path class="road-casing"  d="M 90 205 C 330 205, 420 100, 640 100 S 950 140, 1110 120" />
+        <path class="road-surface" d="M 90 205 C 330 205, 420 100, 640 100 S 950 140, 1110 120" />
+        <path class="road-centre"  d="M 90 205 C 330 205, 420 100, 640 100 S 950 140, 1110 120" />
+        <path class="road-done"    d="M 90 205 C 330 205, 420 100, 640 100 S 950 140, 1110 120" />
+      </g>
+
+      <!-- ── milestones, lit as the truck passes ── -->
+      <g class="milestone ms-1">
+        <circle class="ms-dot" cx="344" cy="162" r="7" />
+        <text class="ms-text" x="344" y="192">PACKED</text>
+      </g>
+      <g class="milestone ms-2">
+        <circle class="ms-dot" cx="594" cy="102" r="7" />
+        <text class="ms-text" x="594" y="132">ON THE ROAD</text>
+      </g>
+      <g class="milestone ms-3">
+        <circle class="ms-dot" cx="852" cy="113" r="7" />
+        <text class="ms-text" x="852" y="143">DELIVERED</text>
+      </g>
+
+      <!-- ── origin ── -->
+      <g class="endpoint">
+        <circle class="ep-disc" cx="90" cy="205" r="26" />
+        <path class="ep-glyph" d="M78 205l12-10 12 10v14h-9v-9h-6v9h-9v-14Z" />
+        <text class="ep-label" x="90" y="262">YOUR OLD PLACE</text>
+      </g>
+
+      <!-- ── destination ── -->
+      <g class="endpoint endpoint-end">
+        <circle class="ep-ring" cx="1110" cy="120" r="26" />
+        <circle class="ep-disc" cx="1110" cy="120" r="26" />
+        <path class="ep-glyph" d="M1098 120l12-10 12 10v14h-9v-9h-6v9h-9v-14Z" />
+        <path class="ep-check" d="M1100 120l7 7 14-14" />
+        <text class="ep-label" x="1110" y="177">YOUR NEW PLACE</text>
+      </g>
+
+      <!-- ── truck: rides the road via offset-path, tilting with the curve ── -->
+      <g class="route-truck">
+        <rect class="truck-bounds" x="-3" y="-18" width="76" height="54.5" />
+        <ellipse class="truck-shadow" cx="35" cy="34.2" rx="33" ry="2.3" fill="url(#truckShadow)" />
+
+        <g class="route-truck-bob">
+          <g class="truck-exhaust">
+            <circle cx="47" cy="-1" r="2.6" />
+            <circle cx="51" cy="-7" r="3.4" />
+            <circle cx="55" cy="-14" r="4.2" />
+          </g>
+          <rect class="truck-stack" x="45" y="1" width="2.6" height="7" rx="1.3" />
+
+          <rect class="truck-body" x="0" y="0" width="48" height="28" rx="3.5" />
+          <rect class="truck-stripe" x="0" y="19" width="48" height="2" />
+          <text class="truck-brand" x="24" y="14">50STATE</text>
+
+          <path class="truck-cab" d="M48 7h11l9 11v10H48V7Z" />
+          <path class="truck-window" d="M50 9h8l6.5 8.5H50V9Z" />
+          <rect class="truck-light" x="65" y="21" width="3" height="2.5" rx="1" />
+
+          <g class="truck-wheel">
+            <circle class="tyre" cx="13" cy="30" r="6.5" />
+            <path class="spoke" d="M13 25v10M8 30h10" />
+            <circle class="hub" cx="13" cy="30" r="2" />
+          </g>
+          <g class="truck-wheel">
+            <circle class="tyre" cx="59" cy="30" r="6.5" />
+            <path class="spoke" d="M59 25v10M54 30h10" />
+            <circle class="hub" cx="59" cy="30" r="2" />
+          </g>
+        </g>
+      </g>
+      </g>
+    </svg>
+  </div>`;
+
+const SERVICES_NOTE = `  <div class="services-note">
+    <span class="sn-text">Not sure which fits your move? We'll tell you straight — no upsell.</span>
+    <a href="tel:${PHONE_HREF}" class="sn-link">
+      Talk to a move coordinator
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>`;
+
 // The six service cards, verbatim from index.html — these describe the company,
 // not the state, so the copy is deliberately identical everywhere.
 const SERVICE_CARDS = [
-  ['01', `<svg viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V21H3V9.5Z"/><path d="M9 21v-8h6v8"/></svg>`, 'Residential',
-   `From studio apartments to five-bedroom homes. We disassemble, transport, and reassemble — and we never leave before everything's in its place.`],
-  ['02', `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>`, 'Commercial',
-   `Office relocations handled after hours or over weekends, so your team is working from the new space on Monday morning — no downtime.`],
-  ['03', `<svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg>`, 'Packing &amp; Crating',
-   `Museum-grade packing for art, antiques, and anything fragile. We build custom crates on site when off-the-shelf won't do.`],
-  ['04', `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`, 'Storage',
-   `Climate-controlled, 24-hour-monitored units in secure facilities. Short-term overflow or long-term — both priced fairly.`],
-  ['05', `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg>`, 'Long Distance',
+  ['01', `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg>`, 'Long Distance',
    `Cross-country and interstate relocations. We coordinate logistics, customs paperwork, and destination unpacking — all door to door.`],
-  ['06', `<svg viewBox="0 0 24 24"><path d="M20 7 9 18l-5-5"/></svg>`, 'White Glove',
+  ['02', `<svg viewBox="0 0 24 24"><path d="M20 7 9 18l-5-5"/></svg>`, 'White Glove',
    `The top tier. Concierge-level service: we'll pack, transport, unpack, arrange, and even hang the art on the walls before we leave.`],
+  ['03', `<svg viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V21H3V9.5Z"/><path d="M9 21v-8h6v8"/></svg>`, 'Residential',
+   `From studio apartments to five-bedroom homes. We disassemble, transport, and reassemble — and we never leave before everything's in its place.`],
+  ['04', `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>`, 'Commercial',
+   `Office relocations handled after hours or over weekends, so your team is working from the new space on Monday morning — no downtime.`],
+  ['05', `<svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg>`, 'Packing &amp; Crating',
+   `Museum-grade packing for art, antiques, and anything fragile. We build custom crates on site when off-the-shelf won't do.`],
+  ['06', `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`, 'Storage',
+   `Climate-controlled, 24-hour-monitored units in secure facilities. Short-term overflow or long-term, fully insured and inventoried throughout.`],
 ];
 
 function servicesSection(intro) {
@@ -149,17 +259,21 @@ function servicesSection(intro) {
     </div>`).join('\n');
   return `<section id="services">
   <div class="section-header">
+    <div class="section-kicker">What we do</div>
     <h2>Services built around <em>your</em> move.</h2>
     <p>${esc(intro)}</p>
   </div>
   <div class="services">
 ${cards}
   </div>
+
+${SERVICES_NOTE}
 </section>`;
 }
 
 const GALLERY = `<section id="gallery" class="gallery-section">
   <div class="section-header">
+    <div class="section-kicker">Gallery</div>
     <h2>Our work, <em>up close.</em></h2>
     <p>A look at the homes, offices, and cross-country relocations we've handled across the country.</p>
   </div>
@@ -204,10 +318,10 @@ function stateOptions(selected) {
 }
 
 function quoteForm(originState) {
-  const heading = originState ? `Free quote from ${esc(originState.name)}` : 'Get a free quote';
-  return `  <div class="hero-form-wrap fade-in delay-2" id="get-quote">
+  return `  <div class="hero-form-col form-enter">
+  <div class="hero-form-wrap" id="get-quote">
     <div class="hero-form-header">
-      <h3>${heading}</h3>
+      <h3>Get a free quote</h3>
       <p>Fixed price · no hidden fees · reply within same day</p>
     </div>
     <form class="quote-form" id="quote-form" novalidate>
@@ -228,11 +342,12 @@ function quoteForm(originState) {
           <label for="qf-size">Home size</label>
           <select id="qf-size">
             <option value="">Size…</option>
-            <option>Studio</option>
             <option>1 Bedroom</option>
             <option>2 Bedrooms</option>
             <option>3 Bedrooms</option>
-            <option>4+ Bedrooms</option>
+            <option>4 Bedrooms</option>
+            <option>5+ Bedrooms</option>
+            <option>Studio</option>
             <option>Office / Commercial</option>
           </select>
         </div>
@@ -241,20 +356,28 @@ function quoteForm(originState) {
           <input type="date" id="qf-date" />
         </div>
       </div>
-      <div class="form-row">
-        <label for="qf-name">Your name</label>
-        <input type="text" id="qf-name" placeholder="Jane Doe" />
-        <div class="field-error" id="error-name" role="alert"></div>
+      <div class="form-row form-row-2">
+        <div>
+          <label for="qf-name">Your name</label>
+          <input type="text" id="qf-name" placeholder="Jane Doe" />
+          <div class="field-error" id="error-name" role="alert"></div>
+        </div>
+        <div>
+          <label for="qf-email">Email address</label>
+          <input type="email" id="qf-email" placeholder="jane@example.com" />
+          <div class="field-error" id="error-email" role="alert"></div>
+        </div>
       </div>
-      <div class="form-row">
-        <label for="qf-email">Email address</label>
-        <input type="email" id="qf-email" placeholder="jane@example.com" />
-        <div class="field-error" id="error-email" role="alert"></div>
-      </div>
-      <div class="form-row">
-        <label for="qf-phone">Phone number</label>
-        <input type="tel" id="qf-phone" placeholder="(555) 000-0000" />
-        <div class="field-error" id="error-phone" role="alert"></div>
+      <div class="form-row form-row-2">
+        <div>
+          <label for="qf-phone">Phone number</label>
+          <input type="tel" id="qf-phone" placeholder="(555) 000-0000" />
+          <div class="field-error" id="error-phone" role="alert"></div>
+        </div>
+        <div>
+          <label for="qf-notes">Special items<span class="lbl-tail"> or notes</span></label>
+          <input type="text" id="qf-notes" placeholder="Piano, antiques…" />
+        </div>
       </div>
       <div class="form-row-consent">
         <label class="sms-consent-label" for="qf-sms">
@@ -266,14 +389,17 @@ function quoteForm(originState) {
         </label>
         <div class="sms-error" id="sms-error" role="alert"></div>
       </div>
-      <div class="form-row">
-        <label for="qf-notes">Special items or notes</label>
-        <input type="text" id="qf-notes" placeholder="Piano, antiques, oversized furniture…" />
-      </div>
-      <button type="submit" class="form-submit">Request a free quote →</button>
+      <button type="submit" class="form-submit">Request a free quote</button>
     </form>
+
+    <ul class="form-assurances">
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Binding written estimate</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Your details are never sold to brokers</li>
+    </ul>
+  </div>
   </div>`;
 }
+
 
 // Footer is identical to index.html except the Company column, which points at
 // the state hub rather than a same-page anchor.
@@ -329,7 +455,7 @@ const FOOTER = `<section id="contact" class="contact-strip">
     <div class="footer-col">
       <h4>Company</h4>
       <ul>
-        <li><a href="${HUB_URL}">Moving companies by state</a></li>
+        <li><a href="${HUB_URL}">Movers by state</a></li>
         <li><a href="#gallery">Our work</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="mailto:careers@50statemovers.com">Careers</a></li>
@@ -508,7 +634,7 @@ function statePage(s) {
      `Whether a trailer can reach your door changes the job. Long carries, stairs, freight elevator reservations, street permits, and shuttle service where a tractor-trailer physically cannot fit are all real work — we check them at survey so they land in the quote instead of on move day.`],
     ['How much packing you want',
      `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>`,
-     `Packing everything yourself is the cheapest option and full packing is the most expensive; most customers land somewhere between, having us handle the kitchen, art, and anything fragile. Custom crating for art, antiques, and oversized items is quoted separately.`],
+     `Full packing is what most long-distance customers choose, and it is the single biggest factor in whether a load arrives intact — a professionally packed box is built for a 2,000-mile ride, not a car trip. Most land somewhere between, having us handle the kitchen, art, and anything fragile. Custom crating for art, antiques, and oversized items is quoted separately.`],
     ['Storage between dates',
      `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`,
      `Move-out and move-in dates rarely line up. Storage-in-transit holds your inventoried goods until your date, and we quote that cost up front rather than letting it accrue quietly. Climate control is worth it for wood, leather, and electronics.`],
@@ -556,8 +682,11 @@ function statePage(s) {
     ],
   };
 
+  // Five states carry their own licensing question in the data, which produced
+  // the same question twice on those pages. The generated one is the fuller
+  // answer (carrier vs broker, binding vs estimate), so it wins.
   const faqItems = [
-    ...s.faqs.map(f => ({ q: esc(f.q), a: [esc(f.a)] })),
+    ...s.faqs.filter(f => !/licens/i.test(f.q)).map(f => ({ q: esc(f.q), a: [esc(f.a)] })),
     licensingFaq,
   ];
 
@@ -569,21 +698,29 @@ ${NAV}
 <header class="hero">
   <div class="hero-content">
     <div class="eyebrow fade-in">
-      <a href="/">Home</a> / <a href="${HUB_URL}">Moving companies by state</a> / ${esc(s.name)}
+      <a href="/">Home</a> / <a href="${HUB_URL}">Movers by state</a> / ${esc(s.name)}
     </div>
     <div class="hero-headline-wrap fade-in delay-1">
-      <h1>
-        Moving Companies in<br>
-        <em>${esc(s.name)}</em>
-      </h1>
+      <h1>Long-Distance Movers in <em>${esc(s.name)}</em></h1>
     </div>
+  </div>
+
+  <div class="hero-lede">
     <p class="fade-in delay-2">
       ${esc(s.intro)}
     </p>
-    <div class="hero-truck-img fade-in delay-2">
-      <img src="/assets/images/trucks/truck-1.jpg" alt="50STATEMOVERS moving truck serving ${esc(s.name)}" />
+
+    <div class="hero-trust fade-in delay-3">
+      <div class="ht-item"><span class="ht-dot" aria-hidden="true"></span><span>Booking moves this week</span></div>
+      <span class="ht-divider" aria-hidden="true"></span>
+      <div class="ht-item">
+        <svg class="ht-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        <span><strong>${s.cities.length}+</strong> ${esc(s.name)} cities</span>
+      </div>
     </div>
   </div>
+
+${HERO_VIDEO}
 
   <div class="hero-stat-cards fade-in delay-3">
     <div class="hero-card hc-light float">
@@ -593,13 +730,18 @@ ${NAV}
     </div>
     <div class="hero-card hc-dark float delay-a">
       <div class="hc-label">Busiest ${esc(s.abbr)} lane</div>
-      <div class="hc-val serif" style="font-size:1.3rem;line-height:1.2;">${esc(s.abbr)} → ${esc(longest.dest.abbr)}</div>
+      <div class="hc-val serif">${esc(s.abbr)} → ${esc(longest.dest.abbr)}</div>
       <div class="hc-sub">${esc(s.name)} to ${esc(longest.dest.name)} · ~${longest.miles.toLocaleString()} mi</div>
     </div>
     <div class="hero-card hc-accent float delay-b">
-      <div class="hc-label">Free Quotes</div>
-      <div class="hc-val serif">Same Day</div>
+      <div class="hc-label">Free quotes</div>
+      <div class="hc-val serif">Same day</div>
       <div class="hc-sub">No obligation, no hidden fees</div>
+    </div>
+    <div class="hero-card hc-light float delay-c">
+      <div class="hc-label">Protection</div>
+      <div class="hc-val serif">$1M</div>
+      <div class="hc-sub">Licensed, bonded &amp; insured</div>
     </div>
   </div>
 
@@ -611,9 +753,12 @@ ${TRUST_BAR}
 <!-- COVERAGE -->
 <section id="coverage" class="coverage-section">
   <div class="section-header">
+    <div class="section-kicker">Coverage</div>
     <h2>Cities we serve across <em>${esc(s.name)}.</em></h2>
     <p>We pick up throughout the state, not just the metros. If your town isn't listed, it's almost certainly still on a route we run — call ${PHONE_DISPLAY} and we'll confirm access before quoting.</p>
   </div>
+${ROUTE_ANIM}
+
   <div class="states-grid" id="states-grid">
 ${cityItems}
   </div>
@@ -626,6 +771,7 @@ ${servicesSection(s.servicesIntro)}
 <!-- COSTS -->
 <section id="costs" class="coverage-section">
   <div class="section-header">
+    <div class="section-kicker">Pricing</div>
     <h2>What shapes the price of ${a(s)} <em>${esc(s.name)}</em> move.</h2>
     <p>We don't publish a price list, because a number without a survey is a guess — and a guess is exactly what turns into a bigger bill on delivery day. Here's what actually moves the figure on ${a(s)} ${esc(s.name)} move. Every one of these is itemized in your written quote before you sign, and the price we agree is the price you pay.</p>
   </div>
@@ -637,6 +783,7 @@ ${costCards}
 <!-- PROCESS -->
 <section id="process" class="process-section">
   <div class="section-header">
+    <div class="section-kicker">Local notes</div>
     <h2>Moving from ${esc(s.name)}: what's <em>actually different.</em></h2>
     <p>Every state has its own access problems, weather windows, and rules. Here's what shapes ${a(s)} ${esc(s.name)} move in practice.</p>
   </div>
@@ -648,6 +795,7 @@ ${localSteps}
 <!-- WHAT CATCHES PEOPLE OUT -->
 <section id="local-notes">
   <div class="section-header">
+    <div class="section-kicker">Good to know</div>
     <h2>What catches people out in <em>${esc(s.name)}.</em></h2>
     <p>Three things that regularly turn a straightforward ${esc(s.name)} move into an expensive one. We check all three before quoting, so they land in the price rather than on move day.</p>
   </div>
@@ -660,12 +808,14 @@ ${quirkCards}
 ${GALLERY}
 
 <!-- FAQ -->
-${faqSection(`    <h2>${esc(s.name)} moving <em>questions</em>, answered.</h2>
+${faqSection(`    <div class="section-kicker">FAQ</div>
+    <h2>${esc(s.name)} moving <em>questions</em>, answered.</h2>
     <p>The things people actually ask us before booking a move out of ${esc(s.name)}.</p>`, faqItems)}
 
 <!-- NEARBY STATES -->
 <section id="nearby">
   <div class="section-header">
+    <div class="section-kicker">Where we go</div>
     <h2>Nearby states &amp; <em>popular destinations.</em></h2>
     <p>We run the full continental map. These are the states most often paired with ${a(s)} ${esc(s.name)} move — each has its own guide covering arrival logistics, building rules, and seasonal timing.</p>
   </div>
@@ -742,7 +892,7 @@ function hubPage() {
     },
     {
       q: 'How far ahead should I book?',
-      a: [`For a June-through-August date, six to eight weeks. Peak season books out, and in a few markets it genuinely runs out — Boston around September 1, Madison on August 15, Chicago on October 1 and May 1, and Nashville and Bozeman all summer. Outside peak, three weeks is usually enough. If you need to move this week, call us anyway; we handle last-minute moves regularly and will tell you straight away whether we can.`],
+      a: [`Call us whatever your timeline — we run last-minute long-distance moves every week, and we will tell you straight away whether your date works rather than leaving you guessing. If you are planning ahead: three weeks is comfortable outside peak season, and six to eight weeks for a June-through-August date. A few markets do sell out — Boston around September 1, Madison on August 15, Chicago on October 1 and May 1, Nashville and Bozeman all summer — so if your move falls on one of those, book earlier.`],
     },
     {
       q: 'What if my state isn&rsquo;t the one I&rsquo;m moving to?',
@@ -758,21 +908,29 @@ ${NAV}
 <header class="hero">
   <div class="hero-content">
     <div class="eyebrow fade-in">
-      <a href="/">Home</a> / Moving companies by state
+      <a href="/">Home</a> / Movers by state
     </div>
     <div class="hero-headline-wrap fade-in delay-1">
-      <h1>
-        Moving Companies<br>
-        <em>By State</em>
-      </h1>
+      <h1>Long-Distance Movers <em>By State</em></h1>
     </div>
+  </div>
+
+  <div class="hero-lede">
     <p class="fade-in delay-2">
       A generic quote hides the things that actually decide how your move goes — building permits, HOA approvals, mountain-pass closures, spring road weight limits, hurricane windows. So we wrote a real guide for every continental state and Washington DC: which lanes we actually run out of that state, how long each takes, and what tends to go wrong there.
     </p>
-    <div class="hero-truck-img fade-in delay-2">
-      <img src="/assets/images/trucks/truck-2.jpg" alt="50STATEMOVERS moving truck on the road" />
+
+    <div class="hero-trust fade-in delay-3">
+      <div class="ht-item"><span class="ht-dot" aria-hidden="true"></span><span>Booking moves this week</span></div>
+      <span class="ht-divider" aria-hidden="true"></span>
+      <div class="ht-item">
+        <svg class="ht-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        <span><strong>${states.length}</strong> state guides</span>
+      </div>
     </div>
   </div>
+
+${HERO_VIDEO}
 
   <div class="hero-stat-cards fade-in delay-3">
     <div class="hero-card hc-light float">
@@ -786,9 +944,14 @@ ${NAV}
       <div class="hc-sub">Based on 2,400+ reviews</div>
     </div>
     <div class="hero-card hc-accent float delay-b">
-      <div class="hc-label">Free Quotes</div>
-      <div class="hc-val serif">Same Day</div>
+      <div class="hc-label">Free quotes</div>
+      <div class="hc-val serif">Same day</div>
       <div class="hc-sub">No obligation, no hidden fees</div>
+    </div>
+    <div class="hero-card hc-light float delay-c">
+      <div class="hc-label">Protection</div>
+      <div class="hc-val serif">$1M</div>
+      <div class="hc-sub">Licensed, bonded &amp; insured</div>
     </div>
   </div>
 
@@ -826,6 +989,7 @@ ${servicesSection(`Whether you're relocating an apartment or a full office, we t
 <!-- PROCESS -->
 <section id="process" class="process-section">
   <div class="section-header">
+    <div class="section-kicker">The process</div>
     <h2>How a move <em>actually</em> goes.</h2>
     <p>No surprises, no vague quotes that balloon on moving day. Here's the full shape of working with us.</p>
   </div>

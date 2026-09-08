@@ -426,20 +426,38 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <header class="hero">
   <div class="hero-content">
     <div class="eyebrow fade-in">
-      <a href="/">Home</a> / Moving companies by state
+      <a href="/">Home</a> / Movers by state
     </div>
     <div class="hero-headline-wrap fade-in delay-1">
-      <h1>
-        Moving Companies<br>
-        <em>By State</em>
-      </h1>
+      <h1>Long-Distance Movers <em>By State</em></h1>
     </div>
+  </div>
+
+  <div class="hero-lede">
     <p class="fade-in delay-2">
       A generic quote hides the things that actually decide how your move goes — building permits, HOA approvals, mountain-pass closures, spring road weight limits, hurricane windows. So we wrote a real guide for every continental state and Washington DC: which lanes we actually run out of that state, how long each takes, and what tends to go wrong there.
     </p>
-    <div class="hero-truck-img fade-in delay-2">
-      <img src="/assets/images/trucks/truck-2.jpg" alt="50STATEMOVERS moving truck on the road" />
+
+    <div class="hero-trust fade-in delay-3">
+      <div class="ht-item"><span class="ht-dot" aria-hidden="true"></span><span>Booking moves this week</span></div>
+      <span class="ht-divider" aria-hidden="true"></span>
+      <div class="ht-item">
+        <svg class="ht-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        <span><strong>49</strong> state guides</span>
+      </div>
     </div>
+  </div>
+
+  <div class="hero-truck-img fade-in delay-3">
+    <video
+      id="hero-video"
+      autoplay muted loop playsinline
+      preload="metadata"
+      poster="/assets/images/hero-poster.jpg"
+      aria-label="50STATEMOVERS crew loading furniture onto the truck">
+      <source src="/assets/video/Movers_loading_furniture_onto_truck_202609070457.mp4" type="video/mp4" />
+      <img src="/assets/images/hero-poster.jpg" alt="50STATEMOVERS crew loading furniture onto the truck" />
+    </video>
   </div>
 
   <div class="hero-stat-cards fade-in delay-3">
@@ -454,13 +472,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="hc-sub">Based on 2,400+ reviews</div>
     </div>
     <div class="hero-card hc-accent float delay-b">
-      <div class="hc-label">Free Quotes</div>
-      <div class="hc-val serif">Same Day</div>
+      <div class="hc-label">Free quotes</div>
+      <div class="hc-val serif">Same day</div>
       <div class="hc-sub">No obligation, no hidden fees</div>
+    </div>
+    <div class="hero-card hc-light float delay-c">
+      <div class="hc-label">Protection</div>
+      <div class="hc-val serif">$1M</div>
+      <div class="hc-sub">Licensed, bonded &amp; insured</div>
     </div>
   </div>
 
-  <div class="hero-form-wrap fade-in delay-2" id="get-quote">
+  <div class="hero-form-col form-enter">
+  <div class="hero-form-wrap" id="get-quote">
     <div class="hero-form-header">
       <h3>Get a free quote</h3>
       <p>Fixed price · no hidden fees · reply within same day</p>
@@ -483,11 +507,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <label for="qf-size">Home size</label>
           <select id="qf-size">
             <option value="">Size…</option>
-            <option>Studio</option>
             <option>1 Bedroom</option>
             <option>2 Bedrooms</option>
             <option>3 Bedrooms</option>
-            <option>4+ Bedrooms</option>
+            <option>4 Bedrooms</option>
+            <option>5+ Bedrooms</option>
+            <option>Studio</option>
             <option>Office / Commercial</option>
           </select>
         </div>
@@ -496,20 +521,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <input type="date" id="qf-date" />
         </div>
       </div>
-      <div class="form-row">
-        <label for="qf-name">Your name</label>
-        <input type="text" id="qf-name" placeholder="Jane Doe" />
-        <div class="field-error" id="error-name" role="alert"></div>
+      <div class="form-row form-row-2">
+        <div>
+          <label for="qf-name">Your name</label>
+          <input type="text" id="qf-name" placeholder="Jane Doe" />
+          <div class="field-error" id="error-name" role="alert"></div>
+        </div>
+        <div>
+          <label for="qf-email">Email address</label>
+          <input type="email" id="qf-email" placeholder="jane@example.com" />
+          <div class="field-error" id="error-email" role="alert"></div>
+        </div>
       </div>
-      <div class="form-row">
-        <label for="qf-email">Email address</label>
-        <input type="email" id="qf-email" placeholder="jane@example.com" />
-        <div class="field-error" id="error-email" role="alert"></div>
-      </div>
-      <div class="form-row">
-        <label for="qf-phone">Phone number</label>
-        <input type="tel" id="qf-phone" placeholder="(555) 000-0000" />
-        <div class="field-error" id="error-phone" role="alert"></div>
+      <div class="form-row form-row-2">
+        <div>
+          <label for="qf-phone">Phone number</label>
+          <input type="tel" id="qf-phone" placeholder="(555) 000-0000" />
+          <div class="field-error" id="error-phone" role="alert"></div>
+        </div>
+        <div>
+          <label for="qf-notes">Special items<span class="lbl-tail"> or notes</span></label>
+          <input type="text" id="qf-notes" placeholder="Piano, antiques…" />
+        </div>
       </div>
       <div class="form-row-consent">
         <label class="sms-consent-label" for="qf-sms">
@@ -521,12 +554,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </label>
         <div class="sms-error" id="sms-error" role="alert"></div>
       </div>
-      <div class="form-row">
-        <label for="qf-notes">Special items or notes</label>
-        <input type="text" id="qf-notes" placeholder="Piano, antiques, oversized furniture…" />
-      </div>
-      <button type="submit" class="form-submit">Request a free quote →</button>
+      <button type="submit" class="form-submit">Request a free quote</button>
     </form>
+
+    <ul class="form-assurances">
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Binding written estimate</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Your details are never sold to brokers</li>
+    </ul>
+  </div>
   </div>
 </header>
 
@@ -536,12 +571,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="trust-label">Fixed-Price Moves</div>
   </div>
   <div class="trust-item">
-    <div class="trust-number serif">Fully</div>
-    <div class="trust-label">Licensed &amp; Insured</div>
-  </div>
-  <div class="trust-item">
-    <div class="trust-number serif">$1M</div>
-    <div class="trust-label">Insurance coverage</div>
+    <div class="trust-number serif">0.3%</div>
+    <div class="trust-label">Damage claim rate</div>
   </div>
   <div class="trust-item">
     <div class="trust-number serif">24/7</div>
@@ -658,52 +689,62 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- SERVICES -->
 <section id="services">
   <div class="section-header">
+    <div class="section-kicker">What we do</div>
     <h2>Services built around <em>your</em> move.</h2>
     <p>Whether you're relocating an apartment or a full office, we tailor the approach to what you're actually moving — and where it needs to go. Every service below is available in all 49 states we cover.</p>
   </div>
   <div class="services">
     <div class="service-card">
       <div class="service-num">01</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V21H3V9.5Z"/><path d="M9 21v-8h6v8"/></svg></div>
-      <h3>Residential</h3>
-      <p>From studio apartments to five-bedroom homes. We disassemble, transport, and reassemble — and we never leave before everything's in its place.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">02</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></div>
-      <h3>Commercial</h3>
-      <p>Office relocations handled after hours or over weekends, so your team is working from the new space on Monday morning — no downtime.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">03</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
-      <h3>Packing &amp; Crating</h3>
-      <p>Museum-grade packing for art, antiques, and anything fragile. We build custom crates on site when off-the-shelf won't do.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">04</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-      <h3>Storage</h3>
-      <p>Climate-controlled, 24-hour-monitored units in secure facilities. Short-term overflow or long-term — both priced fairly.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">05</div>
       <div class="service-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg></div>
       <h3>Long Distance</h3>
       <p>Cross-country and interstate relocations. We coordinate logistics, customs paperwork, and destination unpacking — all door to door.</p>
     </div>
     <div class="service-card">
-      <div class="service-num">06</div>
+      <div class="service-num">02</div>
       <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M20 7 9 18l-5-5"/></svg></div>
       <h3>White Glove</h3>
       <p>The top tier. Concierge-level service: we'll pack, transport, unpack, arrange, and even hang the art on the walls before we leave.</p>
     </div>
+    <div class="service-card">
+      <div class="service-num">03</div>
+      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V21H3V9.5Z"/><path d="M9 21v-8h6v8"/></svg></div>
+      <h3>Residential</h3>
+      <p>From studio apartments to five-bedroom homes. We disassemble, transport, and reassemble — and we never leave before everything's in its place.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">04</div>
+      <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></div>
+      <h3>Commercial</h3>
+      <p>Office relocations handled after hours or over weekends, so your team is working from the new space on Monday morning — no downtime.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">05</div>
+      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
+      <h3>Packing &amp; Crating</h3>
+      <p>Museum-grade packing for art, antiques, and anything fragile. We build custom crates on site when off-the-shelf won't do.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">06</div>
+      <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+      <h3>Storage</h3>
+      <p>Climate-controlled, 24-hour-monitored units in secure facilities. Short-term overflow or long-term, fully insured and inventoried throughout.</p>
+    </div>
+  </div>
+
+  <div class="services-note">
+    <span class="sn-text">Not sure which fits your move? We'll tell you straight — no upsell.</span>
+    <a href="tel:+18885051086" class="sn-link">
+      Talk to a move coordinator
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
   </div>
 </section>
 
 <!-- PROCESS -->
 <section id="process" class="process-section">
   <div class="section-header">
+    <div class="section-kicker">The process</div>
     <h2>How a move <em>actually</em> goes.</h2>
     <p>No surprises, no vague quotes that balloon on moving day. Here's the full shape of working with us.</p>
   </div>
@@ -734,6 +775,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- GALLERY -->
 <section id="gallery" class="gallery-section">
   <div class="section-header">
+    <div class="section-kicker">Gallery</div>
     <h2>Our work, <em>up close.</em></h2>
     <p>A look at the homes, offices, and cross-country relocations we've handled across the country.</p>
   </div>
@@ -774,7 +816,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <div class="faq-item">
       <button class="faq-q" aria-expanded="false">How far ahead should I book?<span class="faq-toggle" aria-hidden="true"></span></button>
-      <div class="faq-a"><p>For a June-through-August date, six to eight weeks. Peak season books out, and in a few markets it genuinely runs out — Boston around September 1, Madison on August 15, Chicago on October 1 and May 1, and Nashville and Bozeman all summer. Outside peak, three weeks is usually enough. If you need to move this week, call us anyway; we handle last-minute moves regularly and will tell you straight away whether we can.</p></div>
+      <div class="faq-a"><p>Call us whatever your timeline — we run last-minute long-distance moves every week, and we will tell you straight away whether your date works rather than leaving you guessing. If you are planning ahead: three weeks is comfortable outside peak season, and six to eight weeks for a June-through-August date. A few markets do sell out — Boston around September 1, Madison on August 15, Chicago on October 1 and May 1, Nashville and Bozeman all summer — so if your move falls on one of those, book earlier.</p></div>
     </div>
     <div class="faq-item">
       <button class="faq-q" aria-expanded="false">What if my state isn&rsquo;t the one I&rsquo;m moving to?<span class="faq-toggle" aria-hidden="true"></span></button>
@@ -835,7 +877,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="footer-col">
       <h4>Company</h4>
       <ul>
-        <li><a href="/moving-companies-by-state/">Moving companies by state</a></li>
+        <li><a href="/moving-companies-by-state/">Movers by state</a></li>
         <li><a href="#gallery">Our work</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="mailto:careers@50statemovers.com">Careers</a></li>
