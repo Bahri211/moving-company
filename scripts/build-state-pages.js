@@ -563,7 +563,8 @@ function statePage(s) {
 
   const canonical = `${SITE}${stateUrl(s)}`;
   const title = `Long-Distance Movers in ${s.name} | 50STATEMOVERS INC`;
-  const description = `Licensed long-distance movers serving ${s.name}. Free fixed-price quotes for moving from ${s.name} to any continental state — real driving distances, transit times, and local access notes for ${s.cities.slice(0, 3).join(', ')} and beyond.`;
+  const topLanes = s.routes.slice(0, 2).map(a => byAbbr[a].name).join(' or ');
+  const description = `Moving from ${s.name} to ${topLanes} — or any continental state. Binding fixed prices, our own crews, $1M coverage, no brokers. Free quote.`;
 
   const schema = {
     '@context': 'https://schema.org',
@@ -840,7 +841,7 @@ ${FOOTER}
 function hubPage() {
   const canonical = `${SITE}${HUB_URL}`;
   const title = 'Long-Distance Movers by State | 49 State Moving Guides';
-  const description = 'Licensed long-distance movers in every continental US state and Washington DC. Pick your state for real routes, transit times, seasonal timing, and the local access rules that shape your move.';
+  const description = 'Long-distance movers for every continental state and Washington DC. Real routes, transit times and local rules per state. Binding prices, no brokers.';
 
   const schema = {
     '@context': 'https://schema.org',
