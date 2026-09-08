@@ -1,6 +1,21 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/api/contact", "destination": "/api/contact" }
+    {
+      "source": "/api/contact",
+      "destination": "/api/contact"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/privacy-policy-sms-terms",
+      "destination": "/privacy-policy",
+      "permanent": true
+    },
+    {
+      "source": "/privacy-policy-sms-terms/",
+      "destination": "/privacy-policy",
+      "permanent": true
+    }
   ]
 }

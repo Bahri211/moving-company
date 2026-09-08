@@ -562,7 +562,7 @@ function statePage(s) {
     .filter(d => !seenLinks.has(d.abbr) && seenLinks.add(d.abbr));
 
   const canonical = `${SITE}${stateUrl(s)}`;
-  const title = `Moving Companies in ${s.name} | Long-Distance Movers From ${s.name}`;
+  const title = `Long-Distance Movers in ${s.name} | 50STATEMOVERS INC`;
   const description = `Licensed long-distance movers serving ${s.name}. Free fixed-price quotes for moving from ${s.name} to any continental state — real driving distances, transit times, and local access notes for ${s.cities.slice(0, 3).join(', ')} and beyond.`;
 
   const schema = {
@@ -839,7 +839,7 @@ ${FOOTER}
 
 function hubPage() {
   const canonical = `${SITE}${HUB_URL}`;
-  const title = 'Moving Companies by State | 49 Long-Distance Moving Guides';
+  const title = 'Long-Distance Movers by State | 49 State Moving Guides';
   const description = 'Licensed long-distance movers in every continental US state and Washington DC. Pick your state for real routes, transit times, seasonal timing, and the local access rules that shape your move.';
 
   const schema = {
