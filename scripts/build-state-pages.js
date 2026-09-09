@@ -287,7 +287,7 @@ const GALLERY = `<section id="gallery" class="gallery-section">
       <div class="gallery-caption"><div class="label">On the Road</div><div class="title">Coast to coast delivery</div></div>
     </div>
     <div class="gallery-item">
-      <img src="/assets/images/trucks/inside house.jpeg" alt="Moving crew inside a home" loading="lazy" />
+      <img src="/assets/images/trucks/inside-house.jpeg" alt="Moving crew inside a home" loading="lazy" />
       <div class="gallery-caption"><div class="label">White Glove Service</div><div class="title">Handled with care</div></div>
     </div>
     <div class="gallery-item">

@@ -162,7 +162,7 @@ module.exports = [
     { title: "Federal corridor timelines", body: "Agency and contractor relocations along I-270 often have fixed report dates. Those go dedicated so delivery is a date, not a spread, and we provide the documentation relocation policies require." }
   ],
   faqs: [
-    { q: "Do I need a parking permit to move in Baltimore?", a: "On most permit-parking blocks, yes — the truck needs a city permit to hold curb space legally. Without one, expect a long carry. We file the application, but it takes lead time, so tell us the address early." },
+    { q: "Do I need a parking permit for the moving truck in Baltimore?", a: "The truck needs one on most permit-parking blocks; you do not have to arrange anything. We file the application — without the permit, expect a long carry from wherever the crew can legally park. It takes lead time, so tell us the address early." },
     { q: "Can you move a Baltimore rowhouse?", a: "Yes, it is routine work here. The planning issues are the narrow front steps, tight turning staircases that will not clear a large sofa or box spring, and the lack of any driveway. We assess these at survey and plan disassembly or a hoist as needed." },
     { q: "How long does a move from Maryland to North Carolina take?", a: "About 350 to 500 miles depending on destination — 2 to 5 days consolidated, next-day dedicated. It is short enough that a dedicated truck is worth considering if you want date certainty." },
     { q: "Will the Bay Bridge affect an Eastern Shore move?", a: "It can. The bridge is the only practical crossing, it closes in sustained high winds, and summer weekend backups are severe. We schedule Shore moves for weekday morning crossings and build a contingency into the delivery window." }
@@ -187,7 +187,7 @@ module.exports = [
   ],
   faqs: [
     { q: "Why is September 1 such a problem in Boston?", a: "An unusually large share of leases in Boston, Cambridge, Somerville, Allston, and Brighton all end on August 31. Every mover in the region is booked, streets are jammed, and pricing peaks. Book two to three months ahead or, if you can, move on a different date." },
-    { q: "Do I need a permit to park a moving truck in Boston?", a: "Yes, on most streets. Boston, Cambridge, and Somerville issue street-occupancy permits that must be posted in advance to reserve the space. We handle the filing — it is the single most common avoidable problem on a Boston move." },
+    { q: "Do I need a permit to park the moving truck in Boston?", a: "The truck does on most streets, and the filing is ours, not yours. Boston, Cambridge, and Somerville issue street-occupancy permits that must be posted in advance to hold the space. Late permits are the single most common avoidable problem on a Boston move, so send us the address as soon as you have it." },
     { q: "Can you move furniture out of a third-floor walk-up?", a: "Yes, routinely. Triple-deckers with tight turning staircases are the standard housing stock here. Where a piece will not clear the stairs, we disassemble it or hoist it through a window, and we identify that at survey so it is in the price." },
     { q: "How long does a move from Massachusetts to Texas take?", a: "About 1,750 to 1,950 miles, typically 7 to 12 days on a consolidated load and 3 to 4 days dedicated. You get a delivery spread at booking and a confirmed 24-hour window once the truck is dispatched." }
   ]

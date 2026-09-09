@@ -90,7 +90,7 @@ module.exports = [
     { title: "Shore seasonal congestion", body: "From late June through Labor Day, Route 35 and the barrier island roads are heavily congested and some towns restrict truck hours. Off-season Shore moves are dramatically easier." }
   ],
   faqs: [
-    { q: "Do I need a permit to move in Hoboken or Jersey City?", a: "Yes. Both require a posted street-occupancy permit to reserve curb space for the truck, and most buildings additionally require a certificate of insurance and a reserved freight elevator. We handle all of it, but it needs about a week." },
+    { q: "Do I need a permit for the moving truck in Hoboken or Jersey City?", a: "The truck needs one in both cities, and we handle it along with the building paperwork — most buildings also want a certificate of insurance and a reserved freight elevator. None of it is on you to file. Allow about a week, so tell us the address and building early." },
     { q: "How long does a move from New Jersey to North Carolina take?", a: "Roughly 500 to 650 miles depending on destination — 2 to 5 days consolidated or next-day dedicated. On short-haul lanes like this, a dedicated truck gives you a delivery date rather than a spread." },
     { q: "Why can't the truck use the Garden State Parkway?", a: "Commercial vehicles are prohibited on large sections of the Parkway. Moving trucks route via the New Jersey Turnpike, I-287, and state highways instead, which adds time to Shore-bound moves, particularly in summer." },
     { q: "Are moving companies in New Jersey licensed?", a: "Intrastate movers must be licensed by the New Jersey Division of Consumer Affairs. For interstate moves, the federal FMCSA credential governs — verify an active USDOT and MC number. Ours are USDOT #4575745 and MC-1820728." }
@@ -135,7 +135,7 @@ module.exports = [
   quirks: [
     { title: "Building COI and elevator reservations", body: "This is the make-or-break detail in New York City. Buildings often require the COI a week ahead with exact wording, and freight elevators book out. Send us the building's move-in packet as soon as you have it." },
     { title: "Parkway truck bans and low bridges", body: "Commercial vehicles are prohibited on the region's parkways, where clearances are too low for a moving trailer. Routing goes via the interstates and truck routes, which affects timing more than distance." },
-    { title: "End-of-month lease turnover", body: "City leases cluster at month end, and the last weekend of June and August are effectively sold out region-wide. Booking six to eight weeks ahead for those dates is the difference between a move and a scramble." }
+    { title: "End-of-month lease turnover", body: "City leases cluster at month end, and the last weekends of June and August are the hardest dates in the region. Six to eight weeks ahead is the difference between a move and a scramble — if your date is closer than that, call us and we will tell you straight away what we can hold." }
   ],
   faqs: [
     { q: "What does a New York City building require from movers?", a: "A certificate of insurance naming the building owner and managing agent as additional insured, usually with specific coverage limits and exact wording; a reserved freight elevator; and a move confined to weekday business hours. Forward us the move-in packet as soon as you get it — this is the most common cause of a canceled move date." },
@@ -282,7 +282,7 @@ module.exports = [
     { title: "Mountain crossing time", body: "Philadelphia to Pittsburgh is 300 miles but crosses the Alleghenies on the Turnpike, and in winter that is a materially slower and less predictable run than the distance implies." }
   ],
   faqs: [
-    { q: "Do I need a permit to move in Philadelphia?", a: "On most rowhouse blocks, yes — a permit to reserve curb space for the truck. Rowhouses have no driveways, so without the permit the crew carries everything from wherever they can legally park. We file the application with lead time." },
+    { q: "Do I need a permit for the moving truck in Philadelphia?", a: "The truck does on most rowhouse blocks, and we file it — nothing for you to arrange. Rowhouses have no driveways, so without the permit the crew carries everything from wherever they can legally park. We just need the address with enough lead time." },
     { q: "Can a moving truck reach my Pittsburgh hillside home?", a: "Sometimes not. Grades, hairpin turns, and homes reachable only by public stairway are genuine features of neighborhoods like the South Side Slopes and Mount Washington. We survey the approach and plan a shuttle with extra crew, priced up front." },
     { q: "How long does a move from Pennsylvania to North Carolina take?", a: "Roughly 450 to 600 miles depending on origin — 2 to 5 days consolidated or next-day dedicated. Short-haul distance means a dedicated truck with a firm delivery date is worth considering." },
     { q: "Do you handle moves from New York and New Jersey into the Poconos?", a: "Yes, it is one of our steadier Pennsylvania lanes. The Pennsylvania end is usually straightforward; the New York or New Jersey side typically requires a street permit and a building certificate of insurance, which we handle." }

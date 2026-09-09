@@ -210,7 +210,7 @@ module.exports = [
     { title: "Hillside houses and long carries", body: "Seattle's topography means many homes sit well above or below street level with stairs as the only approach. That changes crew size significantly and we assess it at survey." }
   ],
   faqs: [
-    { q: "Do I need a permit to move in Seattle?", a: "On most city streets, yes — a street-use permit to reserve curb space for the truck. Seattle's parking density and hills make this important, and the application takes lead time. We file it as part of the booking." },
+    { q: "Do I need a permit for the moving truck in Seattle?", a: "The permit is for the truck, not for you, and we file it as part of the booking. Most Seattle streets need a street-use permit to hold curb space, and with the city's parking density and hills it matters more here than most places. It takes lead time, so give us the address early." },
     { q: "How long does a move from Washington to California take?", a: "Seattle to the Bay Area is about 800 miles and to Los Angeles roughly 1,150 — 4 to 8 days consolidated, 2 to 3 days dedicated. California destinations often need their own parking permits and building COIs, which we arrange." },
     { q: "Will Snoqualmie Pass affect my move?", a: "Only for eastbound routes toward Spokane or the interior. I-90 over the pass closes for avalanche control and storms from November through April. We build a contingency day into eastbound winter windows rather than promising a date we might miss." },
     { q: "Does Seattle rain affect moving?", a: "It affects the method rather than the schedule. From October through May we bring extra floor runners, wrap upholstery inside the house before it goes out, and allow additional time. Crews here work in rain routinely." }
