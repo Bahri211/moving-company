@@ -598,6 +598,20 @@ const SEO_TITLES = {
   "Washington D.C.": "Washington DC Interstate Movers | Nationwide Moving Services",
 };
 
+// The visible headline is the title's first half, with the state emphasised —
+// so the page reads the same as the search result that brought the visitor.
+function headline(s) {
+  const title = SEO_TITLES[s.name];
+  if (!title) return `Long-Distance Movers in <em>${esc(s.name)}</em>`;
+  const lead = title.split(' | ')[0];
+  for (const variant of [s.name, s.name.replace(/\./g, '')]) {
+    if (lead.startsWith(variant + ' ')) {
+      return `<em>${esc(variant)}</em>${esc(lead.slice(variant.length))}`;
+    }
+  }
+  return esc(lead);
+}
+
 function statePage(s) {
   const routes = s.routes.map(abbr => {
     const dest = byAbbr[abbr];
@@ -757,7 +771,7 @@ ${NAV}
       <a href="/">Home</a> / <a href="${HUB_URL}">Movers by state</a> / ${esc(s.name)}
     </div>
     <div class="hero-headline-wrap fade-in delay-1">
-      <h1>Long-Distance Movers in <em>${esc(s.name)}</em></h1>
+      <h1>${headline(s)}</h1>
     </div>
   </div>
 
