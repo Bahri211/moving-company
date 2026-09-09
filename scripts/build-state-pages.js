@@ -543,6 +543,61 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 /* --------------------------------------------------------------- the page */
 
+// Page titles, one per state — deliberately rotated across three phrasings
+// ("state-to-state", "interstate", "out-of-state") so 49 pages don't compete
+// with one identical pattern. Supplied by the client.
+const SEO_TITLES = {
+  "Alabama": "Alabama State-to-State Movers | Moving Anywhere in the USA",
+  "Arizona": "Arizona Out-of-State Movers | Nationwide Moving Services",
+  "Arkansas": "Arkansas State-to-State Moving | Moving Anywhere in the USA",
+  "California": "California Interstate Movers | Nationwide Moving Services",
+  "Colorado": "Colorado State-to-State Movers | Moving Anywhere in the USA",
+  "Connecticut": "Connecticut Out-of-State Movers | Nationwide Moving",
+  "Delaware": "Delaware Interstate Moving Services | Moving Anywhere in the USA",
+  "Florida": "Florida State-to-State Movers | Nationwide Moving Services",
+  "Georgia": "Georgia Out-of-State Movers | Moving Anywhere in the USA",
+  "Idaho": "Idaho State-to-State Movers | Moving Anywhere in the USA",
+  "Illinois": "Illinois Interstate Movers | Nationwide Moving Services",
+  "Indiana": "Indiana Out-of-State Movers | Moving Anywhere in the USA",
+  "Iowa": "Iowa State-to-State Movers | Nationwide Moving",
+  "Kansas": "Kansas Interstate Moving Services | Moving Anywhere in the USA",
+  "Kentucky": "Kentucky State-to-State Movers | Nationwide Moving Services",
+  "Louisiana": "Louisiana Out-of-State Movers | Moving Anywhere in the USA",
+  "Maine": "Maine Interstate Movers | Nationwide Moving",
+  "Maryland": "Maryland State-to-State Movers | Moving Anywhere in the USA",
+  "Massachusetts": "Massachusetts Out-of-State Movers | Nationwide Moving Services",
+  "Michigan": "Michigan Interstate Movers | Moving Anywhere in the USA",
+  "Minnesota": "Minnesota State-to-State Movers | Nationwide Moving",
+  "Mississippi": "Mississippi Out-of-State Movers | Moving Anywhere in the USA",
+  "Missouri": "Missouri Interstate Movers | Nationwide Moving Services",
+  "Montana": "Montana State-to-State Movers | Moving Anywhere in the USA",
+  "Nebraska": "Nebraska Out-of-State Movers | Nationwide Moving",
+  "Nevada": "Nevada Interstate Movers | Moving Anywhere in the USA",
+  "New Hampshire": "New Hampshire State-to-State Movers | Nationwide Moving Services",
+  "New Jersey": "New Jersey Out-of-State Movers | Moving Anywhere in the USA",
+  "New Mexico": "New Mexico Interstate Movers | Nationwide Moving",
+  "New York": "New York State-to-State Movers | Moving Anywhere in the USA",
+  "North Carolina": "North Carolina Interstate Movers | Nationwide Moving Services",
+  "North Dakota": "North Dakota Out-of-State Movers | Moving Anywhere in the USA",
+  "Ohio": "Ohio State-to-State Movers | Nationwide Moving",
+  "Oklahoma": "Oklahoma Interstate Movers | Moving Anywhere in the USA",
+  "Oregon": "Oregon Out-of-State Movers | Nationwide Moving Services",
+  "Pennsylvania": "Pennsylvania State-to-State Movers | Moving Anywhere in the USA",
+  "Rhode Island": "Rhode Island Interstate Movers | Nationwide Moving",
+  "South Carolina": "South Carolina Out-of-State Movers | Moving Anywhere in the USA",
+  "South Dakota": "South Dakota State-to-State Movers | Nationwide Moving Services",
+  "Tennessee": "Tennessee Interstate Movers | Moving Anywhere in the USA",
+  "Texas": "Texas State-to-State Movers | Nationwide Moving",
+  "Utah": "Utah Out-of-State Movers | Moving Anywhere in the USA",
+  "Vermont": "Vermont Interstate Movers | Nationwide Moving Services",
+  "Virginia": "Virginia State-to-State Movers | Moving Anywhere in the USA",
+  "Washington": "Washington Out-of-State Movers | Nationwide Moving",
+  "West Virginia": "West Virginia Interstate Movers | Moving Anywhere in the USA",
+  "Wisconsin": "Wisconsin State-to-State Movers | Nationwide Moving Services",
+  "Wyoming": "Wyoming Out-of-State Movers | Moving Anywhere in the USA",
+  "Washington D.C.": "Washington DC Interstate Movers | Nationwide Moving Services",
+};
+
 function statePage(s) {
   const routes = s.routes.map(abbr => {
     const dest = byAbbr[abbr];
@@ -562,7 +617,7 @@ function statePage(s) {
     .filter(d => !seenLinks.has(d.abbr) && seenLinks.add(d.abbr));
 
   const canonical = `${SITE}${stateUrl(s)}`;
-  const title = `Long-Distance Movers in ${s.name} | 50STATEMOVERS INC`;
+  const title = SEO_TITLES[s.name] || `Long-Distance Movers in ${s.name} | 50STATEMOVERS INC`;
   const topLanes = s.routes.slice(0, 2).map(a => byAbbr[a].name).join(' or ');
   const description = `Moving from ${s.name} to ${topLanes} — or any continental state. Binding fixed prices, our own crews, $1M coverage, no brokers. Free quote.`;
 
