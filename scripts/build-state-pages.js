@@ -488,7 +488,17 @@ const FOOTER = `<section id="contact" class="contact-strip">
   </a>
 </div>`;
 
-function head({ title, description, canonical, schema }) {
+const CLASSIC_FONT_STATES = new Set(['New York']);
+
+const CLASSIC_FONT_HEAD = `<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Libre+Franklin:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>:root {
+  --font-display: 'Playfair Display', Georgia, serif;
+  /* Libre Franklin is Franklin Gothic (1902) — a classic grotesque, still
+     sans-serif, so the form and buttons stay as crisp as they were. */
+  --font-body: 'Libre Franklin', -apple-system, BlinkMacSystemFont, sans-serif;
+}</style>`;
+
+function head({ title, description, canonical, schema, extraHead = '' }) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -529,6 +539,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css">
+${extraHead}
 <script type="application/ld+json">
 ${JSON.stringify(schema, null, 2)}
 </script>
@@ -760,7 +771,7 @@ function statePage(s) {
     licensingFaq,
   ];
 
-  return `${head({ title, description, canonical, schema })}
+  return `${head({ title, description, canonical, schema, extraHead: CLASSIC_FONT_STATES.has(s.name) ? CLASSIC_FONT_HEAD : '' })}
 
 ${NAV}
 
