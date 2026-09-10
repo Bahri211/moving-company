@@ -38,13 +38,553 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Libre+Franklin:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>:root {
-  --font-display: 'Playfair Display', Georgia, serif;
-  /* Libre Franklin is Franklin Gothic (1902) — a classic grotesque, still
-     sans-serif, so the form and buttons stay as crisp as they were. */
-  --font-body: 'Libre Franklin', -apple-system, BlinkMacSystemFont, sans-serif;
-}</style>
+<style>
+:root {
+  /* One face for the whole page. Inter at 600 with tight tracking carries the
+     headings; the serif is gone entirely, so the trial now loads no font of
+     its own — Inter already ships with every page. */
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Text face back to Inter, the site default. Libre Franklin was the period
+     partner for Playfair, but its narrower, older forms cost clarity at the
+     sizes this page actually reads at — and Inter is markedly cleaner on
+     digits, which is what the phone number, mileages and USDOT are made of.
+     It also loads on every page already, so the trial now requests one font
+     instead of two. */
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Palette ------------------------------------------------------------
+     The cream and the terracotta are unchanged — this only settles the cool
+     side of the page. It had been running three separate cool hues: navy for
+     the dark sections, an unrelated brighter blue for the stats band, and a
+     fairly saturated green for the call buttons. Four hues with nothing
+     holding them together is what made the page read generic.
+
+     The bright blue is now the navy's own light step, so the stats band
+     belongs to the dark sections instead of arriving as a fourth colour, and
+     the green drops to an evergreen that sits in the same register as the
+     rest. Green stays reserved for "call" — it is the one hue that carries a
+     meaning, so it keeps its own identity, just at a lower volume. */
+  --ink: #191612;
+  --paper: #f6f1e9;
+  --paper-warm: #eae1d2;
+  --muted: #877c6c;
+  --line: #d8cebc;
+
+  --navy: #10243c;
+  --navy-deep: #0a1727;
+  --navy-soft: #1b3350;
+
+  /* Was #1d5fa8 — a blue of its own. Now the navy two steps lighter. */
+  --blue: #1a4570;
+  --blue-deep: #123152;
+  --blue-text: #b6cde6;
+
+  /* Was #3fae6b. Same signal, less candy. */
+  --green: #2f8f5b;
+  --green-deep: #237046;
+}
+
+/* Headline ---------------------------------------------------------------
+   Trial: the state name in the H1 goes green instead of terracotta. A deep
+   forest rather than --green — the call-button green is tuned to carry a UI
+   signal at small sizes and turns minty in a 300-weight italic serif this
+   large, where a deeper value holds the stroke weight.
+
+   Note this is the H1 only. Every other emphasised word on the page — the
+   section headings, the eyebrow — is still terracotta, so the headline is
+   deliberately the one green thing above the fold. */
+.hero h1 em { color: #1f5f42; }
+
+/* Illustrated band -------------------------------------------------------
+   Reuses .services / .service-card so this adds no new card design — only the
+   image slot is new. Sits on paper: the artwork's near-black strokes vanish
+   against the dark sections. */
+/* Sage rather than a saturated green: the artwork is near-black over
+   transparent, and on a deep forest fill the truck and dolly frames lose their
+   internal detail and collapse into silhouettes. This is light enough to keep
+   them readable while still clearly reading as green, and it ties the band to
+   the green in the H1. */
+.illus-card {
+  text-align: center;
+  background: #d9e5d8;
+  border-color: #bed0bc;
+}
+
+.illus {
+  width: 100%;
+  max-width: 230px;
+  height: auto;
+  margin: 0 auto 1.4rem;
+}
+
+/* The shared .services grid goes 2-up under 768px, which breaks a three-step
+   sequence into 2 + 1 with an orphan. These are narrative steps, so on a phone
+   they stack into a single column and stay in order. */
+@media (max-width: 900px) {
+  .illus { width: 7.2rem; height: 5.2rem; margin-bottom: 0.9rem; }
+}
+
+@media (max-width: 768px) {
+  .illus-band .services { grid-template-columns: 1fr; gap: 0.9rem; }
+  .illus-band .services { gap: 2.1rem; }
+}
+
+/* Service illustrations --------------------------------------------------
+   Larger than the icon tile they replace — these carry detail a 26px glyph
+   cannot, so shrinking them back into a 54px chip would waste them. No hover
+   colour change: the art is terracotta on transparent and would disappear
+   against an --accent fill. */
+.service-illus {
+  margin-bottom: 1.15rem;
+}
+
+.service-illus img {
+  width: 100%;
+  max-width: 138px;
+  height: auto;
+}
+
+@media (max-width: 900px) {
+  .service-illus img { max-width: 108px; }
+  .service-illus { margin-bottom: 0.9rem; }
+}
+
+/* Headings ---------------------------------------------------------------
+   A display serif carries at 400 on its own shapes; a grotesque set at the
+   same weight and tracking just reads as large body text. So the headings take
+   600 and tighter tracking, and the emphasis inside them stops being a 300
+   italic — at that weight Inter's italic went limp against the roman. It keeps
+   the colour shift and matches the surrounding weight. */
+.section-header h2,
+.spec-hero-inner h2,
+.hero h1 {
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+
+.section-header h2 em,
+.spec-hero-inner h2 em,
+.hero h1 em {
+  font-weight: 600;
+  font-style: normal;
+}
+
+.service-card h3,
+.illus-card h3,
+.note-body h3,
+.spec-row summary,
+.hero-form-header h3 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Section grounds --------------------------------------------------------
+   The page ran cream / warm-cream for nine of its twelve sections, and those
+   two are close enough that the whole run read as one flat surface. Each
+   section that carries a distinct job now gets its own ground, drawn from the
+   palette already in play rather than new hues:
+
+     hero        paper       trust bar   navy
+     band        sage        coverage    warm
+     services    paper       costs       blush
+     process     navy        notes       paper
+     gallery     forest      faq         warm
+     nearby      paper       contact     navy
+
+   Sage and forest are the H1 green at two lightnesses; blush is the terracotta
+   at very low saturation. */
+/* Photograph behind the whole band, in place of the sage fill. Decorative
+   only — the three cards carry the meaning — so the img is alt="" and hidden
+   from assistive tech. */
+.illus-band {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* A <picture>, not a bare <img>: the landscape frame crops to almost nothing
+   usable on a phone, so narrow screens get a portrait cut of the same scene. */
+.band-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.band-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+/* The shot is bright daylight on a pale street, so it needs a heavy wash to
+   hold cream text and to stop the cards fighting it for attention. */
+.illus-band::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(10, 23, 39, 0.82), rgba(10, 23, 39, 0.74) 55%, rgba(10, 23, 39, 0.6));
+}
+
+.illus-band .section-header h2 { color: var(--paper); text-shadow: 0 1px 22px rgba(8, 18, 31, 0.5); }
+
+/* Terracotta landed straight on the white truck body — the weakest contrast on
+   the page. Warm cream instead; the italic already carries the emphasis. */
+.illus-band .section-header h2 em { color: #f2c6ac; }
+.illus-band .section-header p  { color: #cfd6dd; text-shadow: 0 1px 16px rgba(8, 18, 31, 0.55); }
+.illus-band .section-kicker    { color: #e8a98c; }
+.illus-band .section-kicker::before,
+.illus-band .section-kicker::after { background: #a8674a; }
+
+/* No card. Three full cards spanning the width left only a sliver of the
+   photograph visible and read as heavy slabs; the panel was doing nothing but
+   giving the artwork a light ground to sit on. So only the artwork keeps a
+   light ground — a small paper tile — and the words sit straight on the photo.
+   The band gets its air back and the street shows through. */
+.illus-card {
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: center;
+}
+
+.illus-card::before { display: none; }   /* the .service-card top accent rule */
+
+.illus-card h3 {
+  color: var(--paper);
+  font-size: 1.16rem;
+  margin-bottom: 0.45rem;
+}
+
+.illus-card p {
+  color: #ccd4dc;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  max-width: 19rem;
+  margin: 0 auto;
+}
+
+/* The tile: the artwork is near-black and terracotta, so it needs paper under
+   it whatever the section behind is doing. */
+.illus {
+  width: 8.6rem;
+  height: 6.1rem;
+  max-width: none;
+  object-fit: contain;
+  background: var(--paper);
+  border-radius: 14px;
+  padding: 0.85rem 0.9rem;
+  margin: 0 auto 1.1rem;
+  box-shadow: 0 10px 26px -12px rgba(8, 18, 31, 0.55);
+}
+
+.illus-band .services { gap: 2.5rem; }
+
+#costs.coverage-section { background: #f7eade; }
+.spec-list, .spec-row { border-color: #e2cdb9; }
+
+/* Photographs carry a dark ground better than a cream one. --blue rather than
+   --navy: the navy is already the process and contact sections, and at that
+   depth the gallery just read as a third slab of the same colour. This is the
+   same blue as the trust bar, so the two blue moments bracket the page. */
+.gallery-section { background: var(--blue); }
+.gallery-section .section-header h2 { color: var(--paper); }
+.gallery-section .section-header p  { color: #bcd0e6; }
+.gallery-section .section-kicker    { color: #8fb0d4; }
+.gallery-section .section-kicker::before,
+.gallery-section .section-kicker::after { background: #46688f; }
+
+/* Price-list hero ---------------------------------------------------------
+   The section heading and intro sit on the photograph rather than above it, so
+   the band opens the section instead of interrupting it. Full-bleed, because a
+   1000px rounded panel read as a picture dropped into the page; edge to edge it
+   reads as the section's own opening.
+
+   The photo is bright through the doorway in the middle and dark at both
+   edges, so a flat tint would not carry text. The scrim is a navy wash that
+   deepens toward the bottom, over a horizontal darkening at the sides — which
+   is where the frame is dark anyway, so it costs the picture very little. */
+.spec-hero {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-bottom: 4.5rem;
+  min-height: 30rem;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.spec-hero img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 45%;
+  z-index: -2;
+}
+
+.spec-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(10, 23, 39, 0.55), rgba(10, 23, 39, 0.2) 35%, rgba(10, 23, 39, 0.2) 65%, rgba(10, 23, 39, 0.55)),
+    linear-gradient(180deg, rgba(10, 23, 39, 0.62), rgba(10, 23, 39, 0.78));
+}
+
+.spec-hero-inner {
+  max-width: 47rem;
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.spec-hero-inner .section-kicker { color: #e8a98c; }
+.spec-hero-inner .section-kicker::before,
+.spec-hero-inner .section-kicker::after { background: #a8674a; }
+
+/* .section-header h2 carries the display face and scale, and this markup is
+   not a .section-header — so the typography is restated here rather than
+   inherited. */
+.spec-hero-inner h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 4.2vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: var(--paper);
+  margin-bottom: 1.25rem;
+  text-shadow: 0 1px 24px rgba(8, 18, 31, 0.45);
+}
+
+/* Terracotta on this ground is legible but muddy — the state name lifts to a
+   warm cream instead, italic already carrying the emphasis. */
+.spec-hero-inner h2 em { color: #f2c6ac; }
+
+.spec-hero-inner p {
+  font-size: 1.05rem;
+  max-width: 35rem;
+  margin: 0 auto;
+  color: #dcd6cc;
+  text-shadow: 0 1px 18px rgba(8, 18, 31, 0.5);
+}
+
+/* The band is the section's top edge, so the section's own padding goes. */
+#costs.coverage-section { padding-top: 0; }
+
+@media (max-width: 768px) {
+  .spec-hero {
+    min-height: 22rem;
+    margin-bottom: 2.5rem;
+  }
+  .spec-hero-inner { padding: 3.25rem 1.5rem; }
+}
+
+/* Gallery lead ------------------------------------------------------------
+   A fifth photo orphans in a two-column grid, so the strongest shot runs full
+   width above the other four instead of squeezing into the rhythm. */
+.gallery-lead {
+  grid-column: 1 / -1;
+  aspect-ratio: 16 / 9;
+}
+
+/* styles.css pins .gallery-item img to a flat 140px under 768px, which left
+   the lead image filling only the top of its taller box — navy gap beneath it
+   and the caption stranded at the bottom. The lead opts back into filling its
+   container, at the source's own 3:2 so cover crops nothing. */
+@media (max-width: 768px) {
+  .gallery-lead { aspect-ratio: 3 / 2; }
+  .gallery-lead img { height: 100%; }
+}
+
+/* Spec list — replaces the six price-driver cards ------------------------
+   Term left, explanation right, hairline between rows. Reads as reference
+   material you scan for the row that applies to you. */
+.spec-list {
+  max-width: 1000px;
+  margin: 0 auto;
+  border-top: 1px solid var(--line);
+}
+
+/* Each row is a <details> emitted already open, so with JS off the desktop
+   layout is exactly what it was. site.js closes them below 769px, where six
+   full explanations ran to roughly four screens of solid text. */
+.spec-row {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) 2fr;
+  gap: 1rem 2.5rem;
+  padding: 1.6rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.spec-row summary {
+  font-family: var(--font-display);
+  font-size: 1.22rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  display: flex;
+  gap: 0.85rem;
+  align-items: baseline;
+  list-style: none;
+  cursor: default;
+}
+
+.spec-row summary::-webkit-details-marker { display: none; }
+
+.spec-num {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.spec-body {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+/* Note list — replaces the three "catches people out" cards --------------- */
+.note-list {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.note-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.4rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.note-row:first-child { border-top: 1px solid var(--line); }
+
+.note-num {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--accent);
+  line-height: 1;
+  opacity: 0.55;
+}
+
+.note-body h3 {
+  font-family: var(--font-display);
+  font-size: 1.22rem;
+  font-weight: 500;
+  margin-bottom: 0.35rem;
+}
+
+.note-body p {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+@media (max-width: 768px) {
+  /* Collapsed on phones: heading row taps open one explanation at a time. */
+  .spec-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .spec-row summary {
+    font-size: 1.06rem;
+    padding: 0.95rem 2rem 0.95rem 0;
+    position: relative;
+    cursor: pointer;
+    align-items: center;
+  }
+
+  /* Chevron, rotating to point down when the row is open. */
+  .spec-row summary::after {
+    content: '';
+    position: absolute;
+    right: 0.35rem;
+    top: 50%;
+    width: 8px; height: 8px;
+    border-right: 1.5px solid var(--accent);
+    border-bottom: 1.5px solid var(--accent);
+    transform: translateY(-70%) rotate(-45deg);
+    transition: transform 0.2s ease;
+  }
+
+  .spec-row[open] summary::after { transform: translateY(-30%) rotate(45deg); }
+
+  .spec-row .spec-title { font-size: 1.06rem; }
+
+  .spec-body {
+    font-size: 0.9rem;
+    padding-bottom: 1.05rem;
+  }
+  .note-row { gap: 1rem; padding: 1.25rem 0; }
+  .note-num { font-size: 1.2rem; }
+}
+
+/* Trust bar --------------------------------------------------------------
+   Was a 120deg gradient plus a 460px white radial hung off the top-left, which
+   read as a smudge across the band rather than as lighting. Now the same flat
+   --navy as the dark sections, so the band is clean and belongs to the family
+   the palette pass established. */
+.trust-bar { background: var(--navy); }
+.trust-bar::before { display: none; }
+
+/* Quote card ------------------------------------------------------------
+   The card's own title sat at 1.3rem — a step above the field labels and
+   below everything else on the screen, so the line that says what the card
+   is for read as the quietest thing in it. It now carries the card. */
+.hero-form-wrap {
+  padding: 1.6rem 1.7rem;
+  border-radius: 22px;
+}
+
+.hero-form-header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.9rem;
+}
+
+.hero-form-header h3 {
+  font-size: 2rem;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+
+.hero-form-header p {
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+/* The card is the page's one conversion point, so it gets a little more
+   separation from the warm wash behind it than a plain panel would. */
+.hero-form-wrap {
+  box-shadow:
+    0 48px 90px -24px rgba(18, 38, 63, 0.26),
+    0 2px 12px -4px rgba(18, 38, 63, 0.09);
+}
+
+@media (max-width: 1100px) {
+  .hero-form-wrap { padding: 1.25rem 1.35rem; }
+  .hero-form-header h3 { font-size: 1.6rem; }
+  .hero-form-header p { font-size: 0.8rem; }
+}
+
+@media (max-width: 640px) {
+  .hero-form-wrap { padding: 1.1rem 1.15rem; }
+  .hero-form-header { margin-bottom: 0.75rem; padding-bottom: 0.6rem; }
+  /* Kept visible here: at 1.4rem it still fits one line at 320px, and on a
+     phone this heading is the first thing that explains the card. */
+  .hero-form-header h3 { font-size: 1.4rem; }
+}
+</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -467,6 +1007,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </div>
 
+<section id="how-it-works" class="illus-band">
+  <picture class="band-bg" aria-hidden="true">
+    <source media="(max-width: 768px)" srcset="/assets/images/gallery/street-loading-mobile.jpg" width="1100" height="1970" />
+    <img src="/assets/images/gallery/street-loading.jpg" alt="" loading="lazy" width="2200" height="1227" />
+  </picture>
+  <div class="section-header">
+    <div class="section-kicker">At a glance</div>
+    <h2>What a long-distance move <em>actually involves.</em></h2>
+    <p>Three things decide whether a New York move lands well, and all three are settled before the truck arrives.</p>
+  </div>
+  <div class="services">
+    <div class="service-card illus-card">
+      <img class="illus" src="/assets/images/gallery/packing.png" alt="Hand truck stacked with packed cartons" width="900" height="560" loading="lazy" decoding="async" />
+      <h3>Packed for the distance</h3>
+      <p>A box that survives a 2,000-mile ride is built differently from one that crosses town. We pack to the lane, not to the room count.</p>
+    </div>
+    <div class="service-card illus-card">
+      <img class="illus" src="/assets/images/gallery/routes.png" alt="Map of the United States with a long-distance route marked" width="900" height="560" loading="lazy" decoding="async" />
+      <h3>Routed, not guessed</h3>
+      <p>Your New York load joins a scheduled lane rather than waiting for a truck to happen past. That is what fixes the transit window before you book.</p>
+    </div>
+    <div class="service-card illus-card">
+      <img class="illus" src="/assets/images/gallery/transport.png" alt="Long-haul moving truck in 50STATEMOVERS livery" width="900" height="560" loading="lazy" decoding="async" />
+      <h3>Carried by our own crew</h3>
+      <p>The crew that loads your home is the crew that unloads it. No broker in the middle, no handoff to a carrier you have never spoken to.</p>
+    </div>
+  </div>
+</section>
+
 <!-- COVERAGE -->
 <section id="coverage" class="coverage-section">
   <div class="section-header">
@@ -595,37 +1164,37 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="services">
     <div class="service-card">
       <div class="service-num">01</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg></div>
+      <div class="service-illus"><img src="/assets/images/gallery/svc-long-distance.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
       <h3>Long Distance</h3>
       <p>Cross-country and interstate relocations. We coordinate logistics, customs paperwork, and destination unpacking — all door to door.</p>
     </div>
     <div class="service-card">
       <div class="service-num">02</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M20 7 9 18l-5-5"/></svg></div>
+      <div class="service-illus"><img src="/assets/images/gallery/svc-white-glove.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
       <h3>White Glove</h3>
       <p>The top tier. Concierge-level service: we'll pack, transport, unpack, arrange, and even hang the art on the walls before we leave.</p>
     </div>
     <div class="service-card">
       <div class="service-num">03</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V21H3V9.5Z"/><path d="M9 21v-8h6v8"/></svg></div>
+      <div class="service-illus"><img src="/assets/images/gallery/svc-residential.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
       <h3>Residential</h3>
       <p>From studio apartments to five-bedroom homes. We disassemble, transport, and reassemble — and we never leave before everything's in its place.</p>
     </div>
     <div class="service-card">
       <div class="service-num">04</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></div>
+      <div class="service-illus"><img src="/assets/images/gallery/svc-commercial.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
       <h3>Commercial</h3>
       <p>Office relocations handled after hours or over weekends, so your team is working from the new space on Monday morning — no downtime.</p>
     </div>
     <div class="service-card">
       <div class="service-num">05</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
+      <div class="service-illus"><img src="/assets/images/gallery/svc-packing.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
       <h3>Packing &amp; Crating</h3>
       <p>Museum-grade packing for art, antiques, and anything fragile. We build custom crates on site when off-the-shelf won't do.</p>
     </div>
     <div class="service-card">
       <div class="service-num">06</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+      <div class="service-illus"><img src="/assets/images/gallery/svc-storage.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
       <h3>Storage</h3>
       <p>Climate-controlled, 24-hour-monitored units in secure facilities. Short-term overflow or long-term, fully insured and inventoried throughout.</p>
     </div>
@@ -642,49 +1211,40 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- COSTS -->
 <section id="costs" class="coverage-section">
-  <div class="section-header">
-    <div class="section-kicker">Pricing</div>
-    <h2>What shapes the price of a <em>New York</em> move.</h2>
-    <p>We don't publish a price list, because a number without a survey is a guess — and a guess is exactly what turns into a bigger bill on delivery day. Here's what actually moves the figure on a New York move. Every one of these is itemized in your written quote before you sign, and the price we agree is the price you pay.</p>
-  </div>
-  <div class="services">
-    <div class="service-card">
-      <div class="service-num">01</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg></div>
-      <h3>Distance and lane</h3>
-      <p>Your route sets the floor. Our New York lanes run from about 620 miles to North Carolina out to roughly 2,860 miles to California. Sharing a trailer with other households costs less than a dedicated truck; a dedicated truck buys you a delivery date instead of a spread.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">02</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
-      <h3>Weight, not bedrooms</h3>
-      <p>Long-distance moves price on what your household actually weighs, not how many rooms it occupies. Two three-bedroom homes can differ by thousands of pounds. This is why we survey by video or in person before quoting rather than guessing from a bedroom count over the phone.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">03</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V21H3V9.5Z"/><path d="M9 21v-8h6v8"/></svg></div>
-      <h3>Access at both ends</h3>
-      <p>Whether a trailer can reach your door changes the job. Long carries, stairs, freight elevator reservations, street permits, and shuttle service where a tractor-trailer physically cannot fit are all real work — we check them at survey so they land in the quote instead of on move day.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">04</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></div>
-      <h3>How much packing you want</h3>
-      <p>Full packing is what most long-distance customers choose, and it is the single biggest factor in whether a load arrives intact — a professionally packed box is built for a 2,000-mile ride, not a car trip. Most land somewhere between, having us handle the kitchen, art, and anything fragile. Custom crating for art, antiques, and oversized items is quoted separately.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">05</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-      <h3>Storage between dates</h3>
-      <p>Move-out and move-in dates rarely line up. Storage-in-transit holds your inventoried goods until your date, and we quote that cost up front rather than letting it accrue quietly. Climate control is worth it for wood, leather, and electronics.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">06</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></div>
-      <h3>Valuation and protection</h3>
-      <p>Every interstate move includes the federally required minimum released-value protection at no extra charge. Full Value Protection — repair, replacement, or a cash settlement at current market value — costs more and is worth considering for a high-value inventory.</p>
+  <div class="spec-hero">
+    <img src="/assets/images/gallery/loading-ramp.jpg" alt="Two 50STATEMOVERS crew carrying a blanket-wrapped item up the ramp into a loaded truck, moving blankets and cartons stacked inside" loading="lazy" width="2000" height="1116" />
+    <div class="spec-hero-inner">
+      <div class="section-kicker">Pricing</div>
+      <h2>What shapes the price of a <em>New York</em> move.</h2>
+      <p>We don't publish a price list, because a number without a survey is a guess — and a guess is exactly what turns into a bigger bill on delivery day. Here's what actually moves the figure on a New York move. Every one of these is itemized in your written quote before you sign, and the price we agree is the price you pay.</p>
     </div>
   </div>
+<div class="spec-list">
+      <details class="spec-row" open>
+        <summary><span class="spec-num">01</span><span class="spec-title">Distance and lane</span></summary>
+        <div class="spec-body">Your route sets the floor. Our New York lanes run from about 620 miles to North Carolina out to roughly 2,860 miles to California. Sharing a trailer with other households costs less than a dedicated truck; a dedicated truck buys you a delivery date instead of a spread.</div>
+      </details>
+      <details class="spec-row" open>
+        <summary><span class="spec-num">02</span><span class="spec-title">Weight, not bedrooms</span></summary>
+        <div class="spec-body">Long-distance moves price on what your household actually weighs, not how many rooms it occupies. Two three-bedroom homes can differ by thousands of pounds. This is why we survey by video or in person before quoting rather than guessing from a bedroom count over the phone.</div>
+      </details>
+      <details class="spec-row" open>
+        <summary><span class="spec-num">03</span><span class="spec-title">Access at both ends</span></summary>
+        <div class="spec-body">Whether a trailer can reach your door changes the job. Long carries, stairs, freight elevator reservations, street permits, and shuttle service where a tractor-trailer physically cannot fit are all real work — we check them at survey so they land in the quote instead of on move day.</div>
+      </details>
+      <details class="spec-row" open>
+        <summary><span class="spec-num">04</span><span class="spec-title">How much packing you want</span></summary>
+        <div class="spec-body">Full packing is what most long-distance customers choose, and it is the single biggest factor in whether a load arrives intact — a professionally packed box is built for a 2,000-mile ride, not a car trip. Most land somewhere between, having us handle the kitchen, art, and anything fragile. Custom crating for art, antiques, and oversized items is quoted separately.</div>
+      </details>
+      <details class="spec-row" open>
+        <summary><span class="spec-num">05</span><span class="spec-title">Storage between dates</span></summary>
+        <div class="spec-body">Move-out and move-in dates rarely line up. Storage-in-transit holds your inventoried goods until your date, and we quote that cost up front rather than letting it accrue quietly. Climate control is worth it for wood, leather, and electronics.</div>
+      </details>
+      <details class="spec-row" open>
+        <summary><span class="spec-num">06</span><span class="spec-title">Valuation and protection</span></summary>
+        <div class="spec-body">Every interstate move includes the federally required minimum released-value protection at no extra charge. Full Value Protection — repair, replacement, or a cash settlement at current market value — costs more and is worth considering for a high-value inventory.</div>
+      </details>
+    </div>
 </section>
 
 <!-- PROCESS -->
@@ -725,26 +1285,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2>What catches people out in <em>New York.</em></h2>
     <p>Three things that regularly turn a straightforward New York move into an expensive one. We check all three before quoting, so they land in the price rather than on move day.</p>
   </div>
-  <div class="services">
-    <div class="service-card">
-      <div class="service-num">01</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></div>
-      <h3>Building COI and elevator reservations</h3>
-      <p>This is the make-or-break detail in New York City. Buildings often require the COI a week ahead with exact wording, and freight elevators book out. Send us the building's move-in packet as soon as you have it.</p>
+  <div class="note-list">
+      <div class="note-row">
+        <div class="note-num">01</div>
+        <div class="note-body">
+          <h3>Building COI and elevator reservations</h3>
+          <p>This is the make-or-break detail in New York City. Buildings often require the COI a week ahead with exact wording, and freight elevators book out. Send us the building's move-in packet as soon as you have it.</p>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="note-num">02</div>
+        <div class="note-body">
+          <h3>Parkway truck bans and low bridges</h3>
+          <p>Commercial vehicles are prohibited on the region's parkways, where clearances are too low for a moving trailer. Routing goes via the interstates and truck routes, which affects timing more than distance.</p>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="note-num">03</div>
+        <div class="note-body">
+          <h3>End-of-month lease turnover</h3>
+          <p>City leases cluster at month end, and the last weekends of June and August are the hardest dates in the region. Six to eight weeks ahead is the difference between a move and a scramble — if your date is closer than that, call us and we will tell you straight away what we can hold.</p>
+        </div>
+      </div>
     </div>
-    <div class="service-card">
-      <div class="service-num">02</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></div>
-      <h3>Parkway truck bans and low bridges</h3>
-      <p>Commercial vehicles are prohibited on the region's parkways, where clearances are too low for a moving trailer. Routing goes via the interstates and truck routes, which affects timing more than distance.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">03</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></div>
-      <h3>End-of-month lease turnover</h3>
-      <p>City leases cluster at month end, and the last weekends of June and August are the hardest dates in the region. Six to eight weeks ahead is the difference between a move and a scramble — if your date is closer than that, call us and we will tell you straight away what we can hold.</p>
-    </div>
-  </div>
 </section>
 
 <!-- GALLERY -->
@@ -755,6 +1318,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p>A look at the homes, offices, and cross-country relocations we've handled across the country.</p>
   </div>
   <div class="gallery-grid">
+    <div class="gallery-item gallery-lead">
+      <img src="/assets/images/gallery/crew-packing.jpg" alt="Three 50STATEMOVERS crew taping a carton, shrink-wrapping an armchair and wrapping a mattress in a New York living room" loading="lazy" />
+      <div class="gallery-caption"><div class="label">On the job</div><div class="title">Wrapped and boxed before anything moves</div></div>
+    </div>
     <div class="gallery-item">
       <img src="/assets/images/trucks/truck-1.jpg" alt="50STATEMOVERS moving truck" loading="lazy" />
       <div class="gallery-caption"><div class="label">Our Fleet</div><div class="title">Ready for your move</div></div>

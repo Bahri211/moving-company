@@ -203,3 +203,28 @@
     }
   });
 })();
+
+/* Price-driver rows (state pages only).
+ *
+ * The rows are <details open> in the markup so that with JS disabled the
+ * desktop layout is correct and nothing is hidden. Below 769px six full
+ * explanations stack to roughly four screens, so they collapse to headings
+ * and open one at a time. Re-evaluated on resize; a row the visitor opened
+ * themselves is left alone while they stay on that side of the breakpoint. */
+(function () {
+  var rows = document.querySelectorAll('.spec-row');
+  if (!rows.length) return;
+
+  var wide = window.matchMedia('(min-width: 769px)');
+  var lastWide = null;
+
+  function apply() {
+    if (wide.matches === lastWide) return;
+    lastWide = wide.matches;
+    rows.forEach(function (row) { row.open = wide.matches; });
+  }
+
+  apply();
+  if (wide.addEventListener) wide.addEventListener('change', apply);
+  else wide.addListener(apply);
+})();
