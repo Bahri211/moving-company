@@ -149,6 +149,71 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .service-illus { margin-bottom: 0.9rem; }
 }
 
+/* Nav ---------------------------------------------------------------------
+   The bar's cream is hardcoded rgba(245, 240, 232, …) rather than taken from
+   --paper, so it sat a shade off the page it overlays once the palette moved.
+   Retinted here, and given a real resting state: no border until you scroll,
+   so at the top the bar reads as part of the hero rather than a strip pinned
+   over it. */
+nav.topnav {
+  background: rgba(246, 241, 233, 0.86);
+  border-bottom: 1px solid transparent;
+}
+
+nav.topnav.scrolled {
+  background: rgba(246, 241, 233, 0.97);
+  border-bottom-color: var(--line);
+  box-shadow: 0 1px 20px rgba(26, 23, 19, 0.06);
+}
+
+/* Six links now, so they need to sit closer. */
+.nav-links { gap: 1.65rem; font-size: 0.875rem; }
+
+.nav-links a {
+  color: var(--ink-soft);
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover { color: var(--ink); }
+
+/* Set by site.js for the section currently under the nav. */
+.nav-links a.is-current { color: var(--accent); }
+.nav-links a.is-current::after { width: 100%; }
+
+/* Headline on one line ----------------------------------------------------
+   "Movers" was dropping to a second line. Sized to fit rather than guessed at:
+   the string measures 14.624em wide in Inter 600 at this tracking, and the
+   column it sits in is a steady 0.446 x viewport above 768px and viewport
+   minus 40px below, where the hero goes single-column. That puts the ceiling
+   at 3.04vw and 5.98vw respectively; both are set just under.
+
+   Note this is measured for "New York State-to-State Movers" specifically. A
+   longer state name — Massachusetts, North Carolina — needs its own number, so
+   this cannot be promoted to the other 48 as-is. */
+.hero h1 { white-space: nowrap; }
+
+@media (min-width: 769px) {
+  .hero h1 { font-size: min(3vw, 2.7rem); }
+}
+
+@media (max-width: 768px) {
+  .hero h1 { font-size: min(5.8vw, 2.4rem); }
+}
+
+/* Footer phones -----------------------------------------------------------
+   Green is the site's "call" colour — the nav phone button and the sticky call
+   button both use it — so the two numbers in the footer take it rather than
+   sitting in the same muted blue as every other link in the column. Lightened
+   from --green, which is tuned for white-on-green buttons and goes muddy as
+   text on the dark footer. */
+.footer-col a[href^="tel:"] {
+  color: #6fce9b;
+  font-weight: 500;
+}
+
+.footer-col a[href^="tel:"]:hover { color: #97e0ba; }
+
 /* Headings ---------------------------------------------------------------
    A display serif carries at 400 on its own shapes; a grotesque set at the
    same weight and tracking just reads as large body text. So the headings take
@@ -816,8 +881,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <span class="logo-name">50STATEMOVERS INC</span>
   </a>
   <ul class="nav-links">
-    <li><a href="#services">Services</a></li>
     <li><a href="#coverage">Coverage</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#costs">Pricing</a></li>
     <li><a href="#process">Process</a></li>
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#faq">FAQ</a></li>
@@ -836,8 +902,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="mobile-menu" aria-hidden="true">
   <ul>
-    <li><a href="#services">Services</a></li>
     <li><a href="#coverage">Coverage</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#costs">Pricing</a></li>
     <li><a href="#process">Process</a></li>
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#faq">FAQ</a></li>
@@ -1225,23 +1292,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="spec-body">Your route sets the floor. Our New York lanes run from about 620 miles to North Carolina out to roughly 2,860 miles to California. Sharing a trailer with other households costs less than a dedicated truck; a dedicated truck buys you a delivery date instead of a spread.</div>
       </details>
       <details class="spec-row" open>
-        <summary><span class="spec-num">02</span><span class="spec-title">Weight, not bedrooms</span></summary>
-        <div class="spec-body">Long-distance moves price on what your household actually weighs, not how many rooms it occupies. Two three-bedroom homes can differ by thousands of pounds. This is why we survey by video or in person before quoting rather than guessing from a bedroom count over the phone.</div>
-      </details>
-      <details class="spec-row" open>
-        <summary><span class="spec-num">03</span><span class="spec-title">Access at both ends</span></summary>
+        <summary><span class="spec-num">02</span><span class="spec-title">Access at both ends</span></summary>
         <div class="spec-body">Whether a trailer can reach your door changes the job. Long carries, stairs, freight elevator reservations, street permits, and shuttle service where a tractor-trailer physically cannot fit are all real work — we check them at survey so they land in the quote instead of on move day.</div>
       </details>
       <details class="spec-row" open>
-        <summary><span class="spec-num">04</span><span class="spec-title">How much packing you want</span></summary>
+        <summary><span class="spec-num">03</span><span class="spec-title">How much packing you want</span></summary>
         <div class="spec-body">Full packing is what most long-distance customers choose, and it is the single biggest factor in whether a load arrives intact — a professionally packed box is built for a 2,000-mile ride, not a car trip. Most land somewhere between, having us handle the kitchen, art, and anything fragile. Custom crating for art, antiques, and oversized items is quoted separately.</div>
       </details>
       <details class="spec-row" open>
-        <summary><span class="spec-num">05</span><span class="spec-title">Storage between dates</span></summary>
+        <summary><span class="spec-num">04</span><span class="spec-title">Storage between dates</span></summary>
         <div class="spec-body">Move-out and move-in dates rarely line up. Storage-in-transit holds your inventoried goods until your date, and we quote that cost up front rather than letting it accrue quietly. Climate control is worth it for wood, leather, and electronics.</div>
       </details>
       <details class="spec-row" open>
-        <summary><span class="spec-num">06</span><span class="spec-title">Valuation and protection</span></summary>
+        <summary><span class="spec-num">05</span><span class="spec-title">Valuation and protection</span></summary>
         <div class="spec-body">Every interstate move includes the federally required minimum released-value protection at no extra charge. Full Value Protection — repair, replacement, or a cash settlement at current market value — costs more and is worth considering for a high-value inventory.</div>
       </details>
     </div>
@@ -1403,7 +1466,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <a class="state-item" href="/moving-from-idaho/"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Idaho</a>
   </div>
   <div class="section-cta">
-    <a href="/moving-companies-by-state/" class="nav-cta">See all 49 state moving guides →</a>
+    <a href="/moving-companies-by-state/" class="nav-cta">Show all 48 states →</a>
   </div>
 </section>
 

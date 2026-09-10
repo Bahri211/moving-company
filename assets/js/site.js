@@ -228,3 +228,54 @@
   if (wide.addEventListener) wide.addEventListener('change', apply);
   else wide.addListener(apply);
 })();
+
+/* Marks the nav link for the section you are currently reading.
+ *
+ * The state pages run to eleven screens, so without this the bar gives no
+ * sense of position. Driven by whichever observed section currently covers the
+ * point just below the nav, rather than by "most visible" — that flickers when
+ * a short section sits between two tall ones. */
+(function () {
+  var links = Array.prototype.slice.call(
+    document.querySelectorAll('.nav-links a[href^="#"]')
+  );
+  if (!links.length) return;
+
+  var pairs = links.map(function (link) {
+    return { link: link, section: document.getElementById(link.hash.slice(1)) };
+  }).filter(function (p) { return p.section; });
+  if (!pairs.length) return;
+
+  // Document order, not nav order — the two agree today but the nav is edited
+  // far more often than this file.
+  pairs.sort(function (a, b) {
+    return a.section.getBoundingClientRect().top - b.section.getBoundingClientRect().top;
+  });
+
+  var current = null;
+
+  function update() {
+    var line = (parseFloat(getComputedStyle(document.documentElement)
+      .getPropertyValue('--nav-h')) || 72) + 8;
+    var found = null;
+
+    // The last section whose top has passed the line, rather than the one
+    // covering it. Several sections are not in the nav at all, and requiring
+    // coverage blanked the indicator out every time you scrolled through one.
+    for (var i = 0; i < pairs.length; i++) {
+      if (pairs[i].section.getBoundingClientRect().top <= line) found = pairs[i].link;
+    }
+
+    if (found === current) return;
+    if (current) current.classList.remove('is-current');
+    if (found) found.classList.add('is-current');
+    current = found;
+  }
+
+  // Called straight from the scroll listener rather than gated behind a
+  // requestAnimationFrame flag: the flag latches on permanently if a frame
+  // never arrives, and reading six rects is cheap enough not to need it.
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update, { passive: true });
+})();

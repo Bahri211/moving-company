@@ -548,6 +548,22 @@ const FOOTER = `<section id="contact" class="contact-strip">
   </a>
 </div>`;
 
+/* Trial nav: the shared bar lists five links in an order that predates the
+   page it sits on. It has no link to #costs — now a full section with its own
+   hero — and its order does not match the order you actually scroll through.
+   Rewritten to page order, with Pricing added. Applies to both the desktop
+   list and the mobile menu, which carry the same markup. */
+const TRIAL_NAV_LINKS = `<li><a href="#coverage">Coverage</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#costs">Pricing</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#faq">FAQ</a></li>`;
+
+const TRIAL_NAV = NAV.replace(
+  /<li><a href="#services">[\s\S]*?<a href="#faq">FAQ<\/a><\/li>/g,
+  TRIAL_NAV_LINKS);
+
 /* ------------------------------------------------- design trial: New York */
 // New York is the testbed. A visual change lands here first — scoped to this
 // one page by the <style> block below, which only this page's <head> gets —
@@ -666,6 +682,71 @@ const TRIAL_HEAD = `<style>
   .service-illus img { max-width: 108px; }
   .service-illus { margin-bottom: 0.9rem; }
 }
+
+/* Nav ---------------------------------------------------------------------
+   The bar's cream is hardcoded rgba(245, 240, 232, …) rather than taken from
+   --paper, so it sat a shade off the page it overlays once the palette moved.
+   Retinted here, and given a real resting state: no border until you scroll,
+   so at the top the bar reads as part of the hero rather than a strip pinned
+   over it. */
+nav.topnav {
+  background: rgba(246, 241, 233, 0.86);
+  border-bottom: 1px solid transparent;
+}
+
+nav.topnav.scrolled {
+  background: rgba(246, 241, 233, 0.97);
+  border-bottom-color: var(--line);
+  box-shadow: 0 1px 20px rgba(26, 23, 19, 0.06);
+}
+
+/* Six links now, so they need to sit closer. */
+.nav-links { gap: 1.65rem; font-size: 0.875rem; }
+
+.nav-links a {
+  color: var(--ink-soft);
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover { color: var(--ink); }
+
+/* Set by site.js for the section currently under the nav. */
+.nav-links a.is-current { color: var(--accent); }
+.nav-links a.is-current::after { width: 100%; }
+
+/* Headline on one line ----------------------------------------------------
+   "Movers" was dropping to a second line. Sized to fit rather than guessed at:
+   the string measures 14.624em wide in Inter 600 at this tracking, and the
+   column it sits in is a steady 0.446 x viewport above 768px and viewport
+   minus 40px below, where the hero goes single-column. That puts the ceiling
+   at 3.04vw and 5.98vw respectively; both are set just under.
+
+   Note this is measured for "New York State-to-State Movers" specifically. A
+   longer state name — Massachusetts, North Carolina — needs its own number, so
+   this cannot be promoted to the other 48 as-is. */
+.hero h1 { white-space: nowrap; }
+
+@media (min-width: 769px) {
+  .hero h1 { font-size: min(3vw, 2.7rem); }
+}
+
+@media (max-width: 768px) {
+  .hero h1 { font-size: min(5.8vw, 2.4rem); }
+}
+
+/* Footer phones -----------------------------------------------------------
+   Green is the site's "call" colour — the nav phone button and the sticky call
+   button both use it — so the two numbers in the footer take it rather than
+   sitting in the same muted blue as every other link in the column. Lightened
+   from --green, which is tuned for white-on-green buttons and goes muddy as
+   text on the dark footer. */
+.footer-col a[href^="tel:"] {
+  color: #6fce9b;
+  font-weight: 500;
+}
+
+.footer-col a[href^="tel:"]:hover { color: #97e0ba; }
 
 /* Headings ---------------------------------------------------------------
    A display serif carries at 400 on its own shapes; a grotesque set at the
@@ -1334,14 +1415,21 @@ function statePage(s) {
   // six bordered cards made them the third identical grid on the page. A
   // numbered definition list reads the way this content is actually used
   // (scanned for the one that applies to you) and drops a card section.
+  // Trial: "Weight, not bedrooms" is dropped here at the client's request. The
+  // other 48 pages still carry it. Numbering is positional, so the rows
+  // renumber themselves.
+  const COSTS = TRIAL_STATES.has(s.name)
+    ? COST_ITEMS.filter(function (c) { return c[0] !== 'Weight, not bedrooms'; })
+    : COST_ITEMS;
+
   const costCards = TRIAL_STATES.has(s.name)
     ? `<div class="spec-list">
-${COST_ITEMS.map(([title, , body], i) => `      <details class="spec-row" open>
+${COSTS.map(([title, , body], i) => `      <details class="spec-row" open>
         <summary><span class="spec-num">${String(i + 1).padStart(2, '0')}</span><span class="spec-title">${title}</span></summary>
         <div class="spec-body">${body}</div>
       </details>`).join('\n')}
     </div>`
-    : COST_ITEMS.map(([title, icon, body], i) => `    <div class="service-card">
+    : COSTS.map(([title, icon, body], i) => `    <div class="service-card">
       <div class="service-num">${String(i + 1).padStart(2, '0')}</div>
       <div class="service-icon">${icon}</div>
       <h3>${title}</h3>
@@ -1404,7 +1492,7 @@ ${s.quirks.map((q, i) => `      <div class="note-row">
 
   return `${head({ title, description, canonical, schema, extraHead: TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '' })}
 
-${NAV}
+${TRIAL_STATES.has(s.name) ? TRIAL_NAV : NAV}
 
 <!-- HERO -->
 <header class="hero">
@@ -1549,7 +1637,7 @@ ${faqSection(`    <div class="section-kicker">FAQ</div>
 ${linkItems(nearbyLinks)}
   </div>
   <div class="section-cta">
-    <a href="${HUB_URL}" class="nav-cta">See all ${states.length} state moving guides →</a>
+    <a href="${HUB_URL}" class="nav-cta">${TRIAL_STATES.has(s.name) ? 'Show all 48 states' : `See all ${states.length} state moving guides`} →</a>
   </div>
 </section>
 
