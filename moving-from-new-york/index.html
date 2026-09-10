@@ -189,6 +189,39 @@ nav.topnav.scrolled {
 .nav-links a.is-current { color: var(--accent); }
 .nav-links a.is-current::after { width: 100%; }
 
+/* Contact strip phone -----------------------------------------------------
+   It was --accent, which put the page's only two "call" buttons in different
+   colours: the nav phone and the sticky call button are green, this one was
+   terracotta. Green here as well, so the colour means one thing throughout —
+   and it stops this button competing with the quote CTA for the same signal.
+   Uses the gradient the nav phone button already carries. */
+.cs-phone {
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-deep) 100%);
+}
+
+.cs-phone:hover {
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-deep) 100%);
+  filter: brightness(1.08);
+}
+
+/* Contact strip email -----------------------------------------------------
+   Given the palette's blue rather than a filled pill: calling should lead, and
+   two solid buttons side by side read as equal choices. Kept as an outline so
+   it stays second, but tinted so it is a colour rather than plain white — blue
+   is already this page's third voice, in the trust bar and behind the gallery,
+   and it avoids borrowing the terracotta that means "get a quote". */
+.cs-email {
+  background: rgba(70, 104, 143, 0.22);
+  border-color: rgba(143, 176, 212, 0.45);
+  color: #cfe0f2;
+}
+
+.cs-email:hover {
+  background: rgba(70, 104, 143, 0.38);
+  border-color: rgba(178, 205, 233, 0.75);
+  color: #eaf2fa;
+}
+
 /* Headline on one line ----------------------------------------------------
    "Movers" was dropping to a second line. Sized to fit rather than guessed at:
    the string measures 14.624em wide in Inter 600 at this tracking, and the
@@ -206,7 +239,12 @@ nav.topnav.scrolled {
 }
 
 @media (max-width: 768px) {
-  .hero h1 { font-size: min(5.8vw, 2.4rem); }
+  /* The state name takes 1.35em. That pushes the string from 14.624em to
+     16.149em, so the base drops to keep it on one line — "New York" still ends
+     up about a fifth larger than it was, and the rest a little smaller.
+     Phone only: at this ratio the desktop column cannot hold one line. */
+  .hero h1 { font-size: min(5.2vw, 2.15rem); }
+  .hero h1 em { font-size: 1.35em; }
 }
 
 /* Footer phones -----------------------------------------------------------
@@ -216,11 +254,26 @@ nav.topnav.scrolled {
    from --green, which is tuned for white-on-green buttons and goes muddy as
    text on the dark footer. */
 .footer-col a[href^="tel:"] {
+  display: inline-flex;
+  align-items: center;
   color: #6fce9b;
   font-weight: 500;
+  background: rgba(111, 206, 155, 0.11);
+  border: 1px solid rgba(111, 206, 155, 0.28);
+  border-radius: 999px;
+  padding: 0.32rem 0.8rem;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
 }
 
-.footer-col a[href^="tel:"]:hover { color: #97e0ba; }
+.footer-col a[href^="tel:"]:hover {
+  color: #b6ebcd;
+  background: rgba(111, 206, 155, 0.2);
+  border-color: rgba(111, 206, 155, 0.5);
+}
+
+/* The pills are taller than the plain links they sit among, so the rows in
+   this column need a little more room. */
+.footer-col li:has(a[href^="tel:"]) { margin-bottom: 0.35rem; }
 
 /* Headings ---------------------------------------------------------------
    A display serif carries at 400 on its own shapes; a grotesque set at the
@@ -932,9 +985,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- HERO -->
 <header class="hero">
   <div class="hero-content">
-    <div class="eyebrow fade-in">
-      <a href="/">Home</a> / <a href="/moving-companies-by-state/">Movers by state</a> / New York
-    </div>
     <div class="hero-headline-wrap fade-in delay-1">
       <h1><em>New York</em> State-to-State Movers</h1>
     </div>
