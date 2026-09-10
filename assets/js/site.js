@@ -204,15 +204,18 @@
   });
 })();
 
-/* Price-driver rows (state pages only).
+/* Collapsible rows (state pages only) — price drivers, local notes, quirks.
  *
- * The rows are <details open> in the markup so that with JS disabled the
- * desktop layout is correct and nothing is hidden. Below 769px six full
- * explanations stack to roughly four screens, so they collapse to headings
- * and open one at a time. Re-evaluated on resize; a row the visitor opened
- * themselves is left alone while they stay on that side of the breakpoint. */
+ * Each is a <details open> in the markup so that with JS disabled the desktop
+ * layout is correct and nothing is hidden. Below 769px these sections stack to
+ * screens of solid text, so they collapse to headings and open one at a time.
+ * Re-evaluated on resize; a row the visitor opened themselves is left alone
+ * while they stay on that side of the breakpoint.
+ *
+ * .js-collapse is the behaviour hook and carries no styling — each section
+ * keeps its own look. */
 (function () {
-  var rows = document.querySelectorAll('.spec-row');
+  var rows = document.querySelectorAll('.js-collapse');
   if (!rows.length) return;
 
   var wide = window.matchMedia('(min-width: 769px)');

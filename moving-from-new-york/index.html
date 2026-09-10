@@ -576,6 +576,39 @@ nav.topnav.scrolled {
   line-height: 1.65;
 }
 
+/* Process steps and notes as collapsibles ---------------------------------
+   Both are <details> now, matching the price list: open on desktop, where the
+   layout is unchanged from the divs they replace, and collapsed to a tappable
+   heading below 769px. The marker is suppressed everywhere; the chevron below
+   is drawn on the summary instead. */
+.process-step summary,
+.note-row summary {
+  list-style: none;
+  cursor: default;
+}
+
+.process-step summary::-webkit-details-marker,
+.note-row summary::-webkit-details-marker { display: none; }
+
+/* Desktop: the summary is just a wrapper, so its children lay out exactly as
+   the step-num / h3 siblings did before. */
+.process-step summary { display: block; }
+
+/* With the body in its own grid column, this row now has the price list's
+   shape — term left, explanation right — so it takes the same proportions
+   rather than sizing the title column to its longest heading. */
+.note-row {
+  grid-template-columns: minmax(15rem, 1fr) 2fr;
+  gap: 1rem 2.5rem;
+}
+
+.note-row summary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem;
+  align-items: baseline;
+}
+
 /* Note list — replaces the three "catches people out" cards --------------- */
 .note-list {
   max-width: 860px;
@@ -614,6 +647,64 @@ nav.topnav.scrolled {
 }
 
 @media (max-width: 768px) {
+  /* Local notes and quirks collapse the same way the price list does — and
+     like it, in a single column. The shared grid still goes 2-up here, which
+     put two narrow accordions side by side. */
+  .process-grid { grid-template-columns: 1fr; gap: 0; }
+
+  .process-step {
+    border-left: none;
+    border-top: 1px solid var(--navy-line);
+  }
+
+  .process-step:first-child { border-top: none; }
+  .process-step::before { display: none; }
+
+  .process-step,
+  .note-row { padding: 0; }
+
+  /* The two-column shape is a desktop thing — left here it kept the summary
+     inside the left column, so the chevron sat against the title and an open
+     body would land beside the heading instead of under it. */
+  .note-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .process-step summary,
+  .note-row summary {
+    position: relative;
+    cursor: pointer;
+    padding: 0.95rem 2rem 0.95rem 0;
+  }
+
+  .process-step summary::after,
+  .note-row summary::after {
+    content: '';
+    position: absolute;
+    right: 0.35rem;
+    top: 50%;
+    width: 8px; height: 8px;
+    border-right: 1.5px solid var(--accent);
+    border-bottom: 1.5px solid var(--accent);
+    transform: translateY(-70%) rotate(-45deg);
+    transition: transform 0.2s ease;
+  }
+
+  .process-step[open] summary::after,
+  .note-row[open] summary::after { transform: translateY(-30%) rotate(45deg); }
+
+  .process-step h3,
+  .note-row h3 { margin-bottom: 0; }
+
+  .process-step .step-body,
+  .note-row .note-body { padding: 0 0 1.05rem; }
+
+  .process-step .step-body p { font-size: 0.88rem; }
+
+  /* The rail node is anchored to the row top, which now sits on the summary. */
+  .process-step::before { top: 1.15rem; }
+
   /* Collapsed on phones: heading row taps open one explanation at a time. */
   .spec-row {
     grid-template-columns: 1fr;
@@ -1350,23 +1441,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </div>
 <div class="spec-list">
-      <details class="spec-row" open>
+      <details class="spec-row js-collapse" open>
         <summary><span class="spec-num">01</span><span class="spec-title">Distance and lane</span></summary>
         <div class="spec-body">Your route sets the floor. Our New York lanes run from about 620 miles to North Carolina out to roughly 2,860 miles to California. Sharing a trailer with other households costs less than a dedicated truck; a dedicated truck buys you a delivery date instead of a spread.</div>
       </details>
-      <details class="spec-row" open>
+      <details class="spec-row js-collapse" open>
         <summary><span class="spec-num">02</span><span class="spec-title">Access at both ends</span></summary>
         <div class="spec-body">Whether a trailer can reach your door changes the job. Long carries, stairs, freight elevator reservations, street permits, and shuttle service where a tractor-trailer physically cannot fit are all real work — we check them at survey so they land in the quote instead of on move day.</div>
       </details>
-      <details class="spec-row" open>
+      <details class="spec-row js-collapse" open>
         <summary><span class="spec-num">03</span><span class="spec-title">How much packing you want</span></summary>
         <div class="spec-body">Full packing is what most long-distance customers choose, and it is the single biggest factor in whether a load arrives intact — a professionally packed box is built for a 2,000-mile ride, not a car trip. Most land somewhere between, having us handle the kitchen, art, and anything fragile. Custom crating for art, antiques, and oversized items is quoted separately.</div>
       </details>
-      <details class="spec-row" open>
+      <details class="spec-row js-collapse" open>
         <summary><span class="spec-num">04</span><span class="spec-title">Storage between dates</span></summary>
         <div class="spec-body">Move-out and move-in dates rarely line up. Storage-in-transit holds your inventoried goods until your date, and we quote that cost up front rather than letting it accrue quietly. Climate control is worth it for wood, leather, and electronics.</div>
       </details>
-      <details class="spec-row" open>
+      <details class="spec-row js-collapse" open>
         <summary><span class="spec-num">05</span><span class="spec-title">Valuation and protection</span></summary>
         <div class="spec-body">Every interstate move includes the federally required minimum released-value protection at no extra charge. Full Value Protection — repair, replacement, or a cash settlement at current market value — costs more and is worth considering for a high-value inventory.</div>
       </details>
@@ -1381,26 +1472,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p>Every state has its own access problems, weather windows, and rules. Here's what shapes a New York move in practice.</p>
   </div>
   <div class="process-grid">
-    <div class="process-step">
-      <div class="step-num">STEP 01</div>
-      <h3>Roads &amp; access</h3>
-      <p>The defining constraint is building access. Nearly every Manhattan and Brooklyn building requires a COI naming the owner and managing agent, a reserved freight elevator, and a weekday move window — many buildings allow moves only between 9 a.m. and 4 p.m. Commercial vehicles are banned from the Hutchinson, Saw Mill, Belt, and other parkways, and low bridge clearances on those routes are a genuine hazard. Walk-ups with tight turning stairs are standard. Main corridors: I-95, I-87, I-90 (Thruway), I-495 (LIE), I-278.</p>
-    </div>
-    <div class="process-step">
-      <div class="step-num">STEP 02</div>
-      <h3>Timing your move</h3>
-      <p>Peak is May through September with the heaviest concentration around the end of the month, when most city leases turn. The last weekend of June and of August are the hardest dates in the region. Winter is meaningfully quieter and building elevators are far easier to reserve, though snow, alternate-side rules, and cold-weather loading slow things down. Upstate winters bring lake-effect snow that can close I-90 near Buffalo and Syracuse.</p>
-    </div>
-    <div class="process-step">
-      <div class="step-num">STEP 03</div>
-      <h3>Who is moving, and why</h3>
-      <p>New York's net outflow is the largest of any state in absolute terms, with Florida, New Jersey, Pennsylvania, the Carolinas, and Texas the leading destinations. The city continues to draw enormous inbound volume from around the country and the world, so gross moving activity is huge in both directions. Upstate metros lose population steadily to the Sun Belt and to the city, though Buffalo and Albany have stabilized in recent years.</p>
-    </div>
-    <div class="process-step">
-      <div class="step-num">STEP 04</div>
-      <h3>Licensing to check</h3>
-      <p>Interstate moves out of New York are federal: look for an active USDOT number and FMCSA authority. Ours are USDOT #4575745 and MC-1820728. Movers operating only inside the state answer instead to the New York State Department of Transportation, which licenses intrastate household-goods carriers — a registration that is not authority to take your belongings across the line.</p>
-    </div>
+    <details class="process-step js-collapse" open>
+      <summary>
+        <span class="step-num">STEP 01</span>
+        <h3>Roads &amp; access</h3>
+      </summary>
+      <div class="step-body"><p>The defining constraint is building access. Nearly every Manhattan and Brooklyn building requires a COI naming the owner and managing agent, a reserved freight elevator, and a weekday move window — many buildings allow moves only between 9 a.m. and 4 p.m. Commercial vehicles are banned from the Hutchinson, Saw Mill, Belt, and other parkways, and low bridge clearances on those routes are a genuine hazard. Walk-ups with tight turning stairs are standard. Main corridors: I-95, I-87, I-90 (Thruway), I-495 (LIE), I-278.</p></div>
+    </details>
+    <details class="process-step js-collapse" open>
+      <summary>
+        <span class="step-num">STEP 02</span>
+        <h3>Timing your move</h3>
+      </summary>
+      <div class="step-body"><p>Peak is May through September with the heaviest concentration around the end of the month, when most city leases turn. The last weekend of June and of August are the hardest dates in the region. Winter is meaningfully quieter and building elevators are far easier to reserve, though snow, alternate-side rules, and cold-weather loading slow things down. Upstate winters bring lake-effect snow that can close I-90 near Buffalo and Syracuse.</p></div>
+    </details>
+    <details class="process-step js-collapse" open>
+      <summary>
+        <span class="step-num">STEP 03</span>
+        <h3>Who is moving, and why</h3>
+      </summary>
+      <div class="step-body"><p>New York's net outflow is the largest of any state in absolute terms, with Florida, New Jersey, Pennsylvania, the Carolinas, and Texas the leading destinations. The city continues to draw enormous inbound volume from around the country and the world, so gross moving activity is huge in both directions. Upstate metros lose population steadily to the Sun Belt and to the city, though Buffalo and Albany have stabilized in recent years.</p></div>
+    </details>
+    <details class="process-step js-collapse" open>
+      <summary>
+        <span class="step-num">STEP 04</span>
+        <h3>Licensing to check</h3>
+      </summary>
+      <div class="step-body"><p>Interstate moves out of New York are federal: look for an active USDOT number and FMCSA authority. Ours are USDOT #4575745 and MC-1820728. Movers operating only inside the state answer instead to the New York State Department of Transportation, which licenses intrastate household-goods carriers — a registration that is not authority to take your belongings across the line.</p></div>
+    </details>
   </div>
 </section>
 
@@ -1412,27 +1511,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p>Three things that regularly turn a straightforward New York move into an expensive one. We check all three before quoting, so they land in the price rather than on move day.</p>
   </div>
   <div class="note-list">
-      <div class="note-row">
-        <div class="note-num">01</div>
-        <div class="note-body">
+      <details class="note-row js-collapse" open>
+        <summary>
+          <span class="note-num">01</span>
           <h3>Building COI and elevator reservations</h3>
-          <p>This is the make-or-break detail in New York City. Buildings often require the COI a week ahead with exact wording, and freight elevators book out. Send us the building's move-in packet as soon as you have it.</p>
-        </div>
-      </div>
-      <div class="note-row">
-        <div class="note-num">02</div>
-        <div class="note-body">
+        </summary>
+        <div class="note-body"><p>This is the make-or-break detail in New York City. Buildings often require the COI a week ahead with exact wording, and freight elevators book out. Send us the building's move-in packet as soon as you have it.</p></div>
+      </details>
+      <details class="note-row js-collapse" open>
+        <summary>
+          <span class="note-num">02</span>
           <h3>Parkway truck bans and low bridges</h3>
-          <p>Commercial vehicles are prohibited on the region's parkways, where clearances are too low for a moving trailer. Routing goes via the interstates and truck routes, which affects timing more than distance.</p>
-        </div>
-      </div>
-      <div class="note-row">
-        <div class="note-num">03</div>
-        <div class="note-body">
+        </summary>
+        <div class="note-body"><p>Commercial vehicles are prohibited on the region's parkways, where clearances are too low for a moving trailer. Routing goes via the interstates and truck routes, which affects timing more than distance.</p></div>
+      </details>
+      <details class="note-row js-collapse" open>
+        <summary>
+          <span class="note-num">03</span>
           <h3>End-of-month lease turnover</h3>
-          <p>City leases cluster at month end, and the last weekends of June and August are the hardest dates in the region. Six to eight weeks ahead is the difference between a move and a scramble — if your date is closer than that, call us and we will tell you straight away what we can hold.</p>
-        </div>
-      </div>
+        </summary>
+        <div class="note-body"><p>City leases cluster at month end, and the last weekends of June and August are the hardest dates in the region. Six to eight weeks ahead is the difference between a move and a scramble — if your date is closer than that, call us and we will tell you straight away what we can hold.</p></div>
+      </details>
     </div>
 </section>
 

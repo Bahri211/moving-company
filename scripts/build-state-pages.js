@@ -1102,6 +1102,39 @@ nav.topnav.scrolled {
   line-height: 1.65;
 }
 
+/* Process steps and notes as collapsibles ---------------------------------
+   Both are <details> now, matching the price list: open on desktop, where the
+   layout is unchanged from the divs they replace, and collapsed to a tappable
+   heading below 769px. The marker is suppressed everywhere; the chevron below
+   is drawn on the summary instead. */
+.process-step summary,
+.note-row summary {
+  list-style: none;
+  cursor: default;
+}
+
+.process-step summary::-webkit-details-marker,
+.note-row summary::-webkit-details-marker { display: none; }
+
+/* Desktop: the summary is just a wrapper, so its children lay out exactly as
+   the step-num / h3 siblings did before. */
+.process-step summary { display: block; }
+
+/* With the body in its own grid column, this row now has the price list's
+   shape — term left, explanation right — so it takes the same proportions
+   rather than sizing the title column to its longest heading. */
+.note-row {
+  grid-template-columns: minmax(15rem, 1fr) 2fr;
+  gap: 1rem 2.5rem;
+}
+
+.note-row summary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem;
+  align-items: baseline;
+}
+
 /* Note list — replaces the three "catches people out" cards --------------- */
 .note-list {
   max-width: 860px;
@@ -1140,6 +1173,64 @@ nav.topnav.scrolled {
 }
 
 @media (max-width: 768px) {
+  /* Local notes and quirks collapse the same way the price list does — and
+     like it, in a single column. The shared grid still goes 2-up here, which
+     put two narrow accordions side by side. */
+  .process-grid { grid-template-columns: 1fr; gap: 0; }
+
+  .process-step {
+    border-left: none;
+    border-top: 1px solid var(--navy-line);
+  }
+
+  .process-step:first-child { border-top: none; }
+  .process-step::before { display: none; }
+
+  .process-step,
+  .note-row { padding: 0; }
+
+  /* The two-column shape is a desktop thing — left here it kept the summary
+     inside the left column, so the chevron sat against the title and an open
+     body would land beside the heading instead of under it. */
+  .note-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .process-step summary,
+  .note-row summary {
+    position: relative;
+    cursor: pointer;
+    padding: 0.95rem 2rem 0.95rem 0;
+  }
+
+  .process-step summary::after,
+  .note-row summary::after {
+    content: '';
+    position: absolute;
+    right: 0.35rem;
+    top: 50%;
+    width: 8px; height: 8px;
+    border-right: 1.5px solid var(--accent);
+    border-bottom: 1.5px solid var(--accent);
+    transform: translateY(-70%) rotate(-45deg);
+    transition: transform 0.2s ease;
+  }
+
+  .process-step[open] summary::after,
+  .note-row[open] summary::after { transform: translateY(-30%) rotate(45deg); }
+
+  .process-step h3,
+  .note-row h3 { margin-bottom: 0; }
+
+  .process-step .step-body,
+  .note-row .note-body { padding: 0 0 1.05rem; }
+
+  .process-step .step-body p { font-size: 0.88rem; }
+
+  /* The rail node is anchored to the row top, which now sits on the summary. */
+  .process-step::before { top: 1.15rem; }
+
   /* Collapsed on phones: heading row taps open one explanation at a time. */
   .spec-row {
     grid-template-columns: 1fr;
@@ -1490,7 +1581,7 @@ function statePage(s) {
 
   const costCards = TRIAL_STATES.has(s.name)
     ? `<div class="spec-list">
-${COSTS.map(([title, , body], i) => `      <details class="spec-row" open>
+${COSTS.map(([title, , body], i) => `      <details class="spec-row js-collapse" open>
         <summary><span class="spec-num">${String(i + 1).padStart(2, '0')}</span><span class="spec-title">${title}</span></summary>
         <div class="spec-body">${body}</div>
       </details>`).join('\n')}
@@ -1503,12 +1594,22 @@ ${COSTS.map(([title, , body], i) => `      <details class="spec-row" open>
     </div>`).join('\n');
 
   // Local knowledge fills the homepage's dark process section.
-  const localSteps = [
+  const LOCAL_STEPS = [
     ['Roads &amp; access', `${esc(s.logistics)} Main corridors: ${s.highways.map(esc).join(', ')}.`],
     ['Timing your move', esc(s.seasonal)],
     ['Who is moving, and why', esc(s.migration)],
     ['Licensing to check', `Interstate moves out of ${esc(s.name)} are federal: look for an active USDOT number and FMCSA authority. Ours are USDOT #${USDOT} and ${MC}. Movers operating only inside the state answer instead to ${esc(s.regulator)} — a registration that is not authority to take your belongings across the line.`],
-  ].map(([title, body], i) => `    <div class="process-step">
+  ];
+
+  const localSteps = TRIAL_STATES.has(s.name)
+    ? LOCAL_STEPS.map(([title, body], i) => `    <details class="process-step js-collapse" open>
+      <summary>
+        <span class="step-num">STEP ${String(i + 1).padStart(2, '0')}</span>
+        <h3>${title}</h3>
+      </summary>
+      <div class="step-body"><p>${body}</p></div>
+    </details>`).join('\n')
+    : LOCAL_STEPS.map(([title, body], i) => `    <div class="process-step">
       <div class="step-num">STEP ${String(i + 1).padStart(2, '0')}</div>
       <h3>${title}</h3>
       <p>${body}</p>
@@ -1519,13 +1620,13 @@ ${COSTS.map(([title, , body], i) => `      <details class="spec-row" open>
   // row of cards — see the note on costCards above.
   const quirkCards = TRIAL_STATES.has(s.name)
     ? `<div class="note-list">
-${s.quirks.map((q, i) => `      <div class="note-row">
-        <div class="note-num">${String(i + 1).padStart(2, '0')}</div>
-        <div class="note-body">
+${s.quirks.map((q, i) => `      <details class="note-row js-collapse" open>
+        <summary>
+          <span class="note-num">${String(i + 1).padStart(2, '0')}</span>
           <h3>${esc(q.title)}</h3>
-          <p>${esc(q.body)}</p>
-        </div>
-      </div>`).join('\n')}
+        </summary>
+        <div class="note-body"><p>${esc(q.body)}</p></div>
+      </details>`).join('\n')}
     </div>`
     : s.quirks.map((q, i) => `    <div class="service-card">
       <div class="service-num">${String(i + 1).padStart(2, '0')}</div>
