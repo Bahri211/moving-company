@@ -2594,3 +2594,24 @@ a.state-item:hover { background: #fff; }
 .service-card:hover h3 a { color: var(--accent); }
 .section-header p a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(200, 85, 44, 0.35); }
 .section-header p a:hover { border-bottom-color: var(--accent); }
+
+/* Blue gallery — the homepage matches the state pages. Opt-in by class rather
+   than restyling .gallery-section, so the hub keeps its warm ground. The hex
+   is the state pages' blue: this stylesheet's own --blue is brighter. */
+.gallery-blue { background: #1a4570; }
+.gallery-blue .section-header h2 { color: var(--paper); }
+.gallery-blue .section-header p  { color: #bcd0e6; }
+.gallery-blue .section-kicker    { color: #8fb0d4; }
+.gallery-blue .section-kicker::before,
+.gallery-blue .section-kicker::after { background: #46688f; }
+
+/* Gallery lead: a fifth photo would orphan in the two-column grid, so the
+   strongest shot runs full width above the other four. Below 768px the grid
+   pins every image to 140px, so the lead opts back into filling its box, at
+   the photo's own 3:2 so nothing is cropped. */
+.gallery-lead { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
+
+@media (max-width: 768px) {
+  .gallery-lead { aspect-ratio: 3 / 2; }
+  .gallery-lead img { height: 100%; }
+}
