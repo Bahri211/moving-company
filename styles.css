@@ -2615,3 +2615,112 @@ a.state-item:hover { background: #fff; }
   .gallery-lead { aspect-ratio: 3 / 2; }
   .gallery-lead img { height: 100%; }
 }
+
+/* ==========================================================================
+   Homepage: the state pages' credentials strip, contact strip and footer.
+   The state pages carry these in their own <style> block; the homepage only
+   loads this file, so they're repeated here under html.home — the hub and the
+   legal pages share this stylesheet and stay as they were. Colours are the
+   state pages' literal values, since this file's navy and green tokens are a
+   shade off theirs.
+   ========================================================================== */
+
+/* Credentials strip. --nav-h is what the hero pads by and the mobile menu
+   hangs from, so it grows to strip + bar; the bar's own min-height is pinned
+   so it doesn't stretch to the full figure. Measured here: the bar renders
+   77px on desktop and 65px on phones (the stock token says 72 and 64). */
+.home { --cred-h: 28px; --nav-h: 105px; }
+
+.home .nav-cred {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 101;
+  height: var(--cred-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0 1rem;
+  background: #10243c;
+  color: #a9c0d6;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.home .cred-icon { width: 13px; height: 13px; flex-shrink: 0; color: #6fce9b; }
+
+.home nav.topnav {
+  top: var(--cred-h);
+  min-height: calc(var(--nav-h) - var(--cred-h));
+}
+
+/* Between 769 and 960px the links and both buttons don't fit on one line and
+   the bar wrapped to two rows (94px), which a fixed offset can't absorb — so
+   everything steps down a size through that range instead. */
+.home .nav-phone { white-space: nowrap; }
+
+@media (min-width: 769px) and (max-width: 960px) {
+  .home nav.topnav { padding: 0.75rem 1.25rem; }
+  .home .logo-img { height: 34px; }
+  .home .nav-links { gap: 1.05rem; font-size: 0.8rem; }
+  .home .nav-right { gap: 0.6rem; }
+  .home .nav-phone { padding: 0.5rem 0.8rem; font-size: 0.78rem; gap: 0.35rem; }
+  .home .topnav .nav-cta { padding: 0.55rem 0.95rem; font-size: 0.78rem; }
+}
+
+@media (max-width: 768px) {
+  .home { --cred-h: 26px; --nav-h: 92px; }
+  .home .nav-cred { font-size: 0.7rem; letter-spacing: 0.04em; }
+  .home .cred-icon { width: 11px; height: 11px; }
+}
+
+/* Below 380px the prefix drops and the registration numbers carry it. */
+@media (max-width: 380px) {
+  .home .cred-lead { display: none; }
+}
+
+/* Contact strip: green call button, neutral outline for email, both the same
+   width with their contents centred, heading in Inter. */
+.home .contact-strip { background: #10243c; }
+.home .cs-text h2 { font-family: var(--font-body); }
+.home .cs-ctas { align-items: stretch; }
+.home .cs-phone, .home .cs-email { width: 100%; justify-content: center; }
+.home .cs-phone { background: linear-gradient(135deg, #2f8f5b 0%, #237046 100%); }
+.home .cs-phone:hover { background: linear-gradient(135deg, #2f8f5b 0%, #237046 100%); filter: brightness(1.08); }
+.home .cs-email { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.4); color: var(--paper); }
+.home .cs-email:hover { background: rgba(255, 255, 255, 0.18); border-color: rgba(255, 255, 255, 0.65); color: #fff; }
+
+/* Footer: the state pages' deeper ground and Inter headings, and the contact
+   lines lose the green (.footer-phone) for a small phone or envelope icon in
+   the same muted colour as every other footer link. */
+.home footer { background: #0a1727; }
+.home .footer-col h4 { font-family: var(--font-body); }
+
+.home .footer-col a[href^="tel:"],
+.home .footer-col a[href^="mailto:"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-weight: 500;
+  color: var(--navy-text);
+}
+
+.home .footer-col a[href^="tel:"]:hover,
+.home .footer-col a[href^="mailto:"]:hover { color: var(--paper); }
+
+.home .footer-col a[href^="tel:"]::before,
+.home .footer-col a[href^="mailto:"]::before {
+  content: '';
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask: no-repeat center / contain;
+  mask: no-repeat center / contain;
+}
+
+.home .footer-col a[href^="tel:"]::before { -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'/%3E%3C/svg%3E"); }
+.home .footer-col a[href^="mailto:"]::before { -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4' width='20' height='16' rx='2'/%3E%3Cpath d='m22 6-10 7L2 6'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4' width='20' height='16' rx='2'/%3E%3Cpath d='m22 6-10 7L2 6'/%3E%3C/svg%3E"); }
