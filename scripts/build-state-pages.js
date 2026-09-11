@@ -800,8 +800,15 @@ nav.topnav.scrolled {
 .nav-links a.is-current { color: var(--accent); }
 .nav-links a.is-current::after { width: 100%; }
 
-/* Contact strip phone -----------------------------------------------------
-   It was --accent, which put the page's only two "call" buttons in different
+/* Contact strip ------------------------------------------------------------
+   Background is --blue rather than --navy: the same blue already used in the
+   trust bar and behind the gallery, so it joins those instead of adding a
+   fourth dark tone. The terracotta glow behind the heading (styles.css,
+   .contact-strip::before) needed no change — a warm accent glow reads fine
+   on a cool ground either way. */
+.contact-strip { background: var(--blue); }
+
+/* It was --accent, which put the page's only two "call" buttons in different
    colours: the nav phone and the sticky call button are green, this one was
    terracotta. Green here as well, so the colour means one thing throughout —
    and it stops this button competing with the quote CTA for the same signal.
@@ -815,22 +822,28 @@ nav.topnav.scrolled {
   filter: brightness(1.08);
 }
 
-/* Contact strip email -----------------------------------------------------
-   Given the palette's blue rather than a filled pill: calling should lead, and
-   two solid buttons side by side read as equal choices. Kept as an outline so
-   it stays second, but tinted so it is a colour rather than plain white — blue
-   is already this page's third voice, in the trust bar and behind the gallery,
-   and it avoids borrowing the terracotta that means "get a quote". */
+/* Email was tinted the same blue as the old navy background so it would read
+   as a colour rather than plain white. Now that the background is that blue,
+   the same tint would sit almost flush against it — so it goes neutral
+   instead: a soft white fill and border, which holds contrast on any dark
+   ground including this one. */
 .cs-email {
-  background: rgba(70, 104, 143, 0.22);
-  border-color: rgba(143, 176, 212, 0.45);
-  color: #cfe0f2;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: var(--paper);
 }
 
 .cs-email:hover {
-  background: rgba(70, 104, 143, 0.38);
-  border-color: rgba(178, 205, 233, 0.75);
-  color: #eaf2fa;
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.65);
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  /* .cs-phone gets width: 100% from the shared stylesheet's stacked mobile
+     layout; .cs-email does not, so it stayed sized to its own text — narrower
+     than the phone button above it despite both being full-width pills. */
+  .cs-email { width: 100%; }
 }
 
 /* Headline on one line ----------------------------------------------------
