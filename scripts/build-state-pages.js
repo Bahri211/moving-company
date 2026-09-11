@@ -747,38 +747,6 @@ nav.topnav {
   .cred-icon { width: 11px; height: 11px; }
 }
 
-/* Contact strip CTAs on phones ---------------------------------------------
-   The shared stylesheet stacks phone and email full-width in a column below
-   769px, which is why they read as two unrelated rows rather than a pair of
-   choices. Put back on one row, sized to fit: the two strings measure 8.257em
-   (phone) and 13.870em (email) in this weight, so email — the bottleneck —
-   drops to a smaller size than the phone button while the phone stays the
-   size that leads. At 0.8rem/0.68rem plus the tightened padding below, the
-   pair totals ~329px, which clears the ~335px available on a 375px phone (the
-   narrowest width still in real use) with room to spare. */
-@media (max-width: 768px) {
-  .cs-ctas { flex-direction: row; gap: 0.4rem; }
-
-  .cs-phone {
-    flex: 0 1 auto;
-    width: auto;
-    padding: 0.5rem 0.7rem;
-    font-size: 0.72rem;
-    gap: 0.35rem;
-  }
-
-  .cs-email {
-    flex: 1 1 auto;
-    min-width: 0;
-    padding: 0.45rem 0.55rem;
-    font-size: 0.6rem;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
 @media (max-width: 380px) {
   .cred-lead { display: none; }
 }
@@ -890,33 +858,50 @@ nav.topnav.scrolled {
   .hero h1 em { font-size: 1.35em; }
 }
 
-/* Footer phones -----------------------------------------------------------
-   Green is the site's "call" colour — the nav phone button and the sticky call
-   button both use it — so the two numbers in the footer take it rather than
-   sitting in the same muted blue as every other link in the column. Lightened
-   from --green, which is tuned for white-on-green buttons and goes muddy as
-   text on the dark footer. */
-.footer-col a[href^="tel:"] {
+/* Footer contact ------------------------------------------------------
+   The two phone numbers were a green pill — green is the site's "call"
+   colour elsewhere, but bright green on a dark footer surrounded by plain
+   links read as an alert rather than a detail, and it singled out the phone
+   numbers while leaving the email looking like an afterthought below them.
+
+   Replaced with a small icon in front of each contact line instead — phone
+   for both numbers, an envelope for the email. Colour stays the same muted
+   --navy-text as every other footer link and brightens the same way on
+   hover, so "Contact" reads as one coherent block instead of two treatments
+   glued together. The icon is a CSS mask filled with currentColor, so it
+   never needs its own colour rule and no markup change was needed to add it. */
+.footer-col a[href^="tel:"],
+.footer-col a[href^="mailto:"] {
   display: inline-flex;
   align-items: center;
-  color: #6fce9b;
+  gap: 0.55rem;
   font-weight: 500;
-  background: rgba(111, 206, 155, 0.11);
-  border: 1px solid rgba(111, 206, 155, 0.28);
-  border-radius: 999px;
-  padding: 0.32rem 0.8rem;
-  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
 }
 
-.footer-col a[href^="tel:"]:hover {
-  color: #b6ebcd;
-  background: rgba(111, 206, 155, 0.2);
-  border-color: rgba(111, 206, 155, 0.5);
+.footer-col a[href^="tel:"]::before,
+.footer-col a[href^="mailto:"]::before {
+  content: '';
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
-/* The pills are taller than the plain links they sit among, so the rows in
-   this column need a little more room. */
-.footer-col li:has(a[href^="tel:"]) { margin-bottom: 0.35rem; }
+.footer-col a[href^="tel:"]::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'/%3E%3C/svg%3E");
+}
+
+.footer-col a[href^="mailto:"]::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4' width='20' height='16' rx='2'/%3E%3Cpath d='m22 6-10 7L2 6'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4' width='20' height='16' rx='2'/%3E%3Cpath d='m22 6-10 7L2 6'/%3E%3C/svg%3E");
+}
 
 /* Headings ---------------------------------------------------------------
    A display serif carries at 400 on its own shapes; a grotesque set at the
