@@ -509,6 +509,11 @@ body.menu-open .mobile-menu { transform: translateX(0); }
 
 .hc-dark  { background: var(--navy);   color: var(--paper); }
 .hc-accent { background: var(--accent); color: var(--paper); }
+/* Sky blue, for the homepage's "Free quotes" card. A light ground, so the text
+   goes navy rather than the cream the dark cards use — cream on sky blue
+   reads poorly. */
+.hc-sky { background: #87ceeb; color: #10243c; }
+.hc-sky .hc-label, .hc-sky .hc-val, .hc-sky .hc-sub { color: inherit; }
 
 .hc-label {
   font-size: 0.68rem;
