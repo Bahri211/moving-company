@@ -321,52 +321,28 @@ nav.topnav.scrolled {
    phone number. justify-content is what actually centers it. */
 .cs-email { justify-content: center; }
 
-/* Cities list -----------------------------------------------------------
-   The heading is a full sentence, so it sits well below the display size the
-   other section titles use — at that size it ran to four lines. The list
-   flows down columns, largest first, and keeps names whole rather than
-   truncating them the way the state pills do on phones. */
-.cities-section .section-header { max-width: 52rem; margin-bottom: 2.5rem; }
-
-.cities-section .section-header h2 {
-  font-size: clamp(1.3rem, 2.5vw, 2rem);
+/* Coverage city pills -------------------------------------------------------
+   The grid now carries the Census list, whose names run longer than the old
+   hand-picked ones — "Parsippany-Troy Hills", "Saginaw (charter township)".
+   The stock pill never wraps, so on desktop those ran past the pill's edge,
+   and below 768px the shared rule cut them off with an ellipsis. In this grid
+   they wrap to a second line instead, with the check mark held on the first.
+   #states-grid is the Coverage grid only; the nearby-states pills don't carry
+   the id and are unchanged. */
+#states-grid .state-item {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  align-items: flex-start;
   line-height: 1.3;
-  letter-spacing: -0.02em;
-  margin-bottom: 0;
 }
 
-.cities-section .section-header h2 a {
-  color: var(--accent);
-  text-decoration: none;
-  white-space: nowrap;
-}
+#states-grid .state-check { margin-top: 0.15em; }
 
-.cities-section .section-header h2 a:hover { text-decoration: underline; }
-
-.city-list {
-  max-width: 1100px;
-  margin: 0 auto;
-  list-style: none;
-  columns: 5 11rem;
-  column-gap: 2.25rem;
-}
-
-.city-list li {
-  break-inside: avoid;
-  padding: 0.55rem 0;
-  border-bottom: 1px solid var(--line);
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-}
-
-/* Paper runs straight on into the nearby-states section, so a rule marks
-   where one list ends and the next begins. */
-.cities-section + #nearby { border-top: 1px solid var(--line); }
-
-@media (max-width: 480px) {
-  .city-list { columns: 2; column-gap: 1.25rem; }
-  .city-list li { font-size: 0.84rem; padding: 0.5rem 0; }
-}
+/* A grid row stretches every item to its tallest, so one wrapped name made
+   the five short pills beside it into tall boxes with empty space. Centred,
+   each pill keeps its own height. */
+#states-grid { align-items: center; }
 
 /* Headline on one line ----------------------------------------------------
    Sized to fit rather than guessed at. Each h1 carries its own measured width
@@ -1526,21 +1502,57 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div class="states-grid" id="states-grid">
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Virginia Beach</div>
-    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Richmond</div>
-    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Norfolk</div>
-    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Arlington</div>
-    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Alexandria</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Chesapeake</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Norfolk</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Richmond</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Newport News</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Alexandria</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Hampton</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Suffolk</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Roanoke</div>
-    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Charlottesville</div>
-    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Fairfax</div>
-    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Reston</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Portsmouth</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Lynchburg</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Harrisonburg</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Leesburg</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Blacksburg</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Charlottesville</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Manassas</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Danville</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Petersburg</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Fredericksburg</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Winchester</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Staunton</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Salem</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Fairfax</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Herndon</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Waynesboro</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Hopewell</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Christiansburg</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Culpeper</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Colonial Heights</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Radford</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Bristol</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Manassas Park</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Vienna</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Williamsburg</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Front Royal</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Falls Church</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Martinsville</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Poquoson</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Warrenton</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Smithfield</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Purcellville</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Pulaski</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Franklin</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Abingdon</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Wytheville</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Vinton</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Ashland</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>South Boston</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Lexington</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Farmville</div>
   </div>
-  <button class="states-toggle" id="states-toggle" aria-expanded="false">Show all 14 cities ↓</button>
+  <button class="states-toggle" id="states-toggle" aria-expanded="false">Show all 50 cities ↓</button>
 </section>
 
 <!-- SERVICES -->
@@ -1755,65 +1767,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="faq-a"><p>Yes, and there are two separate authorities. Any company moving household goods across a state line must hold an active USDOT number and interstate operating authority from the FMCSA — ours are <strong>USDOT #4575745</strong> and <strong>MC-1820728</strong>, and you can verify both on the FMCSA's public SAFER database before paying a deposit.</p><p>Companies that move households only within Virginia answer to the Virginia Department of Motor Vehicles Motor Carrier Services. That distinction matters: an intrastate-only registration is not authority to take your belongings out of Virginia, and it is the most common gap we see when customers forward us a competitor's paperwork. Two other things worth checking on any quote — whether the price is binding or an estimate that can be revised at delivery, and whether the company is a carrier that owns trucks or a broker reselling your move. We are a carrier, we quote binding fixed prices, and we put our own crew and truck on the job.</p></div>
     </div>
   </div>
-</section>
-
-<!-- CITIES -->
-<section id="cities" class="cities-section">
-  <div class="section-header">
-    <h2>We service every city, village, and town in Virginia and deliver to any state. Call <a href="tel:+18885051086">+1 (888) 505-1086</a>.</h2>
-  </div>
-  <ul class="city-list">
-    <li>Virginia Beach</li>
-    <li>Chesapeake</li>
-    <li>Norfolk</li>
-    <li>Richmond</li>
-    <li>Newport News</li>
-    <li>Alexandria</li>
-    <li>Hampton</li>
-    <li>Suffolk</li>
-    <li>Roanoke</li>
-    <li>Portsmouth</li>
-    <li>Lynchburg</li>
-    <li>Harrisonburg</li>
-    <li>Leesburg</li>
-    <li>Blacksburg</li>
-    <li>Charlottesville</li>
-    <li>Manassas</li>
-    <li>Danville</li>
-    <li>Petersburg</li>
-    <li>Fredericksburg</li>
-    <li>Winchester</li>
-    <li>Staunton</li>
-    <li>Salem</li>
-    <li>Fairfax</li>
-    <li>Herndon</li>
-    <li>Waynesboro</li>
-    <li>Hopewell</li>
-    <li>Christiansburg</li>
-    <li>Culpeper</li>
-    <li>Colonial Heights</li>
-    <li>Radford</li>
-    <li>Bristol</li>
-    <li>Manassas Park</li>
-    <li>Vienna</li>
-    <li>Williamsburg</li>
-    <li>Front Royal</li>
-    <li>Falls Church</li>
-    <li>Martinsville</li>
-    <li>Poquoson</li>
-    <li>Warrenton</li>
-    <li>Smithfield</li>
-    <li>Purcellville</li>
-    <li>Pulaski</li>
-    <li>Franklin</li>
-    <li>Abingdon</li>
-    <li>Wytheville</li>
-    <li>Vinton</li>
-    <li>Ashland</li>
-    <li>South Boston</li>
-    <li>Lexington</li>
-    <li>Farmville</li>
-  </ul>
 </section>
 
 <!-- NEARBY STATES -->

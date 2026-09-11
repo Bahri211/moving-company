@@ -321,52 +321,28 @@ nav.topnav.scrolled {
    phone number. justify-content is what actually centers it. */
 .cs-email { justify-content: center; }
 
-/* Cities list -----------------------------------------------------------
-   The heading is a full sentence, so it sits well below the display size the
-   other section titles use — at that size it ran to four lines. The list
-   flows down columns, largest first, and keeps names whole rather than
-   truncating them the way the state pills do on phones. */
-.cities-section .section-header { max-width: 52rem; margin-bottom: 2.5rem; }
-
-.cities-section .section-header h2 {
-  font-size: clamp(1.3rem, 2.5vw, 2rem);
+/* Coverage city pills -------------------------------------------------------
+   The grid now carries the Census list, whose names run longer than the old
+   hand-picked ones — "Parsippany-Troy Hills", "Saginaw (charter township)".
+   The stock pill never wraps, so on desktop those ran past the pill's edge,
+   and below 768px the shared rule cut them off with an ellipsis. In this grid
+   they wrap to a second line instead, with the check mark held on the first.
+   #states-grid is the Coverage grid only; the nearby-states pills don't carry
+   the id and are unchanged. */
+#states-grid .state-item {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  align-items: flex-start;
   line-height: 1.3;
-  letter-spacing: -0.02em;
-  margin-bottom: 0;
 }
 
-.cities-section .section-header h2 a {
-  color: var(--accent);
-  text-decoration: none;
-  white-space: nowrap;
-}
+#states-grid .state-check { margin-top: 0.15em; }
 
-.cities-section .section-header h2 a:hover { text-decoration: underline; }
-
-.city-list {
-  max-width: 1100px;
-  margin: 0 auto;
-  list-style: none;
-  columns: 5 11rem;
-  column-gap: 2.25rem;
-}
-
-.city-list li {
-  break-inside: avoid;
-  padding: 0.55rem 0;
-  border-bottom: 1px solid var(--line);
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-}
-
-/* Paper runs straight on into the nearby-states section, so a rule marks
-   where one list ends and the next begins. */
-.cities-section + #nearby { border-top: 1px solid var(--line); }
-
-@media (max-width: 480px) {
-  .city-list { columns: 2; column-gap: 1.25rem; }
-  .city-list li { font-size: 0.84rem; padding: 0.5rem 0; }
-}
+/* A grid row stretches every item to its tallest, so one wrapped name made
+   the five short pills beside it into tall boxes with empty space. Centred,
+   each pill keeps its own height. */
+#states-grid { align-items: center; }
 
 /* Headline on one line ----------------------------------------------------
    Sized to fit rather than guessed at. Each h1 carries its own measured width
@@ -1532,15 +1508,51 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Independence</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Lee's Summit</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>O'Fallon</div>
-    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>St. Joseph</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>St. Charles</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>St. Joseph</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Blue Springs</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>St. Peters</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Joplin</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Florissant</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Chesterfield</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Wentzville</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Jefferson City</div>
-    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Branson</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Cape Girardeau</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Wildwood</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>University City</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Liberty</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Ballwin</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Kirkwood</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Raytown</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Maryland Heights</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Gladstone</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Belton</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Grandview</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Nixa</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Raymore</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Hazelwood</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Webster Groves</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Ozark</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Sedalia</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Arnold</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Rolla</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Republic</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Warrensburg</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Lake St. Louis</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Creve Coeur</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Farmington</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Manchester</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Ferguson</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Kirksville</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Clayton</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Hannibal</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Grain Valley</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Poplar Bluff</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Sikeston</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Jackson</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Carthage</div>
   </div>
-  <button class="states-toggle" id="states-toggle" aria-expanded="false">Show all 14 cities ↓</button>
+  <button class="states-toggle" id="states-toggle" aria-expanded="false">Show all 50 cities ↓</button>
 </section>
 
 <!-- SERVICES -->
@@ -1755,65 +1767,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="faq-a"><p>Yes, and there are two separate authorities. Any company moving household goods across a state line must hold an active USDOT number and interstate operating authority from the FMCSA — ours are <strong>USDOT #4575745</strong> and <strong>MC-1820728</strong>, and you can verify both on the FMCSA's public SAFER database before paying a deposit.</p><p>Companies that move households only within Missouri answer to the Missouri Department of Transportation Motor Carrier Services division. That distinction matters: an intrastate-only registration is not authority to take your belongings out of Missouri, and it is the most common gap we see when customers forward us a competitor's paperwork. Two other things worth checking on any quote — whether the price is binding or an estimate that can be revised at delivery, and whether the company is a carrier that owns trucks or a broker reselling your move. We are a carrier, we quote binding fixed prices, and we put our own crew and truck on the job.</p></div>
     </div>
   </div>
-</section>
-
-<!-- CITIES -->
-<section id="cities" class="cities-section">
-  <div class="section-header">
-    <h2>We service every city, village, and town in Missouri and deliver to any state. Call <a href="tel:+18885051086">+1 (888) 505-1086</a>.</h2>
-  </div>
-  <ul class="city-list">
-    <li>Kansas City</li>
-    <li>St. Louis</li>
-    <li>Springfield</li>
-    <li>Columbia</li>
-    <li>Independence</li>
-    <li>Lee's Summit</li>
-    <li>O'Fallon</li>
-    <li>St. Charles</li>
-    <li>St. Joseph</li>
-    <li>Blue Springs</li>
-    <li>St. Peters</li>
-    <li>Joplin</li>
-    <li>Florissant</li>
-    <li>Chesterfield</li>
-    <li>Wentzville</li>
-    <li>Jefferson City</li>
-    <li>Cape Girardeau</li>
-    <li>Wildwood</li>
-    <li>University City</li>
-    <li>Liberty</li>
-    <li>Ballwin</li>
-    <li>Kirkwood</li>
-    <li>Raytown</li>
-    <li>Maryland Heights</li>
-    <li>Gladstone</li>
-    <li>Belton</li>
-    <li>Grandview</li>
-    <li>Nixa</li>
-    <li>Raymore</li>
-    <li>Hazelwood</li>
-    <li>Webster Groves</li>
-    <li>Ozark</li>
-    <li>Sedalia</li>
-    <li>Arnold</li>
-    <li>Rolla</li>
-    <li>Republic</li>
-    <li>Warrensburg</li>
-    <li>Lake St. Louis</li>
-    <li>Creve Coeur</li>
-    <li>Farmington</li>
-    <li>Manchester</li>
-    <li>Ferguson</li>
-    <li>Kirksville</li>
-    <li>Clayton</li>
-    <li>Hannibal</li>
-    <li>Grain Valley</li>
-    <li>Poplar Bluff</li>
-    <li>Sikeston</li>
-    <li>Jackson</li>
-    <li>Carthage</li>
-  </ul>
 </section>
 
 <!-- NEARBY STATES -->

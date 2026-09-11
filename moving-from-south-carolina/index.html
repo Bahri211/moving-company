@@ -321,52 +321,28 @@ nav.topnav.scrolled {
    phone number. justify-content is what actually centers it. */
 .cs-email { justify-content: center; }
 
-/* Cities list -----------------------------------------------------------
-   The heading is a full sentence, so it sits well below the display size the
-   other section titles use — at that size it ran to four lines. The list
-   flows down columns, largest first, and keeps names whole rather than
-   truncating them the way the state pills do on phones. */
-.cities-section .section-header { max-width: 52rem; margin-bottom: 2.5rem; }
-
-.cities-section .section-header h2 {
-  font-size: clamp(1.3rem, 2.5vw, 2rem);
+/* Coverage city pills -------------------------------------------------------
+   The grid now carries the Census list, whose names run longer than the old
+   hand-picked ones — "Parsippany-Troy Hills", "Saginaw (charter township)".
+   The stock pill never wraps, so on desktop those ran past the pill's edge,
+   and below 768px the shared rule cut them off with an ellipsis. In this grid
+   they wrap to a second line instead, with the check mark held on the first.
+   #states-grid is the Coverage grid only; the nearby-states pills don't carry
+   the id and are unchanged. */
+#states-grid .state-item {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  align-items: flex-start;
   line-height: 1.3;
-  letter-spacing: -0.02em;
-  margin-bottom: 0;
 }
 
-.cities-section .section-header h2 a {
-  color: var(--accent);
-  text-decoration: none;
-  white-space: nowrap;
-}
+#states-grid .state-check { margin-top: 0.15em; }
 
-.cities-section .section-header h2 a:hover { text-decoration: underline; }
-
-.city-list {
-  max-width: 1100px;
-  margin: 0 auto;
-  list-style: none;
-  columns: 5 11rem;
-  column-gap: 2.25rem;
-}
-
-.city-list li {
-  break-inside: avoid;
-  padding: 0.55rem 0;
-  border-bottom: 1px solid var(--line);
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-}
-
-/* Paper runs straight on into the nearby-states section, so a rule marks
-   where one list ends and the next begins. */
-.cities-section + #nearby { border-top: 1px solid var(--line); }
-
-@media (max-width: 480px) {
-  .city-list { columns: 2; column-gap: 1.25rem; }
-  .city-list li { font-size: 0.84rem; padding: 0.5rem 0; }
-}
+/* A grid row stretches every item to its tallest, so one wrapped name made
+   the five short pills beside it into tall boxes with empty space. Centred,
+   each pill keeps its own height. */
+#states-grid { align-items: center; }
 
 /* Headline on one line ----------------------------------------------------
    Sized to fit rather than guessed at. Each h1 carries its own measured width
@@ -1529,18 +1505,54 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Columbia</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>North Charleston</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Mount Pleasant</div>
-    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Greenville</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Rock Hill</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Greenville</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Summerville</div>
-    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Myrtle Beach</div>
-    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Hilton Head Island</div>
-    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Spartanburg</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Goose Creek</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Greer</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Sumter</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Florence</div>
-    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Aiken</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Myrtle Beach</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Spartanburg</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Hilton Head Island</div>
     <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Bluffton</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Fort Mill</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Aiken</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Anderson</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Mauldin</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Conway</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Simpsonville</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Easley</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>North Augusta</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Lexington</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Greenwood</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Hanahan</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>North Myrtle Beach</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>West Columbia</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Clemson</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Moncks Corner</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Port Royal</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Tega Cay</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Beaufort</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Cayce</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Orangeburg</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Fountain Inn</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Gaffney</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Irmo</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>James Island</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Hardeeville</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Newberry</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Forest Acres</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Laurens</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>York</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Lancaster</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Seneca</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Travelers Rest</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Georgetown</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Camden</div>
+    <div class="state-item"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Union</div>
   </div>
-  <button class="states-toggle" id="states-toggle" aria-expanded="false">Show all 14 cities ↓</button>
+  <button class="states-toggle" id="states-toggle" aria-expanded="false">Show all 50 cities ↓</button>
 </section>
 
 <!-- SERVICES -->
@@ -1755,65 +1767,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="faq-a"><p>Yes, and there are two separate authorities. Any company moving household goods across a state line must hold an active USDOT number and interstate operating authority from the FMCSA — ours are <strong>USDOT #4575745</strong> and <strong>MC-1820728</strong>, and you can verify both on the FMCSA's public SAFER database before paying a deposit.</p><p>Companies that move households only within South Carolina answer to the South Carolina Office of Regulatory Staff and Public Service Commission, which oversee intrastate household-goods carriers. That distinction matters: an intrastate-only registration is not authority to take your belongings out of South Carolina, and it is the most common gap we see when customers forward us a competitor's paperwork. Two other things worth checking on any quote — whether the price is binding or an estimate that can be revised at delivery, and whether the company is a carrier that owns trucks or a broker reselling your move. We are a carrier, we quote binding fixed prices, and we put our own crew and truck on the job.</p></div>
     </div>
   </div>
-</section>
-
-<!-- CITIES -->
-<section id="cities" class="cities-section">
-  <div class="section-header">
-    <h2>We service every city, village, and town in South Carolina and deliver to any state. Call <a href="tel:+18885051086">+1 (888) 505-1086</a>.</h2>
-  </div>
-  <ul class="city-list">
-    <li>Charleston</li>
-    <li>Columbia</li>
-    <li>North Charleston</li>
-    <li>Mount Pleasant</li>
-    <li>Rock Hill</li>
-    <li>Greenville</li>
-    <li>Summerville</li>
-    <li>Goose Creek</li>
-    <li>Greer</li>
-    <li>Sumter</li>
-    <li>Florence</li>
-    <li>Myrtle Beach</li>
-    <li>Spartanburg</li>
-    <li>Hilton Head Island</li>
-    <li>Bluffton</li>
-    <li>Fort Mill</li>
-    <li>Aiken</li>
-    <li>Anderson</li>
-    <li>Mauldin</li>
-    <li>Conway</li>
-    <li>Simpsonville</li>
-    <li>Easley</li>
-    <li>North Augusta</li>
-    <li>Lexington</li>
-    <li>Greenwood</li>
-    <li>Hanahan</li>
-    <li>North Myrtle Beach</li>
-    <li>West Columbia</li>
-    <li>Clemson</li>
-    <li>Moncks Corner</li>
-    <li>Port Royal</li>
-    <li>Tega Cay</li>
-    <li>Beaufort</li>
-    <li>Cayce</li>
-    <li>Orangeburg</li>
-    <li>Fountain Inn</li>
-    <li>Gaffney</li>
-    <li>Irmo</li>
-    <li>James Island</li>
-    <li>Hardeeville</li>
-    <li>Newberry</li>
-    <li>Forest Acres</li>
-    <li>Laurens</li>
-    <li>York</li>
-    <li>Lancaster</li>
-    <li>Seneca</li>
-    <li>Travelers Rest</li>
-    <li>Georgetown</li>
-    <li>Camden</li>
-    <li>Union</li>
-  </ul>
 </section>
 
 <!-- NEARBY STATES -->

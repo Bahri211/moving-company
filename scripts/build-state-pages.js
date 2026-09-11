@@ -287,26 +287,6 @@ ${cards}
 // Deliberately NOT folded into GALLERY: that section is photographs captioned
 // "our work, up close", and illustrations sitting among crew photos read as a
 // mistake rather than a change of pace.
-// Every city, village and town: the state's largest municipalities from the
-// Census list in data/top-cities.js. The heading is the client's wording,
-// verbatim. States without a list (Washington D.C. is a single city) skip the
-// section.
-function citiesSection(s) {
-  const list = TOP_CITIES[s.slug];
-  if (!list || !list.length) return '';
-  return `<!-- CITIES -->
-<section id="cities" class="cities-section">
-  <div class="section-header">
-    <h2>We service every city, village, and town in ${esc(s.name)} and deliver to any state. Call <a href="tel:${PHONE_HREF}">${PHONE_DISPLAY}</a>.</h2>
-  </div>
-  <ul class="city-list">
-${list.map(c => `    <li>${esc(c)}</li>`).join('\n')}
-  </ul>
-</section>
-
-`;
-}
-
 function illustratedRow(s) {
   const items = [
     ['packing.png', 'Hand truck stacked with packed cartons',
@@ -938,52 +918,28 @@ nav.topnav.scrolled {
    phone number. justify-content is what actually centers it. */
 .cs-email { justify-content: center; }
 
-/* Cities list -----------------------------------------------------------
-   The heading is a full sentence, so it sits well below the display size the
-   other section titles use — at that size it ran to four lines. The list
-   flows down columns, largest first, and keeps names whole rather than
-   truncating them the way the state pills do on phones. */
-.cities-section .section-header { max-width: 52rem; margin-bottom: 2.5rem; }
-
-.cities-section .section-header h2 {
-  font-size: clamp(1.3rem, 2.5vw, 2rem);
+/* Coverage city pills -------------------------------------------------------
+   The grid now carries the Census list, whose names run longer than the old
+   hand-picked ones — "Parsippany-Troy Hills", "Saginaw (charter township)".
+   The stock pill never wraps, so on desktop those ran past the pill's edge,
+   and below 768px the shared rule cut them off with an ellipsis. In this grid
+   they wrap to a second line instead, with the check mark held on the first.
+   #states-grid is the Coverage grid only; the nearby-states pills don't carry
+   the id and are unchanged. */
+#states-grid .state-item {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  align-items: flex-start;
   line-height: 1.3;
-  letter-spacing: -0.02em;
-  margin-bottom: 0;
 }
 
-.cities-section .section-header h2 a {
-  color: var(--accent);
-  text-decoration: none;
-  white-space: nowrap;
-}
+#states-grid .state-check { margin-top: 0.15em; }
 
-.cities-section .section-header h2 a:hover { text-decoration: underline; }
-
-.city-list {
-  max-width: 1100px;
-  margin: 0 auto;
-  list-style: none;
-  columns: 5 11rem;
-  column-gap: 2.25rem;
-}
-
-.city-list li {
-  break-inside: avoid;
-  padding: 0.55rem 0;
-  border-bottom: 1px solid var(--line);
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-}
-
-/* Paper runs straight on into the nearby-states section, so a rule marks
-   where one list ends and the next begins. */
-.cities-section + #nearby { border-top: 1px solid var(--line); }
-
-@media (max-width: 480px) {
-  .city-list { columns: 2; column-gap: 1.25rem; }
-  .city-list li { font-size: 0.84rem; padding: 0.5rem 0; }
-}
+/* A grid row stretches every item to its tallest, so one wrapped name made
+   the five short pills beside it into tall boxes with empty space. Centred,
+   each pill keeps its own height. */
+#states-grid { align-items: center; }
 
 /* Headline on one line ----------------------------------------------------
    Sized to fit rather than guessed at. Each h1 carries its own measured width
@@ -1887,7 +1843,11 @@ ${s.quirks.map((q, i) => `      <details class="note-row js-collapse" open>
       <p>${esc(q.body)}</p>
     </div>`).join('\n');
 
-  const cityItems = s.cities.map(c =>
+  // The state's largest municipalities from the Census list (data/top-cities.js),
+  // largest first. Washington D.C. is a single city with no list, so it keeps
+  // the hand-picked neighbourhoods in its state entry.
+  const coverageCities = TOP_CITIES[s.slug] || s.cities;
+  const cityItems = coverageCities.map(c =>
     `    <div class="state-item">${checkIcon}${esc(c)}</div>`).join('\n');
 
   const linkItems = arr => arr.map(d =>
@@ -1978,7 +1938,7 @@ ${ROUTE_ANIM}
   <div class="states-grid" id="states-grid">
 ${cityItems}
   </div>
-  <button class="states-toggle" id="states-toggle" aria-expanded="false">Show all ${s.cities.length} cities ↓</button>
+  <button class="states-toggle" id="states-toggle" aria-expanded="false">Show all ${coverageCities.length} cities ↓</button>
 </section>
 
 <!-- SERVICES -->
@@ -2042,7 +2002,7 @@ ${faqSection(`    <div class="section-kicker">FAQ</div>
     <h2>${esc(s.name)} moving <em>questions</em>, answered.</h2>
     <p>The things people actually ask us before booking a move out of ${esc(s.name)}.</p>`, faqItems)}
 
-${citiesSection(s)}<!-- NEARBY STATES -->
+<!-- NEARBY STATES -->
 <section id="nearby">
   <div class="section-header">
     <div class="section-kicker">Where we go</div>
