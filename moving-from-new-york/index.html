@@ -217,6 +217,38 @@ nav.topnav {
   .cred-icon { width: 11px; height: 11px; }
 }
 
+/* Contact strip CTAs on phones ---------------------------------------------
+   The shared stylesheet stacks phone and email full-width in a column below
+   769px, which is why they read as two unrelated rows rather than a pair of
+   choices. Put back on one row, sized to fit: the two strings measure 8.257em
+   (phone) and 13.870em (email) in this weight, so email — the bottleneck —
+   drops to a smaller size than the phone button while the phone stays the
+   size that leads. At 0.8rem/0.68rem plus the tightened padding below, the
+   pair totals ~329px, which clears the ~335px available on a 375px phone (the
+   narrowest width still in real use) with room to spare. */
+@media (max-width: 768px) {
+  .cs-ctas { flex-direction: row; gap: 0.4rem; }
+
+  .cs-phone {
+    flex: 0 1 auto;
+    width: auto;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.72rem;
+    gap: 0.35rem;
+  }
+
+  .cs-email {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0.45rem 0.55rem;
+    font-size: 0.6rem;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
 @media (max-width: 380px) {
   .cred-lead { display: none; }
 }
@@ -1272,7 +1304,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="form-row form-row-2">
         <div>
           <label for="qf-phone">Phone number</label>
-          <input type="tel" id="qf-phone" placeholder="555-000-0000" />
+          <input type="tel" id="qf-phone" placeholder="(555) 000-0000" />
           <div class="field-error" id="error-phone" role="alert"></div>
         </div>
         <div>
