@@ -276,7 +276,7 @@ nav.topnav.scrolled {
    fourth dark tone. The terracotta glow behind the heading (styles.css,
    .contact-strip::before) needed no change — a warm accent glow reads fine
    on a cool ground either way. */
-.contact-strip { background: var(--blue); }
+.contact-strip { background: var(--navy); }
 
 /* It was --accent, which put the page's only two "call" buttons in different
    colours: the nav phone and the sticky call button are green, this one was
@@ -309,12 +309,17 @@ nav.topnav.scrolled {
   color: #ffffff;
 }
 
-@media (max-width: 768px) {
-  /* .cs-phone gets width: 100% from the shared stylesheet's stacked mobile
-     layout; .cs-email does not, so it stayed sized to its own text — narrower
-     than the phone button above it despite both being full-width pills. */
-  .cs-email { width: 100%; }
-}
+/* .cs-ctas aligns its children flex-start (styles.css), so on desktop each
+   button sizes to its own text — the shorter phone number left email's wider
+   edge sticking out below it, looking misaligned rather than stacked. Stretch
+   makes both match the container's width at every size, not just mobile. */
+.cs-ctas { align-items: stretch; }
+.cs-phone, .cs-email { width: 100%; }
+
+/* styles.css centers .cs-email's text with text-align, which does nothing
+   for a flex child's content — so the email sat flush-left under a centered
+   phone number. justify-content is what actually centers it. */
+.cs-email { justify-content: center; }
 
 /* Headline on one line ----------------------------------------------------
    "Movers" was dropping to a second line. Sized to fit rather than guessed at:
