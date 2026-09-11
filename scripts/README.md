@@ -73,9 +73,30 @@ Derived values:
 - **Cross-links** — from each state's `neighbors`, `routes`, and the shared
   `POPULAR` list. `data/states.js` fails the build on an unknown state code.
 
-Copy that is deliberately identical everywhere — the six service card
-descriptions, the gallery, the trust bar, the footer — describes the company
-rather than the state, and lives as constants in `build-state-pages.js`.
+## Rotated copy (`data/variants.js`)
+
+Copy that isn't state-specific used to be byte-identical on all 49 pages, which
+is duplicate content. Every such block now lives in `data/variants.js` as four
+hand-written phrasings of the same claim: the five generic price drivers, the
+service card descriptions, the licensing FAQ answer, the illustrated band, and
+the lead paragraph and `<h2>` of each section.
+
+`pick(key, state)` in `build-state-pages.js` assigns one variant per state
+positionally — `(state index + hash of the key) % variants.length` — so each
+key is spread evenly over the 49 pages (12–13 each) and the keys rotate
+independently, leaving every page with a combination of wordings no other page
+has. Called without a state (the hub) it returns the first variant.
+
+Variants support `{{state}}`, `{{a}}` ("a"/"an"), `{{regulator}}`, `{{usdot}}`,
+`{{mc}}`, `{{phone}}` and `{{phoneHref}}`. Variants of one key must be
+interchangeable in meaning — never let one promise something its siblings
+don't — and should be close in length, since the cards they sit in are sized
+for both extremes. Adding a fifth variant to a key is always safe.
+
+What is still identical everywhere is chrome: the trust bar, gallery captions,
+quote form and its SMS consent line, contact strip and footer. That text
+describes the company (and in the consent line, must stay verbatim), so it
+lives as constants in `build-state-pages.js`.
 
 ## Adding a state
 

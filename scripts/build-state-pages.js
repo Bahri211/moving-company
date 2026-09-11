@@ -13,6 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 const { states, byAbbr } = require('./data/states.js');
+const VARIANTS = require('./data/variants.js');
 const TOP_CITIES = require('./data/top-cities.js');
 
 // Canonical origin for the live site. Change here if the site moves to www.
@@ -51,6 +52,32 @@ function transit(miles) {
 // "a" vs "an" by pronunciation, not first letter — Utah takes "a" (YOO-tah).
 const AN_STATES = new Set(['AL', 'AZ', 'AR', 'ID', 'IL', 'IN', 'IA', 'OH', 'OK', 'OR']);
 const a = st => (AN_STATES.has(st.abbr) ? 'an' : 'a');
+
+// Each state gets its own phrasing of the copy that is otherwise identical
+// site-wide (data/variants.js). The rotation is positional so the variants are
+// spread evenly, and each key is offset by its own name hash so two states that
+// share one sentence do not share the next — every page ends up with a
+// combination of wordings no other page has.
+const STATE_INDEX = Object.fromEntries(states.map((s, i) => [s.slug, i]));
+const keyOffset = k => [...k].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 9973, 7);
+
+function pick(key, s) {
+  const list = VARIANTS[key];
+  if (!list) throw new Error(`Unknown copy variant "${key}"`);
+  const text = s
+    ? list[(STATE_INDEX[s.slug] + keyOffset(key)) % list.length]
+    : list[0];
+  return s
+    ? text
+        .replace(/\{\{state\}\}/g, esc(s.name))
+        .replace(/\{\{a\}\}/g, a(s))
+        .replace(/\{\{regulator\}\}/g, esc(s.regulator))
+        .replace(/\{\{usdot\}\}/g, USDOT)
+        .replace(/\{\{mc\}\}/g, MC)
+        .replace(/\{\{phone\}\}/g, PHONE_DISPLAY)
+        .replace(/\{\{phoneHref\}\}/g, PHONE_HREF)
+    : text;
+}
 
 const stateUrl = s => `/moving-from-${s.slug}/`;
 const HUB_URL = '/moving-companies-by-state/';
@@ -229,18 +256,12 @@ const ROUTE_ANIM = `  <div class="route-anim">
 // The six service cards, verbatim from index.html — these describe the company,
 // not the state, so the copy is deliberately identical everywhere.
 const SERVICE_CARDS = [
-  ['01', `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg>`, 'Long Distance',
-   `Cross-country and interstate relocations. We coordinate logistics, customs paperwork, and destination unpacking — all door to door.`],
-  ['02', `<svg viewBox="0 0 24 24"><path d="M20 7 9 18l-5-5"/></svg>`, 'White Glove',
-   `The top tier. Concierge-level service: we'll pack, transport, unpack, arrange, and even hang the art on the walls before we leave.`],
-  ['03', `<svg viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V21H3V9.5Z"/><path d="M9 21v-8h6v8"/></svg>`, 'Residential',
-   `From studio apartments to five-bedroom homes. We disassemble, transport, and reassemble — and we never leave before everything's in its place.`],
-  ['04', `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>`, 'Commercial',
-   `Office relocations handled after hours or over weekends, so your team is working from the new space on Monday morning — no downtime.`],
-  ['05', `<svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg>`, 'Packing &amp; Crating',
-   `Museum-grade packing for art, antiques, and anything fragile. We build custom crates on site when off-the-shelf won't do.`],
-  ['06', `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`, 'Storage',
-   `Climate-controlled, 24-hour-monitored units in secure facilities. Short-term overflow or long-term, fully insured and inventoried throughout.`],
+  ['01', `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg>`, 'Long Distance', 'svcLongDistance'],
+  ['02', `<svg viewBox="0 0 24 24"><path d="M20 7 9 18l-5-5"/></svg>`, 'White Glove', 'svcWhiteGlove'],
+  ['03', `<svg viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V21H3V9.5Z"/><path d="M9 21v-8h6v8"/></svg>`, 'Residential', 'svcResidential'],
+  ['04', `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>`, 'Commercial', 'svcCommercial'],
+  ['05', `<svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg>`, 'Packing &amp; Crating', 'svcPacking'],
+  ['06', `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`, 'Storage', 'svcStorage'],
 ];
 
 const SERVICE_ILLUS = {
@@ -255,8 +276,9 @@ const SERVICE_ILLUS = {
 // `illus` swaps the 54px line-icon tile for the commissioned illustrations.
 // The tile is dropped rather than filled: it turns --accent on hover, which
 // would swallow the terracotta the artwork is drawn in.
-function servicesSection(intro, illus) {
-  const cards = SERVICE_CARDS.map(([num, icon, title, body]) => {
+function servicesSection(intro, illus, s) {
+  const cards = SERVICE_CARDS.map(([num, icon, title, bodyKey]) => {
+    const body = pick(bodyKey, s);
     const art = illus && SERVICE_ILLUS[title]
       ? `      <div class="service-illus"><img src="/assets/images/gallery/${SERVICE_ILLUS[title]}" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>`
       : `      <div class="service-icon">${icon}</div>`;
@@ -270,7 +292,7 @@ ${art}
   return `<section id="services">
   <div class="section-header">
     <div class="section-kicker">What we do</div>
-    <h2>Services built around <em>your</em> move.</h2>
+    <h2>${pick('servicesHead', s)}</h2>
     <p>${esc(intro)}</p>
   </div>
   <div class="services">
@@ -284,23 +306,21 @@ ${cards}
 // transparent background — which is why this band sits on paper and never on
 // one of the dark sections, where the near-black strokes disappear.
 //
-// Deliberately NOT folded into GALLERY: that section is photographs captioned
+// Deliberately NOT folded into the gallery: that section is photographs captioned
 // "our work, up close", and illustrations sitting among crew photos read as a
 // mistake rather than a change of pace.
 function illustratedRow(s) {
   const items = [
     ['packing.png', 'Hand truck stacked with packed cartons',
      'Packed for the distance',
-     `A box that survives a 2,000-mile ride is built differently from one that ` +
-     `crosses town. We pack to the lane, not to the room count.`],
+     pick('bandPacking', s)],
     ['routes.png', 'Map of the United States with a long-distance route marked',
      'Routed, not guessed',
      `Your ${esc(s.name)} load joins a scheduled lane rather than waiting for a ` +
      `truck to happen past. That is what fixes the transit window before you book.`],
     ['transport.png', 'Long-haul moving truck in 50STATEMOVERS livery',
      'Carried by our own crew',
-     `The crew that loads your home is the crew that unloads it. No broker in ` +
-     `the middle, no handoff to a carrier you have never spoken to.`],
+     pick('bandCrew', s)],
   ];
   return `<section id="how-it-works" class="illus-band">
   <picture class="band-bg" aria-hidden="true">
@@ -310,7 +330,7 @@ function illustratedRow(s) {
   <div class="section-header">
     <div class="section-kicker">At a glance</div>
     <h2>What a long-distance move <em>actually involves.</em></h2>
-    <p>Three things decide whether a ${esc(s.name)} move lands well, and all three are settled before the truck arrives.</p>
+    <p>${pick('bandLede', s)}</p>
   </div>
   <div class="services">
 ${items.map(([f, alt, h, p]) => `    <div class="service-card illus-card">
@@ -322,11 +342,11 @@ ${items.map(([f, alt, h, p]) => `    <div class="service-card illus-card">
 </section>`;
 }
 
-const GALLERY = `<section id="gallery" class="gallery-section">
+const gallery = s => `<section id="gallery" class="gallery-section">
   <div class="section-header">
     <div class="section-kicker">Gallery</div>
     <h2>Our work, <em>up close.</em></h2>
-    <p>A look at the homes, offices, and cross-country relocations we've handled across the country.</p>
+    <p>${pick('galleryLede', s)}</p>
   </div>
   <div class="gallery-grid">
     <div class="gallery-item">
@@ -1810,19 +1830,19 @@ function statePage(s) {
      `Your route sets the floor. Our ${esc(s.name)} lanes run from about ${shortest.miles.toLocaleString()} miles to ${esc(shortest.dest.name)} out to roughly ${longest.miles.toLocaleString()} miles to ${esc(longest.dest.name)}. Sharing a trailer with other households costs less than a dedicated truck; a dedicated truck buys you a delivery date instead of a spread.`],
     ['Weight, not bedrooms',
      `<svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg>`,
-     `Long-distance moves price on what your household actually weighs, not how many rooms it occupies. Two three-bedroom homes can differ by thousands of pounds. This is why we survey by video or in person before quoting rather than guessing from a bedroom count over the phone.`],
+     pick('costWeight', s)],
     ['Access at both ends',
      `<svg viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V21H3V9.5Z"/><path d="M9 21v-8h6v8"/></svg>`,
-     `Whether a trailer can reach your door changes the job. Long carries, stairs, freight elevator reservations, street permits, and shuttle service where a tractor-trailer physically cannot fit are all real work — we check them at survey so they land in the quote instead of on move day.`],
+     pick('costAccess', s)],
     ['How much packing you want',
      `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>`,
-     `Full packing is what most long-distance customers choose, and it is the single biggest factor in whether a load arrives intact — a professionally packed box is built for a 2,000-mile ride, not a car trip. Most land somewhere between, having us handle the kitchen, art, and anything fragile. Custom crating for art, antiques, and oversized items is quoted separately.`],
+     pick('costPacking', s)],
     ['Storage between dates',
      `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`,
-     `Move-out and move-in dates rarely line up. Storage-in-transit holds your inventoried goods until your date, and we quote that cost up front rather than letting it accrue quietly. Climate control is worth it for wood, leather, and electronics.`],
+     pick('costStorage', s)],
     ['Valuation and protection',
      `<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>`,
-     `Every interstate move includes the federally required minimum released-value protection at no extra charge. Full Value Protection — repair, replacement, or a cash settlement at current market value — costs more and is worth considering for a high-value inventory.`],
+     pick('costValuation', s)],
   ];
 
   // Trial: the price drivers are reference material, not parallel offerings —
@@ -1904,10 +1924,7 @@ ${s.quirks.map((q, i) => `      <details class="note-row js-collapse" open>
 
   const licensingFaq = {
     q: `Are moving companies in ${esc(s.name)} required to be licensed?`,
-    a: [
-      `Yes, and there are two separate authorities. Any company moving household goods across a state line must hold an active USDOT number and interstate operating authority from the FMCSA — ours are <strong>USDOT #${USDOT}</strong> and <strong>${MC}</strong>, and you can verify both on the FMCSA's public SAFER database before paying a deposit.`,
-      `Companies that move households only within ${esc(s.name)} answer to ${esc(s.regulator)}. That distinction matters: an intrastate-only registration is not authority to take your belongings out of ${esc(s.name)}, and it is the most common gap we see when customers forward us a competitor's paperwork. Two other things worth checking on any quote — whether the price is binding or an estimate that can be revised at delivery, and whether the company is a carrier that owns trucks or a broker reselling your move. We are a carrier, we quote binding fixed prices, and we put our own crew and truck on the job.`,
-    ],
+    a: [pick('licensingA', s), pick('licensingB', s)],
   };
 
   // Five states carry their own licensing question in the data, which produced
@@ -1979,8 +1996,8 @@ ${TRIAL_STATES.has(s.name) ? `\n${illustratedRow(s)}\n` : ''}
 <section id="coverage" class="coverage-section">
   <div class="section-header">
     <div class="section-kicker">Coverage</div>
-    <h2>We service every city, village, and town in <em>${esc(s.name)}</em> and deliver to any state. Call <a href="tel:${PHONE_HREF}">${PHONE_DISPLAY}</a>.</h2>
-    <p>We pick up throughout the state, not just the metros. If your town isn't listed, it's almost certainly still on a route we run — call ${PHONE_DISPLAY} and we'll confirm access before quoting.</p>
+    <h2>${pick('coverageHead', s)}</h2>
+    <p>${pick('coverageLede', s)}</p>
   </div>
 ${ROUTE_ANIM}
 
@@ -1991,7 +2008,7 @@ ${cityItems}
 </section>
 
 <!-- SERVICES -->
-${servicesSection(s.servicesIntro, TRIAL_STATES.has(s.name))}
+${servicesSection(s.servicesIntro, TRIAL_STATES.has(s.name), s)}
 
 <!-- COSTS -->
 <section id="costs" class="coverage-section">
@@ -1999,14 +2016,14 @@ ${servicesSection(s.servicesIntro, TRIAL_STATES.has(s.name))}
     <img src="/assets/images/gallery/loading-ramp.jpg" alt="Two 50STATEMOVERS crew carrying a blanket-wrapped item up the ramp into a loaded truck, moving blankets and cartons stacked inside" loading="lazy" width="2000" height="1116" />
     <div class="spec-hero-inner">
       <div class="section-kicker">Pricing</div>
-      <h2>What shapes the price of ${a(s)} <em>${esc(s.name)}</em> move.</h2>
-      <p>We don't publish a price list, because a number without a survey is a guess — and a guess is exactly what turns into a bigger bill on delivery day. Here's what actually moves the figure on ${a(s)} ${esc(s.name)} move. Every one of these is itemized in your written quote before you sign, and the price we agree is the price you pay.</p>
+      <h2>${pick('costsHead', s)}</h2>
+      <p>${pick('costsLede', s)}</p>
     </div>
   </div>
 ${costCards}` : `<div class="section-header">
     <div class="section-kicker">Pricing</div>
-    <h2>What shapes the price of ${a(s)} <em>${esc(s.name)}</em> move.</h2>
-    <p>We don't publish a price list, because a number without a survey is a guess — and a guess is exactly what turns into a bigger bill on delivery day. Here's what actually moves the figure on ${a(s)} ${esc(s.name)} move. Every one of these is itemized in your written quote before you sign, and the price we agree is the price you pay.</p>
+    <h2>${pick('costsHead', s)}</h2>
+    <p>${pick('costsLede', s)}</p>
   </div>
   <div class="services">
 ${costCards}
@@ -2017,8 +2034,8 @@ ${costCards}
 <section id="process" class="process-section">
   <div class="section-header">
     <div class="section-kicker">Local notes</div>
-    <h2>Moving from ${esc(s.name)}: what's <em>actually different.</em></h2>
-    <p>Every state has its own access problems, weather windows, and rules. Here's what shapes ${a(s)} ${esc(s.name)} move in practice.</p>
+    <h2>${pick('processHead', s)}</h2>
+    <p>${pick('processLede', s)}</p>
   </div>
   <div class="process-grid">
 ${localSteps}
@@ -2029,8 +2046,8 @@ ${localSteps}
 <section id="local-notes">
   <div class="section-header">
     <div class="section-kicker">Good to know</div>
-    <h2>What catches people out in <em>${esc(s.name)}.</em></h2>
-    <p>Three things that regularly turn a straightforward ${esc(s.name)} move into an expensive one. We check all three before quoting, so they land in the price rather than on move day.</p>
+    <h2>${pick('quirksHead', s)}</h2>
+    <p>${pick('quirksLede', s)}</p>
   </div>
   ${TRIAL_STATES.has(s.name) ? `${quirkCards}` : `<div class="services">
 ${quirkCards}
@@ -2039,24 +2056,24 @@ ${quirkCards}
 
 <!-- GALLERY -->
 ${TRIAL_STATES.has(s.name)
-  ? GALLERY.replace('<div class="gallery-grid">', `<div class="gallery-grid">
+  ? gallery(s).replace('<div class="gallery-grid">', `<div class="gallery-grid">
     <div class="gallery-item gallery-lead">
       <img src="/assets/images/gallery/crew-packing.jpg" alt="Three 50STATEMOVERS crew taping a carton, shrink-wrapping an armchair and wrapping a mattress in a ${esc(s.name)} living room" loading="lazy" />
       <div class="gallery-caption"><div class="label">On the job</div><div class="title">Wrapped and boxed before anything moves</div></div>
     </div>`)
-  : GALLERY}
+  : gallery(s)}
 
 <!-- FAQ -->
 ${faqSection(`    <div class="section-kicker">FAQ</div>
-    <h2>${esc(s.name)} moving <em>questions</em>, answered.</h2>
-    <p>The things people actually ask us before booking a move out of ${esc(s.name)}.</p>`, faqItems)}
+    <h2>${pick('faqHead', s)}</h2>
+    <p>${pick('faqLede', s)}</p>`, faqItems)}
 
 <!-- NEARBY STATES -->
 <section id="nearby">
   <div class="section-header">
     <div class="section-kicker">Where we go</div>
-    <h2>Nearby states &amp; <em>popular destinations.</em></h2>
-    <p>We run the full continental map. These are the states most often paired with ${a(s)} ${esc(s.name)} move — each has its own guide covering arrival logistics, building rules, and seasonal timing.</p>
+    <h2>${pick('nearbyHead', s)}</h2>
+    <p>${pick('nearbyLede', s)}</p>
   </div>
   <div class="states-grid expanded">
 ${linkItems(nearbyLinks)}
@@ -2257,7 +2274,7 @@ ${servicesSection(`Whether you're relocating an apartment or a full office, we t
 </section>
 
 <!-- GALLERY -->
-${GALLERY}
+${gallery()}
 
 <!-- FAQ -->
 ${faqSection(`    <h2>Choosing a mover, <em>state by state.</em></h2>
