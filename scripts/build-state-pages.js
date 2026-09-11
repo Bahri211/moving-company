@@ -941,6 +941,55 @@ nav.topnav.scrolled {
    each pill keeps its own height. */
 #states-grid { align-items: center; }
 
+/* Coverage: twelve cities, then the rest -------------------------------
+   The grid opens on the twelve largest at every width — two full rows on
+   desktop — and the button shows the rest. Hidden by count rather than the
+   shared stylesheet's 210px phone clip, which only ran below 480px and would
+   cut a row in half wherever a long name wraps. The button already works at
+   any width (site.js toggles .expanded); it was only ever displayed on
+   phones. */
+#states-grid { max-height: none; overflow: visible; }
+#states-grid:not(.expanded) .state-item:nth-child(n+13) { display: none; }
+
+#states-toggle {
+  display: block;
+  margin: 1.75rem auto 0;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.6rem 1.4rem;
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: border-color 0.25s, color 0.25s;
+}
+
+#states-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+/* The client's sentence is the Coverage title. At the display size the other
+   section titles use it ran to four lines, so it sits a size down; the state
+   name keeps the terracotta em every section title has, and the number is a
+   tap-to-call link underlined in the accent rather than a second orange. */
+#coverage .section-header { max-width: 54rem; }
+
+#coverage .section-header h2 {
+  font-size: clamp(1.45rem, 2.8vw, 2.3rem);
+  line-height: 1.22;
+  letter-spacing: -0.025em;
+}
+
+#coverage .section-header h2 a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+  white-space: nowrap;
+}
+
+#coverage .section-header h2 a:hover { color: var(--accent); }
+
 /* Headline on one line ----------------------------------------------------
    Sized to fit rather than guessed at. Each h1 carries its own measured width
    (--hw-d, --hw-m, from HEADLINE_FIT), and the size is the column width
@@ -1930,7 +1979,7 @@ ${TRIAL_STATES.has(s.name) ? `\n${illustratedRow(s)}\n` : ''}
 <section id="coverage" class="coverage-section">
   <div class="section-header">
     <div class="section-kicker">Coverage</div>
-    <h2>Cities we serve across <em>${esc(s.name)}.</em></h2>
+    <h2>We service every city, village, and town in <em>${esc(s.name)}</em> and deliver to any state. Call <a href="tel:${PHONE_HREF}">${PHONE_DISPLAY}</a>.</h2>
     <p>We pick up throughout the state, not just the metros. If your town isn't listed, it's almost certainly still on a route we run — call ${PHONE_DISPLAY} and we'll confirm access before quoting.</p>
   </div>
 ${ROUTE_ANIM}
@@ -1938,7 +1987,7 @@ ${ROUTE_ANIM}
   <div class="states-grid" id="states-grid">
 ${cityItems}
   </div>
-  <button class="states-toggle" id="states-toggle" aria-expanded="false">Show all ${coverageCities.length} cities ↓</button>
+  ${coverageCities.length > 12 ? `<button class="states-toggle" id="states-toggle" aria-expanded="false" aria-controls="states-grid">Show all ${coverageCities.length} cities ↓</button>` : ''}
 </section>
 
 <!-- SERVICES -->
