@@ -322,27 +322,25 @@ nav.topnav.scrolled {
 .cs-email { justify-content: center; }
 
 /* Headline on one line ----------------------------------------------------
-   "Movers" was dropping to a second line. Sized to fit rather than guessed at:
-   the string measures 14.624em wide in Inter 600 at this tracking, and the
-   column it sits in is a steady 0.446 x viewport above 768px and viewport
-   minus 40px below, where the hero goes single-column. That puts the ceiling
-   at 3.04vw and 5.98vw respectively; both are set just under.
+   Sized to fit rather than guessed at. Each h1 carries its own measured width
+   (--hw-d, --hw-m, from HEADLINE_FIT), and the size is the column width
+   divided by it. The column is a steady 0.446 x viewport above 768px, but
+   stops growing at 644px once the hero hits its 1400px max-width, so the
+   desktop numerator is min(44vw, 640px) — without that ceiling a long title
+   like New Hampshire's would overflow on wide screens under a flat rem cap.
+   Below 768px the hero is single-column and the column is viewport minus
+   40px. Both numerators are set a little under the measured limit.
 
-   Note this is measured for "New York State-to-State Movers" specifically. A
-   longer state name — Massachusetts, North Carolina — needs its own number, so
-   this cannot be promoted to the other 48 as-is. */
-.hero h1 { white-space: nowrap; }
+   Pages without a matching measurement don't get .h1-fit and wrap normally. */
+.hero h1.h1-fit { white-space: nowrap; }
 
 @media (min-width: 769px) {
-  .hero h1 { font-size: min(3vw, 2.7rem); }
+  .hero h1.h1-fit { font-size: min(calc(min(44vw, 640px) / var(--hw-d)), 2.7rem); }
 }
 
 @media (max-width: 768px) {
-  /* The state name takes 1.35em. That pushes the string from 14.624em to
-     16.149em, so the base drops to keep it on one line — "New York" still ends
-     up about a fifth larger than it was, and the rest a little smaller.
-     Phone only: at this ratio the desktop column cannot hold one line. */
-  .hero h1 { font-size: min(5.2vw, 2.15rem); }
+  /* The state name takes 1.35em here, which is why --hw-m is the wider one. */
+  .hero h1.h1-fit { font-size: min(calc((100vw - 44px) / var(--hw-m)), 2.15rem); }
   .hero h1 em { font-size: 1.35em; }
 }
 
@@ -1200,7 +1198,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <header class="hero">
   <div class="hero-content">
     <div class="hero-headline-wrap fade-in delay-1">
-      <h1><em>New York</em> State-to-State Movers</h1>
+      <h1 class="h1-fit" style="--hw-d:14.624;--hw-m:16.245"><em>New York</em> State-to-State Movers</h1>
     </div>
   </div>
 

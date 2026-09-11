@@ -568,13 +568,79 @@ const TRIAL_NAV = NAV.replace(
   /<li><a href="#services">[\s\S]*?<a href="#faq">FAQ<\/a><\/li>/g,
   TRIAL_NAV_LINKS);
 
-/* ---------------------------------------- design trial: New York, Florida */
-// New York is the testbed. A visual change lands here first — scoped to these
-// pages by the <style> block below, which only their <head> gets — and is
-// promoted into styles.css for all 49 states once it holds up. Widen the trial
-// by adding states to the set; retire it by moving the rules into styles.css
-// and deleting them from here.
-const TRIAL_STATES = new Set(['New York']);
+/* --------------------------------------------- the state-page design */
+// Developed on New York as a trial, now on every state page. It still lives in
+// the <style> block below rather than styles.css because styles.css is shared
+// with the homepage, the hub and the legal pages, and this block retokens the
+// palette and type — moving it there would restyle those too. To trial a new
+// change on one page again, gate it on a separate set rather than this one.
+const TRIAL_STATES = new Set(states.map(s => s.name));
+
+/* One-line hero headlines. Each title's width in em, measured in headless
+   Chrome at the hero's weight and tracking: [text, desktop em, mobile em] —
+   mobile is wider because the state name is set at 1.35em there. The CSS
+   divides the column width by these to get a size that exactly fits.
+   Keyed with the text it was measured for: if a title in SEO_TITLES changes,
+   the entry no longer matches, the page drops back to an ordinary wrapping
+   headline, and it needs re-measuring. */
+const HEADLINE_FIT = {
+  'alabama': ['Alabama State-to-State Movers', 14.272, 15.758],
+  'arizona': ['Arizona Out-of-State Movers', 13.052, 14.359],
+  'arkansas': ['Arkansas State-to-State Moving', 14.54, 16.139],
+  'california': ['California Interstate Movers', 12.442, 14.074],
+  'colorado': ['Colorado State-to-State Movers', 14.401, 15.945],
+  'connecticut': ['Connecticut Out-of-State Movers', 15.083, 17.15],
+  'delaware': ['Delaware Interstate Moving Services', 16.521, 18.106],
+  'florida': ['Florida State-to-State Movers', 13.348, 14.51],
+  'georgia': ['Georgia Out-of-State Movers', 13.103, 14.428],
+  'idaho': ['Idaho State-to-State Movers', 12.792, 13.735],
+  'illinois': ['Illinois Interstate Movers', 10.943, 12.025],
+  'indiana': ['Indiana Out-of-State Movers', 12.852, 14.089],
+  'iowa': ['Iowa State-to-State Movers', 12.413, 13.212],
+  'kansas': ['Kansas Interstate Moving Services', 15.626, 16.873],
+  'kentucky': ['Kentucky State-to-State Movers', 14.569, 16.172],
+  'louisiana': ['Louisiana Out-of-State Movers', 13.866, 15.482],
+  'maine': ['Maine Interstate Movers', 10.917, 11.953],
+  'maryland': ['Maryland State-to-State Movers', 14.563, 16.164],
+  'massachusetts': ['Massachusetts Out-of-State Movers', 16.465, 19.041],
+  'michigan': ['Michigan Interstate Movers', 12.303, 13.86],
+  'minnesota': ['Minnesota State-to-State Movers', 15.046, 16.827],
+  'mississippi': ['Mississippi Out-of-State Movers', 14.592, 16.487],
+  'missouri': ['Missouri Interstate Movers', 12.019, 13.478],
+  'montana': ['Montana State-to-State Movers', 14.287, 15.778],
+  'nebraska': ['Nebraska Out-of-State Movers', 13.912, 15.533],
+  'nevada': ['Nevada Interstate Movers', 11.604, 12.894],
+  'new-hampshire': ['New Hampshire State-to-State Movers', 17.477, 20.158],
+  'new-jersey': ['New Jersey Out-of-State Movers', 14.918, 16.915],
+  'new-mexico': ['New Mexico Interstate Movers', 13.722, 15.801],
+  'new-york': ['New York State-to-State Movers', 14.624, 16.245],
+  'north-carolina': ['North Carolina Interstate Movers', 14.646, 17.099],
+  'north-dakota': ['North Dakota Out-of-State Movers', 15.528, 17.764],
+  'ohio': ['Ohio State-to-State Movers', 12.382, 13.17],
+  'oklahoma': ['Oklahoma Interstate Movers', 12.72, 14.424],
+  'oregon': ['Oregon Out-of-State Movers', 12.934, 14.187],
+  'pennsylvania': ['Pennsylvania State-to-State Movers', 16.315, 18.578],
+  'rhode-island': ['Rhode Island Interstate Movers', 13.949, 16.133],
+  'south-carolina': ['South Carolina Out-of-State Movers', 16.166, 18.649],
+  'south-dakota': ['South Dakota State-to-State Movers', 16.325, 18.592],
+  'tennessee': ['Tennessee Interstate Movers', 13.086, 14.931],
+  'texas': ['Texas State-to-State Movers', 12.939, 13.935],
+  'utah': ['Utah Out-of-State Movers', 11.702, 12.501],
+  'vermont': ['Vermont Interstate Movers', 12.028, 13.479],
+  'virginia': ['Virginia State-to-State Movers', 13.69, 14.984],
+  'washington': ['Washington Out-of-State Movers', 14.976, 16.993],
+  'washington-dc': ['Washington DC Interstate Movers', 15.149, 17.766],
+  'west-virginia': ['West Virginia Interstate Movers', 14.091, 16.336],
+  'wisconsin': ['Wisconsin State-to-State Movers', 15.014, 16.783],
+  'wyoming': ['Wyoming Out-of-State Movers', 13.915, 15.524],
+};
+
+function headlineFit(s) {
+  const fit = HEADLINE_FIT[s.slug];
+  const text = headline(s).replace(/<[^>]+>/g, '');
+  if (!fit || fit[0] !== text) return '';
+  return ` class="h1-fit" style="--hw-d:${fit[1]};--hw-m:${fit[2]}"`;
+}
 
 const TRIAL_HEAD = `<style>
 :root {
@@ -852,27 +918,25 @@ nav.topnav.scrolled {
 .cs-email { justify-content: center; }
 
 /* Headline on one line ----------------------------------------------------
-   "Movers" was dropping to a second line. Sized to fit rather than guessed at:
-   the string measures 14.624em wide in Inter 600 at this tracking, and the
-   column it sits in is a steady 0.446 x viewport above 768px and viewport
-   minus 40px below, where the hero goes single-column. That puts the ceiling
-   at 3.04vw and 5.98vw respectively; both are set just under.
+   Sized to fit rather than guessed at. Each h1 carries its own measured width
+   (--hw-d, --hw-m, from HEADLINE_FIT), and the size is the column width
+   divided by it. The column is a steady 0.446 x viewport above 768px, but
+   stops growing at 644px once the hero hits its 1400px max-width, so the
+   desktop numerator is min(44vw, 640px) — without that ceiling a long title
+   like New Hampshire's would overflow on wide screens under a flat rem cap.
+   Below 768px the hero is single-column and the column is viewport minus
+   40px. Both numerators are set a little under the measured limit.
 
-   Note this is measured for "New York State-to-State Movers" specifically. A
-   longer state name — Massachusetts, North Carolina — needs its own number, so
-   this cannot be promoted to the other 48 as-is. */
-.hero h1 { white-space: nowrap; }
+   Pages without a matching measurement don't get .h1-fit and wrap normally. */
+.hero h1.h1-fit { white-space: nowrap; }
 
 @media (min-width: 769px) {
-  .hero h1 { font-size: min(3vw, 2.7rem); }
+  .hero h1.h1-fit { font-size: min(calc(min(44vw, 640px) / var(--hw-d)), 2.7rem); }
 }
 
 @media (max-width: 768px) {
-  /* The state name takes 1.35em. That pushes the string from 14.624em to
-     16.149em, so the base drops to keep it on one line — "New York" still ends
-     up about a fifth larger than it was, and the rest a little smaller.
-     Phone only: at this ratio the desktop column cannot hold one line. */
-  .hero h1 { font-size: min(5.2vw, 2.15rem); }
+  /* The state name takes 1.35em here, which is why --hw-m is the wider one. */
+  .hero h1.h1-fit { font-size: min(calc((100vw - 44px) / var(--hw-m)), 2.15rem); }
   .hero h1 em { font-size: 1.35em; }
 }
 
@@ -1785,7 +1849,7 @@ ${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
 <header class="hero">
   <div class="hero-content">
     <div class="hero-headline-wrap fade-in delay-1">
-      <h1>${headline(s)}</h1>
+      <h1${headlineFit(s)}>${headline(s)}</h1>
     </div>
   </div>
 
