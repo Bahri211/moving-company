@@ -1059,6 +1059,19 @@ section { padding: 6rem 2rem; }
 
 .service-card:hover::after { opacity: 1; }
 
+/* Service illustrations — the homepage's "What we do" cards and the state
+   pages use the same six drawings in place of the icon tile. Larger than the
+   54px tile they replace, since they carry detail a 26px glyph can't, and no
+   hover fill: the art is terracotta on transparent and would vanish against
+   an accent background. */
+.service-illus { margin-bottom: 1.15rem; }
+.service-illus img { width: 100%; max-width: 138px; height: auto; }
+
+@media (max-width: 900px) {
+  .service-illus { margin-bottom: 0.9rem; }
+  .service-illus img { max-width: 108px; }
+}
+
 .service-icon {
   width: 54px; height: 54px;
   margin-bottom: 1.25rem;
