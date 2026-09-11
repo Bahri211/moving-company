@@ -225,14 +225,6 @@ const ROUTE_ANIM = `  <div class="route-anim">
     </svg>
   </div>`;
 
-const SERVICES_NOTE = `  <div class="services-note">
-    <span class="sn-text">Not sure which fits your move? We'll tell you straight — no upsell.</span>
-    <a href="tel:${PHONE_HREF}" class="sn-link">
-      Talk to a move coordinator
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-    </a>
-  </div>`;
-
 // The six service cards, verbatim from index.html — these describe the company,
 // not the state, so the copy is deliberately identical everywhere.
 const SERVICE_CARDS = [
@@ -283,8 +275,6 @@ ${art}
   <div class="services">
 ${cards}
   </div>
-
-${SERVICES_NOTE}
 </section>`;
 }
 
@@ -560,6 +550,12 @@ const TRIAL_NAV_LINKS = `<li><a href="#coverage">Coverage</a></li>
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#faq">FAQ</a></li>`;
 
+/* A slim credentials strip above the bar. The prefix is inside one span so
+   that hiding it on very narrow phones takes its separator with it. */
+const CRED_BAR = `<div class="nav-cred">
+  <span class="cred-lead">Licensed &amp; insured · </span>${MC} · USDOT #${USDOT}
+</div>`;
+
 const TRIAL_NAV = NAV.replace(
   /<li><a href="#services">[\s\S]*?<a href="#faq">FAQ<\/a><\/li>/g,
   TRIAL_NAV_LINKS);
@@ -619,15 +615,12 @@ const TRIAL_HEAD = `<style>
 }
 
 /* Headline ---------------------------------------------------------------
-   Trial: the state name in the H1 goes green instead of terracotta. A deep
-   forest rather than --green — the call-button green is tuned to carry a UI
-   signal at small sizes and turns minty in a 300-weight italic serif this
-   large, where a deeper value holds the stroke weight.
-
-   Note this is the H1 only. Every other emphasised word on the page — the
-   section headings, the eyebrow — is still terracotta, so the headline is
-   deliberately the one green thing above the fold. */
-.hero h1 em { color: #1f5f42; }
+   The state name takes --accent — the same terracotta filling the "Free
+   quotes / Same day" card a little further down the hero, so the two warm
+   marks above the fold match. It had been a deep forest green, which made the
+   H1 the only green thing on the page while green everywhere else means
+   "call". */
+.hero h1 em { color: var(--accent); }
 
 /* Illustrated band -------------------------------------------------------
    Reuses .services / .service-card so this adds no new card design — only the
@@ -683,6 +676,62 @@ const TRIAL_HEAD = `<style>
   .service-illus { margin-bottom: 0.9rem; }
 }
 
+/* Credentials strip -------------------------------------------------------
+   A fixed band above the bar. --nav-h is what the hero pads by, what the
+   mobile menu hangs from and what the scroll-spy measures against, so it grows
+   to the full occupied height (strip + bar) and the bar's own min-height is
+   pinned separately — otherwise the bar itself would stretch to 100px.
+
+   The string is 28.44em wide. At 0.75rem that needs about 341px of room, so
+   below 380px the "Licensed & insured" prefix drops and the registration
+   numbers alone (17.27em) carry it. */
+:root {
+  --cred-h: 28px;
+  /* Strip + bar, measured. The stock token said 72px while the bar actually
+     renders 77px, so hero content tucked under it — that understatement is in
+     styles.css and still affects the other 48 pages. Pinning the bar's
+     min-height to the same number keeps it a uniform height across desktop
+     widths, so this figure is exact rather than a worst case. */
+  --nav-h: 105px;
+}
+
+.nav-cred {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 101;
+  height: var(--cred-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0 1rem;
+  background: var(--navy);
+  color: #a9c0d6;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+nav.topnav {
+  top: var(--cred-h);
+  min-height: calc(var(--nav-h) - var(--cred-h));
+}
+
+@media (max-width: 768px) {
+  :root {
+    --cred-h: 26px;
+    --nav-h: 92px;
+  }
+
+  .nav-cred { font-size: 0.7rem; letter-spacing: 0.04em; }
+}
+
+@media (max-width: 380px) {
+  .cred-lead { display: none; }
+}
+
 /* Nav ---------------------------------------------------------------------
    The bar's cream is hardcoded rgba(245, 240, 232, …) rather than taken from
    --paper, so it sat a shade off the page it overlays once the palette moved.
@@ -710,6 +759,23 @@ nav.topnav.scrolled {
 }
 
 .nav-links a:hover { color: var(--ink); }
+
+/* .nav-phone has no white-space rule of its own, so when the bar runs out of
+   room the number breaks mid-string and the button balls up. */
+.nav-phone { white-space: nowrap; }
+
+/* Between 769px and roughly 960px the six links plus both buttons no longer
+   fit on one line, and the bar grew to two rows — worse here than on the
+   shared nav because this one carries a sixth link. Everything steps down a
+   size through that range instead. */
+@media (min-width: 769px) and (max-width: 960px) {
+  nav.topnav { padding: 0.75rem 1.25rem; }
+  .logo-img { height: 34px; }
+  .nav-links { gap: 1.05rem; font-size: 0.8rem; }
+  .nav-right { gap: 0.6rem; }
+  .nav-phone { padding: 0.5rem 0.8rem; font-size: 0.78rem; gap: 0.35rem; }
+  .topnav .nav-cta { padding: 0.55rem 0.95rem; font-size: 0.78rem; }
+}
 
 /* Set by site.js for the section currently under the nav. */
 .nav-links a.is-current { color: var(--accent); }
@@ -1659,7 +1725,7 @@ ${s.quirks.map((q, i) => `      <details class="note-row js-collapse" open>
 
   return `${head({ title, description, canonical, schema, extraHead: TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '' })}
 
-${TRIAL_STATES.has(s.name) ? TRIAL_NAV : NAV}
+${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
 
 <!-- HERO -->
 <header class="hero">
