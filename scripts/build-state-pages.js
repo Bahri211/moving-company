@@ -13,6 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 const { states, byAbbr } = require('./data/states.js');
+const TOP_CITIES = require('./data/top-cities.js');
 
 // Canonical origin for the live site. Change here if the site moves to www.
 const SITE = process.env.SITE_URL || 'https://50statemovers.com';
@@ -286,6 +287,26 @@ ${cards}
 // Deliberately NOT folded into GALLERY: that section is photographs captioned
 // "our work, up close", and illustrations sitting among crew photos read as a
 // mistake rather than a change of pace.
+// Every city, village and town: the state's largest municipalities from the
+// Census list in data/top-cities.js. The heading is the client's wording,
+// verbatim. States without a list (Washington D.C. is a single city) skip the
+// section.
+function citiesSection(s) {
+  const list = TOP_CITIES[s.slug];
+  if (!list || !list.length) return '';
+  return `<!-- CITIES -->
+<section id="cities" class="cities-section">
+  <div class="section-header">
+    <h2>We service every city, village, and town in ${esc(s.name)} and deliver to any state. Call <a href="tel:${PHONE_HREF}">${PHONE_DISPLAY}</a>.</h2>
+  </div>
+  <ul class="city-list">
+${list.map(c => `    <li>${esc(c)}</li>`).join('\n')}
+  </ul>
+</section>
+
+`;
+}
+
 function illustratedRow(s) {
   const items = [
     ['packing.png', 'Hand truck stacked with packed cartons',
@@ -916,6 +937,53 @@ nav.topnav.scrolled {
    for a flex child's content — so the email sat flush-left under a centered
    phone number. justify-content is what actually centers it. */
 .cs-email { justify-content: center; }
+
+/* Cities list -----------------------------------------------------------
+   The heading is a full sentence, so it sits well below the display size the
+   other section titles use — at that size it ran to four lines. The list
+   flows down columns, largest first, and keeps names whole rather than
+   truncating them the way the state pills do on phones. */
+.cities-section .section-header { max-width: 52rem; margin-bottom: 2.5rem; }
+
+.cities-section .section-header h2 {
+  font-size: clamp(1.3rem, 2.5vw, 2rem);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  margin-bottom: 0;
+}
+
+.cities-section .section-header h2 a {
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.cities-section .section-header h2 a:hover { text-decoration: underline; }
+
+.city-list {
+  max-width: 1100px;
+  margin: 0 auto;
+  list-style: none;
+  columns: 5 11rem;
+  column-gap: 2.25rem;
+}
+
+.city-list li {
+  break-inside: avoid;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+/* Paper runs straight on into the nearby-states section, so a rule marks
+   where one list ends and the next begins. */
+.cities-section + #nearby { border-top: 1px solid var(--line); }
+
+@media (max-width: 480px) {
+  .city-list { columns: 2; column-gap: 1.25rem; }
+  .city-list li { font-size: 0.84rem; padding: 0.5rem 0; }
+}
 
 /* Headline on one line ----------------------------------------------------
    Sized to fit rather than guessed at. Each h1 carries its own measured width
@@ -1974,7 +2042,7 @@ ${faqSection(`    <div class="section-kicker">FAQ</div>
     <h2>${esc(s.name)} moving <em>questions</em>, answered.</h2>
     <p>The things people actually ask us before booking a move out of ${esc(s.name)}.</p>`, faqItems)}
 
-<!-- NEARBY STATES -->
+${citiesSection(s)}<!-- NEARBY STATES -->
 <section id="nearby">
   <div class="section-header">
     <div class="section-kicker">Where we go</div>
