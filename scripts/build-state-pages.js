@@ -368,6 +368,7 @@ function stateOptions(selected) {
 }
 
 function quoteForm(originState) {
+  if (originState && FORM_TRIAL_STATES.has(originState.name)) return quoteFormV2(originState);
   return `  <div class="hero-form-col form-enter">
   <div class="hero-form-wrap" id="get-quote">
     <div class="hero-form-header">
@@ -421,7 +422,7 @@ function quoteForm(originState) {
       <div class="form-row form-row-2">
         <div>
           <label for="qf-phone">Phone number</label>
-          <input type="tel" id="qf-phone" placeholder="(555) 000-0000" />
+          <input type="tel" id="qf-phone" placeholder="555-000-0000" />
           <div class="field-error" id="error-phone" role="alert"></div>
         </div>
         <div>
@@ -445,6 +446,152 @@ function quoteForm(originState) {
     <ul class="form-assurances">
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Binding written estimate</li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Your details are never sold to brokers</li>
+    </ul>
+  </div>
+  </div>`;
+}
+
+
+/* ------------------------------------------- design trial: the quote form
+   Florida is the testbed for the hero form. The redesign below is scoped to
+   this one page by FORM_TRIAL_HEAD, which only Florida's <head> gets, and by
+   the .qf2 class on the card — the shared rules in styles.css and the shared
+   handler in site.js are untouched. Widen by adding states to the set;
+   retire by moving the rules into styles.css and deleting them from here. */
+const FORM_TRIAL_STATES = new Set(['Florida']);
+
+const qfLock = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`;
+const qfCheck = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><polyline points="20 6 9 17 4 12" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+/* Field icons. All one stroke weight on a 24 grid so they sit at the same
+   optical size inside the controls, and all aria-hidden — every one of them
+   repeats a label that is already there. */
+const ico = (paths) =>
+  `<svg class="qf2-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`;
+const icoPin = ico(`<path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/>`);
+const icoFlag = ico(`<path d="M6 21V4"/><path d="M6 4.5h10.5l-2 3.5 2 3.5H6"/>`);
+const icoHome = ico(`<path d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"/><path d="M9.5 20.5v-6h5v6"/>`);
+const icoCal = ico(`<rect x="3.75" y="5.5" width="16.5" height="14.5" rx="2.5"/><path d="M8 3.5v4M16 3.5v4M3.75 10.5h16.5"/>`);
+const icoBox = ico(`<path d="M3.75 8.2 12 4l8.25 4.2v7.6L12 20l-8.25-4.2V8.2Z"/><path d="m3.75 8.2 8.25 4.2 8.25-4.2M12 12.4V20"/>`);
+const icoUser = ico(`<circle cx="12" cy="8.5" r="3.75"/><path d="M4.75 20.25a7.25 7.25 0 0 1 14.5 0"/>`);
+const icoMail = ico(`<rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="m4.5 7.5 7.5 5.5 7.5-5.5"/>`);
+const icoPhone = ico(`<path d="M7.5 3.75h3l1.5 4-2 1.5a10.5 10.5 0 0 0 4.75 4.75l1.5-2 4 1.5v3a1.75 1.75 0 0 1-1.9 1.75C10.9 19.6 4.4 13.1 3.75 5.65A1.75 1.75 0 0 1 5.5 3.75Z"/>`);
+
+/* Three steps rather than one wall of eight fields. On a phone that is the
+   whole point: two paired rows fit above the fold at a real tap size, where
+   the old card's four paired rows were squeezed until the labels had to be
+   clipped with an ellipsis. The placeholders are the short form ("State…",
+   not "Select state…") so that a half-width control on a 393px screen still
+   shows its whole placeholder — the label above it already says which. */
+function quoteFormV2(originState) {
+  const origin = originState && originState.name;
+  return `  <div class="hero-form-col qf2-col">
+  <div class="hero-form-wrap qf2" id="get-quote">
+    <div class="qf2-head">
+      <h3>Get a free quote</h3>
+      <p class="qf2-sub">Three quick steps</p>
+    </div>
+
+    <ol class="qf2-steps" id="qf2-steps" aria-hidden="true">
+      <li class="is-current" data-step="1"><span class="qf2-dot">1</span><span class="qf2-step-label">Route</span></li>
+      <li data-step="2"><span class="qf2-dot">2</span><span class="qf2-step-label">Details</span></li>
+      <li data-step="3"><span class="qf2-dot">3</span><span class="qf2-step-label">Contact</span></li>
+    </ol>
+    <div class="qf2-track" aria-hidden="true"><span id="qf2-fill"></span></div>
+
+    <form class="quote-form" id="quote-form" novalidate>
+      <fieldset class="qf2-panel is-active" data-panel="1">
+        <legend class="qf2-legend">Where are you moving?</legend>
+        <div class="form-row qf2-pair">
+          <div class="qf2-field">
+            <label for="qf-from">Moving from</label>
+            <div class="qf2-control">${icoPin}<select id="qf-from"><option value="">State…</option>${stateOptions(origin)}</select></div>
+            <div class="field-error" id="error-from" role="alert"></div>
+          </div>
+          <div class="qf2-arrow" aria-hidden="true">→</div>
+          <div class="qf2-field">
+            <label for="qf-to">Moving to</label>
+            <div class="qf2-control">${icoFlag}<select id="qf-to"><option value="">State…</option>${stateOptions(null)}</select></div>
+            <div class="field-error" id="error-to" role="alert"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="qf2-field">
+            <label for="qf-size">Home size</label>
+            <div class="qf2-control">${icoHome}<select id="qf-size">
+              <option value="">Select size…</option>
+              <option>Studio</option>
+              <option>1 Bedroom</option>
+              <option>2 Bedrooms</option>
+              <option>3 Bedrooms</option>
+              <option>4 Bedrooms</option>
+              <option>5+ Bedrooms</option>
+              <option>Office / Commercial</option>
+            </select></div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="qf2-panel" data-panel="2">
+        <legend class="qf2-legend">When, and anything special?</legend>
+        <div class="form-row qf2-two">
+          <div class="qf2-field">
+            <label for="qf-date">Move date</label>
+            <div class="qf2-control">${icoCal}<input type="date" id="qf-date" /></div>
+          </div>
+          <div class="qf2-field">
+            <label for="qf-notes">Special items</label>
+            <div class="qf2-control">${icoBox}<input type="text" id="qf-notes" placeholder="Piano, stairs" /></div>
+          </div>
+        </div>
+        <p class="qf2-hint">Date not fixed yet? Give us your best guess — it only changes the price if the season does.</p>
+      </fieldset>
+
+      <fieldset class="qf2-panel" data-panel="3">
+        <legend class="qf2-legend">Where should we send the quote?</legend>
+        <div class="form-row qf2-two">
+          <div class="qf2-field">
+            <label for="qf-name">Your name</label>
+            <div class="qf2-control">${icoUser}<input type="text" id="qf-name" placeholder="Jane Doe" autocomplete="name" /></div>
+            <div class="field-error" id="error-name" role="alert"></div>
+          </div>
+          <div class="qf2-field">
+            <label for="qf-phone">Phone number</label>
+            <div class="qf2-control">${icoPhone}<input type="tel" id="qf-phone" placeholder="(555) 000-0000" autocomplete="tel" /></div>
+            <div class="field-error" id="error-phone" role="alert"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="qf2-field">
+            <!-- Full width even on a phone: an address is the one value here
+                 long enough that a half-width box would scroll while typing. -->
+            <label for="qf-email">Email address</label>
+            <div class="qf2-control">${icoMail}<input type="email" id="qf-email" placeholder="jane@example.com" autocomplete="email" /></div>
+            <div class="field-error" id="error-email" role="alert"></div>
+          </div>
+        </div>
+        <div class="form-row-consent">
+          <label class="sms-consent-label" for="qf-sms">
+            <span class="sms-checkbox-wrap">
+              <input type="checkbox" id="qf-sms" />
+              <span class="sms-checkbox-box" aria-hidden="true"></span>
+            </span>
+            <span class="sms-consent-text">I agree to receive SMS messages from 50STATEMOVERS INC about my quote. Msg &amp; data rates may apply.<span class="sms-more" id="sms-more" hidden> Message frequency varies. Reply STOP to opt out at any time. See our <a href="/privacy-policy" target="_blank">Privacy Policy</a>.</span><button type="button" class="sms-toggle" id="sms-toggle" aria-expanded="false" aria-controls="sms-more">Read more</button></span>
+          </label>
+          <div class="sms-error" id="sms-error" role="alert"></div>
+        </div>
+      </fieldset>
+
+      <div class="qf2-actions">
+        <button type="button" class="qf2-back" id="qf2-back" hidden>← Back</button>
+        <button type="button" class="form-submit qf2-next" id="qf2-next">Continue</button>
+        <button type="submit" class="form-submit qf2-send" hidden>Request my free quote</button>
+      </div>
+    </form>
+
+    <ul class="form-assurances qf2-assurances">
+      <li>${qfCheck}Binding written estimate</li>
+      <li>${qfLock}Never sold to brokers</li>
     </ul>
   </div>
   </div>`;
@@ -568,13 +715,17 @@ const TRIAL_NAV = NAV.replace(
   /<li><a href="#services">[\s\S]*?<a href="#faq">FAQ<\/a><\/li>/g,
   TRIAL_NAV_LINKS);
 
-/* ------------------------------------------------- design trial: New York */
-// New York is the testbed. A visual change lands here first — scoped to this
-// one page by the <style> block below, which only this page's <head> gets —
-// and is promoted into styles.css for all 49 states once it holds up. Widen
-// the trial by adding states to the set; retire it by moving the rules into
-// styles.css and deleting them from here.
-const TRIAL_STATES = new Set(['New York']);
+/* ---------------------------------------- design trial: New York, Florida */
+// New York is the testbed. A visual change lands here first — scoped to these
+// pages by the <style> block below, which only their <head> gets — and is
+// promoted into styles.css for all 49 states once it holds up. Widen the trial
+// by adding states to the set; retire it by moving the rules into styles.css
+// and deleting them from here.
+//
+// Florida is also FORM_TRIAL_STATES — the quote-form redesign. The two are
+// independent: statePage() composes both heads and quoteForm() picks the V2
+// form, so Florida carries the redesign and the new form together.
+const TRIAL_STATES = new Set(['New York', 'Florida']);
 
 const TRIAL_HEAD = `<style>
 :root {
@@ -1414,6 +1565,393 @@ nav.topnav.scrolled {
 }
 </style>`;
 
+const FORM_TRIAL_HEAD = `<style>
+/* Hero quote form, v2 — Florida only ---------------------------------------
+   Everything here hangs off .qf2, so the shared .hero-form-wrap rules in
+   styles.css still describe every other state's card. Three things changed:
+   the eight fields are split across three steps, every field is a boxed
+   control at a real tap size instead of a hairline underline, and the card
+   leads with the credential it is actually asking the visitor to trust. */
+
+.qf2-col { max-width: 500px; }
+
+.qf2 {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 22px;
+  border-color: #c9bda6;
+  /* A touch more lift than the shared card: on this page it is the only
+     thing in its column, so it carries the whole right side. */
+  box-shadow: 0 32px 64px -24px rgba(18, 38, 63, 0.3), 0 4px 14px -6px rgba(18, 38, 63, 0.12);
+}
+
+/* Header ------------------------------------------------------------------ */
+.qf2-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.35rem 1.5rem 1.1rem;
+  background: linear-gradient(168deg, #14293f 0%, #0c1a2b 100%);
+  color: var(--paper);
+  position: relative;
+}
+/* The accent belongs to the button; a hairline of it at the top ties the two
+   ends of the card together without another block of orange. */
+.qf2-head::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), #e0894f 55%, transparent);
+}
+
+
+.qf2 .qf2-head h3 {
+  /* Inter rather than the display serif: the card is a control surface, and
+     it reads as one when its title is set in the same face as its labels. */
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.45rem;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--paper);
+}
+.qf2-sub {
+  flex-shrink: 0;
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--navy-text);
+  line-height: 1.45;
+}
+
+/* Step rail --------------------------------------------------------------- */
+.qf2-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  list-style: none;
+  margin: 0;
+  padding: 0.8rem 1.5rem 0;
+  background: var(--paper);
+}
+.qf2-steps li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  position: relative;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.3s;
+}
+/* A single track under the rail rather than a rule between each pair of
+   dots: a connector long enough to reach the next dot has to pass through
+   the label in between, which read as a strikethrough. */
+.qf2-track {
+  height: 3px;
+  margin: 0.6rem 1.5rem 0;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+.qf2-track span {
+  display: block;
+  width: 33.33%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), #e0894f);
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.qf2-dot {
+  width: 24px; height: 24px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  background: var(--paper);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--muted);
+  position: relative;
+  z-index: 1;
+  transition: border-color 0.3s, background 0.3s, color 0.3s;
+}
+.qf2-steps li.is-current { color: var(--ink); }
+.qf2-steps li.is-current .qf2-dot {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(200, 85, 44, 0.12);
+}
+.qf2-steps li.is-done { color: var(--ink-soft); }
+.qf2-steps li.is-done .qf2-dot {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--paper);
+  font-size: 0;
+}
+.qf2-steps li.is-done .qf2-dot::after {
+  content: '✓';
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* Panels ------------------------------------------------------------------ */
+.qf2 .quote-form { padding: 1rem 1.5rem 1.35rem; }
+
+.qf2-panel {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: none;
+}
+.qf2-panel.is-active { display: block; animation: qf2In 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes qf2In {
+  from { opacity: 0; transform: translateX(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.qf2-legend {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.02rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  padding: 0;
+  margin-bottom: 0.75rem;
+}
+
+.qf2 .form-row { margin-bottom: 0.8rem; }
+.qf2 .form-row:last-child { margin-bottom: 0; }
+
+/* The route pair keeps its arrow on desktop; on a phone it stacks and the
+   arrow turns down, which reads as a route rather than as two loose menus. */
+.qf2-pair {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 0.6rem;
+}
+.qf2-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  align-items: start;
+}
+
+.qf2-arrow {
+  padding-bottom: 0.85rem;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.qf2 .qf2-field > label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 0.3rem;
+  /* No clipping: every field is full width or half of a two-up, and the
+     labels are short enough to fit at this size. */
+  white-space: normal;
+  overflow: visible;
+}
+
+/* Boxed controls everywhere, not just on touch. A filled field says "this is
+   where you type" at a glance, and 46px is a real target with a mouse too. */
+/* The icon sits inside the control rather than beside the label, so a
+   half-width field spends none of its width on it. */
+.qf2-control { position: relative; display: block; }
+.qf2-ico {
+  position: absolute;
+  left: 0.72rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 17px; height: 17px;
+  color: var(--muted);
+  pointer-events: none;
+  /* The date input is position:relative so its picker overlay can stretch;
+     without this the input paints over the icon that precedes it. */
+  z-index: 2;
+  transition: color 0.2s;
+}
+.qf2-control:focus-within .qf2-ico { color: var(--accent); }
+
+.qf2 .form-row input,
+.qf2 .form-row select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.55rem 0.8rem 0.55rem 2.45rem;
+  background: #fbf8f2;
+  border: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--ink);
+  box-shadow: none;
+  text-overflow: ellipsis;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.qf2 .form-row select { background-position: right 0.7rem center; padding-right: 1.85rem; }
+.qf2 .form-row input:hover,
+.qf2 .form-row select:hover { border-color: var(--muted); border-bottom-color: var(--muted); }
+.qf2 .form-row input:focus,
+.qf2 .form-row select:focus {
+  border-color: var(--accent);
+  border-bottom-color: var(--accent);
+  background: var(--paper);
+  box-shadow: 0 0 0 3px rgba(200, 85, 44, 0.14);
+}
+.qf2 .form-row > div:focus-within > label,
+.qf2 .form-row:focus-within > label { color: var(--ink-soft); }
+/* Safari renders an empty date input as a faint stub; keep it at the same
+   ink as the rest so the field does not look disabled. */
+.qf2 input[type="date"] { color: var(--ink); position: relative; }
+.qf2 input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  margin: 0; padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.qf2-hint {
+  margin-top: 0.3rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.qf2 .field-error { font-size: 0.74rem; margin-top: 0.25rem; }
+
+.qf2 .form-row-consent { margin-top: 0.85rem; margin-bottom: 0; }
+.qf2 .sms-consent-text { font-size: 0.7rem; }
+
+/* Actions ----------------------------------------------------------------- */
+.qf2-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.1rem;
+}
+.qf2 .form-submit { margin-top: 0; flex: 1; }
+.qf2-back {
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  background: transparent;
+  border-radius: 999px;
+  min-height: 50px;
+  padding: 0 1.05rem;
+  font-family: var(--font-body);
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.qf2-back:hover { border-color: var(--muted); background: var(--paper-warm); }
+/* "Continue" is not the submit, so it does not get the arrow the shared
+   .form-submit adds — that arrow is reserved for the action that sends. */
+.qf2-next::after { content: ''; }
+.qf2-next { letter-spacing: 0.01em; }
+/* .form-submit is display:flex, which outranks the UA sheet's [hidden]
+   rule — without this the Send button shows on every step. */
+.qf2 [hidden] { display: none !important; }
+
+/* Assurances -------------------------------------------------------------- */
+.qf2-assurances {
+  margin: 0;
+  padding: 0.75rem 1.5rem;
+  border-top: 1px solid var(--line);
+  background: var(--paper-warm);
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem 0.9rem;
+}
+.qf2-assurances li { font-size: 0.72rem; align-items: center; color: var(--ink-soft); }
+.qf2-assurances svg {
+  width: 14px; height: 14px;
+  margin-top: 0;
+  stroke: var(--green-deep);
+  stroke-width: 2;
+}
+
+/* The success panel replaces the form's innards, so it needs the padding the
+   form was carrying. */
+.qf2 .form-success { padding: 1.75rem 1.5rem; }
+
+/* Entrance: the shared .form-enter staggers .quote-form > div, which the
+   stepped form no longer has. One move for the whole card instead. */
+.qf2-col { animation: qf2CardIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both; }
+@keyframes qf2CardIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .qf2-col, .qf2-panel.is-active { animation: none; }
+}
+
+/* Phones ------------------------------------------------------------------ */
+@media (max-width: 768px) {
+  .qf2 { border-radius: 18px; padding: 0; }
+  .qf2-head { padding: 1rem 0.9rem 0.85rem; }
+  .qf2 .qf2-head h3 { font-size: 1.45rem; }
+  /* Stays on a phone: the old card dropped its subline to buy vertical
+     space, and two words on the title's own line cost none. */
+  .qf2-sub { font-size: 0.64rem; }
+
+  .qf2-steps { padding: 0.7rem 0.9rem 0; }
+  .qf2-track { margin: 0.5rem 0.9rem 0; }
+  .qf2-steps li { font-size: 0.62rem; gap: 0.35rem; letter-spacing: 0.03em; }
+  .qf2-dot { width: 22px; height: 22px; font-size: 0.68rem; }
+
+  .qf2 .quote-form { padding: 0.9rem 0.9rem 1rem; }
+  .qf2-legend { font-size: 0.95rem; margin-bottom: 0.6rem; }
+  .qf2 .form-row { margin-bottom: 0.7rem; }
+
+  /* Pairs stay side by side. What made the old card unreadable was not the
+     pairing itself but the 14-character placeholders inside half-width
+     boxes; these say "State…", and the icon carries the rest. */
+  .qf2-two { gap: 0.5rem; }
+  .qf2-pair { gap: 0.35rem; }
+  .qf2-arrow { padding-bottom: 0.9rem; font-size: 0.82rem; }
+
+  .qf2 .qf2-field > label { font-size: 0.72rem; margin-bottom: 0.25rem; white-space: normal; overflow: visible; text-overflow: clip; }
+  /* 16px or iOS zooms the page on focus and the card ends up half off-screen —
+     which is the cropping the old form was showing. */
+  .qf2 .form-row input,
+  .qf2 .form-row select { font-size: 1rem; min-height: 48px; padding: 0.6rem 0.6rem 0.6rem 2.1rem; border-radius: 10px; }
+  .qf2 .form-row select { background-position: right 0.5rem center; padding-right: 1.5rem; }
+  .qf2-ico { left: 0.6rem; width: 15px; height: 15px; }
+
+  .qf2-actions { margin-top: 0.9rem; gap: 0.5rem; }
+  .qf2 .form-submit { min-height: 50px; font-size: 0.92rem; padding: 0.7rem 1rem; }
+  .qf2-back { min-height: 50px; padding: 0 0.9rem; font-size: 0.82rem; }
+
+  .qf2-assurances { padding: 0.65rem 0.9rem; gap: 0.35rem 0.6rem; }
+  .qf2-assurances li { font-size: 0.66rem; }
+  .qf2-assurances svg { width: 12px; height: 12px; }
+}
+
+@media (max-width: 380px) {
+  /* The rail's labels are the first thing to go when the dots stop fitting;
+     the numbers still say where you are. */
+  .qf2-step-label { display: none; }
+  .qf2-steps { display: flex; gap: 0.5rem; align-items: center; }
+  .qf2-steps li { flex: 1; }
+}
+</style>`;
+
+
 function head({ title, description, canonical, schema, extraHead = '' }) {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -1742,7 +2280,7 @@ ${s.quirks.map((q, i) => `      <details class="note-row js-collapse" open>
     licensingFaq,
   ];
 
-  return `${head({ title, description, canonical, schema, extraHead: TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '' })}
+  return `${head({ title, description, canonical, schema, extraHead: (TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '') + (FORM_TRIAL_STATES.has(s.name) ? FORM_TRIAL_HEAD : '') })}
 
 ${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
 

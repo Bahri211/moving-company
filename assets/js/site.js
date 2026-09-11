@@ -82,6 +82,89 @@
     });
   }
 
+  // ---- stepped quote form (design trial, .qf2 only) ----------------------
+  // Pages without the trial card have no .qf2-panel, so this whole block is
+  // inert on them and the form stays the single-panel one it has always been.
+  var panels = [].slice.call(form.querySelectorAll('.qf2-panel'));
+  var stepOf = function () { return 1; };
+  if (panels.length) {
+    var stepItems = [].slice.call(document.querySelectorAll('#qf2-steps li'));
+    var nextBtn = document.getElementById('qf2-next');
+    var backBtn = document.getElementById('qf2-back');
+    var sendBtn = form.querySelector('.qf2-send');
+    var step = 1;
+    stepOf = function () { return step; };
+
+    // Per-step gate. Step 2 is optional, so it has no entry — everything
+    // required is validated again on submit regardless.
+    var checks = {
+      1: [
+        ['qf-from', 'error-from', 'Please select your origin state.'],
+        ['qf-to', 'error-to', 'Please select your destination state.'],
+      ],
+      3: [
+        ['qf-name', 'error-name', 'Please enter your name.'],
+        ['qf-email', 'error-email', 'Please enter a valid email address.'],
+        ['qf-phone', 'error-phone', 'Please enter your phone number.'],
+      ],
+    };
+
+    var validateStep = function (n) {
+      var ok = true;
+      (checks[n] || []).forEach(function (c) {
+        var v = ($(c[0]).value || '').trim();
+        if (c[0] === 'qf-email') {
+          if (!v || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { setError(c[1], c[2]); ok = false; }
+        } else if (!v) { setError(c[1], c[2]); ok = false; }
+      });
+      return ok;
+    };
+
+    var render = function (focus) {
+      panels.forEach(function (p) {
+        p.classList.toggle('is-active', p.getAttribute('data-panel') === String(step));
+      });
+      stepItems.forEach(function (li) {
+        var n = Number(li.getAttribute('data-step'));
+        li.classList.toggle('is-current', n === step);
+        li.classList.toggle('is-done', n < step);
+      });
+      var fill = document.getElementById('qf2-fill');
+      if (fill) fill.style.width = (step / panels.length * 100) + '%';
+      backBtn.hidden = step === 1;
+      nextBtn.hidden = step === panels.length;
+      sendBtn.hidden = step !== panels.length;
+      if (!focus) return;
+      var first = panels[step - 1].querySelector('input, select');
+      // Focusing a select on a phone pops the picker open unasked, so only
+      // the card is scrolled into view there.
+      if (first && !('ontouchstart' in window)) first.focus();
+    };
+
+    nextBtn.addEventListener('click', function () {
+      if (!validateStep(step)) {
+        var e1 = panels[step - 1].querySelector('.field-error:not(:empty)');
+        if (e1) e1.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      if (step < panels.length) { step += 1; render(true); }
+    });
+
+    backBtn.addEventListener('click', function () {
+      if (step > 1) { step -= 1; render(true); }
+    });
+
+    // Enter in a text field should advance the step, not submit from step 1.
+    form.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' || step === panels.length) return;
+      if (e.target.tagName === 'TEXTAREA') return;
+      e.preventDefault();
+      nextBtn.click();
+    });
+
+    render(false);
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -104,12 +187,24 @@
     }
 
     if (!valid) {
+      // On the stepped card the offending field may be on a panel that is not
+      // showing, so walk back to it before scrolling — otherwise the message
+      // is written into a hidden div and the visitor sees nothing happen.
       var firstError = form.querySelector('.field-error:not(:empty), .sms-error:not(:empty)');
-      if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (firstError) {
+        var panel = firstError.closest && firstError.closest('.qf2-panel');
+        if (panel && !panel.classList.contains('is-active') && backBtn) {
+          while (stepOf() > Number(panel.getAttribute('data-panel'))) backBtn.click();
+        }
+        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
       return;
     }
 
-    var btn = form.querySelector('.form-submit');
+    // The stepped card has two .form-submit buttons (Continue and Send), and
+    // Continue comes first in the DOM — take the send button by name there.
+    var btn = form.querySelector('.qf2-send') || form.querySelector('.form-submit');
+    var btnLabel = btn.textContent;
     btn.textContent = 'Sending…';
     btn.disabled = true;
 
@@ -121,7 +216,7 @@
         btn.insertAdjacentElement('beforebegin', errDiv);
       }
       errDiv.textContent = msg;
-      btn.textContent = 'Request a free quote';
+      btn.textContent = btnLabel;
       btn.disabled = false;
     }
 

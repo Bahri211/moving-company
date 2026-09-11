@@ -46,7 +46,1227 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css">
+<style>
+:root {
+  /* One face for the whole page. Inter at 600 with tight tracking carries the
+     headings; the serif is gone entirely, so the trial now loads no font of
+     its own — Inter already ships with every page. */
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Text face back to Inter, the site default. Libre Franklin was the period
+     partner for Playfair, but its narrower, older forms cost clarity at the
+     sizes this page actually reads at — and Inter is markedly cleaner on
+     digits, which is what the phone number, mileages and USDOT are made of.
+     It also loads on every page already, so the trial now requests one font
+     instead of two. */
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
+  /* Palette ------------------------------------------------------------
+     The cream and the terracotta are unchanged — this only settles the cool
+     side of the page. It had been running three separate cool hues: navy for
+     the dark sections, an unrelated brighter blue for the stats band, and a
+     fairly saturated green for the call buttons. Four hues with nothing
+     holding them together is what made the page read generic.
+
+     The bright blue is now the navy's own light step, so the stats band
+     belongs to the dark sections instead of arriving as a fourth colour, and
+     the green drops to an evergreen that sits in the same register as the
+     rest. Green stays reserved for "call" — it is the one hue that carries a
+     meaning, so it keeps its own identity, just at a lower volume. */
+  --ink: #191612;
+  --paper: #f6f1e9;
+  --paper-warm: #eae1d2;
+  --muted: #877c6c;
+  --line: #d8cebc;
+
+  --navy: #10243c;
+  --navy-deep: #0a1727;
+  --navy-soft: #1b3350;
+
+  /* Was #1d5fa8 — a blue of its own. Now the navy two steps lighter. */
+  --blue: #1a4570;
+  --blue-deep: #123152;
+  --blue-text: #b6cde6;
+
+  /* Was #3fae6b. Same signal, less candy. */
+  --green: #2f8f5b;
+  --green-deep: #237046;
+}
+
+/* Headline ---------------------------------------------------------------
+   The state name takes --accent — the same terracotta filling the "Free
+   quotes / Same day" card a little further down the hero, so the two warm
+   marks above the fold match. It had been a deep forest green, which made the
+   H1 the only green thing on the page while green everywhere else means
+   "call". */
+.hero h1 em { color: var(--accent); }
+
+/* Illustrated band -------------------------------------------------------
+   Reuses .services / .service-card so this adds no new card design — only the
+   image slot is new. Sits on paper: the artwork's near-black strokes vanish
+   against the dark sections. */
+/* Sage rather than a saturated green: the artwork is near-black over
+   transparent, and on a deep forest fill the truck and dolly frames lose their
+   internal detail and collapse into silhouettes. This is light enough to keep
+   them readable while still clearly reading as green, and it ties the band to
+   the green in the H1. */
+.illus-card {
+  text-align: center;
+  background: #d9e5d8;
+  border-color: #bed0bc;
+}
+
+.illus {
+  width: 100%;
+  max-width: 230px;
+  height: auto;
+  margin: 0 auto 1.4rem;
+}
+
+/* The shared .services grid goes 2-up under 768px, which breaks a three-step
+   sequence into 2 + 1 with an orphan. These are narrative steps, so on a phone
+   they stack into a single column and stay in order. */
+@media (max-width: 900px) {
+  .illus { width: 7.2rem; height: 5.2rem; margin-bottom: 0.9rem; }
+}
+
+@media (max-width: 768px) {
+  .illus-band .services { grid-template-columns: 1fr; gap: 0.9rem; }
+  .illus-band .services { gap: 2.1rem; }
+}
+
+/* Service illustrations --------------------------------------------------
+   Larger than the icon tile they replace — these carry detail a 26px glyph
+   cannot, so shrinking them back into a 54px chip would waste them. No hover
+   colour change: the art is terracotta on transparent and would disappear
+   against an --accent fill. */
+.service-illus {
+  margin-bottom: 1.15rem;
+}
+
+.service-illus img {
+  width: 100%;
+  max-width: 138px;
+  height: auto;
+}
+
+@media (max-width: 900px) {
+  .service-illus img { max-width: 108px; }
+  .service-illus { margin-bottom: 0.9rem; }
+}
+
+/* Credentials strip -------------------------------------------------------
+   A fixed band above the bar. --nav-h is what the hero pads by, what the
+   mobile menu hangs from and what the scroll-spy measures against, so it grows
+   to the full occupied height (strip + bar) and the bar's own min-height is
+   pinned separately — otherwise the bar itself would stretch to 100px.
+
+   The string is 28.44em wide. At 0.75rem that needs about 341px of room, so
+   below 380px the "Licensed & insured" prefix drops and the registration
+   numbers alone (17.27em) carry it. */
+:root {
+  --cred-h: 28px;
+  /* Strip + bar, measured. The stock token said 72px while the bar actually
+     renders 77px, so hero content tucked under it — that understatement is in
+     styles.css and still affects the other 48 pages. Pinning the bar's
+     min-height to the same number keeps it a uniform height across desktop
+     widths, so this figure is exact rather than a worst case. */
+  --nav-h: 105px;
+}
+
+.nav-cred {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 101;
+  height: var(--cred-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0 1rem;
+  background: var(--navy);
+  color: #a9c0d6;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Shield-check, in the same green the rest of the page reserves for trust
+   signals — separate from the muted blue-grey the credentials text uses, so
+   it reads as a mark of assurance rather than just another word in the line. */
+.cred-icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  color: #6fce9b;
+}
+
+nav.topnav {
+  top: var(--cred-h);
+  min-height: calc(var(--nav-h) - var(--cred-h));
+}
+
+@media (max-width: 768px) {
+  :root {
+    --cred-h: 26px;
+    --nav-h: 92px;
+  }
+
+  .nav-cred { font-size: 0.7rem; letter-spacing: 0.04em; }
+  .cred-icon { width: 11px; height: 11px; }
+}
+
+@media (max-width: 380px) {
+  .cred-lead { display: none; }
+}
+
+/* Nav ---------------------------------------------------------------------
+   The bar's cream is hardcoded rgba(245, 240, 232, …) rather than taken from
+   --paper, so it sat a shade off the page it overlays once the palette moved.
+   Retinted here, and given a real resting state: no border until you scroll,
+   so at the top the bar reads as part of the hero rather than a strip pinned
+   over it. */
+nav.topnav {
+  background: rgba(246, 241, 233, 0.86);
+  border-bottom: 1px solid transparent;
+}
+
+nav.topnav.scrolled {
+  background: rgba(246, 241, 233, 0.97);
+  border-bottom-color: var(--line);
+  box-shadow: 0 1px 20px rgba(26, 23, 19, 0.06);
+}
+
+/* Six links now, so they need to sit closer. */
+.nav-links { gap: 1.65rem; font-size: 0.875rem; }
+
+.nav-links a {
+  color: var(--ink-soft);
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover { color: var(--ink); }
+
+/* .nav-phone has no white-space rule of its own, so when the bar runs out of
+   room the number breaks mid-string and the button balls up. */
+.nav-phone { white-space: nowrap; }
+
+/* Between 769px and roughly 960px the six links plus both buttons no longer
+   fit on one line, and the bar grew to two rows — worse here than on the
+   shared nav because this one carries a sixth link. Everything steps down a
+   size through that range instead. */
+@media (min-width: 769px) and (max-width: 960px) {
+  nav.topnav { padding: 0.75rem 1.25rem; }
+  .logo-img { height: 34px; }
+  .nav-links { gap: 1.05rem; font-size: 0.8rem; }
+  .nav-right { gap: 0.6rem; }
+  .nav-phone { padding: 0.5rem 0.8rem; font-size: 0.78rem; gap: 0.35rem; }
+  .topnav .nav-cta { padding: 0.55rem 0.95rem; font-size: 0.78rem; }
+}
+
+/* Set by site.js for the section currently under the nav. */
+.nav-links a.is-current { color: var(--accent); }
+.nav-links a.is-current::after { width: 100%; }
+
+/* Contact strip phone -----------------------------------------------------
+   It was --accent, which put the page's only two "call" buttons in different
+   colours: the nav phone and the sticky call button are green, this one was
+   terracotta. Green here as well, so the colour means one thing throughout —
+   and it stops this button competing with the quote CTA for the same signal.
+   Uses the gradient the nav phone button already carries. */
+.cs-phone {
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-deep) 100%);
+}
+
+.cs-phone:hover {
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-deep) 100%);
+  filter: brightness(1.08);
+}
+
+/* Contact strip email -----------------------------------------------------
+   Given the palette's blue rather than a filled pill: calling should lead, and
+   two solid buttons side by side read as equal choices. Kept as an outline so
+   it stays second, but tinted so it is a colour rather than plain white — blue
+   is already this page's third voice, in the trust bar and behind the gallery,
+   and it avoids borrowing the terracotta that means "get a quote". */
+.cs-email {
+  background: rgba(70, 104, 143, 0.22);
+  border-color: rgba(143, 176, 212, 0.45);
+  color: #cfe0f2;
+}
+
+.cs-email:hover {
+  background: rgba(70, 104, 143, 0.38);
+  border-color: rgba(178, 205, 233, 0.75);
+  color: #eaf2fa;
+}
+
+/* Headline on one line ----------------------------------------------------
+   "Movers" was dropping to a second line. Sized to fit rather than guessed at:
+   the string measures 14.624em wide in Inter 600 at this tracking, and the
+   column it sits in is a steady 0.446 x viewport above 768px and viewport
+   minus 40px below, where the hero goes single-column. That puts the ceiling
+   at 3.04vw and 5.98vw respectively; both are set just under.
+
+   Note this is measured for "New York State-to-State Movers" specifically. A
+   longer state name — Massachusetts, North Carolina — needs its own number, so
+   this cannot be promoted to the other 48 as-is. */
+.hero h1 { white-space: nowrap; }
+
+@media (min-width: 769px) {
+  .hero h1 { font-size: min(3vw, 2.7rem); }
+}
+
+@media (max-width: 768px) {
+  /* The state name takes 1.35em. That pushes the string from 14.624em to
+     16.149em, so the base drops to keep it on one line — "New York" still ends
+     up about a fifth larger than it was, and the rest a little smaller.
+     Phone only: at this ratio the desktop column cannot hold one line. */
+  .hero h1 { font-size: min(5.2vw, 2.15rem); }
+  .hero h1 em { font-size: 1.35em; }
+}
+
+/* Footer phones -----------------------------------------------------------
+   Green is the site's "call" colour — the nav phone button and the sticky call
+   button both use it — so the two numbers in the footer take it rather than
+   sitting in the same muted blue as every other link in the column. Lightened
+   from --green, which is tuned for white-on-green buttons and goes muddy as
+   text on the dark footer. */
+.footer-col a[href^="tel:"] {
+  display: inline-flex;
+  align-items: center;
+  color: #6fce9b;
+  font-weight: 500;
+  background: rgba(111, 206, 155, 0.11);
+  border: 1px solid rgba(111, 206, 155, 0.28);
+  border-radius: 999px;
+  padding: 0.32rem 0.8rem;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.footer-col a[href^="tel:"]:hover {
+  color: #b6ebcd;
+  background: rgba(111, 206, 155, 0.2);
+  border-color: rgba(111, 206, 155, 0.5);
+}
+
+/* The pills are taller than the plain links they sit among, so the rows in
+   this column need a little more room. */
+.footer-col li:has(a[href^="tel:"]) { margin-bottom: 0.35rem; }
+
+/* Headings ---------------------------------------------------------------
+   A display serif carries at 400 on its own shapes; a grotesque set at the
+   same weight and tracking just reads as large body text. So the headings take
+   600 and tighter tracking, and the emphasis inside them stops being a 300
+   italic — at that weight Inter's italic went limp against the roman. It keeps
+   the colour shift and matches the surrounding weight. */
+.section-header h2,
+.spec-hero-inner h2,
+.hero h1 {
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+
+.section-header h2 em,
+.spec-hero-inner h2 em,
+.hero h1 em {
+  font-weight: 600;
+  font-style: normal;
+}
+
+.service-card h3,
+.illus-card h3,
+.note-body h3,
+.spec-row summary,
+.hero-form-header h3 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Section grounds --------------------------------------------------------
+   The page ran cream / warm-cream for nine of its twelve sections, and those
+   two are close enough that the whole run read as one flat surface. Each
+   section that carries a distinct job now gets its own ground, drawn from the
+   palette already in play rather than new hues:
+
+     hero        paper       trust bar   navy
+     band        sage        coverage    warm
+     services    paper       costs       blush
+     process     navy        notes       paper
+     gallery     forest      faq         warm
+     nearby      paper       contact     navy
+
+   Sage and forest are the H1 green at two lightnesses; blush is the terracotta
+   at very low saturation. */
+/* Photograph behind the whole band, in place of the sage fill. Decorative
+   only — the three cards carry the meaning — so the img is alt="" and hidden
+   from assistive tech. */
+.illus-band {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* A <picture>, not a bare <img>: the landscape frame crops to almost nothing
+   usable on a phone, so narrow screens get a portrait cut of the same scene. */
+.band-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.band-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+/* The shot is bright daylight on a pale street, so it needs a heavy wash to
+   hold cream text and to stop the cards fighting it for attention. */
+.illus-band::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(10, 23, 39, 0.82), rgba(10, 23, 39, 0.74) 55%, rgba(10, 23, 39, 0.6));
+}
+
+.illus-band .section-header h2 { color: var(--paper); text-shadow: 0 1px 22px rgba(8, 18, 31, 0.5); }
+
+/* Terracotta landed straight on the white truck body — the weakest contrast on
+   the page. Warm cream instead; the italic already carries the emphasis. */
+.illus-band .section-header h2 em { color: #f2c6ac; }
+.illus-band .section-header p  { color: #cfd6dd; text-shadow: 0 1px 16px rgba(8, 18, 31, 0.55); }
+.illus-band .section-kicker    { color: #e8a98c; }
+.illus-band .section-kicker::before,
+.illus-band .section-kicker::after { background: #a8674a; }
+
+/* No card. Three full cards spanning the width left only a sliver of the
+   photograph visible and read as heavy slabs; the panel was doing nothing but
+   giving the artwork a light ground to sit on. So only the artwork keeps a
+   light ground — a small paper tile — and the words sit straight on the photo.
+   The band gets its air back and the street shows through. */
+.illus-card {
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: center;
+}
+
+.illus-card::before { display: none; }   /* the .service-card top accent rule */
+
+.illus-card h3 {
+  color: var(--paper);
+  font-size: 1.16rem;
+  margin-bottom: 0.45rem;
+}
+
+.illus-card p {
+  color: #ccd4dc;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  max-width: 19rem;
+  margin: 0 auto;
+}
+
+/* The tile: the artwork is near-black and terracotta, so it needs paper under
+   it whatever the section behind is doing. */
+.illus {
+  width: 8.6rem;
+  height: 6.1rem;
+  max-width: none;
+  object-fit: contain;
+  background: var(--paper);
+  border-radius: 14px;
+  padding: 0.85rem 0.9rem;
+  margin: 0 auto 1.1rem;
+  box-shadow: 0 10px 26px -12px rgba(8, 18, 31, 0.55);
+}
+
+.illus-band .services { gap: 2.5rem; }
+
+#costs.coverage-section { background: #f7eade; }
+.spec-list, .spec-row { border-color: #e2cdb9; }
+
+/* Photographs carry a dark ground better than a cream one. --blue rather than
+   --navy: the navy is already the process and contact sections, and at that
+   depth the gallery just read as a third slab of the same colour. This is the
+   same blue as the trust bar, so the two blue moments bracket the page. */
+.gallery-section { background: var(--blue); }
+.gallery-section .section-header h2 { color: var(--paper); }
+.gallery-section .section-header p  { color: #bcd0e6; }
+.gallery-section .section-kicker    { color: #8fb0d4; }
+.gallery-section .section-kicker::before,
+.gallery-section .section-kicker::after { background: #46688f; }
+
+/* Price-list hero ---------------------------------------------------------
+   The section heading and intro sit on the photograph rather than above it, so
+   the band opens the section instead of interrupting it. Full-bleed, because a
+   1000px rounded panel read as a picture dropped into the page; edge to edge it
+   reads as the section's own opening.
+
+   The photo is bright through the doorway in the middle and dark at both
+   edges, so a flat tint would not carry text. The scrim is a navy wash that
+   deepens toward the bottom, over a horizontal darkening at the sides — which
+   is where the frame is dark anyway, so it costs the picture very little. */
+.spec-hero {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-bottom: 4.5rem;
+  min-height: 30rem;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.spec-hero img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 45%;
+  z-index: -2;
+}
+
+.spec-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(10, 23, 39, 0.55), rgba(10, 23, 39, 0.2) 35%, rgba(10, 23, 39, 0.2) 65%, rgba(10, 23, 39, 0.55)),
+    linear-gradient(180deg, rgba(10, 23, 39, 0.62), rgba(10, 23, 39, 0.78));
+}
+
+.spec-hero-inner {
+  max-width: 47rem;
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.spec-hero-inner .section-kicker { color: #e8a98c; }
+.spec-hero-inner .section-kicker::before,
+.spec-hero-inner .section-kicker::after { background: #a8674a; }
+
+/* .section-header h2 carries the display face and scale, and this markup is
+   not a .section-header — so the typography is restated here rather than
+   inherited. */
+.spec-hero-inner h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 4.2vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: var(--paper);
+  margin-bottom: 1.25rem;
+  text-shadow: 0 1px 24px rgba(8, 18, 31, 0.45);
+}
+
+/* Terracotta on this ground is legible but muddy — the state name lifts to a
+   warm cream instead, italic already carrying the emphasis. */
+.spec-hero-inner h2 em { color: #f2c6ac; }
+
+.spec-hero-inner p {
+  font-size: 1.05rem;
+  max-width: 35rem;
+  margin: 0 auto;
+  color: #dcd6cc;
+  text-shadow: 0 1px 18px rgba(8, 18, 31, 0.5);
+}
+
+/* The band is the section's top edge, so the section's own padding goes. */
+#costs.coverage-section { padding-top: 0; }
+
+@media (max-width: 768px) {
+  .spec-hero {
+    min-height: 22rem;
+    margin-bottom: 2.5rem;
+  }
+  .spec-hero-inner { padding: 3.25rem 1.5rem; }
+}
+
+/* Gallery lead ------------------------------------------------------------
+   A fifth photo orphans in a two-column grid, so the strongest shot runs full
+   width above the other four instead of squeezing into the rhythm. */
+.gallery-lead {
+  grid-column: 1 / -1;
+  aspect-ratio: 16 / 9;
+}
+
+/* styles.css pins .gallery-item img to a flat 140px under 768px, which left
+   the lead image filling only the top of its taller box — navy gap beneath it
+   and the caption stranded at the bottom. The lead opts back into filling its
+   container, at the source's own 3:2 so cover crops nothing. */
+@media (max-width: 768px) {
+  .gallery-lead { aspect-ratio: 3 / 2; }
+  .gallery-lead img { height: 100%; }
+}
+
+/* Spec list — replaces the six price-driver cards ------------------------
+   Term left, explanation right, hairline between rows. Reads as reference
+   material you scan for the row that applies to you. */
+.spec-list {
+  max-width: 1000px;
+  margin: 0 auto;
+  border-top: 1px solid var(--line);
+}
+
+/* Each row is a <details> emitted already open, so with JS off the desktop
+   layout is exactly what it was. site.js closes them below 769px, where six
+   full explanations ran to roughly four screens of solid text. */
+.spec-row {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) 2fr;
+  gap: 1rem 2.5rem;
+  padding: 1.6rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.spec-row summary {
+  font-family: var(--font-display);
+  font-size: 1.22rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  display: flex;
+  gap: 0.85rem;
+  align-items: baseline;
+  list-style: none;
+  cursor: default;
+}
+
+.spec-row summary::-webkit-details-marker { display: none; }
+
+.spec-num {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.spec-body {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+/* Process steps and notes as collapsibles ---------------------------------
+   Both are <details> now, matching the price list: open on desktop, where the
+   layout is unchanged from the divs they replace, and collapsed to a tappable
+   heading below 769px. The marker is suppressed everywhere; the chevron below
+   is drawn on the summary instead. */
+.process-step summary,
+.note-row summary {
+  list-style: none;
+  cursor: default;
+}
+
+.process-step summary::-webkit-details-marker,
+.note-row summary::-webkit-details-marker { display: none; }
+
+/* Desktop: the summary is just a wrapper, so its children lay out exactly as
+   the step-num / h3 siblings did before. */
+.process-step summary { display: block; }
+
+/* With the body in its own grid column, this row now has the price list's
+   shape — term left, explanation right — so it takes the same proportions
+   rather than sizing the title column to its longest heading. */
+.note-row {
+  grid-template-columns: minmax(15rem, 1fr) 2fr;
+  gap: 1rem 2.5rem;
+}
+
+.note-row summary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem;
+  align-items: baseline;
+}
+
+/* Note list — replaces the three "catches people out" cards --------------- */
+.note-list {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.note-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.4rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.note-row:first-child { border-top: 1px solid var(--line); }
+
+.note-num {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--accent);
+  line-height: 1;
+  opacity: 0.55;
+}
+
+.note-body h3 {
+  font-family: var(--font-display);
+  font-size: 1.22rem;
+  font-weight: 500;
+  margin-bottom: 0.35rem;
+}
+
+.note-body p {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+@media (max-width: 768px) {
+  /* Local notes and quirks collapse the same way the price list does — and
+     like it, in a single column. The shared grid still goes 2-up here, which
+     put two narrow accordions side by side. */
+  .process-grid { grid-template-columns: 1fr; gap: 0; }
+
+  .process-step {
+    border-left: none;
+    border-top: 1px solid var(--navy-line);
+  }
+
+  .process-step:first-child { border-top: none; }
+  .process-step::before { display: none; }
+
+  .process-step,
+  .note-row { padding: 0; }
+
+  /* The two-column shape is a desktop thing — left here it kept the summary
+     inside the left column, so the chevron sat against the title and an open
+     body would land beside the heading instead of under it. */
+  .note-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .process-step summary,
+  .note-row summary {
+    position: relative;
+    cursor: pointer;
+    padding: 0.95rem 2rem 0.95rem 0;
+  }
+
+  .process-step summary::after,
+  .note-row summary::after {
+    content: '';
+    position: absolute;
+    right: 0.35rem;
+    top: 50%;
+    width: 8px; height: 8px;
+    border-right: 1.5px solid var(--accent);
+    border-bottom: 1.5px solid var(--accent);
+    transform: translateY(-70%) rotate(-45deg);
+    transition: transform 0.2s ease;
+  }
+
+  .process-step[open] summary::after,
+  .note-row[open] summary::after { transform: translateY(-30%) rotate(45deg); }
+
+  .process-step h3,
+  .note-row h3 { margin-bottom: 0; }
+
+  .process-step .step-body,
+  .note-row .note-body { padding: 0 0 1.05rem; }
+
+  .process-step .step-body p { font-size: 0.88rem; }
+
+  /* The rail node is anchored to the row top, which now sits on the summary. */
+  .process-step::before { top: 1.15rem; }
+
+  /* Collapsed on phones: heading row taps open one explanation at a time. */
+  .spec-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .spec-row summary {
+    font-size: 1.06rem;
+    padding: 0.95rem 2rem 0.95rem 0;
+    position: relative;
+    cursor: pointer;
+    align-items: center;
+  }
+
+  /* Chevron, rotating to point down when the row is open. */
+  .spec-row summary::after {
+    content: '';
+    position: absolute;
+    right: 0.35rem;
+    top: 50%;
+    width: 8px; height: 8px;
+    border-right: 1.5px solid var(--accent);
+    border-bottom: 1.5px solid var(--accent);
+    transform: translateY(-70%) rotate(-45deg);
+    transition: transform 0.2s ease;
+  }
+
+  .spec-row[open] summary::after { transform: translateY(-30%) rotate(45deg); }
+
+  .spec-row .spec-title { font-size: 1.06rem; }
+
+  .spec-body {
+    font-size: 0.9rem;
+    padding-bottom: 1.05rem;
+  }
+  .note-row { gap: 1rem; padding: 1.25rem 0; }
+  .note-num { font-size: 1.2rem; }
+}
+
+/* Trust bar --------------------------------------------------------------
+   Was a 120deg gradient plus a 460px white radial hung off the top-left, which
+   read as a smudge across the band rather than as lighting. Now the same flat
+   --navy as the dark sections, so the band is clean and belongs to the family
+   the palette pass established. */
+.trust-bar { background: var(--navy); }
+.trust-bar::before { display: none; }
+
+/* Quote card ------------------------------------------------------------
+   The card's own title sat at 1.3rem — a step above the field labels and
+   below everything else on the screen, so the line that says what the card
+   is for read as the quietest thing in it. It now carries the card. */
+.hero-form-wrap {
+  padding: 1.6rem 1.7rem;
+  border-radius: 22px;
+}
+
+.hero-form-header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.9rem;
+}
+
+.hero-form-header h3 {
+  font-size: 2rem;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+
+.hero-form-header p {
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+/* The card is the page's one conversion point, so it gets a little more
+   separation from the warm wash behind it than a plain panel would. */
+.hero-form-wrap {
+  box-shadow:
+    0 48px 90px -24px rgba(18, 38, 63, 0.26),
+    0 2px 12px -4px rgba(18, 38, 63, 0.09);
+}
+
+@media (max-width: 1100px) {
+  .hero-form-wrap { padding: 1.25rem 1.35rem; }
+  .hero-form-header h3 { font-size: 1.6rem; }
+  .hero-form-header p { font-size: 0.8rem; }
+}
+
+@media (max-width: 640px) {
+  .hero-form-wrap { padding: 1.1rem 1.15rem; }
+  .hero-form-header { margin-bottom: 0.75rem; padding-bottom: 0.6rem; }
+  /* Kept visible here: at 1.4rem it still fits one line at 320px, and on a
+     phone this heading is the first thing that explains the card. */
+  .hero-form-header h3 { font-size: 1.4rem; }
+}
+</style><style>
+/* Hero quote form, v2 — Florida only ---------------------------------------
+   Everything here hangs off .qf2, so the shared .hero-form-wrap rules in
+   styles.css still describe every other state's card. Three things changed:
+   the eight fields are split across three steps, every field is a boxed
+   control at a real tap size instead of a hairline underline, and the card
+   leads with the credential it is actually asking the visitor to trust. */
+
+.qf2-col { max-width: 500px; }
+
+.qf2 {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 22px;
+  border-color: #c9bda6;
+  /* A touch more lift than the shared card: on this page it is the only
+     thing in its column, so it carries the whole right side. */
+  box-shadow: 0 32px 64px -24px rgba(18, 38, 63, 0.3), 0 4px 14px -6px rgba(18, 38, 63, 0.12);
+}
+
+/* Header ------------------------------------------------------------------ */
+.qf2-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.35rem 1.5rem 1.1rem;
+  background: linear-gradient(168deg, #14293f 0%, #0c1a2b 100%);
+  color: var(--paper);
+  position: relative;
+}
+/* The accent belongs to the button; a hairline of it at the top ties the two
+   ends of the card together without another block of orange. */
+.qf2-head::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), #e0894f 55%, transparent);
+}
+
+
+.qf2 .qf2-head h3 {
+  /* Inter rather than the display serif: the card is a control surface, and
+     it reads as one when its title is set in the same face as its labels. */
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.45rem;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--paper);
+}
+.qf2-sub {
+  flex-shrink: 0;
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--navy-text);
+  line-height: 1.45;
+}
+
+/* Step rail --------------------------------------------------------------- */
+.qf2-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  list-style: none;
+  margin: 0;
+  padding: 0.8rem 1.5rem 0;
+  background: var(--paper);
+}
+.qf2-steps li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  position: relative;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.3s;
+}
+/* A single track under the rail rather than a rule between each pair of
+   dots: a connector long enough to reach the next dot has to pass through
+   the label in between, which read as a strikethrough. */
+.qf2-track {
+  height: 3px;
+  margin: 0.6rem 1.5rem 0;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+.qf2-track span {
+  display: block;
+  width: 33.33%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), #e0894f);
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.qf2-dot {
+  width: 24px; height: 24px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  background: var(--paper);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--muted);
+  position: relative;
+  z-index: 1;
+  transition: border-color 0.3s, background 0.3s, color 0.3s;
+}
+.qf2-steps li.is-current { color: var(--ink); }
+.qf2-steps li.is-current .qf2-dot {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(200, 85, 44, 0.12);
+}
+.qf2-steps li.is-done { color: var(--ink-soft); }
+.qf2-steps li.is-done .qf2-dot {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--paper);
+  font-size: 0;
+}
+.qf2-steps li.is-done .qf2-dot::after {
+  content: '✓';
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* Panels ------------------------------------------------------------------ */
+.qf2 .quote-form { padding: 1rem 1.5rem 1.35rem; }
+
+.qf2-panel {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: none;
+}
+.qf2-panel.is-active { display: block; animation: qf2In 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes qf2In {
+  from { opacity: 0; transform: translateX(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.qf2-legend {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.02rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  padding: 0;
+  margin-bottom: 0.75rem;
+}
+
+.qf2 .form-row { margin-bottom: 0.8rem; }
+.qf2 .form-row:last-child { margin-bottom: 0; }
+
+/* The route pair keeps its arrow on desktop; on a phone it stacks and the
+   arrow turns down, which reads as a route rather than as two loose menus. */
+.qf2-pair {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 0.6rem;
+}
+.qf2-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  align-items: start;
+}
+
+.qf2-arrow {
+  padding-bottom: 0.85rem;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.qf2 .qf2-field > label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 0.3rem;
+  /* No clipping: every field is full width or half of a two-up, and the
+     labels are short enough to fit at this size. */
+  white-space: normal;
+  overflow: visible;
+}
+
+/* Boxed controls everywhere, not just on touch. A filled field says "this is
+   where you type" at a glance, and 46px is a real target with a mouse too. */
+/* The icon sits inside the control rather than beside the label, so a
+   half-width field spends none of its width on it. */
+.qf2-control { position: relative; display: block; }
+.qf2-ico {
+  position: absolute;
+  left: 0.72rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 17px; height: 17px;
+  color: var(--muted);
+  pointer-events: none;
+  /* The date input is position:relative so its picker overlay can stretch;
+     without this the input paints over the icon that precedes it. */
+  z-index: 2;
+  transition: color 0.2s;
+}
+.qf2-control:focus-within .qf2-ico { color: var(--accent); }
+
+.qf2 .form-row input,
+.qf2 .form-row select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.55rem 0.8rem 0.55rem 2.45rem;
+  background: #fbf8f2;
+  border: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--ink);
+  box-shadow: none;
+  text-overflow: ellipsis;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.qf2 .form-row select { background-position: right 0.7rem center; padding-right: 1.85rem; }
+.qf2 .form-row input:hover,
+.qf2 .form-row select:hover { border-color: var(--muted); border-bottom-color: var(--muted); }
+.qf2 .form-row input:focus,
+.qf2 .form-row select:focus {
+  border-color: var(--accent);
+  border-bottom-color: var(--accent);
+  background: var(--paper);
+  box-shadow: 0 0 0 3px rgba(200, 85, 44, 0.14);
+}
+.qf2 .form-row > div:focus-within > label,
+.qf2 .form-row:focus-within > label { color: var(--ink-soft); }
+/* Safari renders an empty date input as a faint stub; keep it at the same
+   ink as the rest so the field does not look disabled. */
+.qf2 input[type="date"] { color: var(--ink); position: relative; }
+.qf2 input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  margin: 0; padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.qf2-hint {
+  margin-top: 0.3rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.qf2 .field-error { font-size: 0.74rem; margin-top: 0.25rem; }
+
+.qf2 .form-row-consent { margin-top: 0.85rem; margin-bottom: 0; }
+.qf2 .sms-consent-text { font-size: 0.7rem; }
+
+/* Actions ----------------------------------------------------------------- */
+.qf2-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.1rem;
+}
+.qf2 .form-submit { margin-top: 0; flex: 1; }
+.qf2-back {
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  background: transparent;
+  border-radius: 999px;
+  min-height: 50px;
+  padding: 0 1.05rem;
+  font-family: var(--font-body);
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.qf2-back:hover { border-color: var(--muted); background: var(--paper-warm); }
+/* "Continue" is not the submit, so it does not get the arrow the shared
+   .form-submit adds — that arrow is reserved for the action that sends. */
+.qf2-next::after { content: ''; }
+.qf2-next { letter-spacing: 0.01em; }
+/* .form-submit is display:flex, which outranks the UA sheet's [hidden]
+   rule — without this the Send button shows on every step. */
+.qf2 [hidden] { display: none !important; }
+
+/* Assurances -------------------------------------------------------------- */
+.qf2-assurances {
+  margin: 0;
+  padding: 0.75rem 1.5rem;
+  border-top: 1px solid var(--line);
+  background: var(--paper-warm);
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem 0.9rem;
+}
+.qf2-assurances li { font-size: 0.72rem; align-items: center; color: var(--ink-soft); }
+.qf2-assurances svg {
+  width: 14px; height: 14px;
+  margin-top: 0;
+  stroke: var(--green-deep);
+  stroke-width: 2;
+}
+
+/* The success panel replaces the form's innards, so it needs the padding the
+   form was carrying. */
+.qf2 .form-success { padding: 1.75rem 1.5rem; }
+
+/* Entrance: the shared .form-enter staggers .quote-form > div, which the
+   stepped form no longer has. One move for the whole card instead. */
+.qf2-col { animation: qf2CardIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both; }
+@keyframes qf2CardIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .qf2-col, .qf2-panel.is-active { animation: none; }
+}
+
+/* Phones ------------------------------------------------------------------ */
+@media (max-width: 768px) {
+  .qf2 { border-radius: 18px; padding: 0; }
+  .qf2-head { padding: 1rem 0.9rem 0.85rem; }
+  .qf2 .qf2-head h3 { font-size: 1.45rem; }
+  /* Stays on a phone: the old card dropped its subline to buy vertical
+     space, and two words on the title's own line cost none. */
+  .qf2-sub { font-size: 0.64rem; }
+
+  .qf2-steps { padding: 0.7rem 0.9rem 0; }
+  .qf2-track { margin: 0.5rem 0.9rem 0; }
+  .qf2-steps li { font-size: 0.62rem; gap: 0.35rem; letter-spacing: 0.03em; }
+  .qf2-dot { width: 22px; height: 22px; font-size: 0.68rem; }
+
+  .qf2 .quote-form { padding: 0.9rem 0.9rem 1rem; }
+  .qf2-legend { font-size: 0.95rem; margin-bottom: 0.6rem; }
+  .qf2 .form-row { margin-bottom: 0.7rem; }
+
+  /* Pairs stay side by side. What made the old card unreadable was not the
+     pairing itself but the 14-character placeholders inside half-width
+     boxes; these say "State…", and the icon carries the rest. */
+  .qf2-two { gap: 0.5rem; }
+  .qf2-pair { gap: 0.35rem; }
+  .qf2-arrow { padding-bottom: 0.9rem; font-size: 0.82rem; }
+
+  .qf2 .qf2-field > label { font-size: 0.72rem; margin-bottom: 0.25rem; white-space: normal; overflow: visible; text-overflow: clip; }
+  /* 16px or iOS zooms the page on focus and the card ends up half off-screen —
+     which is the cropping the old form was showing. */
+  .qf2 .form-row input,
+  .qf2 .form-row select { font-size: 1rem; min-height: 48px; padding: 0.6rem 0.6rem 0.6rem 2.1rem; border-radius: 10px; }
+  .qf2 .form-row select { background-position: right 0.5rem center; padding-right: 1.5rem; }
+  .qf2-ico { left: 0.6rem; width: 15px; height: 15px; }
+
+  .qf2-actions { margin-top: 0.9rem; gap: 0.5rem; }
+  .qf2 .form-submit { min-height: 50px; font-size: 0.92rem; padding: 0.7rem 1rem; }
+  .qf2-back { min-height: 50px; padding: 0 0.9rem; font-size: 0.82rem; }
+
+  .qf2-assurances { padding: 0.65rem 0.9rem; gap: 0.35rem 0.6rem; }
+  .qf2-assurances li { font-size: 0.66rem; }
+  .qf2-assurances svg { width: 12px; height: 12px; }
+}
+
+@media (max-width: 380px) {
+  /* The rail's labels are the first thing to go when the dots stop fitting;
+     the numbers still say where you are. */
+  .qf2-step-label { display: none; }
+  .qf2-steps { display: flex; gap: 0.5rem; align-items: center; }
+  .qf2-steps li { flex: 1; }
+}
+</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -277,14 +1497,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
+<div class="nav-cred">
+  <svg class="cred-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <path d="M12 2.5 4.5 5.5v5.2c0 5 3.2 9.1 7.5 10.8 4.3-1.7 7.5-5.8 7.5-10.8V5.5L12 2.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M8.5 12.3 11 14.8l4.5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+  <span class="cred-lead">Licensed &amp; insured · </span>MC-1820728 · USDOT #4575745
+</div>
 <nav class="topnav">
   <a href="/" class="logo" aria-label="50STATEMOVERS INC home">
     <img src="/assets/images/48-state-movers-logo-removebg-preview.png" alt="50STATEMOVERS INC" class="logo-img" />
     <span class="logo-name">50STATEMOVERS INC</span>
   </a>
   <ul class="nav-links">
-    <li><a href="#services">Services</a></li>
     <li><a href="#coverage">Coverage</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#costs">Pricing</a></li>
     <li><a href="#process">Process</a></li>
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#faq">FAQ</a></li>
@@ -303,8 +1531,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="mobile-menu" aria-hidden="true">
   <ul>
-    <li><a href="#services">Services</a></li>
     <li><a href="#coverage">Coverage</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#costs">Pricing</a></li>
     <li><a href="#process">Process</a></li>
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#faq">FAQ</a></li>
@@ -374,83 +1603,113 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </div>
 
-  <div class="hero-form-col form-enter">
-  <div class="hero-form-wrap" id="get-quote">
-    <div class="hero-form-header">
+  <div class="hero-form-col qf2-col">
+  <div class="hero-form-wrap qf2" id="get-quote">
+    <div class="qf2-head">
       <h3>Get a free quote</h3>
-      <p>Fixed price · no hidden fees · reply within same day</p>
+      <p class="qf2-sub">Three quick steps</p>
     </div>
+
+    <ol class="qf2-steps" id="qf2-steps" aria-hidden="true">
+      <li class="is-current" data-step="1"><span class="qf2-dot">1</span><span class="qf2-step-label">Route</span></li>
+      <li data-step="2"><span class="qf2-dot">2</span><span class="qf2-step-label">Details</span></li>
+      <li data-step="3"><span class="qf2-dot">3</span><span class="qf2-step-label">Contact</span></li>
+    </ol>
+    <div class="qf2-track" aria-hidden="true"><span id="qf2-fill"></span></div>
+
     <form class="quote-form" id="quote-form" novalidate>
-      <div class="form-row form-row-2">
-        <div>
-          <label for="qf-from">Moving from</label>
-          <select id="qf-from"><option value="">State…</option><option>Alabama</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option selected>Florida</option><option>Georgia</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>Washington D.C.</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option></select>
-          <div class="field-error" id="error-from" role="alert"></div>
+      <fieldset class="qf2-panel is-active" data-panel="1">
+        <legend class="qf2-legend">Where are you moving?</legend>
+        <div class="form-row qf2-pair">
+          <div class="qf2-field">
+            <label for="qf-from">Moving from</label>
+            <div class="qf2-control"><svg class="qf2-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg><select id="qf-from"><option value="">State…</option><option>Alabama</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option selected>Florida</option><option>Georgia</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>Washington D.C.</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option></select></div>
+            <div class="field-error" id="error-from" role="alert"></div>
+          </div>
+          <div class="qf2-arrow" aria-hidden="true">→</div>
+          <div class="qf2-field">
+            <label for="qf-to">Moving to</label>
+            <div class="qf2-control"><svg class="qf2-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 4.5h10.5l-2 3.5 2 3.5H6"/></svg><select id="qf-to"><option value="">State…</option><option>Alabama</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>Washington D.C.</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option></select></div>
+            <div class="field-error" id="error-to" role="alert"></div>
+          </div>
         </div>
-        <div>
-          <label for="qf-to">Moving to</label>
-          <select id="qf-to"><option value="">State…</option><option>Alabama</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>Washington D.C.</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option></select>
-          <div class="field-error" id="error-to" role="alert"></div>
+        <div class="form-row">
+          <div class="qf2-field">
+            <label for="qf-size">Home size</label>
+            <div class="qf2-control"><svg class="qf2-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"/><path d="M9.5 20.5v-6h5v6"/></svg><select id="qf-size">
+              <option value="">Select size…</option>
+              <option>Studio</option>
+              <option>1 Bedroom</option>
+              <option>2 Bedrooms</option>
+              <option>3 Bedrooms</option>
+              <option>4 Bedrooms</option>
+              <option>5+ Bedrooms</option>
+              <option>Office / Commercial</option>
+            </select></div>
+          </div>
         </div>
+      </fieldset>
+
+      <fieldset class="qf2-panel" data-panel="2">
+        <legend class="qf2-legend">When, and anything special?</legend>
+        <div class="form-row qf2-two">
+          <div class="qf2-field">
+            <label for="qf-date">Move date</label>
+            <div class="qf2-control"><svg class="qf2-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.75" y="5.5" width="16.5" height="14.5" rx="2.5"/><path d="M8 3.5v4M16 3.5v4M3.75 10.5h16.5"/></svg><input type="date" id="qf-date" /></div>
+          </div>
+          <div class="qf2-field">
+            <label for="qf-notes">Special items</label>
+            <div class="qf2-control"><svg class="qf2-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.75 8.2 12 4l8.25 4.2v7.6L12 20l-8.25-4.2V8.2Z"/><path d="m3.75 8.2 8.25 4.2 8.25-4.2M12 12.4V20"/></svg><input type="text" id="qf-notes" placeholder="Piano, stairs" /></div>
+          </div>
+        </div>
+        <p class="qf2-hint">Date not fixed yet? Give us your best guess — it only changes the price if the season does.</p>
+      </fieldset>
+
+      <fieldset class="qf2-panel" data-panel="3">
+        <legend class="qf2-legend">Where should we send the quote?</legend>
+        <div class="form-row qf2-two">
+          <div class="qf2-field">
+            <label for="qf-name">Your name</label>
+            <div class="qf2-control"><svg class="qf2-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.75"/><path d="M4.75 20.25a7.25 7.25 0 0 1 14.5 0"/></svg><input type="text" id="qf-name" placeholder="Jane Doe" autocomplete="name" /></div>
+            <div class="field-error" id="error-name" role="alert"></div>
+          </div>
+          <div class="qf2-field">
+            <label for="qf-phone">Phone number</label>
+            <div class="qf2-control"><svg class="qf2-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 3.75h3l1.5 4-2 1.5a10.5 10.5 0 0 0 4.75 4.75l1.5-2 4 1.5v3a1.75 1.75 0 0 1-1.9 1.75C10.9 19.6 4.4 13.1 3.75 5.65A1.75 1.75 0 0 1 5.5 3.75Z"/></svg><input type="tel" id="qf-phone" placeholder="(555) 000-0000" autocomplete="tel" /></div>
+            <div class="field-error" id="error-phone" role="alert"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="qf2-field">
+            <!-- Full width even on a phone: an address is the one value here
+                 long enough that a half-width box would scroll while typing. -->
+            <label for="qf-email">Email address</label>
+            <div class="qf2-control"><svg class="qf2-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="m4.5 7.5 7.5 5.5 7.5-5.5"/></svg><input type="email" id="qf-email" placeholder="jane@example.com" autocomplete="email" /></div>
+            <div class="field-error" id="error-email" role="alert"></div>
+          </div>
+        </div>
+        <div class="form-row-consent">
+          <label class="sms-consent-label" for="qf-sms">
+            <span class="sms-checkbox-wrap">
+              <input type="checkbox" id="qf-sms" />
+              <span class="sms-checkbox-box" aria-hidden="true"></span>
+            </span>
+            <span class="sms-consent-text">I agree to receive SMS messages from 50STATEMOVERS INC about my quote. Msg &amp; data rates may apply.<span class="sms-more" id="sms-more" hidden> Message frequency varies. Reply STOP to opt out at any time. See our <a href="/privacy-policy" target="_blank">Privacy Policy</a>.</span><button type="button" class="sms-toggle" id="sms-toggle" aria-expanded="false" aria-controls="sms-more">Read more</button></span>
+          </label>
+          <div class="sms-error" id="sms-error" role="alert"></div>
+        </div>
+      </fieldset>
+
+      <div class="qf2-actions">
+        <button type="button" class="qf2-back" id="qf2-back" hidden>← Back</button>
+        <button type="button" class="form-submit qf2-next" id="qf2-next">Continue</button>
+        <button type="submit" class="form-submit qf2-send" hidden>Request my free quote</button>
       </div>
-      <div class="form-row form-row-2">
-        <div>
-          <label for="qf-size">Home size</label>
-          <select id="qf-size">
-            <option value="">Size…</option>
-            <option>1 Bedroom</option>
-            <option>2 Bedrooms</option>
-            <option>3 Bedrooms</option>
-            <option>4 Bedrooms</option>
-            <option>5+ Bedrooms</option>
-            <option>Studio</option>
-            <option>Office / Commercial</option>
-          </select>
-        </div>
-        <div>
-          <label for="qf-date">Planned move date</label>
-          <input type="date" id="qf-date" />
-        </div>
-      </div>
-      <div class="form-row form-row-2">
-        <div>
-          <label for="qf-name">Your name</label>
-          <input type="text" id="qf-name" placeholder="Jane Doe" />
-          <div class="field-error" id="error-name" role="alert"></div>
-        </div>
-        <div>
-          <label for="qf-email">Email address</label>
-          <input type="email" id="qf-email" placeholder="jane@example.com" />
-          <div class="field-error" id="error-email" role="alert"></div>
-        </div>
-      </div>
-      <div class="form-row form-row-2">
-        <div>
-          <label for="qf-phone">Phone number</label>
-          <input type="tel" id="qf-phone" placeholder="(555) 000-0000" />
-          <div class="field-error" id="error-phone" role="alert"></div>
-        </div>
-        <div>
-          <label for="qf-notes">Special items<span class="lbl-tail"> or notes</span></label>
-          <input type="text" id="qf-notes" placeholder="Piano, antiques…" />
-        </div>
-      </div>
-      <div class="form-row-consent">
-        <label class="sms-consent-label" for="qf-sms">
-          <span class="sms-checkbox-wrap">
-            <input type="checkbox" id="qf-sms" />
-            <span class="sms-checkbox-box" aria-hidden="true"></span>
-          </span>
-          <span class="sms-consent-text">I agree to receive SMS messages from 50STATEMOVERS INC about my quote. Msg &amp; data rates may apply.<span class="sms-more" id="sms-more" hidden> Message frequency varies. Reply STOP to opt out at any time. See our <a href="/privacy-policy" target="_blank">Privacy Policy</a>.</span><button type="button" class="sms-toggle" id="sms-toggle" aria-expanded="false" aria-controls="sms-more">Read more</button></span>
-        </label>
-        <div class="sms-error" id="sms-error" role="alert"></div>
-      </div>
-      <button type="submit" class="form-submit">Request a free quote</button>
     </form>
 
-    <ul class="form-assurances">
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Binding written estimate</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Your details are never sold to brokers</li>
+    <ul class="form-assurances qf2-assurances">
+      <li><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><polyline points="20 6 9 17 4 12" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Binding written estimate</li>
+      <li><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Never sold to brokers</li>
     </ul>
   </div>
   </div>
@@ -470,6 +1729,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="trust-label">Customer support</div>
   </div>
 </div>
+
+<section id="how-it-works" class="illus-band">
+  <picture class="band-bg" aria-hidden="true">
+    <source media="(max-width: 768px)" srcset="/assets/images/gallery/street-loading-mobile.jpg" width="1100" height="1970" />
+    <img src="/assets/images/gallery/street-loading.jpg" alt="" loading="lazy" width="2200" height="1227" />
+  </picture>
+  <div class="section-header">
+    <div class="section-kicker">At a glance</div>
+    <h2>What a long-distance move <em>actually involves.</em></h2>
+    <p>Three things decide whether a Florida move lands well, and all three are settled before the truck arrives.</p>
+  </div>
+  <div class="services">
+    <div class="service-card illus-card">
+      <img class="illus" src="/assets/images/gallery/packing.png" alt="Hand truck stacked with packed cartons" width="900" height="560" loading="lazy" decoding="async" />
+      <h3>Packed for the distance</h3>
+      <p>A box that survives a 2,000-mile ride is built differently from one that crosses town. We pack to the lane, not to the room count.</p>
+    </div>
+    <div class="service-card illus-card">
+      <img class="illus" src="/assets/images/gallery/routes.png" alt="Map of the United States with a long-distance route marked" width="900" height="560" loading="lazy" decoding="async" />
+      <h3>Routed, not guessed</h3>
+      <p>Your Florida load joins a scheduled lane rather than waiting for a truck to happen past. That is what fixes the transit window before you book.</p>
+    </div>
+    <div class="service-card illus-card">
+      <img class="illus" src="/assets/images/gallery/transport.png" alt="Long-haul moving truck in 50STATEMOVERS livery" width="900" height="560" loading="lazy" decoding="async" />
+      <h3>Carried by our own crew</h3>
+      <p>The crew that loads your home is the crew that unloads it. No broker in the middle, no handoff to a carrier you have never spoken to.</p>
+    </div>
+  </div>
+</section>
 
 <!-- COVERAGE -->
 <section id="coverage" class="coverage-section">
@@ -599,37 +1887,37 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="services">
     <div class="service-card">
       <div class="service-num">01</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg></div>
+      <div class="service-illus"><img src="/assets/images/gallery/svc-long-distance.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
       <h3>Long Distance</h3>
       <p>Cross-country and interstate relocations. We coordinate logistics, customs paperwork, and destination unpacking — all door to door.</p>
     </div>
     <div class="service-card">
       <div class="service-num">02</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M20 7 9 18l-5-5"/></svg></div>
+      <div class="service-illus"><img src="/assets/images/gallery/svc-white-glove.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
       <h3>White Glove</h3>
       <p>The top tier. Concierge-level service: we'll pack, transport, unpack, arrange, and even hang the art on the walls before we leave.</p>
     </div>
     <div class="service-card">
       <div class="service-num">03</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V21H3V9.5Z"/><path d="M9 21v-8h6v8"/></svg></div>
+      <div class="service-illus"><img src="/assets/images/gallery/svc-residential.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
       <h3>Residential</h3>
       <p>From studio apartments to five-bedroom homes. We disassemble, transport, and reassemble — and we never leave before everything's in its place.</p>
     </div>
     <div class="service-card">
       <div class="service-num">04</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></div>
+      <div class="service-illus"><img src="/assets/images/gallery/svc-commercial.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
       <h3>Commercial</h3>
       <p>Office relocations handled after hours or over weekends, so your team is working from the new space on Monday morning — no downtime.</p>
     </div>
     <div class="service-card">
       <div class="service-num">05</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
+      <div class="service-illus"><img src="/assets/images/gallery/svc-packing.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
       <h3>Packing &amp; Crating</h3>
       <p>Museum-grade packing for art, antiques, and anything fragile. We build custom crates on site when off-the-shelf won't do.</p>
     </div>
     <div class="service-card">
       <div class="service-num">06</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+      <div class="service-illus"><img src="/assets/images/gallery/svc-storage.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
       <h3>Storage</h3>
       <p>Climate-controlled, 24-hour-monitored units in secure facilities. Short-term overflow or long-term, fully insured and inventoried throughout.</p>
     </div>
@@ -638,49 +1926,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- COSTS -->
 <section id="costs" class="coverage-section">
-  <div class="section-header">
-    <div class="section-kicker">Pricing</div>
-    <h2>What shapes the price of a <em>Florida</em> move.</h2>
-    <p>We don't publish a price list, because a number without a survey is a guess — and a guess is exactly what turns into a bigger bill on delivery day. Here's what actually moves the figure on a Florida move. Every one of these is itemized in your written quote before you sign, and the price we agree is the price you pay.</p>
-  </div>
-  <div class="services">
-    <div class="service-card">
-      <div class="service-num">01</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg></div>
-      <h3>Distance and lane</h3>
-      <p>Your route sets the floor. Our Florida lanes run from about 470 miles to Georgia out to roughly 2,570 miles to California. Sharing a trailer with other households costs less than a dedicated truck; a dedicated truck buys you a delivery date instead of a spread.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">02</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
-      <h3>Weight, not bedrooms</h3>
-      <p>Long-distance moves price on what your household actually weighs, not how many rooms it occupies. Two three-bedroom homes can differ by thousands of pounds. This is why we survey by video or in person before quoting rather than guessing from a bedroom count over the phone.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">03</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V21H3V9.5Z"/><path d="M9 21v-8h6v8"/></svg></div>
-      <h3>Access at both ends</h3>
-      <p>Whether a trailer can reach your door changes the job. Long carries, stairs, freight elevator reservations, street permits, and shuttle service where a tractor-trailer physically cannot fit are all real work — we check them at survey so they land in the quote instead of on move day.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">04</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></div>
-      <h3>How much packing you want</h3>
-      <p>Full packing is what most long-distance customers choose, and it is the single biggest factor in whether a load arrives intact — a professionally packed box is built for a 2,000-mile ride, not a car trip. Most land somewhere between, having us handle the kitchen, art, and anything fragile. Custom crating for art, antiques, and oversized items is quoted separately.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">05</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-      <h3>Storage between dates</h3>
-      <p>Move-out and move-in dates rarely line up. Storage-in-transit holds your inventoried goods until your date, and we quote that cost up front rather than letting it accrue quietly. Climate control is worth it for wood, leather, and electronics.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">06</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></div>
-      <h3>Valuation and protection</h3>
-      <p>Every interstate move includes the federally required minimum released-value protection at no extra charge. Full Value Protection — repair, replacement, or a cash settlement at current market value — costs more and is worth considering for a high-value inventory.</p>
+  <div class="spec-hero">
+    <img src="/assets/images/gallery/loading-ramp.jpg" alt="Two 50STATEMOVERS crew carrying a blanket-wrapped item up the ramp into a loaded truck, moving blankets and cartons stacked inside" loading="lazy" width="2000" height="1116" />
+    <div class="spec-hero-inner">
+      <div class="section-kicker">Pricing</div>
+      <h2>What shapes the price of a <em>Florida</em> move.</h2>
+      <p>We don't publish a price list, because a number without a survey is a guess — and a guess is exactly what turns into a bigger bill on delivery day. Here's what actually moves the figure on a Florida move. Every one of these is itemized in your written quote before you sign, and the price we agree is the price you pay.</p>
     </div>
   </div>
+<div class="spec-list">
+      <details class="spec-row js-collapse" open>
+        <summary><span class="spec-num">01</span><span class="spec-title">Distance and lane</span></summary>
+        <div class="spec-body">Your route sets the floor. Our Florida lanes run from about 470 miles to Georgia out to roughly 2,570 miles to California. Sharing a trailer with other households costs less than a dedicated truck; a dedicated truck buys you a delivery date instead of a spread.</div>
+      </details>
+      <details class="spec-row js-collapse" open>
+        <summary><span class="spec-num">02</span><span class="spec-title">Access at both ends</span></summary>
+        <div class="spec-body">Whether a trailer can reach your door changes the job. Long carries, stairs, freight elevator reservations, street permits, and shuttle service where a tractor-trailer physically cannot fit are all real work — we check them at survey so they land in the quote instead of on move day.</div>
+      </details>
+      <details class="spec-row js-collapse" open>
+        <summary><span class="spec-num">03</span><span class="spec-title">How much packing you want</span></summary>
+        <div class="spec-body">Full packing is what most long-distance customers choose, and it is the single biggest factor in whether a load arrives intact — a professionally packed box is built for a 2,000-mile ride, not a car trip. Most land somewhere between, having us handle the kitchen, art, and anything fragile. Custom crating for art, antiques, and oversized items is quoted separately.</div>
+      </details>
+      <details class="spec-row js-collapse" open>
+        <summary><span class="spec-num">04</span><span class="spec-title">Storage between dates</span></summary>
+        <div class="spec-body">Move-out and move-in dates rarely line up. Storage-in-transit holds your inventoried goods until your date, and we quote that cost up front rather than letting it accrue quietly. Climate control is worth it for wood, leather, and electronics.</div>
+      </details>
+      <details class="spec-row js-collapse" open>
+        <summary><span class="spec-num">05</span><span class="spec-title">Valuation and protection</span></summary>
+        <div class="spec-body">Every interstate move includes the federally required minimum released-value protection at no extra charge. Full Value Protection — repair, replacement, or a cash settlement at current market value — costs more and is worth considering for a high-value inventory.</div>
+      </details>
+    </div>
 </section>
 
 <!-- PROCESS -->
@@ -691,26 +1966,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p>Every state has its own access problems, weather windows, and rules. Here's what shapes a Florida move in practice.</p>
   </div>
   <div class="process-grid">
-    <div class="process-step">
-      <div class="step-num">STEP 01</div>
-      <h3>Roads &amp; access</h3>
-      <p>I-95 on the east coast, I-75 on the west, and I-4 across the middle carry nearly all Florida moving traffic, and I-4 through Orlando is among the most congested corridors in the Southeast. The defining access issue is vertical: condo towers from Miami Beach to Naples require a certificate of insurance, a reserved freight elevator, and often a move window restricted to weekday mornings. Gated and 55-plus communities add registration requirements on top of that. Main corridors: I-95, I-75, I-4, I-10, Florida's Turnpike.</p>
-    </div>
-    <div class="process-step">
-      <div class="step-num">STEP 02</div>
-      <h3>Timing your move</h3>
-      <p>The moving calendar here is inverted relative to most of the country. Winter and early spring are peak season as snowbirds and retirees arrive; June through November is hurricane season, when we build flexibility into coastal delivery windows and will not run a loaded trailer into a landfall forecast. Late spring — April and May — is often the best combination of weather and availability in Florida.</p>
-    </div>
-    <div class="process-step">
-      <div class="step-num">STEP 03</div>
-      <h3>Who is moving, and why</h3>
-      <p>Florida's inbound flow is enormous and comes primarily from New York, New Jersey, Illinois, Pennsylvania, and Ohio, concentrated in Tampa Bay, Southwest Florida, and Central Florida. What gets less attention is outbound volume: rising insurance premiums, HOA assessments, and coastal housing costs have pushed a steady stream of Florida households toward Texas, Tennessee, the Carolinas, and Georgia. The Villages and Southwest Florida remain overwhelmingly net inbound; South Florida is closer to balanced.</p>
-    </div>
-    <div class="process-step">
-      <div class="step-num">STEP 04</div>
-      <h3>Licensing to check</h3>
-      <p>Interstate moves out of Florida are federal: look for an active USDOT number and FMCSA authority. Ours are USDOT #4575745 and MC-1820728. Movers operating only inside the state answer instead to the Florida Department of Agriculture and Consumer Services (FDACS), which registers intrastate household-goods movers — a registration that is not authority to take your belongings across the line.</p>
-    </div>
+    <details class="process-step js-collapse" open>
+      <summary>
+        <span class="step-num">STEP 01</span>
+        <h3>Roads &amp; access</h3>
+      </summary>
+      <div class="step-body"><p>I-95 on the east coast, I-75 on the west, and I-4 across the middle carry nearly all Florida moving traffic, and I-4 through Orlando is among the most congested corridors in the Southeast. The defining access issue is vertical: condo towers from Miami Beach to Naples require a certificate of insurance, a reserved freight elevator, and often a move window restricted to weekday mornings. Gated and 55-plus communities add registration requirements on top of that. Main corridors: I-95, I-75, I-4, I-10, Florida's Turnpike.</p></div>
+    </details>
+    <details class="process-step js-collapse" open>
+      <summary>
+        <span class="step-num">STEP 02</span>
+        <h3>Timing your move</h3>
+      </summary>
+      <div class="step-body"><p>The moving calendar here is inverted relative to most of the country. Winter and early spring are peak season as snowbirds and retirees arrive; June through November is hurricane season, when we build flexibility into coastal delivery windows and will not run a loaded trailer into a landfall forecast. Late spring — April and May — is often the best combination of weather and availability in Florida.</p></div>
+    </details>
+    <details class="process-step js-collapse" open>
+      <summary>
+        <span class="step-num">STEP 03</span>
+        <h3>Who is moving, and why</h3>
+      </summary>
+      <div class="step-body"><p>Florida's inbound flow is enormous and comes primarily from New York, New Jersey, Illinois, Pennsylvania, and Ohio, concentrated in Tampa Bay, Southwest Florida, and Central Florida. What gets less attention is outbound volume: rising insurance premiums, HOA assessments, and coastal housing costs have pushed a steady stream of Florida households toward Texas, Tennessee, the Carolinas, and Georgia. The Villages and Southwest Florida remain overwhelmingly net inbound; South Florida is closer to balanced.</p></div>
+    </details>
+    <details class="process-step js-collapse" open>
+      <summary>
+        <span class="step-num">STEP 04</span>
+        <h3>Licensing to check</h3>
+      </summary>
+      <div class="step-body"><p>Interstate moves out of Florida are federal: look for an active USDOT number and FMCSA authority. Ours are USDOT #4575745 and MC-1820728. Movers operating only inside the state answer instead to the Florida Department of Agriculture and Consumer Services (FDACS), which registers intrastate household-goods movers — a registration that is not authority to take your belongings across the line.</p></div>
+    </details>
   </div>
 </section>
 
@@ -721,26 +2004,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2>What catches people out in <em>Florida.</em></h2>
     <p>Three things that regularly turn a straightforward Florida move into an expensive one. We check all three before quoting, so they land in the price rather than on move day.</p>
   </div>
-  <div class="services">
-    <div class="service-card">
-      <div class="service-num">01</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></div>
-      <h3>Condo and HOA approval</h3>
-      <p>Most Florida towers require an approved COI, a reserved elevator, and sometimes an association-approved move date. Approval can take a week or more. This is the single most common source of Florida move delays.</p>
+  <div class="note-list">
+      <details class="note-row js-collapse" open>
+        <summary>
+          <span class="note-num">01</span>
+          <h3>Condo and HOA approval</h3>
+        </summary>
+        <div class="note-body"><p>Most Florida towers require an approved COI, a reserved elevator, and sometimes an association-approved move date. Approval can take a week or more. This is the single most common source of Florida move delays.</p></div>
+      </details>
+      <details class="note-row js-collapse" open>
+        <summary>
+          <span class="note-num">02</span>
+          <h3>Hurricane-season contingencies</h3>
+        </summary>
+        <div class="note-body"><p>From June through November we track named storms against your route and dates. We would rather hold a load 48 hours than deliver into an evacuation zone, and your contract accounts for that.</p></div>
+      </details>
+      <details class="note-row js-collapse" open>
+        <summary>
+          <span class="note-num">03</span>
+          <h3>Humidity and long-term storage</h3>
+        </summary>
+        <div class="note-body"><p>Standard warehouse storage in Florida is hard on leather, wood, and upholstery. If your goods will be stored more than a few weeks, climate control is worth asking for.</p></div>
+      </details>
     </div>
-    <div class="service-card">
-      <div class="service-num">02</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></div>
-      <h3>Hurricane-season contingencies</h3>
-      <p>From June through November we track named storms against your route and dates. We would rather hold a load 48 hours than deliver into an evacuation zone, and your contract accounts for that.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">03</div>
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></div>
-      <h3>Humidity and long-term storage</h3>
-      <p>Standard warehouse storage in Florida is hard on leather, wood, and upholstery. If your goods will be stored more than a few weeks, climate control is worth asking for.</p>
-    </div>
-  </div>
 </section>
 
 <!-- GALLERY -->
@@ -751,6 +2037,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p>A look at the homes, offices, and cross-country relocations we've handled across the country.</p>
   </div>
   <div class="gallery-grid">
+    <div class="gallery-item gallery-lead">
+      <img src="/assets/images/gallery/crew-packing.jpg" alt="Three 50STATEMOVERS crew taping a carton, shrink-wrapping an armchair and wrapping a mattress in a Florida living room" loading="lazy" />
+      <div class="gallery-caption"><div class="label">On the job</div><div class="title">Wrapped and boxed before anything moves</div></div>
+    </div>
     <div class="gallery-item">
       <img src="/assets/images/trucks/truck-1.jpg" alt="50STATEMOVERS moving truck" loading="lazy" />
       <div class="gallery-caption"><div class="label">Our Fleet</div><div class="title">Ready for your move</div></div>
@@ -829,7 +2119,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <a class="state-item" href="/moving-from-idaho/"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Idaho</a>
   </div>
   <div class="section-cta">
-    <a href="/moving-companies-by-state/" class="nav-cta">See all 49 state moving guides →</a>
+    <a href="/moving-companies-by-state/" class="nav-cta">Show all 48 states →</a>
   </div>
 </section>
 
