@@ -1602,89 +1602,6 @@ nav.topnav.scrolled {
 }
 </style>`;
 
-/* ---------------------------------------------------------------- sky trial
- * Kansas only: every navy surface on the page becomes sky blue (#87ceeb, the
- * same sky the homepage "Free quotes" card uses). Loaded AFTER TRIAL_HEAD, so
- * these :root values win.
- *
- * Sky is a LIGHT ground, so this is not a hue swap — it inverts four sections
- * that were dark (cred bar, trust bar, process, gallery, contact strip,
- * footer, sticky CTA). Everything that painted cream text on navy is flipped
- * to deep ink here, or those sections would be unreadable. The terracotta
- * accent and the green call buttons are untouched.
- */
-const SKY_HEAD = `<style>
-:root {
-  --navy: #87ceeb;
-  --navy-deep: #6fc2e4;
-  --navy-soft: #a9dff5;
-  --navy-line: rgba(12, 34, 51, 0.22);
-  --navy-text: #1d4763;
-
-  /* The trial's blue was "the navy two steps lighter" — it follows the navy. */
-  --blue: #87ceeb;
-  --blue-deep: #6fc2e4;
-  --blue-line: rgba(12, 34, 51, 0.22);
-  --blue-text: #1d4763;
-}
-
-/* Sections that were dark now carry ink text. */
-.nav-cred,
-.trust-bar,
-.process-section,
-.gallery-section,
-.contact-strip,
-footer { color: #0c2233; }
-
-.nav-cred { color: #1b4462; }
-.trust-bar .tb-item,
-.trust-bar strong { color: #0c2233; }
-
-.process-section .section-header p,
-.process-step p,
-.cs-meta,
-.cs-text p,
-.footer-brand p,
-.footer-col a,
-.footer-bottom { color: #1d4763; }
-
-.process-section .section-header h2,
-.cs-text h2,
-.process-step h3 { color: #0c2233; }
-
-.gallery-section .section-header h2 { color: #0c2233; }
-.gallery-section .section-header p  { color: #1d4763; }
-.gallery-section .section-kicker    { color: #1b4462; }
-.gallery-section .section-kicker::before,
-.gallery-section .section-kicker::after { background: rgba(12, 34, 51, 0.3); }
-
-/* Outline button on the contact strip: white on sky is invisible, so it goes
-   ink-on-translucent-white the way it reads on the dark version. */
-.cs-email {
-  background: rgba(255, 255, 255, 0.45);
-  border-color: rgba(12, 34, 51, 0.35);
-  color: #0c2233;
-}
-.cs-email:hover {
-  background: rgba(255, 255, 255, 0.7);
-  border-color: rgba(12, 34, 51, 0.6);
-}
-
-.footer-brand .logo { color: #0c2233; }
-.footer-brand .logo-mark { background: #0c2233; }
-.footer-col a:hover { color: #0c2233; }
-/* The footer phone was --green on navy; on sky it needs the deeper step. */
-.footer-col a.footer-phone { color: var(--green-deep); }
-.footer-col a.footer-phone:hover { color: var(--green); }
-.social-link { color: #1d4763; border-color: rgba(12, 34, 51, 0.28); }
-
-.hc-dark { color: #0c2233; }
-.hc-dark .hc-label, .hc-dark .hc-val, .hc-dark .hc-sub { color: inherit; }
-
-/* Sticky bar sits on sky now; its two buttons keep their own colours. */
-.sticky-cta { border-top: 1px solid rgba(12, 34, 51, 0.18); }
-</style>`;
-
 function head({ title, description, canonical, schema, extraHead = '' }) {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -2014,7 +1931,7 @@ ${s.quirks.map((q, i) => `      <details class="note-row js-collapse" open>
     licensingFaq,
   ];
 
-  return `${head({ title, description, canonical, schema, extraHead: (TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '') + (s.slug === 'kansas' ? SKY_HEAD : '') })}
+  return `${head({ title, description, canonical, schema, extraHead: TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '' })}
 
 ${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
 
