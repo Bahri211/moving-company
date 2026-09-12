@@ -525,7 +525,6 @@ const FOOTER = `<section id="contact" class="contact-strip">
         <li><a href="${HUB_URL}">Movers by state</a></li>
         <li><a href="#gallery">Our work</a></li>
         <li><a href="#faq">FAQ</a></li>
-        <li><a href="mailto:careers@50statemovers.com">Careers</a></li>
       </ul>
     </div>
     <div class="footer-col">
