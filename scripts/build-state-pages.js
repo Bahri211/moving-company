@@ -312,15 +312,11 @@ ${cards}
 function illustratedRow(s) {
   const items = [
     ['packing.png', 'Hand truck stacked with packed cartons',
-     'Packed for the distance',
-     pick('bandPacking', s)],
+     pick('bandPackingTitle', s), pick('bandPacking', s)],
     ['routes.png', 'Map of the United States with a long-distance route marked',
-     'Routed, not guessed',
-     `Your ${esc(s.name)} load joins a scheduled lane rather than waiting for a ` +
-     `truck to happen past. That is what fixes the transit window before you book.`],
+     pick('bandRoutesTitle', s), pick('bandRoutes', s)],
     ['transport.png', 'Long-haul moving truck in 50STATEMOVERS livery',
-     'Carried by our own crew',
-     pick('bandCrew', s)],
+     pick('bandCrewTitle', s), pick('bandCrew', s)],
   ];
   return `<section id="how-it-works" class="illus-band">
   <picture class="band-bg" aria-hidden="true">
@@ -328,8 +324,8 @@ function illustratedRow(s) {
     <img src="/assets/images/gallery/street-loading.jpg" alt="" loading="lazy" width="2200" height="1227" />
   </picture>
   <div class="section-header">
-    <div class="section-kicker">At a glance</div>
-    <h2>What a long-distance move <em>actually involves.</em></h2>
+    <div class="section-kicker">${pick('bandKicker', s)}</div>
+    <h2>${pick('bandHead', s)}</h2>
     <p>${pick('bandLede', s)}</p>
   </div>
   <div class="services">
@@ -2058,7 +2054,7 @@ ${quirkCards}
 ${TRIAL_STATES.has(s.name)
   ? gallery(s).replace('<div class="gallery-grid">', `<div class="gallery-grid">
     <div class="gallery-item gallery-lead">
-      <img src="/assets/images/gallery/crew-packing.jpg" alt="Three 50STATEMOVERS crew taping a carton, shrink-wrapping an armchair and wrapping a mattress in a ${esc(s.name)} living room" loading="lazy" />
+      <img src="/assets/images/gallery/crew-packing.jpg" alt="Three 50STATEMOVERS crew taping a carton, shrink-wrapping an armchair and wrapping a mattress in ${a(s)} ${esc(s.name)} living room" loading="lazy" />
       <div class="gallery-caption"><div class="label">On the job</div><div class="title">Wrapped and boxed before anything moves</div></div>
     </div>`)
   : gallery(s)}

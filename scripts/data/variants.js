@@ -224,10 +224,52 @@ module.exports = {
   /* --------------------------------------------------------- illustrated band */
 
   bandLede: [
-    `Three things decide whether a {{state}} move lands well, and all three are settled before the truck arrives.`,
-    `Three decisions make or break a {{state}} move, and all three happen before loading day.`,
+    `Three things decide whether {{a}} {{state}} move lands well, and all three are settled before the truck arrives.`,
+    `Three decisions make or break {{a}} {{state}} move, and all three happen before loading day.`,
     `Whether {{a}} {{state}} move goes smoothly comes down to three things, each settled in advance.`,
-    `Three points carry a {{state}} move, and none of them are left to the morning of the job.`,
+    `Three points carry {{a}} {{state}} move, and none of them are left to the morning of the job.`,
+  ],
+
+  bandKicker: [
+    `At a glance`,
+    `The short version`,
+    `In brief`,
+    `The essentials`,
+  ],
+
+  bandHead: [
+    `What a long-distance move <em>actually involves.</em>`,
+    `What moving out of {{state}} <em>really takes.</em>`,
+    `The work behind a <em>long-haul move.</em>`,
+    `What we do with <em>{{state}}</em> loads.`,
+  ],
+
+  bandPackingTitle: [
+    `Packed for the distance`,
+    `Packed for the miles`,
+    `Built to travel`,
+    `Packed for the road ahead`,
+  ],
+
+  bandRoutesTitle: [
+    `Routed, not guessed`,
+    `On a scheduled lane`,
+    `Planned, not improvised`,
+    `A route, not a maybe`,
+  ],
+
+  bandCrewTitle: [
+    `Carried by our own crew`,
+    `One crew, both ends`,
+    `Our trucks, our people`,
+    `No brokers involved`,
+  ],
+
+  bandRoutes: [
+    `Your {{state}} load joins a scheduled lane rather than waiting for a truck to happen past. That is what fixes the transit window before you book.`,
+    `We run {{state}} on planned lanes, so your goods travel on a set schedule instead of waiting for a truck heading roughly your way. That's why the delivery window is known up front.`,
+    `Loads out of {{state}} go onto a route we already run. Nothing sits in a warehouse waiting for a half-empty trailer, which is how we can commit to a transit window before you sign.`,
+    `{{state}} shipments are slotted into an existing schedule rather than held until something passes through. The result is a delivery window you get in writing at booking.`,
   ],
 
   bandPacking: [
