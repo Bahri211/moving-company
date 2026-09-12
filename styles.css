@@ -163,6 +163,12 @@ nav.topnav.scrolled {
 
 .nav-cta:hover { background: var(--accent); }
 
+/* The nav button is the homepage's primary action, so it reads a step larger
+   than the shared default. Scoped to .home (set on <html> in index.html) —
+   the state pages and hub keep 0.85rem. Placed here rather than at the end of
+   the file so the narrow-desktop clamp at 769-960px still wins. */
+.home .topnav .nav-cta { font-size: 0.95rem; padding: 0.74rem 1.5rem; }
+
 /* Hamburger */
 .nav-toggle {
   display: none;
