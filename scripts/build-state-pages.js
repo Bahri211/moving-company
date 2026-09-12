@@ -581,9 +581,22 @@ const CRED_BAR = `<div class="nav-cred">
   <span class="cred-lead">Licensed &amp; insured · </span>${MC} · USDOT #${USDOT}
 </div>`;
 
+/* The hub's own section set — it has a destinations list where a state page
+   has pricing, and no costs section at all. */
+const TRIAL_HUB_NAV_LINKS = `<li><a href="#coverage">All states</a></li>
+    <li><a href="#routes">Destinations</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#faq">FAQ</a></li>`;
+
 const TRIAL_NAV = NAV.replace(
   /<li><a href="#services">[\s\S]*?<a href="#faq">FAQ<\/a><\/li>/g,
   TRIAL_NAV_LINKS);
+
+const TRIAL_HUB_NAV = NAV.replace(
+  /<li><a href="#services">[\s\S]*?<a href="#faq">FAQ<\/a><\/li>/g,
+  TRIAL_HUB_NAV_LINKS);
 
 /* --------------------------------------------- the state-page design */
 // Developed on New York as a trial, now on every state page. It still lives in
@@ -2152,9 +2165,10 @@ function hubPage() {
     },
   ];
 
-  return `${head({ title, description, canonical, schema })}
+  return `${head({ title, description, canonical, schema, extraHead: TRIAL_HEAD })}
 
-${NAV}
+${CRED_BAR}
+${TRIAL_HUB_NAV}
 
 <!-- HERO -->
 <header class="hero">
@@ -2236,7 +2250,7 @@ ${featured}
 </section>
 
 <!-- SERVICES -->
-${servicesSection(`Whether you're relocating an apartment or a full office, we tailor the approach to what you're actually moving — and where it needs to go. Every service below is available in all ${states.length} states we cover.`)}
+${servicesSection(`Whether you're relocating an apartment or a full office, we tailor the approach to what you're actually moving — and where it needs to go. Every service below is available in all ${states.length} states we cover.`, true)}
 
 <!-- PROCESS -->
 <section id="process" class="process-section">
