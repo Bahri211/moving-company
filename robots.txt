@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://50statemovers.com/sitemap.xml
+Sitemap: https://www.50statemovers.com/sitemap.xml

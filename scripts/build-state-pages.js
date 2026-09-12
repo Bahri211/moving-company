@@ -17,7 +17,7 @@ const VARIANTS = require('./data/variants.js');
 const TOP_CITIES = require('./data/top-cities.js');
 
 // Canonical origin for the live site. Change here if the site moves to www.
-const SITE = process.env.SITE_URL || 'https://50statemovers.com';
+const SITE = process.env.SITE_URL || 'https://www.50statemovers.com';
 const ROOT = path.join(__dirname, '..');
 const PHONE_DISPLAY = '+1 (888) 505-1086';
 const PHONE_HREF = '+18885051086';

@@ -130,5 +130,7 @@ If you add another way to serve the site, it needs the same mapping.
 
 ## Canonical origin
 
-`SITE` in `build-state-pages.js` defaults to `https://50statemovers.com`.
-Override per build with `SITE_URL=https://www.example.com npm run build:seo`.
+`SITE` in `build-state-pages.js` defaults to `https://www.50statemovers.com`
+— with the `www`, because that is what the live site serves: the apex
+307-redirects to it, so an apex canonical would point at a redirect.
+Override per build with `SITE_URL=https://example.com npm run build:seo`.
