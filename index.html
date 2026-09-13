@@ -100,60 +100,85 @@ src="https://www.facebook.com/tr?id=1413801450690954&ev=PageView&noscript=1"
      when promoting to the state pages. -->
 <style>
 .home .nav-left { display: flex; align-items: center; gap: 1.1rem; min-width: 0; }
-/* Reads as a credential, not a button: no fill, a hairline divider off the
-   logo, a seal and a two-line label naming the federal agency. */
 .fmcsa-badge {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  padding-left: 1.1rem;
-  border-left: 1px solid var(--line);
-  color: var(--ink);
+  gap: 0.55rem;
+  height: 38px;
+  padding: 0 0.95rem 0 0.3rem;
+  border-radius: 999px;
+  /* Gradient ring: the padding-box layer is the fill, the border-box layer
+     shows through the transparent 1px border as a green-to-navy edge. */
+  border: 1px solid transparent;
+  background:
+    radial-gradient(90% 140% at 0% 50%, rgba(63, 174, 107, 0.3), transparent 60%) padding-box,
+    linear-gradient(180deg, #1f3a5a, var(--navy) 55%, var(--navy-deep)) padding-box,
+    linear-gradient(120deg, rgba(95, 208, 139, 0.85), rgba(245, 240, 232, 0.18) 45%, rgba(95, 208, 139, 0.5)) border-box;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 10px 22px -12px rgba(12, 26, 43, 0.7),
+    0 2px 6px -2px rgba(12, 26, 43, 0.3);
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   white-space: nowrap;
-  cursor: default;
 }
-.fmcsa-badge .fb-seal { width: 34px; height: 38px; flex-shrink: 0; filter: drop-shadow(0 4px 6px rgba(12, 26, 43, 0.28)); }
-.fmcsa-badge .fb-label { display: flex; flex-direction: column; gap: 0.18rem; line-height: 1; }
-.fmcsa-badge .fb-eyebrow {
-  font-size: 0.58rem; font-weight: 600;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: #6b7c8f;
+/* Slow light sweep every few seconds, so the credential catches the eye
+   without asking to be clicked. */
+.fmcsa-badge::after {
+  content: "";
+  position: absolute; inset: 0;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.16) 50%, transparent 62%);
+  transform: translateX(-110%);
+  animation: fbSweep 6s ease-in-out 1.2s infinite;
+  pointer-events: none;
 }
-.fmcsa-badge .fb-main { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; font-weight: 700; letter-spacing: -0.005em; color: var(--navy); }
-.fmcsa-badge .fb-sep { color: #b9c3cd; font-weight: 400; }
-.fmcsa-badge .fb-active { display: inline-flex; align-items: center; gap: 0.35rem; color: var(--green-deep); }
+@keyframes fbSweep {
+  0% { transform: translateX(-110%); }
+  22%, 100% { transform: translateX(110%); }
+}
+.fmcsa-badge .fb-seal { width: 30px; height: 30px; flex-shrink: 0; filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.4)); }
+.fmcsa-badge .fb-label { display: inline-flex; align-items: center; gap: 0.45rem; }
+.fmcsa-badge .fb-verified { color: #fff; }
+.fmcsa-badge .fb-sep { color: rgba(168, 188, 210, 0.55); font-size: 0.8em; }
+.fmcsa-badge .fb-active { display: inline-flex; align-items: center; gap: 0.4rem; color: #7ddca3; }
 /* Live dot: MC authority is active */
 .fmcsa-badge .fb-dot {
-  position: relative;
   width: 7px; height: 7px; border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 0 0 rgba(63, 174, 107, 0.55);
+  background: #5fd08b;
+  box-shadow: 0 0 0 0 rgba(95, 208, 139, 0.6);
   animation: fbPulse 2.4s ease-out infinite;
 }
 @keyframes fbPulse {
-  0% { box-shadow: 0 0 0 0 rgba(63, 174, 107, 0.55); }
-  70%, 100% { box-shadow: 0 0 0 6px rgba(63, 174, 107, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(95, 208, 139, 0.6); }
+  70%, 100% { box-shadow: 0 0 0 6px rgba(95, 208, 139, 0); }
 }
-/* Narrow desktop: links and both buttons already fill the bar, so the badge
-   drops its label and keeps the seal. */
+/* Narrow desktop: links and both buttons already fill the bar, so the pill
+   drops its text and keeps the seal. */
 @media (min-width: 769px) and (max-width: 1180px) {
-  .home .nav-left { gap: 0.7rem; }
-  .fmcsa-badge { padding-left: 0.7rem; }
-  .fmcsa-badge .fb-label { display: none; }
+  .home .nav-left { gap: 0.6rem; }
+  .fmcsa-badge { width: 34px; height: 34px; padding: 0; border: 0; justify-content: center; background: none; box-shadow: none; }
+  .fmcsa-badge .fb-seal { width: 34px; height: 34px; }
+  .fmcsa-badge .fb-label, .fmcsa-badge::after { display: none; }
 }
 @media (max-width: 768px) {
   /* The logo art already carries the company name, so the text name
      gives its room to the badge on phones. */
   .home .logo-name { display: none; }
-  .home .nav-left { gap: 0.75rem; }
-  .fmcsa-badge { gap: 0.45rem; padding-left: 0.75rem; }
-  .fmcsa-badge .fb-seal { width: 27px; height: 30px; }
-  .fmcsa-badge .fb-eyebrow { font-size: 0.5rem; letter-spacing: 0.13em; }
-  .fmcsa-badge .fb-main { font-size: 0.74rem; gap: 0.3rem; }
+  .home .nav-left { gap: 0.7rem; }
+  .fmcsa-badge { height: 32px; padding: 0 0.7rem 0 0.2rem; gap: 0.4rem; font-size: 0.66rem; }
+  .fmcsa-badge .fb-seal { width: 25px; height: 25px; }
+  .fmcsa-badge .fb-label { gap: 0.35rem; }
+  .fmcsa-badge .fb-active { gap: 0.3rem; }
   .fmcsa-badge .fb-dot { width: 6px; height: 6px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .fmcsa-badge .fb-dot { animation: none; }
+  .fmcsa-badge::after, .fmcsa-badge .fb-dot { animation: none; }
 }
 </style>
 <script type="application/ld+json">
@@ -217,28 +242,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <img src="assets/images/48-state-movers-logo-removebg-preview.png" alt="50STATEMOVERS INC" class="logo-img" />
       <span class="logo-name">50STATEMOVERS INC</span>
     </a>
-    <span class="fmcsa-badge" role="img" aria-label="U.S. DOT and FMCSA: USDOT verified, MC authority active">
-      <svg class="fb-seal" viewBox="0 0 34 38" aria-hidden="true">
+    <span class="fmcsa-badge" role="img" aria-label="USDOT verified, MC authority active">
+      <svg class="fb-seal" viewBox="0 0 36 36" aria-hidden="true">
         <defs>
-          <linearGradient id="fbShield" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#1c3552"/>
-            <stop offset="1" stop-color="#0c1a2b"/>
-          </linearGradient>
-          <linearGradient id="fbCheck" x1="0" y1="0" x2="1" y2="1">
+          <linearGradient id="fbSealGrad" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0" stop-color="#5fd08b"/>
             <stop offset="1" stop-color="#2e8b57"/>
           </linearGradient>
         </defs>
-        <path d="M17 1 3 6.2v10.3C3 26 9 33.6 17 37c8-3.4 14-11 14-20.5V6.2z" fill="url(#fbShield)"/>
-        <path d="M17 4.3 6 8.4v8.1c0 7.6 4.7 13.8 11 16.8 6.3-3 11-9.2 11-16.8V8.4z" fill="none" stroke="#f5f0e8" stroke-opacity="0.35" stroke-width="0.8"/>
-        <circle cx="17" cy="18" r="7.4" fill="url(#fbCheck)"/>
-        <polyline points="13.6 18.2 16 20.6 20.6 15.8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M17 6.6l.7 1.4 1.5.2-1.1 1 .3 1.5-1.4-.7-1.4.7.3-1.5-1.1-1 1.5-.2z" fill="#f5f0e8" fill-opacity="0.85"/>
+        <polygon fill="url(#fbSealGrad)" points="18.00 0.50 20.97 3.09 24.70 1.83 26.44 5.36 30.37 5.63 30.64 9.56 34.17 11.30 32.91 15.03 35.50 18.00 32.91 20.97 34.17 24.70 30.64 26.44 30.37 30.37 26.44 30.64 24.70 34.17 20.97 32.91 18.00 35.50 15.03 32.91 11.30 34.17 9.56 30.64 5.63 30.37 5.36 26.44 1.83 24.70 3.09 20.97 0.50 18.00 3.09 15.03 1.83 11.30 5.36 9.56 5.63 5.63 9.56 5.36 11.30 1.83 15.03 3.09"/>
+        <circle cx="18" cy="18" r="12.2" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="0.8" stroke-dasharray="1.2 1.4"/>
+        <path d="M18 9.5 12 11.9v4.6c0 3.7 2.5 6.9 6 8.1 3.5-1.2 6-4.4 6-8.1v-4.6z" fill="#fff"/>
+        <polyline points="15.2 17.2 17.3 19.3 21 15.3" fill="none" stroke="#2e8b57" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      <span class="fb-label">
-        <span class="fb-eyebrow">U.S. DOT · FMCSA</span>
-        <span class="fb-main">USDOT Verified <span class="fb-sep" aria-hidden="true">•</span> <span class="fb-active">MC Active<span class="fb-dot" aria-hidden="true"></span></span></span>
-      </span>
+      <span class="fb-label"><span class="fb-verified">USDOT Verified</span> <span class="fb-sep" aria-hidden="true">•</span> <span class="fb-active">MC Active<span class="fb-dot" aria-hidden="true"></span></span></span>
     </span>
   </div>
   <ul class="nav-links">
