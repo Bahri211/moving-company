@@ -141,6 +141,7 @@
       body: JSON.stringify({ name: name, email: email, phone: phone, message: message }),
     }).then(function (res) {
       if (res.ok) {
+        gtag('event', 'conversion', {'send_to': 'AW-18314228447/zfVSCMKZ1PYcEN_l85xE'});
         form.innerHTML =
           '<div class="form-success">' +
           '<div class="success-icon">✓</div>' +
