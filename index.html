@@ -96,70 +96,77 @@ src="https://www.facebook.com/tr?id=1413801450690954&ev=PageView&noscript=1"
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-<!-- TRIAL: FMCSA badge under the quote form, homepage only. Move to styles.css
+<!-- TRIAL: FMCSA badge in the navbar, homepage only. Move to styles.css
      when promoting to the state pages. -->
 <style>
+.home .nav-left { display: flex; align-items: center; gap: 1.1rem; min-width: 0; }
 .fmcsa-badge {
   position: relative;
   overflow: hidden;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.85rem;
-  margin-top: 0.8rem;
-  padding: 0.7rem 0.8rem 0.7rem 0.75rem;
+  gap: 0.5rem;
+  height: 36px;
+  padding: 0 0.85rem 0 0.3rem;
+  border-radius: 999px;
   background:
-    radial-gradient(120% 140% at 0% 0%, rgba(63, 174, 107, 0.22), transparent 55%),
-    linear-gradient(135deg, var(--navy-soft), var(--navy) 55%, var(--navy-deep));
-  border-radius: 14px;
-  box-shadow: inset 0 0 0 1px var(--navy-line), 0 10px 24px -12px rgba(12, 26, 43, 0.55);
+    radial-gradient(120% 160% at 0% 50%, rgba(63, 174, 107, 0.28), transparent 60%),
+    linear-gradient(135deg, var(--navy-soft), var(--navy) 60%, var(--navy-deep));
+  box-shadow: inset 0 0 0 1px var(--navy-line), 0 8px 18px -10px rgba(12, 26, 43, 0.6);
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
   text-decoration: none;
-  color: var(--paper);
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s;
 }
-/* Light sweep across the card on hover */
+/* Light sweep across the pill on hover */
 .fmcsa-badge::after {
   content: "";
   position: absolute; inset: 0;
-  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.12) 50%, transparent 65%);
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.16) 50%, transparent 65%);
   transform: translateX(-100%);
   transition: transform 0.8s ease;
   pointer-events: none;
 }
-.fmcsa-badge:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px rgba(63, 174, 107, 0.45), 0 16px 30px -14px rgba(12, 26, 43, 0.6); }
+.fmcsa-badge:hover { transform: translateY(-1px); box-shadow: inset 0 0 0 1px rgba(63, 174, 107, 0.5), 0 12px 22px -10px rgba(12, 26, 43, 0.65); }
 .fmcsa-badge:hover::after { transform: translateX(100%); }
 .fmcsa-badge:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
-.fmcsa-badge .fb-seal { width: 46px; height: 46px; flex-shrink: 0; filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35)); }
-.fmcsa-badge .fb-text { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; line-height: 1.2; }
-.fmcsa-badge .fb-eyebrow {
-  font-size: 0.6rem; font-weight: 600;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--green);
+.fmcsa-badge .fb-seal { width: 28px; height: 28px; flex-shrink: 0; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35)); }
+.fmcsa-badge .fb-sep { color: var(--green); font-size: 0.9em; }
+.fmcsa-badge .fb-active { display: inline-flex; align-items: center; gap: 0.35rem; }
+/* Live dot: MC authority is active */
+.fmcsa-badge .fb-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #5fd08b;
+  box-shadow: 0 0 0 0 rgba(95, 208, 139, 0.6);
+  animation: fbPulse 2.4s ease-out infinite;
 }
-.fmcsa-badge .fb-title { font-family: var(--font-display); font-size: 1rem; font-weight: 500; color: #fff; }
-.fmcsa-badge .fb-ids { font-size: 0.68rem; color: var(--navy-text); letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
-.fmcsa-badge .fb-verify {
-  margin-left: auto; flex-shrink: 0;
-  display: inline-flex; align-items: center; gap: 0.3rem;
-  padding: 0.38rem 0.7rem;
-  border-radius: 999px;
-  background: rgba(245, 240, 232, 0.1);
-  box-shadow: inset 0 0 0 1px var(--navy-line);
-  font-size: 0.7rem; font-weight: 600; color: var(--paper);
-  transition: background 0.2s;
+@keyframes fbPulse {
+  0% { box-shadow: 0 0 0 0 rgba(95, 208, 139, 0.6); }
+  70%, 100% { box-shadow: 0 0 0 6px rgba(95, 208, 139, 0); }
 }
-.fmcsa-badge .fb-verify svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
-.fmcsa-badge:hover .fb-verify { background: var(--green-deep); }
-.form-enter .fmcsa-badge { animation: formFieldIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.99s both; }
-@media (max-width: 640px) {
-  .fmcsa-badge { margin-top: 0.6rem; padding: 0.55rem 0.6rem; gap: 0.6rem; }
-  .fmcsa-badge .fb-seal { width: 38px; height: 38px; }
-  .fmcsa-badge .fb-title { font-size: 0.88rem; }
-  .fmcsa-badge .fb-eyebrow { font-size: 0.55rem; letter-spacing: 0.1em; }
-  .fmcsa-badge .fb-verify { padding: 0.32rem 0.55rem; }
+/* Narrow desktop: links and both buttons already fill the bar, so the pill
+   drops its text and keeps the seal. */
+@media (min-width: 769px) and (max-width: 1180px) {
+  .home .nav-left { gap: 0.6rem; }
+  .fmcsa-badge { width: 34px; height: 34px; padding: 0; justify-content: center; background: none; box-shadow: none; }
+  .fmcsa-badge .fb-seal { width: 34px; height: 34px; }
+  .fmcsa-badge .fb-label, .fmcsa-badge::after { display: none; }
+}
+@media (max-width: 768px) {
+  /* The logo art already carries the company name, so the text name
+     gives its room to the badge on phones. */
+  .home .logo-name { display: none; }
+  .home .nav-left { gap: 0.7rem; }
+  .fmcsa-badge { height: 30px; padding: 0 0.6rem 0 0.2rem; gap: 0.35rem; font-size: 0.64rem; }
+  .fmcsa-badge .fb-seal { width: 24px; height: 24px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .fmcsa-badge, .fmcsa-badge::after { transition: none; }
   .fmcsa-badge:hover { transform: none; }
+  .fmcsa-badge .fb-dot { animation: none; }
 }
 </style>
 <script type="application/ld+json">
@@ -218,10 +225,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <span class="cred-lead">Licensed &amp; insured · </span>MC-1820728 · USDOT #4575745
 </div>
 <nav class="topnav">
-  <a href="/" class="logo" aria-label="50STATEMOVERS INC home">
-    <img src="assets/images/48-state-movers-logo-removebg-preview.png" alt="50STATEMOVERS INC" class="logo-img" />
-    <span class="logo-name">50STATEMOVERS INC</span>
-  </a>
+  <div class="nav-left">
+    <a href="/" class="logo" aria-label="50STATEMOVERS INC home">
+      <img src="assets/images/48-state-movers-logo-removebg-preview.png" alt="50STATEMOVERS INC" class="logo-img" />
+      <span class="logo-name">50STATEMOVERS INC</span>
+    </a>
+    <a class="fmcsa-badge" href="https://safer.fmcsa.dot.gov/query.asp?searchtype=ANY&amp;query_type=queryCarrierSnapshot&amp;query_param=USDOT&amp;query_string=4575745" target="_blank" rel="noopener" aria-label="USDOT verified, MC authority active. Verify USDOT 4575745 on the FMCSA website">
+      <svg class="fb-seal" viewBox="0 0 36 36" aria-hidden="true">
+        <defs>
+          <linearGradient id="fbSealGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#5fd08b"/>
+            <stop offset="1" stop-color="#2e8b57"/>
+          </linearGradient>
+        </defs>
+        <polygon fill="url(#fbSealGrad)" points="18.00 0.50 20.97 3.09 24.70 1.83 26.44 5.36 30.37 5.63 30.64 9.56 34.17 11.30 32.91 15.03 35.50 18.00 32.91 20.97 34.17 24.70 30.64 26.44 30.37 30.37 26.44 30.64 24.70 34.17 20.97 32.91 18.00 35.50 15.03 32.91 11.30 34.17 9.56 30.64 5.63 30.37 5.36 26.44 1.83 24.70 3.09 20.97 0.50 18.00 3.09 15.03 1.83 11.30 5.36 9.56 5.63 5.63 9.56 5.36 11.30 1.83 15.03 3.09"/>
+        <circle cx="18" cy="18" r="12.2" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="0.8" stroke-dasharray="1.2 1.4"/>
+        <path d="M18 9.5 12 11.9v4.6c0 3.7 2.5 6.9 6 8.1 3.5-1.2 6-4.4 6-8.1v-4.6z" fill="#fff"/>
+        <polyline points="15.2 17.2 17.3 19.3 21 15.3" fill="none" stroke="#2e8b57" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="fb-label">USDOT Verified <span class="fb-sep" aria-hidden="true">•</span> <span class="fb-active">MC Active<span class="fb-dot" aria-hidden="true"></span></span></span>
+    </a>
+  </div>
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
     <li><a href="#coverage">Coverage</a></li>
@@ -422,27 +446,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Your information is encrypted and secure</li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Your details are never sold to brokers</li>
     </ul>
-
-    <a class="fmcsa-badge" href="https://safer.fmcsa.dot.gov/query.asp?searchtype=ANY&amp;query_type=queryCarrierSnapshot&amp;query_param=USDOT&amp;query_string=4575745" target="_blank" rel="noopener" aria-label="FMCSA licensed interstate mover, USDOT 4575745, MC-1820728. Verify on the FMCSA website">
-      <svg class="fb-seal" viewBox="0 0 36 36" aria-hidden="true">
-        <defs>
-          <linearGradient id="fbSealGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#5fd08b"/>
-            <stop offset="1" stop-color="#2e8b57"/>
-          </linearGradient>
-        </defs>
-        <polygon fill="url(#fbSealGrad)" points="18.00 0.50 20.97 3.09 24.70 1.83 26.44 5.36 30.37 5.63 30.64 9.56 34.17 11.30 32.91 15.03 35.50 18.00 32.91 20.97 34.17 24.70 30.64 26.44 30.37 30.37 26.44 30.64 24.70 34.17 20.97 32.91 18.00 35.50 15.03 32.91 11.30 34.17 9.56 30.64 5.63 30.37 5.36 26.44 1.83 24.70 3.09 20.97 0.50 18.00 3.09 15.03 1.83 11.30 5.36 9.56 5.63 5.63 9.56 5.36 11.30 1.83 15.03 3.09"/>
-        <circle cx="18" cy="18" r="12.2" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="0.8" stroke-dasharray="1.2 1.4"/>
-        <path d="M18 9.5 12 11.9v4.6c0 3.7 2.5 6.9 6 8.1 3.5-1.2 6-4.4 6-8.1v-4.6z" fill="#fff"/>
-        <polyline points="15.2 17.2 17.3 19.3 21 15.3" fill="none" stroke="#2e8b57" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span class="fb-text">
-        <span class="fb-eyebrow">Registered with FMCSA</span>
-        <span class="fb-title">Licensed Interstate Mover</span>
-        <span class="fb-ids">USDOT #4575745 · MC-1820728</span>
-      </span>
-      <span class="fb-verify">Verify<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
-    </a>
   </div>
 
   </div>
