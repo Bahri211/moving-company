@@ -121,7 +121,7 @@
         btn.insertAdjacentElement('beforebegin', errDiv);
       }
       errDiv.textContent = msg;
-      btn.textContent = 'Request a free quote';
+      btn.textContent = 'Submit a free quote';
       btn.disabled = false;
     }
 

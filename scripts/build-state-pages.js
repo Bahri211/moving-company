@@ -456,7 +456,7 @@ function quoteForm(originState) {
         </label>
         <div class="sms-error" id="sms-error" role="alert"></div>
       </div>
-      <button type="submit" class="form-submit">Request a free quote</button>
+      <button type="submit" class="form-submit">Submit a free quote</button>
     </form>
 
     <ul class="form-assurances">
