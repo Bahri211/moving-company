@@ -573,27 +573,86 @@ function quoteFormSteps(originState) {
   </div>`;
 }
 
-const STEP_FORM_HEAD = `<link rel="preload" as="image" href="/assets/images/hero-bg-movers.jpg">
+const CHECK_BADGE = `<span class="ph-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>`;
+
+/* The photo hero's left column: one line and three checks instead of the long
+   intro, trust line and stat cards, which move to the section below. */
+function photoHeroLede(s) {
+  return `  <div class="hero-lede">
+    <p class="ph-sub fade-in delay-2">Fixed-price moves from ${esc(s.name)} to anywhere in the continental US.</p>
+    <ul class="ph-checks fade-in delay-3">
+      <li>${CHECK_BADGE}FMCSA licensed &amp; insured</li>
+      <li>${CHECK_BADGE}Fixed price, no hidden fees</li>
+      <li>${CHECK_BADGE}Free quote the same day</li>
+    </ul>
+  </div>`;
+}
+
+const PH_ICONS = {
+  price: `<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M7 9.5v5M17 9.5v5"/></svg>`,
+  shield: `<svg viewBox="0 0 24 24"><path d="M12 2.8 4.5 5.8v5.6c0 4.9 3.2 8.8 7.5 10 4.3-1.2 7.5-5.1 7.5-10V5.8z"/><polyline points="8.8 12.2 11 14.4 15.4 9.8"/></svg>`,
+  support: `<svg viewBox="0 0 24 24"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/><path d="M19 19a3 3 0 0 1-3 3h-3"/></svg>`,
+  cover: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.8 9.2c-.5-.9-1.6-1.4-2.8-1.4-1.6 0-2.8.8-2.8 2.1 0 2.9 5.8 1.4 5.8 4.3 0 1.3-1.3 2.2-3 2.2-1.3 0-2.5-.6-3-1.6M12 6.3v1.5M12 16.7v1.5"/></svg>`,
+};
+
+/* Replaces the navy trust bar on the photo-hero page: the hero is already dark
+   and the band after it is a dark photo, so this runs light — a white stats card
+   lifted over the hero's bottom edge, then the intro and two route facts. */
+function photoProof(s, longest) {
+  const stat = (icon, num, label) => `    <div class="ph-stat">
+      <span class="ph-stat-icon" aria-hidden="true">${PH_ICONS[icon]}</span>
+      <div><strong>${num}</strong><span>${label}</span></div>
+    </div>`;
+  return `<section class="ph-proof">
+  <div class="ph-stats">
+${stat('price', '100%', 'Fixed-price moves')}
+${stat('shield', '0.3%', 'Damage claim rate')}
+${stat('support', '24/7', 'Customer support')}
+${stat('cover', '$1M', 'Liability coverage')}
+  </div>
+
+  <div class="ph-about">
+    <div class="ph-about-text">
+      <span class="ph-kicker">Moving from ${esc(s.name)}</span>
+      <h2>What makes a ${esc(s.name)} move <em>different</em></h2>
+      <p>${esc(s.intro)}</p>
+    </div>
+    <div class="ph-facts">
+      <div class="ph-fact">
+        <span class="ph-fact-label">${esc(s.name)} cities served</span>
+        <strong>${s.cities.length}+</strong>
+        <span class="ph-fact-sub">${esc(s.cities.slice(0, 3).join(' · '))} and more</span>
+      </div>
+      <div class="ph-fact ph-fact-dark">
+        <span class="ph-fact-label">Busiest ${esc(s.abbr)} lane</span>
+        <strong>${esc(s.abbr)} → ${esc(longest.dest.abbr)}</strong>
+        <span class="ph-fact-sub">${esc(s.name)} to ${esc(longest.dest.name)} · ~${longest.miles.toLocaleString()} mi</span>
+      </div>
+    </div>
+  </div>
+</section>`;
+}
+
+const STEP_FORM_HEAD = `<link rel="preload" as="image" href="/assets/images/hero-bg-road.jpg">
 <style>
 /* Photo hero ---------------------------------------------------------------
-   The photo sits on a full-bleed layer behind the 1400px hero, darkest on the
-   left where the headline and copy sit, and fades to --navy at the bottom so it
-   runs straight into the trust bar. The clip is dropped: two large images
-   side by side competed. */
+   Truck on an open road behind the full width of the hero. The wash is darkest
+   on the left under the headline and opens up to the right, where the truck
+   and the sky show around the form. The left column is only a headline, one
+   line and three checks. */
 body { overflow-x: clip; }
 .hero.hero-photo {
   isolation: isolate;
   grid-template-areas:
     "content form"
-    "lede    form"
-    "cards   cards";
-  grid-template-rows: auto auto auto;
-  /* The stock hero fills the viewport and stretches its rows to do it, which
-     opened a gap under the headline once the card got shorter. */
-  align-content: start;
-  min-height: auto;
-  padding-top: calc(var(--nav-h) + 2.5rem);
-  padding-bottom: 4.5rem;
+    "lede    form";
+  grid-template-rows: auto auto;
+  column-gap: 4rem;
+  row-gap: 1.1rem;
+  align-content: center;
+  min-height: min(840px, 100vh);
+  padding-top: calc(var(--nav-h) + 3rem);
+  padding-bottom: 8rem;
 }
 .hero.hero-photo::before {
   top: 0; bottom: 0; right: auto;
@@ -602,18 +661,82 @@ body { overflow-x: clip; }
   opacity: 1;
   z-index: -1;
   background:
-    linear-gradient(90deg, rgba(12, 26, 43, 0.93) 0%, rgba(12, 26, 43, 0.8) 45%, rgba(12, 26, 43, 0.5) 100%),
-    linear-gradient(180deg, rgba(18, 38, 63, 0) 55%, var(--navy) 100%),
-    var(--navy-deep) url('/assets/images/hero-bg-movers.jpg') center 40% / cover no-repeat;
+    linear-gradient(90deg, rgba(9, 20, 34, 0.92) 0%, rgba(9, 20, 34, 0.78) 38%, rgba(9, 20, 34, 0.3) 72%, rgba(9, 20, 34, 0.4) 100%),
+    linear-gradient(180deg, rgba(9, 20, 34, 0.35) 0%, rgba(9, 20, 34, 0) 30%, rgba(9, 20, 34, 0) 70%, rgba(9, 20, 34, 0.5) 100%),
+    var(--navy-deep) url('/assets/images/hero-bg-road.jpg') 70% 62% / cover no-repeat;
 }
-.hero-photo h1 { color: #fff; }
+.hero-photo .hero-content { align-self: end; }
+.hero-photo .hero-lede { align-self: start; }
+.hero-photo h1 { color: #fff; text-shadow: 0 2px 24px rgba(0, 0, 0, 0.3); }
 .hero-photo h1 em { color: #f4a37f; }
-.hero-photo .hero-lede > p { color: rgba(245, 240, 232, 0.86); }
-.hero-photo .ht-item { color: rgba(245, 240, 232, 0.85); }
-.hero-photo .ht-item strong { color: #fff; }
-.hero-photo .ht-divider { background: rgba(255, 255, 255, 0.25); }
-.hero-photo .ht-check { stroke: #7ddca3; }
-.hero-photo .ht-dot { background: #5fd08b; box-shadow: 0 0 0 3px rgba(95, 208, 139, 0.25); }
+.hero-photo .ph-sub {
+  max-width: 30rem;
+  margin: 0 0 1.6rem;
+  font-size: 1.2rem;
+  line-height: 1.55;
+  color: rgba(245, 240, 232, 0.9);
+}
+.ph-checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.8rem; }
+.ph-checks li { display: flex; align-items: center; gap: 0.7rem; font-size: 1rem; font-weight: 500; color: #fff; }
+.ph-check {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(95, 208, 139, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(95, 208, 139, 0.55);
+}
+.ph-check svg { width: 13px; height: 13px; fill: none; stroke: #7ddca3; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Proof section --------------------------------------------------------- */
+/* flow-root keeps the stats card's negative margin inside the section; it had
+   collapsed through and pulled the cream ground up over the hero instead. */
+.ph-proof { position: relative; display: flow-root; background: var(--paper); padding: 0 2rem 5.5rem; }
+.ph-stats {
+  position: relative; z-index: 3;
+  max-width: 1240px;
+  margin: -4.75rem auto 0;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  padding: 1.6rem 0.75rem;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 34px 70px -34px rgba(12, 26, 43, 0.45), 0 0 0 1px rgba(12, 26, 43, 0.05);
+}
+.ph-stat { display: flex; align-items: center; gap: 0.95rem; padding: 0.35rem 1.5rem; }
+.ph-stat + .ph-stat { border-left: 1px solid #ece6dc; }
+.ph-stat-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; flex-shrink: 0;
+  border-radius: 14px;
+  background: #e9f4ed;
+}
+.ph-stat-icon svg { width: 24px; height: 24px; fill: none; stroke: var(--green); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.ph-stat strong { display: block; font-size: 1.7rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--navy); }
+.ph-stat div > span { display: block; margin-top: 0.15rem; font-size: 0.82rem; color: var(--muted); }
+
+.ph-about {
+  max-width: 1240px;
+  margin: 4.5rem auto 0;
+  display: grid; grid-template-columns: 1.35fr 1fr;
+  gap: 4rem; align-items: center;
+}
+.ph-kicker { display: block; margin-bottom: 0.7rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green); }
+.ph-about h2 { margin: 0 0 1.1rem; font-size: clamp(1.8rem, 2.8vw, 2.5rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.12; color: var(--ink); }
+.ph-about h2 em { font-style: normal; color: var(--accent); }
+.ph-about p { max-width: 40rem; font-size: 1.05rem; line-height: 1.75; color: var(--ink-soft); }
+.ph-facts { display: grid; gap: 1rem; }
+.ph-fact {
+  padding: 1.4rem 1.6rem;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(12, 26, 43, 0.06), 0 18px 40px -28px rgba(12, 26, 43, 0.35);
+}
+.ph-fact-label { display: block; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase; color: var(--muted); }
+.ph-fact strong { display: block; margin: 0.45rem 0 0.3rem; font-size: 2rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1; color: var(--navy); }
+.ph-fact-sub { display: block; font-size: 0.86rem; color: var(--ink-soft); }
+.ph-fact-dark { background: var(--navy); box-shadow: 0 18px 40px -24px rgba(12, 26, 43, 0.6); }
+.ph-fact-dark .ph-fact-label { color: #a8bcd2; }
+.ph-fact-dark strong { color: #fff; }
+.ph-fact-dark .ph-fact-sub { color: rgba(245, 240, 232, 0.8); }
 
 /* Step form card -----------------------------------------------------------
    Plain white on the photo: a heading, a step count, the fields and one line
@@ -694,21 +817,33 @@ body { overflow-x: clip; }
 }
 .qs-secure svg { width: 13px; height: 13px; fill: none; stroke: var(--green); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 
+@media (max-width: 1100px) {
+  .hero.hero-photo { column-gap: 2rem; }
+  .ph-stat { padding: 0.35rem 0.9rem; gap: 0.7rem; }
+  .ph-stat-icon { width: 40px; height: 40px; }
+  .ph-stat strong { font-size: 1.4rem; }
+}
 @media (max-width: 768px) {
   .hero.hero-photo {
-    grid-template-areas: "content" "form" "lede" "cards";
+    grid-template-areas: "content" "form" "lede";
     grid-template-rows: auto;
+    align-content: start;
+    min-height: auto;
     padding-top: calc(var(--nav-h) + 1.25rem);
+    padding-bottom: 6rem;
     row-gap: 1rem;
   }
   .hero.hero-photo::before {
     background:
-      linear-gradient(180deg, rgba(12, 26, 43, 0.72) 0%, rgba(12, 26, 43, 0.88) 50%, var(--navy) 100%),
-      var(--navy-deep) url('/assets/images/hero-bg-movers.jpg') 60% top / cover no-repeat;
+      linear-gradient(180deg, rgba(9, 20, 34, 0.6) 0%, rgba(9, 20, 34, 0.82) 45%, rgba(9, 20, 34, 0.9) 100%),
+      var(--navy-deep) url('/assets/images/hero-bg-road.jpg') 72% center / cover no-repeat;
   }
   /* The accent rule tied the copy to the clip above it as a caption; with the
      clip gone it has nothing to caption. */
   .hero-photo .hero-lede { border-left: 0; padding-left: 0; }
+  .hero-photo .ph-sub { font-size: 1rem; margin-bottom: 0.9rem; }
+  .ph-checks { gap: 0.55rem; }
+  .ph-checks li { font-size: 0.92rem; }
   .hero-form-wrap.qs-card { padding: 1.15rem 1.1rem 1rem; border-radius: 18px; }
   .qs-card .qs-header h3 { font-size: 1.35rem; }
   .qs-bar { margin-bottom: 1rem; }
@@ -716,6 +851,21 @@ body { overflow-x: clip; }
   .qs-card .form-row-2 { gap: 0.6rem; }
   .qs-card .form-row input,
   .qs-card .form-row select { min-height: 48px; border: 1px solid #ddd6cb; background-color: #faf8f4; }
+
+  .ph-proof { padding: 0 1.25rem 3.5rem; }
+  .ph-stats { margin-top: -4rem; grid-template-columns: 1fr 1fr; padding: 0.4rem; border-radius: 18px; }
+  .ph-stat { flex-direction: column; text-align: center; gap: 0.5rem; padding: 1rem 0.4rem; }
+  .ph-stat + .ph-stat { border-left: 0; }
+  .ph-stat:nth-child(even) { border-left: 1px solid #ece6dc; }
+  .ph-stat:nth-child(n+3) { border-top: 1px solid #ece6dc; }
+  .ph-stat-icon { width: 40px; height: 40px; border-radius: 12px; }
+  .ph-stat-icon svg { width: 20px; height: 20px; }
+  .ph-stat strong { font-size: 1.35rem; }
+  .ph-stat div > span { font-size: 0.74rem; }
+  .ph-about { grid-template-columns: 1fr; gap: 1.75rem; margin-top: 2.75rem; }
+  .ph-about p { font-size: 0.98rem; }
+  .ph-fact { padding: 1.1rem 1.25rem; }
+  .ph-fact strong { font-size: 1.7rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .qs-step.is-active { animation: none; }
@@ -2234,7 +2384,12 @@ ${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
     </div>
   </div>
 
-  <div class="hero-lede">
+${STEP_FORM_STATES.has(s.name) ? `${photoHeroLede(s)}
+
+${quoteFormSteps(s)}
+</header>
+
+${photoProof(s, longest)}` : `  <div class="hero-lede">
     <p class="fade-in delay-2">
       ${esc(s.intro)}
     </p>
@@ -2249,7 +2404,7 @@ ${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
     </div>
   </div>
 
-${STEP_FORM_STATES.has(s.name) ? '' : HERO_VIDEO}
+${HERO_VIDEO}
 
   <div class="hero-stat-cards fade-in delay-3">
     <div class="hero-card hc-light float">
@@ -2274,10 +2429,10 @@ ${STEP_FORM_STATES.has(s.name) ? '' : HERO_VIDEO}
     </div>
   </div>
 
-${STEP_FORM_STATES.has(s.name) ? quoteFormSteps(s) : quoteForm(s)}
+${quoteForm(s)}
 </header>
 
-${TRUST_BAR}
+${TRUST_BAR}`}
 ${TRIAL_STATES.has(s.name) ? `\n${illustratedRow(s)}\n` : ''}
 <!-- COVERAGE -->
 <section id="coverage" class="coverage-section">
