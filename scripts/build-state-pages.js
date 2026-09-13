@@ -487,6 +487,228 @@ function quoteForm(originState) {
 
 // Footer is identical to index.html except the Company column, which points at
 // the state hub rather than a same-page anchor.
+/* ------------------------------------------- step form test (West Virginia)
+   A/B-style trial of the multi-step quote form many movers use: two fields per
+   screen (route → move details → contact), email only with no phone number and
+   so no SMS consent, on a photo-backed navy card. Gated on its own set so the
+   other state pages keep the eight-field form. site.js drives the steps and
+   reports each one to GA as a quote_form_step event. */
+const STEP_FORM_STATES = new Set(['West Virginia']);
+
+function quoteFormSteps(originState) {
+  return `  <div class="hero-form-col form-enter">
+  <div class="hero-form-wrap qf-photo" id="get-quote">
+    <div class="hero-form-header">
+      <span class="qs-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>3 quick steps · under a minute</span>
+      <h3>Get a free quote</h3>
+      <p>Fixed price · no hidden fees · reply within same day</p>
+    </div>
+    <form class="quote-form qs-form" id="quote-form" data-steps novalidate>
+      <div class="qs-progress">
+        <div class="qs-head" aria-live="polite">
+          <span class="qs-count">Step <span id="qs-num">1</span> of 3</span>
+          <span class="qs-title" id="qs-title">Where are you moving?</span>
+        </div>
+        <div class="qs-bar" aria-hidden="true"><i class="is-done"></i><i></i><i></i></div>
+      </div>
+
+      <fieldset class="qs-step is-active" data-title="Where are you moving?">
+        <div class="form-row form-row-2">
+          <div>
+            <label for="qf-from">Moving from</label>
+            <select id="qf-from"><option value="">State…</option>${stateOptions(originState && originState.name)}</select>
+            <div class="field-error" id="error-from" role="alert"></div>
+          </div>
+          <div>
+            <label for="qf-to">Moving to</label>
+            <select id="qf-to"><option value="">State…</option>${stateOptions(null)}</select>
+            <div class="field-error" id="error-to" role="alert"></div>
+          </div>
+        </div>
+        <button type="button" class="form-submit qs-next">Next step</button>
+      </fieldset>
+
+      <fieldset class="qs-step" data-title="Tell us about your move" hidden>
+        <div class="form-row form-row-2">
+          <div>
+            <label for="qf-size">Home size</label>
+            <select id="qf-size">
+              <option value="">Size…</option>
+              <option>Studio</option>
+              <option>1 Bedroom</option>
+              <option>2 Bedrooms</option>
+              <option>3 Bedrooms</option>
+              <option>4 Bedrooms</option>
+              <option>5+ Bedrooms</option>
+              <option>Office / Commercial</option>
+            </select>
+          </div>
+          <div>
+            <label for="qf-date">Move date</label>
+            <input type="text" id="qf-date" placeholder="MM/DD/YYYY" autocomplete="off" />
+          </div>
+        </div>
+        <div class="qs-nav">
+          <button type="button" class="qs-back" aria-label="Back to step 1">←</button>
+          <button type="button" class="form-submit qs-next">Next step</button>
+        </div>
+      </fieldset>
+
+      <fieldset class="qs-step" data-title="Where should we send your quote?" hidden>
+        <div class="form-row form-row-2">
+          <div>
+            <label for="qf-name">Your name</label>
+            <input type="text" id="qf-name" placeholder="Jane Doe" autocomplete="name" />
+            <div class="field-error" id="error-name" role="alert"></div>
+          </div>
+          <div>
+            <label for="qf-email">Email address</label>
+            <input type="email" id="qf-email" placeholder="you@email.com" autocomplete="email" />
+            <div class="field-error" id="error-email" role="alert"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="qf-notes">Special items <span class="qs-opt">(optional)</span></label>
+          <input type="text" id="qf-notes" placeholder="Piano, antiques…" />
+        </div>
+        <div class="qs-nav">
+          <button type="button" class="qs-back" aria-label="Back to step 2">←</button>
+          <button type="submit" class="form-submit">Get my free quote</button>
+        </div>
+      </fieldset>
+    </form>
+
+    <ul class="form-assurances">
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Your information is encrypted and secure</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Your details are never sold to brokers</li>
+    </ul>
+  </div>
+  </div>`;
+}
+
+const STEP_FORM_HEAD = `<link rel="preload" as="image" href="/assets/images/form-bg-movers.jpg">
+<style>
+/* Photo-backed card: the movers photo shows through at the top behind the
+   heading and fades to near-solid navy behind the fields. */
+.hero-form-wrap.qf-photo {
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--navy-deep) url('/assets/images/form-bg-movers.jpg') 58% 35% / cover no-repeat;
+  color: #fff;
+  padding-top: 7.5rem;
+  box-shadow: 0 48px 90px -24px rgba(12, 26, 43, 0.55), 0 2px 12px -4px rgba(12, 26, 43, 0.2);
+}
+.hero-form-wrap.qf-photo::before {
+  content: "";
+  position: absolute; inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg,
+    rgba(12, 26, 43, 0.15) 0%,
+    rgba(12, 26, 43, 0.55) 22%,
+    rgba(12, 26, 43, 0.9) 42%,
+    rgba(12, 26, 43, 0.96) 100%);
+}
+.qf-photo .hero-form-header { border-bottom-color: rgba(255, 255, 255, 0.14); }
+.qf-photo .hero-form-header h3 { color: #fff; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
+.qf-photo .hero-form-header p { color: rgba(245, 240, 232, 0.78); }
+.qs-chip {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  margin-bottom: 0.7rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(12, 26, 43, 0.55);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em;
+  color: #fff;
+}
+.qs-chip svg { width: 13px; height: 13px; fill: none; stroke: #7ddca3; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Progress */
+.qs-progress { margin-bottom: 1rem; }
+.qs-head { display: flex; flex-direction: column; gap: 0.2rem; }
+.qs-count { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #7ddca3; }
+.qs-title { font-size: 1.12rem; font-weight: 600; letter-spacing: -0.01em; color: #fff; }
+.qs-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 0.75rem; }
+.qs-bar i { height: 4px; border-radius: 999px; background: rgba(255, 255, 255, 0.16); transition: background 0.35s ease; }
+.qs-bar i.is-done { background: linear-gradient(90deg, #5fd08b, #3fae6b); }
+
+/* Steps */
+.qs-step { border: 0; margin: 0; padding: 0; min-width: 0; }
+.qs-step.is-active { animation: qsIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes qsIn { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+.form-enter .qf-photo .qs-step .form-submit { animation: none; }
+.qf-photo .form-row { margin-bottom: 0.9rem; }
+.qf-photo .form-row-2 { gap: 0.8rem; }
+
+/* Fields: white boxes read cleanly on the dark photo at every width. */
+.qf-photo .form-row label { color: rgba(245, 240, 232, 0.9); font-size: 0.86rem; margin-bottom: 0.35rem; }
+.qf-photo .form-row > div:focus-within > label,
+.qf-photo .form-row:focus-within > label { color: #fff; }
+.qf-photo .qs-opt { font-weight: 400; color: rgba(245, 240, 232, 0.55); }
+.qf-photo .form-row input,
+.qf-photo .form-row select {
+  min-height: 48px;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.97);
+  color: var(--ink);
+  font-size: 1rem;
+}
+.qf-photo .form-row select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7f6f' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  padding-right: 2.2rem;
+}
+.qf-photo .form-row input:hover,
+.qf-photo .form-row select:hover { border-color: rgba(125, 220, 163, 0.6); }
+.qf-photo .form-row input:focus,
+.qf-photo .form-row select:focus {
+  border-color: #5fd08b;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(95, 208, 139, 0.32);
+}
+.qf-photo .field-error { color: #ffa493; }
+.qf-photo .form-submit-error { color: #ffd2c9; background: rgba(192, 57, 43, 0.25); border-color: rgba(255, 164, 147, 0.4); }
+
+/* Back + next row */
+.qs-nav { display: flex; gap: 0.6rem; align-items: stretch; margin-top: 0.65rem; }
+.qs-nav .form-submit { flex: 1; margin-top: 0; }
+.qs-back {
+  flex: 0 0 52px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.qs-back:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.4); }
+.qs-back:focus-visible { outline: 2px solid #7ddca3; outline-offset: 2px; }
+
+.qf-photo .form-assurances { border-top-color: rgba(255, 255, 255, 0.14); }
+.qf-photo .form-assurances li { color: rgba(245, 240, 232, 0.72); }
+.qf-photo .form-assurances svg { stroke: #7ddca3; }
+.qf-photo .form-success h3 { color: #fff; }
+.qf-photo .form-success p { color: rgba(245, 240, 232, 0.85); }
+.qf-photo .form-success a { color: #7ddca3; }
+
+@media (max-width: 768px) {
+  .hero-form-wrap.qf-photo { position: relative; padding-top: 5.5rem; }
+  .qf-photo .form-row label { font-size: 0.86rem; }
+  .qf-photo .form-row input,
+  .qf-photo .form-row select { min-height: 46px; background-color: rgba(255, 255, 255, 0.97); border: 1px solid transparent; }
+  .qf-photo .form-assurances li { font-size: 0.68rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .qs-step.is-active { animation: none; }
+}
+</style>`;
+
 const FOOTER = `<section id="contact" class="contact-strip">
   <div class="contact-strip-inner">
     <div class="cs-text">
@@ -1987,7 +2209,7 @@ ${s.quirks.map((q, i) => `      <details class="note-row js-collapse" open>
     licensingFaq,
   ];
 
-  return `${head({ title, description, canonical, schema, extraHead: TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '' })}
+  return `${head({ title, description, canonical, schema, extraHead: (TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '') + (STEP_FORM_STATES.has(s.name) ? STEP_FORM_HEAD : '') })}
 
 ${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
 
@@ -2039,7 +2261,7 @@ ${HERO_VIDEO}
     </div>
   </div>
 
-${quoteForm(s)}
+${STEP_FORM_STATES.has(s.name) ? quoteFormSteps(s) : quoteForm(s)}
 </header>
 
 ${TRUST_BAR}

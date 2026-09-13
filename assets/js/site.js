@@ -66,6 +66,41 @@
   var setError = function (id, msg) { var el = $(id); if (el) el.textContent = msg; };
   var clearError = function (id) { setError(id, ''); };
 
+  // Step form (the West Virginia test): route, then move details, then contact.
+  // Only the route is required to move on; each step shown is reported to GA.
+  var steps = form.hasAttribute('data-steps') ? [].slice.call(form.querySelectorAll('.qs-step')) : null;
+  var current = 0;
+  var track = function (name, params) { if (typeof gtag === 'function') gtag('event', name, params); };
+
+  function showStep(i) {
+    steps.forEach(function (el, k) { el.hidden = k !== i; el.classList.toggle('is-active', k === i); });
+    [].forEach.call(form.querySelectorAll('.qs-bar i'), function (bar, k) { bar.classList.toggle('is-done', k <= i); });
+    $('qs-num').textContent = i + 1;
+    $('qs-title').textContent = steps[i].getAttribute('data-title');
+    current = i;
+    // Mouse users land in the first field; touch skips it so no keyboard pops up.
+    var first = steps[i].querySelector('select, input');
+    if (first && window.matchMedia('(pointer: fine)').matches) first.focus({ preventScroll: true });
+  }
+
+  function nextStep() {
+    if (current === 0) {
+      var ok = true;
+      if (!$('qf-from').value) { setError('error-from', 'Please select your origin state.'); ok = false; }
+      if (!$('qf-to').value) { setError('error-to', 'Please select your destination state.'); ok = false; }
+      if (!ok) return;
+    }
+    showStep(current + 1);
+    track('quote_form_step', { step: current + 1, form_variant: 'steps_email_only' });
+  }
+
+  if (steps) {
+    form.addEventListener('click', function (e) {
+      if (e.target.closest('.qs-next')) nextStep();
+      else if (e.target.closest('.qs-back')) showStep(current - 1);
+    });
+  }
+
   // Planned move date: a native date field draws its placeholder and value in
   // the visitor's OS language (Arabic on an Arabic Mac, etc.). It rests as a
   // text field with an English MM/DD/YYYY hint, becomes a real date field when
@@ -116,12 +151,15 @@
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
+    // Enter pressed on an earlier step advances instead of submitting.
+    if (steps && current < steps.length - 1) { nextStep(); return; }
 
     var from = $('qf-from').value;
     var to = $('qf-to').value;
     var name = $('qf-name').value.trim();
     var email = $('qf-email').value.trim();
-    var phone = $('qf-phone').value.trim();
+    var phoneEl = $('qf-phone');
+    var phone = phoneEl ? phoneEl.value.trim() : '';
     var valid = true;
 
     if (!from) { setError('error-from', 'Please select your origin state.'); valid = false; }
@@ -130,8 +168,8 @@
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setError('error-email', 'Please enter a valid email address.'); valid = false;
     }
-    if (!phone) { setError('error-phone', 'Please enter your phone number.'); valid = false; }
-    if (!sms.checked) {
+    if (phoneEl && !phone) { setError('error-phone', 'Please enter your phone number.'); valid = false; }
+    if (sms && !sms.checked) {
       setError('sms-error', 'Please agree to receive text messages to continue.'); valid = false;
     }
 
@@ -141,7 +179,8 @@
       return;
     }
 
-    var btn = form.querySelector('.form-submit');
+    var btn = form.querySelector('button[type="submit"]');
+    var btnLabel = btn.textContent;
     btn.textContent = 'Sending…';
     btn.disabled = true;
 
@@ -153,7 +192,7 @@
         btn.insertAdjacentElement('beforebegin', errDiv);
       }
       errDiv.textContent = msg;
-      btn.textContent = 'Submit';
+      btn.textContent = btnLabel;
       btn.disabled = false;
     }
 
@@ -162,8 +201,9 @@
       'Moving to: ' + to,
       $('qf-size').value ? 'Home size: ' + $('qf-size').value : null,
       $('qf-date').value ? 'Planned move date: ' + $('qf-date').value : null,
-      $('qf-notes').value.trim() ? 'Notes: ' + $('qf-notes').value.trim() : null,
-      'SMS opt-in: ' + (sms.checked ? 'Yes' : 'No'),
+      $('qf-notes') && $('qf-notes').value.trim() ? 'Notes: ' + $('qf-notes').value.trim() : null,
+      sms ? 'SMS opt-in: ' + (sms.checked ? 'Yes' : 'No') : null,
+      steps ? 'Form: 3-step, email only (test)' : null,
       'Landing page: ' + window.location.pathname,
     ].filter(Boolean).join('\n');
 
