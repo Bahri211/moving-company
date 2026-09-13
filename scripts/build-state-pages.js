@@ -488,31 +488,26 @@ function quoteForm(originState) {
 // Footer is identical to index.html except the Company column, which points at
 // the state hub rather than a same-page anchor.
 /* ------------------------------------------- step form test (West Virginia)
-   A/B-style trial of the multi-step quote form many movers use: two fields per
-   screen (route → move details → contact), email only with no phone number and
-   so no SMS consent, on a photo-backed navy card. Gated on its own set so the
-   other state pages keep the eight-field form. site.js drives the steps and
-   reports each one to GA as a quote_form_step event. */
+   Trial of the multi-step quote form many movers use: two fields per screen
+   (route → move details → contact), email only with no phone number and so no
+   SMS consent, in a plain white card over a photo hero. Gated on its own set
+   so the other state pages keep the eight-field form and their paper hero.
+   site.js drives the steps and reports each one to GA as quote_form_step. */
 const STEP_FORM_STATES = new Set(['West Virginia']);
+
+const LOCK_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`;
 
 function quoteFormSteps(originState) {
   return `  <div class="hero-form-col form-enter">
-  <div class="hero-form-wrap qf-photo" id="get-quote">
-    <div class="hero-form-header">
-      <span class="qs-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>3 quick steps · under a minute</span>
+  <div class="hero-form-wrap qs-card" id="get-quote">
+    <div class="hero-form-header qs-header">
       <h3>Get a free quote</h3>
-      <p>Fixed price · no hidden fees · reply within same day</p>
+      <span class="qs-count" aria-live="polite">Step <span id="qs-num">1</span> of 3</span>
     </div>
     <form class="quote-form qs-form" id="quote-form" data-steps novalidate>
-      <div class="qs-progress">
-        <div class="qs-head" aria-live="polite">
-          <span class="qs-count">Step <span id="qs-num">1</span> of 3</span>
-          <span class="qs-title" id="qs-title">Where are you moving?</span>
-        </div>
-        <div class="qs-bar" aria-hidden="true"><i class="is-done"></i><i></i><i></i></div>
-      </div>
+      <div class="qs-bar" aria-hidden="true"><i class="is-done"></i><i></i><i></i></div>
 
-      <fieldset class="qs-step is-active" data-title="Where are you moving?">
+      <fieldset class="qs-step is-active" aria-label="Your route">
         <div class="form-row form-row-2">
           <div>
             <label for="qf-from">Moving from</label>
@@ -525,10 +520,10 @@ function quoteFormSteps(originState) {
             <div class="field-error" id="error-to" role="alert"></div>
           </div>
         </div>
-        <button type="button" class="form-submit qs-next">Next step</button>
+        <button type="button" class="form-submit qs-next">Next</button>
       </fieldset>
 
-      <fieldset class="qs-step" data-title="Tell us about your move" hidden>
+      <fieldset class="qs-step" aria-label="Your move" hidden>
         <div class="form-row form-row-2">
           <div>
             <label for="qf-size">Home size</label>
@@ -549,160 +544,178 @@ function quoteFormSteps(originState) {
           </div>
         </div>
         <div class="qs-nav">
-          <button type="button" class="qs-back" aria-label="Back to step 1">←</button>
-          <button type="button" class="form-submit qs-next">Next step</button>
+          <button type="button" class="qs-back" aria-label="Back">←</button>
+          <button type="button" class="form-submit qs-next">Next</button>
         </div>
       </fieldset>
 
-      <fieldset class="qs-step" data-title="Where should we send your quote?" hidden>
+      <fieldset class="qs-step" aria-label="Your contact details" hidden>
         <div class="form-row form-row-2">
           <div>
-            <label for="qf-name">Your name</label>
+            <label for="qf-name">Name</label>
             <input type="text" id="qf-name" placeholder="Jane Doe" autocomplete="name" />
             <div class="field-error" id="error-name" role="alert"></div>
           </div>
           <div>
-            <label for="qf-email">Email address</label>
+            <label for="qf-email">Email</label>
             <input type="email" id="qf-email" placeholder="you@email.com" autocomplete="email" />
             <div class="field-error" id="error-email" role="alert"></div>
           </div>
         </div>
-        <div class="form-row">
-          <label for="qf-notes">Special items <span class="qs-opt">(optional)</span></label>
-          <input type="text" id="qf-notes" placeholder="Piano, antiques…" />
-        </div>
         <div class="qs-nav">
-          <button type="button" class="qs-back" aria-label="Back to step 2">←</button>
+          <button type="button" class="qs-back" aria-label="Back">←</button>
           <button type="submit" class="form-submit">Get my free quote</button>
         </div>
       </fieldset>
     </form>
-
-    <ul class="form-assurances">
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Your information is encrypted and secure</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Your details are never sold to brokers</li>
-    </ul>
+    <p class="qs-secure">${LOCK_ICON}Secure · never sold to brokers</p>
   </div>
   </div>`;
 }
 
-const STEP_FORM_HEAD = `<link rel="preload" as="image" href="/assets/images/form-bg-movers.jpg">
+const STEP_FORM_HEAD = `<link rel="preload" as="image" href="/assets/images/hero-bg-movers.jpg">
 <style>
-/* Photo-backed card: the movers photo shows through at the top behind the
-   heading and fades to near-solid navy behind the fields. */
-.hero-form-wrap.qf-photo {
+/* Photo hero ---------------------------------------------------------------
+   The photo sits on a full-bleed layer behind the 1400px hero, darkest on the
+   left where the headline and copy sit, and fades to --navy at the bottom so it
+   runs straight into the trust bar. The clip is dropped: two large images
+   side by side competed. */
+body { overflow-x: clip; }
+.hero.hero-photo {
   isolation: isolate;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: var(--navy-deep) url('/assets/images/form-bg-movers.jpg') 58% 35% / cover no-repeat;
-  color: #fff;
-  padding-top: 7.5rem;
-  box-shadow: 0 48px 90px -24px rgba(12, 26, 43, 0.55), 0 2px 12px -4px rgba(12, 26, 43, 0.2);
+  grid-template-areas:
+    "content form"
+    "lede    form"
+    "cards   cards";
+  grid-template-rows: auto auto auto;
+  /* The stock hero fills the viewport and stretches its rows to do it, which
+     opened a gap under the headline once the card got shorter. */
+  align-content: start;
+  min-height: auto;
+  padding-top: calc(var(--nav-h) + 2.5rem);
+  padding-bottom: 4.5rem;
 }
-.hero-form-wrap.qf-photo::before {
-  content: "";
-  position: absolute; inset: 0;
+.hero.hero-photo::before {
+  top: 0; bottom: 0; right: auto;
+  left: calc(50% - 50vw);
+  width: 100vw; height: auto;
+  opacity: 1;
   z-index: -1;
-  background: linear-gradient(180deg,
-    rgba(12, 26, 43, 0.15) 0%,
-    rgba(12, 26, 43, 0.55) 22%,
-    rgba(12, 26, 43, 0.9) 42%,
-    rgba(12, 26, 43, 0.96) 100%);
+  background:
+    linear-gradient(90deg, rgba(12, 26, 43, 0.93) 0%, rgba(12, 26, 43, 0.8) 45%, rgba(12, 26, 43, 0.5) 100%),
+    linear-gradient(180deg, rgba(18, 38, 63, 0) 55%, var(--navy) 100%),
+    var(--navy-deep) url('/assets/images/hero-bg-movers.jpg') center 40% / cover no-repeat;
 }
-.qf-photo .hero-form-header { border-bottom-color: rgba(255, 255, 255, 0.14); }
-.qf-photo .hero-form-header h3 { color: #fff; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
-.qf-photo .hero-form-header p { color: rgba(245, 240, 232, 0.78); }
-.qs-chip {
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  margin-bottom: 0.7rem;
-  padding: 0.3rem 0.7rem;
-  border-radius: 999px;
-  background: rgba(12, 26, 43, 0.55);
-  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
-  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em;
-  color: #fff;
+.hero-photo h1 { color: #fff; }
+.hero-photo h1 em { color: #f4a37f; }
+.hero-photo .hero-lede > p { color: rgba(245, 240, 232, 0.86); }
+.hero-photo .ht-item { color: rgba(245, 240, 232, 0.85); }
+.hero-photo .ht-item strong { color: #fff; }
+.hero-photo .ht-divider { background: rgba(255, 255, 255, 0.25); }
+.hero-photo .ht-check { stroke: #7ddca3; }
+.hero-photo .ht-dot { background: #5fd08b; box-shadow: 0 0 0 3px rgba(95, 208, 139, 0.25); }
+
+/* Step form card -----------------------------------------------------------
+   Plain white on the photo: a heading, a step count, the fields and one line
+   of reassurance. Nothing else competes with the button. */
+.hero-form-wrap.qs-card {
+  background: #fff;
+  border: 0;
+  border-radius: 20px;
+  padding: 1.6rem 1.7rem 1.25rem;
+  box-shadow: 0 40px 80px -28px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
-.qs-chip svg { width: 13px; height: 13px; fill: none; stroke: #7ddca3; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.qs-card .qs-header {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+  margin-bottom: 0.9rem; padding-bottom: 0; border-bottom: 0;
+}
+.qs-card .qs-header h3 { font-size: 1.75rem; margin: 0; color: var(--ink); }
+.qs-count { font-size: 0.78rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.qs-card:has(.form-success) .qs-count { display: none; }
 
-/* Progress */
-.qs-progress { margin-bottom: 1rem; }
-.qs-head { display: flex; flex-direction: column; gap: 0.2rem; }
-.qs-count { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #7ddca3; }
-.qs-title { font-size: 1.12rem; font-weight: 600; letter-spacing: -0.01em; color: #fff; }
-.qs-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 0.75rem; }
-.qs-bar i { height: 4px; border-radius: 999px; background: rgba(255, 255, 255, 0.16); transition: background 0.35s ease; }
-.qs-bar i.is-done { background: linear-gradient(90deg, #5fd08b, #3fae6b); }
+.qs-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 1.25rem; }
+.qs-bar i { height: 4px; border-radius: 999px; background: #ebe5dc; transition: background 0.35s ease; }
+.qs-bar i.is-done { background: var(--green); }
 
-/* Steps */
 .qs-step { border: 0; margin: 0; padding: 0; min-width: 0; }
 .qs-step.is-active { animation: qsIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
 @keyframes qsIn { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
-.form-enter .qf-photo .qs-step .form-submit { animation: none; }
-.qf-photo .form-row { margin-bottom: 0.9rem; }
-.qf-photo .form-row-2 { gap: 0.8rem; }
+.form-enter .qs-card .qs-step .form-submit { animation: none; }
 
-/* Fields: white boxes read cleanly on the dark photo at every width. */
-.qf-photo .form-row label { color: rgba(245, 240, 232, 0.9); font-size: 0.86rem; margin-bottom: 0.35rem; }
-.qf-photo .form-row > div:focus-within > label,
-.qf-photo .form-row:focus-within > label { color: #fff; }
-.qf-photo .qs-opt { font-weight: 400; color: rgba(245, 240, 232, 0.55); }
-.qf-photo .form-row input,
-.qf-photo .form-row select {
-  min-height: 48px;
-  padding: 0.65rem 0.85rem;
-  border: 1px solid transparent;
+.qs-card .form-row { margin-bottom: 1rem; }
+.qs-card .form-row-2 { gap: 0.8rem; }
+.qs-card .form-row label { font-size: 0.84rem; font-weight: 600; color: var(--ink-soft); margin-bottom: 0.35rem; }
+.qs-card .form-row > div:focus-within > label { color: var(--ink); }
+.qs-card .form-row input,
+.qs-card .form-row select {
+  min-height: 50px;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid #ddd6cb;
   border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.97);
+  background-color: #faf8f4;
   color: var(--ink);
   font-size: 1rem;
 }
-.qf-photo .form-row select {
+.qs-card .form-row select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7f6f' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 0.85rem center;
+  background-position: right 0.9rem center;
   padding-right: 2.2rem;
 }
-.qf-photo .form-row input:hover,
-.qf-photo .form-row select:hover { border-color: rgba(125, 220, 163, 0.6); }
-.qf-photo .form-row input:focus,
-.qf-photo .form-row select:focus {
-  border-color: #5fd08b;
+.qs-card .form-row input:hover,
+.qs-card .form-row select:hover { border-color: #bfb5a6; }
+.qs-card .form-row input:focus,
+.qs-card .form-row select:focus {
+  border-color: var(--green);
   background-color: #fff;
-  box-shadow: 0 0 0 3px rgba(95, 208, 139, 0.32);
+  box-shadow: 0 0 0 3px rgba(47, 143, 91, 0.16);
 }
-.qf-photo .field-error { color: #ffa493; }
-.qf-photo .form-submit-error { color: #ffd2c9; background: rgba(192, 57, 43, 0.25); border-color: rgba(255, 164, 147, 0.4); }
 
-/* Back + next row */
-.qs-nav { display: flex; gap: 0.6rem; align-items: stretch; margin-top: 0.65rem; }
+.qs-nav { display: flex; gap: 0.6rem; align-items: stretch; }
 .qs-nav .form-submit { flex: 1; margin-top: 0; }
+.qs-card .qs-step > .form-submit { margin-top: 0; }
 .qs-back {
   flex: 0 0 52px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
+  border: 1px solid #ddd6cb;
+  background: #fff;
+  color: var(--ink);
   font-size: 1.2rem;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
+  transition: border-color 0.2s, background 0.2s;
 }
-.qs-back:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.4); }
-.qs-back:focus-visible { outline: 2px solid #7ddca3; outline-offset: 2px; }
+.qs-back:hover { border-color: #bfb5a6; background: #faf8f4; }
+.qs-back:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 
-.qf-photo .form-assurances { border-top-color: rgba(255, 255, 255, 0.14); }
-.qf-photo .form-assurances li { color: rgba(245, 240, 232, 0.72); }
-.qf-photo .form-assurances svg { stroke: #7ddca3; }
-.qf-photo .form-success h3 { color: #fff; }
-.qf-photo .form-success p { color: rgba(245, 240, 232, 0.85); }
-.qf-photo .form-success a { color: #7ddca3; }
+.qs-secure {
+  display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+  margin-top: 0.95rem;
+  font-size: 0.76rem; color: var(--muted);
+}
+.qs-secure svg { width: 13px; height: 13px; fill: none; stroke: var(--green); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 
 @media (max-width: 768px) {
-  .hero-form-wrap.qf-photo { position: relative; padding-top: 5.5rem; }
-  .qf-photo .form-row label { font-size: 0.86rem; }
-  .qf-photo .form-row input,
-  .qf-photo .form-row select { min-height: 46px; background-color: rgba(255, 255, 255, 0.97); border: 1px solid transparent; }
-  .qf-photo .form-assurances li { font-size: 0.68rem; }
+  .hero.hero-photo {
+    grid-template-areas: "content" "form" "lede" "cards";
+    grid-template-rows: auto;
+    padding-top: calc(var(--nav-h) + 1.25rem);
+    row-gap: 1rem;
+  }
+  .hero.hero-photo::before {
+    background:
+      linear-gradient(180deg, rgba(12, 26, 43, 0.72) 0%, rgba(12, 26, 43, 0.88) 50%, var(--navy) 100%),
+      var(--navy-deep) url('/assets/images/hero-bg-movers.jpg') 60% top / cover no-repeat;
+  }
+  /* The accent rule tied the copy to the clip above it as a caption; with the
+     clip gone it has nothing to caption. */
+  .hero-photo .hero-lede { border-left: 0; padding-left: 0; }
+  .hero-form-wrap.qs-card { padding: 1.15rem 1.1rem 1rem; border-radius: 18px; }
+  .qs-card .qs-header h3 { font-size: 1.35rem; }
+  .qs-bar { margin-bottom: 1rem; }
+  .qs-card .form-row { margin-bottom: 0.85rem; }
+  .qs-card .form-row-2 { gap: 0.6rem; }
+  .qs-card .form-row input,
+  .qs-card .form-row select { min-height: 48px; border: 1px solid #ddd6cb; background-color: #faf8f4; }
 }
 @media (prefers-reduced-motion: reduce) {
   .qs-step.is-active { animation: none; }
@@ -2214,7 +2227,7 @@ ${s.quirks.map((q, i) => `      <details class="note-row js-collapse" open>
 ${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
 
 <!-- HERO -->
-<header class="hero">
+<header class="hero${STEP_FORM_STATES.has(s.name) ? ' hero-photo' : ''}">
   <div class="hero-content">
     <div class="hero-headline-wrap fade-in delay-1">
       <h1${headlineFit(s)}>${headline(s)}</h1>
@@ -2236,7 +2249,7 @@ ${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
     </div>
   </div>
 
-${HERO_VIDEO}
+${STEP_FORM_STATES.has(s.name) ? '' : HERO_VIDEO}
 
   <div class="hero-stat-cards fade-in delay-3">
     <div class="hero-card hc-light float">

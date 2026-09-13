@@ -76,7 +76,6 @@
     steps.forEach(function (el, k) { el.hidden = k !== i; el.classList.toggle('is-active', k === i); });
     [].forEach.call(form.querySelectorAll('.qs-bar i'), function (bar, k) { bar.classList.toggle('is-done', k <= i); });
     $('qs-num').textContent = i + 1;
-    $('qs-title').textContent = steps[i].getAttribute('data-title');
     current = i;
     // Mouse users land in the first field; touch skips it so no keyboard pops up.
     var first = steps[i].querySelector('select, input');
