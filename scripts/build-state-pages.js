@@ -420,7 +420,7 @@ function quoteForm(originState) {
         </div>
         <div>
           <label for="qf-date">Planned move date</label>
-          <input type="date" id="qf-date" />
+          <input type="text" id="qf-date" placeholder="MM/DD/YYYY" autocomplete="off" />
         </div>
       </div>
       <div class="form-row form-row-2">

@@ -304,7 +304,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
         <div>
           <label for="qf-date">Planned move date</label>
-          <input type="date" id="qf-date" />
+          <input type="text" id="qf-date" placeholder="MM/DD/YYYY" autocomplete="off" />
         </div>
       </div>
       <div class="form-row form-row-2">
@@ -971,6 +971,38 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   document.getElementById('qf-sms').addEventListener('change', function () {
     if (this.checked) document.getElementById('sms-error').textContent = '';
   });
+
+  // Planned move date: a native date field draws its placeholder and value in
+  // the visitor's OS language (Arabic on an Arabic Mac, etc.). It rests as a
+  // text field with an English MM/DD/YYYY hint, becomes a real date field when
+  // touched so phones still get their native picker, and writes the chosen
+  // date back as MM/DD/YYYY — which is also what goes into the quote email.
+  (function () {
+    var input = document.getElementById('qf-date');
+    if (!input) return;
+    var lastPointer = '';
+    function toDate() {
+      if (input.type === 'date') return;
+      var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(input.value);
+      input.type = 'date';
+      input.value = m ? m[3] + '-' + m[1] + '-' + m[2] : '';
+    }
+    function toText() {
+      if (input.type !== 'date') return;
+      var v = input.value;
+      input.type = 'text';
+      input.value = /^\d{4}-\d{2}-\d{2}$/.test(v) ? v.slice(5, 7) + '/' + v.slice(8, 10) + '/' + v.slice(0, 4) : '';
+    }
+    input.addEventListener('pointerdown', function (e) { lastPointer = e.pointerType; toDate(); });
+    input.addEventListener('focus', toDate);
+    input.addEventListener('blur', toText);
+    // Desktop: open the calendar on click. Touch devices open their own picker.
+    input.addEventListener('click', function () {
+      if (lastPointer === 'mouse' && input.showPicker) { try { input.showPicker(); } catch (err) {} }
+    });
+    // Enter pressed inside the field submits without a blur: normalise first.
+    document.addEventListener('submit', function (e) { if (e.target === input.form) toText(); }, true);
+  })();
 
   async function submitQuote(e) {
     e.preventDefault();
