@@ -469,15 +469,13 @@ body.menu-open .mobile-menu { transform: translateX(0); }
   flex-shrink: 0;
   margin-top: 0.2rem;
   fill: none;
-  stroke: var(--accent);
+  /* Green, like the call buttons: these are "safe" signals, and terracotta is
+     the page's call-to-action colour. */
+  stroke: var(--green);
   stroke-width: 3;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-
-/* The security claim takes the green of the call buttons rather than the
-   terracotta checkmark, so the padlock reads as "safe" at a glance. */
-.form-assurances li.fa-secure svg { stroke: var(--green); }
 
 .hero-form-header {
   margin-bottom: 0.7rem;
