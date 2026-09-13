@@ -1658,11 +1658,6 @@ section { padding: 6rem 2rem; }
 
 .contact-form-grid .cs-text { margin-bottom: 2rem; }
 
-@media (min-width: 769px) {
-  /* Full disclosure always visible where there's room for it */
-  .sms-more[hidden] { display: inline; }
-}
-
 /* Quote form */
 .quote-form {
   /* No nested card: .hero-form-wrap already provides the surface and padding. */
@@ -2172,10 +2167,11 @@ footer {
   text-decoration: underline;
 }
 
-/* "Read more" only exists to keep the consent block short on a phone —
-   desktop has the room, so it shows the full disclosure and drops the button. */
+/* "Read more" collapses the SMS disclosure (rates, frequency, STOP, privacy
+   link) to the single consent sentence on every screen size; the full text
+   stays in the DOM and expands in place. */
 .sms-toggle {
-  display: none;
+  display: inline;
   background: none;
   border: none;
   padding: 0;
@@ -2388,7 +2384,6 @@ footer {
 
   .form-row-consent { margin-top: 0.1rem; margin-bottom: 0.2rem; }
   .sms-consent-text { font-size: 0.66rem; line-height: 1.35; }
-  .sms-toggle { display: inline; }
   .sms-checkbox-wrap, .sms-checkbox-box { width: 18px; height: 18px; }
   .sms-checkbox-box::after { margin: 2px 0 0 4px; }
   .sms-consent-label { gap: 0.6rem; padding: 0; }
