@@ -87,6 +87,44 @@ src="https://www.facebook.com/tr?id=1413801450690954&ev=PageView&noscript=1"
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<!-- TRIAL: FMCSA badge under the quote form, homepage only. Move to styles.css
+     when promoting to the state pages. -->
+<style>
+.fmcsa-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 0.7rem;
+  padding: 0.55rem 0.8rem;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.fmcsa-badge:hover { border-color: var(--navy-soft); box-shadow: 0 6px 16px -8px rgba(18, 38, 63, 0.35); }
+.fmcsa-badge .fb-seal {
+  width: 34px; height: 34px;
+  flex-shrink: 0;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--navy);
+  box-shadow: inset 0 0 0 2px var(--navy), inset 0 0 0 3.5px var(--paper-warm);
+}
+.fmcsa-badge .fb-seal svg { width: 18px; height: 18px; fill: none; stroke: var(--paper); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fmcsa-badge .fb-seal svg .fb-check { stroke: var(--green); stroke-width: 2.6; }
+.fmcsa-badge .fb-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.fmcsa-badge .fb-title { font-size: 0.8rem; font-weight: 600; color: var(--navy); }
+.fmcsa-badge .fb-ids { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.01em; }
+.fmcsa-badge .fb-verify { margin-left: auto; flex-shrink: 0; font-size: 0.7rem; font-weight: 600; color: var(--blue); }
+.form-enter .fmcsa-badge { animation: formFieldIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.99s both; }
+@media (max-width: 640px) {
+  .fmcsa-badge { margin-top: 0.55rem; padding: 0.45rem 0.65rem; gap: 0.55rem; }
+  .fmcsa-badge .fb-seal { width: 30px; height: 30px; }
+  .fmcsa-badge .fb-title { font-size: 0.74rem; }
+}
+</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -347,6 +385,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Your information is encrypted and secure</li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Your details are never sold to brokers</li>
     </ul>
+
+    <a class="fmcsa-badge" href="https://safer.fmcsa.dot.gov/query.asp?searchtype=ANY&amp;query_type=queryCarrierSnapshot&amp;query_param=USDOT&amp;query_string=4575745" target="_blank" rel="noopener" aria-label="FMCSA licensed interstate mover, USDOT 4575745, MC-1820728. Verify on the FMCSA website">
+      <span class="fb-seal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 4.5 5.5v6c0 4.6 3.1 8.5 7.5 10 4.4-1.5 7.5-5.4 7.5-10v-6z"/><polyline class="fb-check" points="8.5 12 11 14.5 15.5 9.5"/></svg></span>
+      <span class="fb-text">
+        <span class="fb-title">FMCSA Licensed Interstate Mover</span>
+        <span class="fb-ids">USDOT #4575745 · MC-1820728</span>
+      </span>
+      <span class="fb-verify">Verify ↗</span>
+    </a>
   </div>
 
   </div>
