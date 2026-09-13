@@ -640,10 +640,8 @@ ${s.quirks.slice(0, 3).map(q => `        <li>${PH_POINT_TICK}${esc(q.title)}</li
       <div class="ph-row">
         <span class="ph-row-icon" aria-hidden="true">${PH_ROW_ICONS.pin}</span>
         <div>
-          <span class="ph-row-label">Cities we serve</span>
-          <ul class="ph-chips">
-${s.cities.slice(0, 8).map(c => `            <li>${esc(c)}</li>`).join('\n')}${s.cities.length > 8 ? `\n            <li class="ph-chip-more">+${s.cities.length - 8} more</li>` : ''}
-          </ul>
+          <span class="ph-row-label">Where we serve</span>
+          <p class="ph-row-text">We serve every city, village, and town in ${esc(s.name)}.</p>
         </div>
       </div>
       <div class="ph-row">
@@ -786,6 +784,7 @@ body { overflow-x: clip; }
 }
 .ph-row-icon svg { width: 20px; height: 20px; fill: none; stroke: var(--navy); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 .ph-row-label { display: block; margin: 0.1rem 0 0.6rem; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.ph-row-text { margin: 0; font-size: 0.98rem; font-weight: 600; line-height: 1.45; color: var(--ink); }
 .ph-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .ph-chips li { padding: 0.3rem 0.7rem; border-radius: 999px; background: #f5f1ea; font-size: 0.82rem; color: var(--ink-soft); }
 .ph-chips .ph-chip-more { background: none; box-shadow: inset 0 0 0 1px #ddd5c8; color: var(--muted); }
