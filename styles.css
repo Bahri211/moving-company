@@ -449,8 +449,10 @@ body.menu-open .mobile-menu { transform: translateX(0); }
   padding-top: 0.7rem;
   border-top: 1px solid var(--line);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
-  gap: 0.4rem 1rem;
+  /* One claim per row: both run to ~40 characters, too long to sit side by
+     side in the card without the tail of one wrapping under the line. */
+  grid-template-columns: 1fr;
+  gap: 0.35rem;
 }
 
 .form-assurances li {
@@ -472,6 +474,10 @@ body.menu-open .mobile-menu { transform: translateX(0); }
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+/* The security claim takes the green of the call buttons rather than the
+   terracotta checkmark, so the padlock reads as "safe" at a glance. */
+.form-assurances li.fa-secure svg { stroke: var(--green); }
 
 .hero-form-header {
   margin-bottom: 0.7rem;
@@ -2326,12 +2332,12 @@ footer {
 
   /* Two fixed columns so the pair always sits side by side — flex-wrap put
      them on separate lines as soon as the second one ran long. */
-  /* Uneven columns: the second claim is half again as long as the first, so
-     an even split pushed "brokers" onto a line of its own. */
+  /* Stacked here too — two ~40-character claims can't share a phone-width
+     row without one of them wrapping. */
   .form-assurances {
     display: grid;
-    grid-template-columns: 0.82fr 1.18fr;
-    gap: 0.45rem;
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
     margin-top: 0.6rem;
     padding-top: 0.55rem;
     align-items: start;
