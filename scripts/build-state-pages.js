@@ -573,7 +573,14 @@ function quoteFormSteps(originState) {
   </div>`;
 }
 
-const CHECK_BADGE = `<span class="ph-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>`;
+/* One icon per promise (Lucide shapes, ISC): shield-check for the licence,
+   a price tag for the fixed price, a timer for the same-day quote. */
+const PH_CHECK_ICONS = {
+  licensed: `<svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>`,
+  price: `<svg viewBox="0 0 24 24"><path d="M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.42l8.7 8.7a2.43 2.43 0 0 0 3.42 0l6.58-6.58a2.43 2.43 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r="1.2" fill="currentColor" stroke="none"/></svg>`,
+  quote: `<svg viewBox="0 0 24 24"><line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/></svg>`,
+};
+const phBadge = key => `<span class="ph-check" aria-hidden="true">${PH_CHECK_ICONS[key]}</span>`;
 
 /* The photo hero's left column: one line and three checks instead of the long
    intro, trust line and stat cards, which move to the section below. */
@@ -581,9 +588,9 @@ function photoHeroLede(s) {
   return `  <div class="hero-lede">
     <p class="ph-sub fade-in delay-2">Fixed-price moves from ${esc(s.name)} to anywhere in the continental US.</p>
     <ul class="ph-checks fade-in delay-3">
-      <li>${CHECK_BADGE}FMCSA licensed &amp; insured</li>
-      <li>${CHECK_BADGE}Fixed price, no hidden fees</li>
-      <li>${CHECK_BADGE}Free quote the same day</li>
+      <li>${phBadge('licensed')}FMCSA licensed &amp; insured</li>
+      <li>${phBadge('price')}Fixed price, no hidden fees</li>
+      <li>${phBadge('quote')}Free quote the same day</li>
     </ul>
   </div>`;
 }
@@ -676,16 +683,17 @@ body { overflow-x: clip; }
   line-height: 1.55;
   color: rgba(245, 240, 232, 0.9);
 }
-.ph-checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.8rem; }
-.ph-checks li { display: flex; align-items: center; gap: 0.7rem; font-size: 1rem; font-weight: 500; color: #fff; }
+.ph-checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.85rem; }
+.ph-checks li { display: flex; align-items: center; gap: 0.8rem; font-size: 1.02rem; font-weight: 500; color: #fff; }
 .ph-check {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 24px; height: 24px; flex-shrink: 0;
+  width: 34px; height: 34px; flex-shrink: 0;
   border-radius: 50%;
-  background: rgba(95, 208, 139, 0.16);
-  box-shadow: inset 0 0 0 1px rgba(95, 208, 139, 0.55);
+  color: #7ddca3;
+  background: rgba(95, 208, 139, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(95, 208, 139, 0.45);
 }
-.ph-check svg { width: 13px; height: 13px; fill: none; stroke: #7ddca3; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.ph-check svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
 /* Proof section --------------------------------------------------------- */
 /* flow-root keeps the stats card's negative margin inside the section; it had
@@ -843,7 +851,9 @@ body { overflow-x: clip; }
   .hero-photo .hero-lede { border-left: 0; padding-left: 0; }
   .hero-photo .ph-sub { font-size: 1rem; margin-bottom: 0.9rem; }
   .ph-checks { gap: 0.55rem; }
-  .ph-checks li { font-size: 0.92rem; }
+  .ph-checks li { font-size: 0.92rem; gap: 0.65rem; }
+  .ph-check { width: 30px; height: 30px; }
+  .ph-check svg { width: 15px; height: 15px; }
   .hero-form-wrap.qs-card { padding: 1.15rem 1.1rem 1rem; border-radius: 18px; }
   .qs-card .qs-header h3 { font-size: 1.35rem; }
   .qs-bar { margin-bottom: 1rem; }
