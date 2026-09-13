@@ -602,10 +602,17 @@ const PH_ICONS = {
   cover: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.8 9.2c-.5-.9-1.6-1.4-2.8-1.4-1.6 0-2.8.8-2.8 2.1 0 2.9 5.8 1.4 5.8 4.3 0 1.3-1.3 2.2-3 2.2-1.3 0-2.5-.6-3-1.6M12 6.3v1.5M12 16.7v1.5"/></svg>`,
 };
 
+const PH_POINT_TICK = `<span class="ph-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>`;
+const PH_ROW_ICONS = {
+  pin: `<svg viewBox="0 0 24 24"><path d="M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>`,
+  route: `<svg viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>`,
+  road: `<svg viewBox="0 0 24 24"><path d="M12 13v8"/><path d="M12 3v3"/><path d="M4 6a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h13a2 2 0 0 0 1.15-.37l3.43-2.31a1 1 0 0 0 0-1.64l-3.43-2.31A2 2 0 0 0 17 6z"/></svg>`,
+};
+
 /* Replaces the navy trust bar on the photo-hero page: the hero is already dark
    and the band after it is a dark photo, so this runs light — a white stats card
    lifted over the hero's bottom edge, then the intro and two route facts. */
-function photoProof(s, longest) {
+function photoProof(s, routes) {
   const stat = (icon, num, label) => `    <div class="ph-stat">
       <span class="ph-stat-icon" aria-hidden="true">${PH_ICONS[icon]}</span>
       <div><strong>${num}</strong><span>${label}</span></div>
@@ -621,21 +628,41 @@ ${stat('cover', '$1M', 'Liability coverage')}
   <div class="ph-about">
     <div class="ph-about-text">
       <span class="ph-kicker">Moving from ${esc(s.name)}</span>
-      <h2>What makes a ${esc(s.name)} move <em>different</em></h2>
+      <h2>Moving out of <em>${esc(s.name)}</em></h2>
       <p>${esc(s.intro)}</p>
+      <ul class="ph-points">
+${s.quirks.slice(0, 3).map(q => `        <li>${PH_POINT_TICK}${esc(q.title)}</li>`).join('\n')}
+      </ul>
     </div>
-    <div class="ph-facts">
-      <div class="ph-fact">
-        <span class="ph-fact-label">${esc(s.name)} cities served</span>
-        <strong>${s.cities.length}+</strong>
-        <span class="ph-fact-sub">${esc(s.cities.slice(0, 3).join(' · '))} and more</span>
+
+    <aside class="ph-glance" aria-label="${esc(s.name)} at a glance">
+      <h3>${esc(s.name)} at a glance</h3>
+      <div class="ph-row">
+        <span class="ph-row-icon" aria-hidden="true">${PH_ROW_ICONS.pin}</span>
+        <div>
+          <span class="ph-row-label">Cities we serve</span>
+          <ul class="ph-chips">
+${s.cities.slice(0, 8).map(c => `            <li>${esc(c)}</li>`).join('\n')}${s.cities.length > 8 ? `\n            <li class="ph-chip-more">+${s.cities.length - 8} more</li>` : ''}
+          </ul>
+        </div>
       </div>
-      <div class="ph-fact ph-fact-dark">
-        <span class="ph-fact-label">Busiest ${esc(s.abbr)} lane</span>
-        <strong>${esc(s.abbr)} → ${esc(longest.dest.abbr)}</strong>
-        <span class="ph-fact-sub">${esc(s.name)} to ${esc(longest.dest.name)} · ~${longest.miles.toLocaleString()} mi</span>
+      <div class="ph-row">
+        <span class="ph-row-icon" aria-hidden="true">${PH_ROW_ICONS.route}</span>
+        <div>
+          <span class="ph-row-label">Popular destinations</span>
+          <ul class="ph-routes">
+${routes.map(r => `            <li>${esc(r.dest.name)}<span>~${r.miles.toLocaleString()} mi</span></li>`).join('\n')}
+          </ul>
+        </div>
       </div>
-    </div>
+      <div class="ph-row">
+        <span class="ph-row-icon" aria-hidden="true">${PH_ROW_ICONS.road}</span>
+        <div>
+          <span class="ph-row-label">Main highways</span>
+          <div class="ph-hwys">${s.highways.map(h => `<span>${esc(h)}</span>`).join('')}</div>
+        </div>
+      </div>
+    </aside>
   </div>
 </section>`;
 }
@@ -724,28 +751,49 @@ body { overflow-x: clip; }
 
 .ph-about {
   max-width: 1240px;
-  margin: 4.5rem auto 0;
-  display: grid; grid-template-columns: 1.35fr 1fr;
-  gap: 4rem; align-items: center;
+  margin: 5rem auto 0;
+  display: grid; grid-template-columns: 1.1fr 1fr;
+  gap: 4.5rem; align-items: start;
 }
 .ph-kicker { display: block; margin-bottom: 0.7rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green); }
-.ph-about h2 { margin: 0 0 1.1rem; font-size: clamp(1.8rem, 2.8vw, 2.5rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.12; color: var(--ink); }
+.ph-about h2 { margin: 0 0 1.1rem; font-size: clamp(1.9rem, 3vw, 2.6rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.1; color: var(--ink); }
 .ph-about h2 em { font-style: normal; color: var(--accent); }
-.ph-about p { max-width: 40rem; font-size: 1.05rem; line-height: 1.75; color: var(--ink-soft); }
-.ph-facts { display: grid; gap: 1rem; }
-.ph-fact {
-  padding: 1.4rem 1.6rem;
-  border-radius: 18px;
-  background: #fff;
-  box-shadow: 0 0 0 1px rgba(12, 26, 43, 0.06), 0 18px 40px -28px rgba(12, 26, 43, 0.35);
+.ph-about-text p { max-width: 36rem; font-size: 1.02rem; line-height: 1.75; color: var(--ink-soft); }
+.ph-points { list-style: none; margin: 1.6rem 0 0; padding: 1.4rem 0 0; border-top: 1px solid #e7e0d5; display: grid; gap: 0.8rem; }
+.ph-points li { display: flex; align-items: center; gap: 0.75rem; font-size: 0.98rem; font-weight: 600; color: var(--ink); }
+.ph-tick {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; flex-shrink: 0;
+  border-radius: 50%; background: #e9f4ed;
 }
-.ph-fact-label { display: block; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase; color: var(--muted); }
-.ph-fact strong { display: block; margin: 0.45rem 0 0.3rem; font-size: 2rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1; color: var(--navy); }
-.ph-fact-sub { display: block; font-size: 0.86rem; color: var(--ink-soft); }
-.ph-fact-dark { background: var(--navy); box-shadow: 0 18px 40px -24px rgba(12, 26, 43, 0.6); }
-.ph-fact-dark .ph-fact-label { color: #a8bcd2; }
-.ph-fact-dark strong { color: #fff; }
-.ph-fact-dark .ph-fact-sub { color: rgba(245, 240, 232, 0.8); }
+.ph-tick svg { width: 14px; height: 14px; fill: none; stroke: var(--green); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* At-a-glance card: the state's own data (cities, lanes, corridors) as a
+   scannable reference rather than two big-number tiles. */
+.ph-glance {
+  padding: 1.75rem 1.9rem 0.6rem;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(12, 26, 43, 0.06), 0 30px 60px -36px rgba(12, 26, 43, 0.4);
+}
+.ph-glance h3 { margin: 0 0 0.4rem; font-size: 1.15rem; font-weight: 700; letter-spacing: -0.015em; color: var(--ink); }
+.ph-row { display: grid; grid-template-columns: 40px 1fr; gap: 1rem; padding: 1.15rem 0; }
+.ph-row + .ph-row { border-top: 1px solid #eee8de; }
+.ph-row-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px;
+  border-radius: 12px; background: #eef2f7;
+}
+.ph-row-icon svg { width: 20px; height: 20px; fill: none; stroke: var(--navy); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.ph-row-label { display: block; margin: 0.1rem 0 0.6rem; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.ph-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.ph-chips li { padding: 0.3rem 0.7rem; border-radius: 999px; background: #f5f1ea; font-size: 0.82rem; color: var(--ink-soft); }
+.ph-chips .ph-chip-more { background: none; box-shadow: inset 0 0 0 1px #ddd5c8; color: var(--muted); }
+.ph-routes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1.5rem; }
+.ph-routes li { display: flex; justify-content: space-between; gap: 0.75rem; font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+.ph-routes span { font-weight: 400; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ph-hwys { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.ph-hwys span { padding: 0.28rem 0.55rem; border-radius: 6px; background: var(--navy); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.02em; color: #fff; }
 
 /* Step form card -----------------------------------------------------------
    Plain white on the photo: a heading, a step count, the fields and one line
@@ -826,6 +874,10 @@ body { overflow-x: clip; }
 }
 .qs-secure svg { width: 13px; height: 13px; fill: none; stroke: var(--green); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 
+/* Two columns of destinations wrap "North Carolina" once the card narrows. */
+@media (max-width: 1180px) {
+  .ph-routes { grid-template-columns: 1fr; gap: 0.5rem; }
+}
 @media (max-width: 1100px) {
   .hero.hero-photo { column-gap: 2rem; }
   .ph-stat { padding: 0.35rem 0.9rem; gap: 0.7rem; }
@@ -887,10 +939,17 @@ body { overflow-x: clip; }
   .ph-stat-icon svg { width: 20px; height: 20px; }
   .ph-stat strong { font-size: 1.35rem; }
   .ph-stat div > span { font-size: 0.74rem; }
-  .ph-about { grid-template-columns: 1fr; gap: 1.75rem; margin-top: 2.75rem; }
-  .ph-about p { font-size: 0.98rem; }
-  .ph-fact { padding: 1.1rem 1.25rem; }
-  .ph-fact strong { font-size: 1.7rem; }
+  .ph-about { grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
+  .ph-about h2 { font-size: 1.85rem; }
+  .ph-about-text p { font-size: 0.98rem; }
+  .ph-points { margin-top: 1.25rem; padding-top: 1.1rem; }
+  .ph-points li { font-size: 0.93rem; }
+  .ph-glance { padding: 1.3rem 1.2rem 0.3rem; border-radius: 18px; }
+  .ph-row { grid-template-columns: 34px 1fr; gap: 0.8rem; padding: 1rem 0; }
+  .ph-row-icon { width: 34px; height: 34px; border-radius: 10px; }
+  .ph-row-icon svg { width: 17px; height: 17px; }
+  .ph-routes { gap: 0.45rem 1rem; }
+  .ph-routes li { font-size: 0.85rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .qs-step.is-active { animation: none; }
@@ -2414,7 +2473,7 @@ ${STEP_FORM_STATES.has(s.name) ? `${photoHeroLede(s)}
 ${quoteFormSteps(s)}
 </header>
 
-${photoProof(s, longest)}` : `  <div class="hero-lede">
+${photoProof(s, routes)}` : `  <div class="hero-lede">
     <p class="fade-in delay-2">
       ${esc(s.intro)}
     </p>
