@@ -2773,17 +2773,19 @@ a.state-item:hover { background: #fff; }
   padding: 0 0.8rem 0 0.25rem;
   border-radius: 999px;
   /* Gradient ring: the padding-box layer is the fill, the border-box layer
-     shows through the transparent 1px border as a soft green edge. White
-     rather than navy, so it reads as a certificate on the cream bar instead
-     of a second dark button beside the phone and quote buttons. */
+     shows through the transparent 1px border as a light-to-deep orange edge.
+     A deeper orange than the form button so the small white label holds its
+     contrast. */
   border: 1px solid transparent;
   background:
-    linear-gradient(180deg, #ffffff, #f1f7f3) padding-box,
-    linear-gradient(120deg, rgba(47, 143, 91, 0.6), rgba(47, 143, 91, 0.18) 50%, rgba(47, 143, 91, 0.45)) border-box;
+    linear-gradient(180deg, #e8641a, #d2500f 55%, #bd430b) padding-box,
+    linear-gradient(120deg, #f7a567, #c9480c 50%, #f08a45) border-box;
   box-shadow:
-    0 6px 16px -10px rgba(12, 26, 43, 0.35),
-    0 1px 3px rgba(12, 26, 43, 0.08);
-  color: #12263f;
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 8px 18px -10px rgba(201, 72, 12, 0.7),
+    0 1px 3px rgba(12, 26, 43, 0.12);
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(110, 35, 0, 0.3);
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -2795,7 +2797,7 @@ a.state-item:hover { background: #fff; }
   content: "";
   position: absolute; inset: 0;
   z-index: -1;
-  background: linear-gradient(105deg, transparent 38%, rgba(63, 174, 107, 0.14) 50%, transparent 62%);
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.22) 50%, transparent 62%);
   transform: translateX(-110%);
   animation: fbSweep 6s ease-in-out 1.2s infinite;
   pointer-events: none;
@@ -2804,28 +2806,35 @@ a.state-item:hover { background: #fff; }
   0% { transform: translateX(-110%); }
   22%, 100% { transform: translateX(110%); }
 }
-.fmcsa-badge .fb-seal { width: 26px; height: 26px; flex-shrink: 0; filter: drop-shadow(0 1px 3px rgba(12, 26, 43, 0.25)); }
+.fmcsa-badge .fb-seal { width: 26px; height: 26px; flex-shrink: 0; filter: drop-shadow(0 1px 3px rgba(110, 35, 0, 0.35)); }
+/* Recolour the green seal for the orange pill: white rosette, orange shield,
+   white tick. CSS beats the SVG presentation attributes. */
+.fmcsa-badge .fb-seal stop { stop-color: #fff; }
+.fmcsa-badge .fb-seal circle { stroke: #d2500f; stroke-opacity: 0.5; }
+.fmcsa-badge .fb-seal path { fill: #d2500f; }
+.fmcsa-badge .fb-seal polyline { stroke: #fff; }
 .fmcsa-badge .fb-label { display: inline-flex; align-items: center; gap: 0.4rem; }
-.fmcsa-badge .fb-verified { color: #12263f; }
-.fmcsa-badge .fb-sep { color: #b3bdc7; font-size: 0.8em; }
-.fmcsa-badge .fb-active { display: inline-flex; align-items: center; gap: 0.35rem; color: #1f7a4a; }
+.fmcsa-badge .fb-verified { color: #fff; }
+.fmcsa-badge .fb-sep { color: rgba(255, 255, 255, 0.6); font-size: 0.8em; }
+.fmcsa-badge .fb-active { display: inline-flex; align-items: center; gap: 0.35rem; color: #fff; }
 /* Live dot: MC authority is active */
 .fmcsa-badge .fb-dot {
   width: 7px; height: 7px; border-radius: 50%;
-  background: #3fae6b;
-  box-shadow: 0 0 0 0 rgba(63, 174, 107, 0.55);
+  background: #fff;
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
   animation: fbPulse 2.4s ease-out infinite;
 }
 @keyframes fbPulse {
-  0% { box-shadow: 0 0 0 0 rgba(63, 174, 107, 0.55); }
-  70%, 100% { box-shadow: 0 0 0 5px rgba(63, 174, 107, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+  70%, 100% { box-shadow: 0 0 0 5px rgba(255, 255, 255, 0); }
 }
 /* Narrow desktop: links and both buttons already fill the bar, so the pill
    drops its text and keeps the seal. */
 @media (min-width: 769px) and (max-width: 1239px) {
   .nav-left { gap: 0.6rem; }
-  .fmcsa-badge { width: 30px; height: 30px; padding: 0; border: 0; justify-content: center; background: none; box-shadow: none; }
-  .fmcsa-badge .fb-seal { width: 30px; height: 30px; }
+  /* The seal is white now, so it keeps a small orange disc to sit on. */
+  .fmcsa-badge { width: 32px; height: 32px; padding: 0; justify-content: center; }
+  .fmcsa-badge .fb-seal { width: 24px; height: 24px; }
   .fmcsa-badge .fb-label, .fmcsa-badge::after { display: none; }
 }
 @media (max-width: 768px) {

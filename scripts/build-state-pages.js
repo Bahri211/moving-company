@@ -851,14 +851,16 @@ body { overflow-x: clip; }
     background:
       linear-gradient(180deg,
         rgba(9, 20, 34, 0.72) 0,
-        rgba(9, 20, 34, 0.6) calc(var(--nav-h) + 60px),
-        rgba(9, 20, 34, 0.08) calc(var(--nav-h) + 130px),
-        rgba(9, 20, 34, 0.12) calc(var(--nav-h) + 235px),
-        rgba(9, 20, 34, 0.86) calc(var(--nav-h) + 360px),
-        var(--navy-deep) 158vw),
+        rgba(9, 20, 34, 0.6) 40vw,
+        rgba(9, 20, 34, 0.06) 54vw,
+        rgba(9, 20, 34, 0.1) 106vw,
+        rgba(9, 20, 34, 0.86) 128vw,
+        var(--navy-deep) 176vw),
       var(--navy-deep) url('/assets/images/hero-bg-road-mobile.jpg') center top / 100% auto no-repeat;
   }
-  .hero-photo .hero-form-col { margin-top: 11rem; }
+  /* Photo drawn at full width is ~179vw tall, truck from ~50vw to ~108vw down;
+     the form starts just under the wheels on any phone width. */
+  .hero-photo .hero-form-col { margin-top: 66vw; }
   /* The accent rule tied the copy to the clip above it as a caption; with the
      clip gone it has nothing to caption. */
   .hero-photo .hero-lede { border-left: 0; padding-left: 0; }
