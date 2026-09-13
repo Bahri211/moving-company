@@ -153,7 +153,7 @@
         btn.insertAdjacentElement('beforebegin', errDiv);
       }
       errDiv.textContent = msg;
-      btn.textContent = 'Submit a free quote';
+      btn.textContent = 'Submit';
       btn.disabled = false;
     }
 
