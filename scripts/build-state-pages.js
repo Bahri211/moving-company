@@ -94,10 +94,27 @@ const phoneIconLg = phoneIconSm.replace('width="16" height="16"', 'width="18" he
 const checkIcon = `<svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`;
 
 const NAV = `<nav class="topnav">
-  <a href="/" class="logo" aria-label="50STATEMOVERS INC home">
-    <img src="/assets/images/48-state-movers-logo-removebg-preview.png" alt="50STATEMOVERS INC" class="logo-img" />
-    <span class="logo-name">50STATEMOVERS INC</span>
-  </a>
+  <div class="nav-left">
+    <a href="/" class="logo" aria-label="50STATEMOVERS INC home">
+      <img src="/assets/images/48-state-movers-logo-removebg-preview.png" alt="50STATEMOVERS INC" class="logo-img" />
+      <span class="logo-name">50STATEMOVERS INC</span>
+    </a>
+    <span class="fmcsa-badge" role="img" aria-label="USDOT verified, MC authority active">
+      <svg class="fb-seal" viewBox="0 0 36 36" aria-hidden="true">
+        <defs>
+          <linearGradient id="fbSealGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#5fd08b"/>
+            <stop offset="1" stop-color="#2e8b57"/>
+          </linearGradient>
+        </defs>
+        <polygon fill="url(#fbSealGrad)" points="18.00 0.50 20.97 3.09 24.70 1.83 26.44 5.36 30.37 5.63 30.64 9.56 34.17 11.30 32.91 15.03 35.50 18.00 32.91 20.97 34.17 24.70 30.64 26.44 30.37 30.37 26.44 30.64 24.70 34.17 20.97 32.91 18.00 35.50 15.03 32.91 11.30 34.17 9.56 30.64 5.63 30.37 5.36 26.44 1.83 24.70 3.09 20.97 0.50 18.00 3.09 15.03 1.83 11.30 5.36 9.56 5.63 5.63 9.56 5.36 11.30 1.83 15.03 3.09"/>
+        <circle cx="18" cy="18" r="12.2" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="0.8" stroke-dasharray="1.2 1.4"/>
+        <path d="M18 9.5 12 11.9v4.6c0 3.7 2.5 6.9 6 8.1 3.5-1.2 6-4.4 6-8.1v-4.6z" fill="#fff"/>
+        <polyline points="15.2 17.2 17.3 19.3 21 15.3" fill="none" stroke="#2e8b57" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="fb-label"><span class="fb-verified">USDOT Verified</span> <span class="fb-sep" aria-hidden="true">•</span> <span class="fb-active">MC Active<span class="fb-dot" aria-hidden="true"></span></span></span>
+    </span>
+  </div>
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
     <li><a href="#coverage">Coverage</a></li>
