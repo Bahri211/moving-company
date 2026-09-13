@@ -640,7 +640,8 @@ ${stat('cover', '$1M', 'Liability coverage')}
 </section>`;
 }
 
-const STEP_FORM_HEAD = `<link rel="preload" as="image" href="/assets/images/hero-bg-road.jpg">
+const STEP_FORM_HEAD = `<link rel="preload" as="image" href="/assets/images/hero-bg-road.jpg" media="(min-width: 769px)">
+<link rel="preload" as="image" href="/assets/images/hero-bg-road-mobile.jpg" media="(max-width: 768px)">
 <style>
 /* Photo hero ---------------------------------------------------------------
    Truck on an open road behind the full width of the hero. The wash is darkest
@@ -841,11 +842,23 @@ body { overflow-x: clip; }
     padding-bottom: 6rem;
     row-gap: 1rem;
   }
+  /* Portrait cut with the branded truck a third of the way down. It sits at
+     full width from the top, and the form drops below a clear band so the
+     truck shows between the headline and the card; the wash is heavy under
+     the headline, near clear across the truck, then heavy again behind the
+     form and copy, reaching solid navy before the photo runs out. */
   .hero.hero-photo::before {
     background:
-      linear-gradient(180deg, rgba(9, 20, 34, 0.6) 0%, rgba(9, 20, 34, 0.82) 45%, rgba(9, 20, 34, 0.9) 100%),
-      var(--navy-deep) url('/assets/images/hero-bg-road.jpg') 72% center / cover no-repeat;
+      linear-gradient(180deg,
+        rgba(9, 20, 34, 0.72) 0,
+        rgba(9, 20, 34, 0.6) calc(var(--nav-h) + 60px),
+        rgba(9, 20, 34, 0.08) calc(var(--nav-h) + 130px),
+        rgba(9, 20, 34, 0.12) calc(var(--nav-h) + 235px),
+        rgba(9, 20, 34, 0.86) calc(var(--nav-h) + 360px),
+        var(--navy-deep) 158vw),
+      var(--navy-deep) url('/assets/images/hero-bg-road-mobile.jpg') center top / 100% auto no-repeat;
   }
+  .hero-photo .hero-form-col { margin-top: 11rem; }
   /* The accent rule tied the copy to the clip above it as a caption; with the
      clip gone it has nothing to caption. */
   .hero-photo .hero-lede { border-left: 0; padding-left: 0; }
