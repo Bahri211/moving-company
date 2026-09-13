@@ -118,21 +118,7 @@ src="https://www.facebook.com/tr?id=1413801450690954&ev=PageView&noscript=1"
   font-weight: 600;
   letter-spacing: 0.01em;
   white-space: nowrap;
-  text-decoration: none;
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s;
 }
-/* Light sweep across the pill on hover */
-.fmcsa-badge::after {
-  content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.16) 50%, transparent 65%);
-  transform: translateX(-100%);
-  transition: transform 0.8s ease;
-  pointer-events: none;
-}
-.fmcsa-badge:hover { transform: translateY(-1px); box-shadow: inset 0 0 0 1px rgba(63, 174, 107, 0.5), 0 12px 22px -10px rgba(12, 26, 43, 0.65); }
-.fmcsa-badge:hover::after { transform: translateX(100%); }
-.fmcsa-badge:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .fmcsa-badge .fb-seal { width: 28px; height: 28px; flex-shrink: 0; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35)); }
 .fmcsa-badge .fb-sep { color: var(--green); font-size: 0.9em; }
 .fmcsa-badge .fb-active { display: inline-flex; align-items: center; gap: 0.35rem; }
@@ -153,7 +139,7 @@ src="https://www.facebook.com/tr?id=1413801450690954&ev=PageView&noscript=1"
   .home .nav-left { gap: 0.6rem; }
   .fmcsa-badge { width: 34px; height: 34px; padding: 0; justify-content: center; background: none; box-shadow: none; }
   .fmcsa-badge .fb-seal { width: 34px; height: 34px; }
-  .fmcsa-badge .fb-label, .fmcsa-badge::after { display: none; }
+  .fmcsa-badge .fb-label { display: none; }
 }
 @media (max-width: 768px) {
   /* The logo art already carries the company name, so the text name
@@ -164,8 +150,6 @@ src="https://www.facebook.com/tr?id=1413801450690954&ev=PageView&noscript=1"
   .fmcsa-badge .fb-seal { width: 24px; height: 24px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .fmcsa-badge, .fmcsa-badge::after { transition: none; }
-  .fmcsa-badge:hover { transform: none; }
   .fmcsa-badge .fb-dot { animation: none; }
 }
 </style>
@@ -230,7 +214,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <img src="assets/images/48-state-movers-logo-removebg-preview.png" alt="50STATEMOVERS INC" class="logo-img" />
       <span class="logo-name">50STATEMOVERS INC</span>
     </a>
-    <a class="fmcsa-badge" href="https://safer.fmcsa.dot.gov/query.asp?searchtype=ANY&amp;query_type=queryCarrierSnapshot&amp;query_param=USDOT&amp;query_string=4575745" target="_blank" rel="noopener" aria-label="USDOT verified, MC authority active. Verify USDOT 4575745 on the FMCSA website">
+    <span class="fmcsa-badge" role="img" aria-label="USDOT verified, MC authority active">
       <svg class="fb-seal" viewBox="0 0 36 36" aria-hidden="true">
         <defs>
           <linearGradient id="fbSealGrad" x1="0" y1="0" x2="1" y2="1">
@@ -244,7 +228,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <polyline points="15.2 17.2 17.3 19.3 21 15.3" fill="none" stroke="#2e8b57" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <span class="fb-label">USDOT Verified <span class="fb-sep" aria-hidden="true">•</span> <span class="fb-active">MC Active<span class="fb-dot" aria-hidden="true"></span></span></span>
-    </a>
+    </span>
   </div>
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
