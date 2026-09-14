@@ -125,7 +125,7 @@ const NAV = `<nav class="topnav">
   <div class="nav-right">
     <a href="tel:${PHONE_HREF}" class="nav-phone">
       ${phoneIconSm}
-      ${PHONE_DISPLAY}
+      ${PHONE_DISPLAY.replace(/^(\+1 )/, '<span class="np-cc">$1</span>')}
     </a>
     <a href="#get-quote" class="nav-cta">Get a free quote</a>
     <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">

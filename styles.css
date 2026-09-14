@@ -2773,19 +2773,19 @@ a.state-item:hover { background: #fff; }
   padding: 0 0.62rem 0 0.2rem;
   border-radius: 999px;
   /* Gradient ring: the padding-box layer is the fill, the border-box layer
-     shows through the transparent 1px border as a light-to-deep orange edge.
-     A deeper orange than the form button so the small white label holds its
+     shows through the transparent 1px border as a light-to-deep green edge.
+     A deeper green than the brand accent so the small white label holds its
      contrast. */
   border: 1px solid transparent;
   background:
-    linear-gradient(180deg, #e8641a, #d2500f 55%, #bd430b) padding-box,
-    linear-gradient(120deg, #f7a567, #c9480c 50%, #f08a45) border-box;
+    linear-gradient(180deg, #33a063, #2a8a53 55%, #237046) padding-box,
+    linear-gradient(120deg, #86dcaa, #1f6a41 50%, #5cc58a) border-box;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    0 8px 18px -10px rgba(201, 72, 12, 0.7),
+    0 8px 18px -10px rgba(35, 112, 70, 0.7),
     0 1px 3px rgba(12, 26, 43, 0.12);
   color: #fff;
-  text-shadow: 0 1px 1px rgba(110, 35, 0, 0.3);
+  text-shadow: 0 1px 1px rgba(10, 55, 30, 0.3);
   font-size: 0.62rem;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -2806,12 +2806,12 @@ a.state-item:hover { background: #fff; }
   0% { transform: translateX(-110%); }
   22%, 100% { transform: translateX(110%); }
 }
-.fmcsa-badge .fb-seal { width: 21px; height: 21px; flex-shrink: 0; filter: drop-shadow(0 1px 3px rgba(110, 35, 0, 0.35)); }
-/* Recolour the green seal for the orange pill: white rosette, orange shield,
+.fmcsa-badge .fb-seal { width: 21px; height: 21px; flex-shrink: 0; filter: drop-shadow(0 1px 3px rgba(10, 55, 30, 0.35)); }
+/* Recolour the seal for the green pill: white rosette, deep green shield,
    white tick. CSS beats the SVG presentation attributes. */
 .fmcsa-badge .fb-seal stop { stop-color: #fff; }
-.fmcsa-badge .fb-seal circle { stroke: #d2500f; stroke-opacity: 0.5; }
-.fmcsa-badge .fb-seal path { fill: #d2500f; }
+.fmcsa-badge .fb-seal circle { stroke: #237046; stroke-opacity: 0.5; }
+.fmcsa-badge .fb-seal path { fill: #237046; }
 .fmcsa-badge .fb-seal polyline { stroke: #fff; }
 .fmcsa-badge .fb-label { display: inline-flex; align-items: center; gap: 0.3rem; }
 .fmcsa-badge .fb-verified { color: #fff; }
@@ -2842,11 +2842,50 @@ a.state-item:hover { background: #fff; }
      gives its room to the badge on phones. */
   .nav-left .logo-name { display: none; }
   .nav-left { gap: 0.7rem; }
-  .fmcsa-badge { height: 21px; padding: 0 0.42rem 0 0.14rem; gap: 0.22rem; font-size: 0.5rem; }
-  .fmcsa-badge .fb-seal { width: 15px; height: 15px; }
+  .fmcsa-badge { height: 24px; padding: 0 0.45rem 0 0.18rem; gap: 0.24rem; font-size: 0.45rem; }
+  .fmcsa-badge .fb-seal { width: 18px; height: 18px; }
   .fmcsa-badge .fb-label { gap: 0.24rem; }
   .fmcsa-badge .fb-active { gap: 0.22rem; }
   .fmcsa-badge .fb-dot { width: 4px; height: 4px; }
+  /* The number comes back on phones as plain navy text with a small green
+     icon, not a second green pill beside the badge. */
+  /* Phones drop the country code so logo, badge, number and menu share one
+     row without squeezing the badge's label. */
+  .nav-left { gap: 0.5rem; }
+  .fmcsa-badge { flex-shrink: 0; }
+  .nav-phone .np-cc { display: none; }
+  .nav-right { gap: 0.55rem; }
+  .topnav .nav-phone {
+    display: inline-flex; gap: 0.25rem;
+    padding: 0; background: none; box-shadow: none;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: -0.01em; color: var(--ink);
+  }
+  .topnav .nav-phone svg { width: 13px; height: 13px; color: var(--green-deep); }
+  .topnav .nav-phone:hover { transform: none; box-shadow: none; }
+}
+/* Narrow phones: the bar's side padding and the logo give back a little room
+   so the badge and the number don't touch; below 360px the number drops its
+   icon as well. */
+@media (max-width: 400px) {
+  nav.topnav { padding-left: 0.85rem; padding-right: 0.85rem; }
+  .topnav .logo-img { height: 30px; }
+  .topnav .nav-left > a, .topnav .logo-img { flex-shrink: 0; }
+  .nav-right { gap: 0.45rem; }
+}
+@media (max-width: 374px) {
+  .topnav .nav-phone svg { display: none; }
+}
+@media (max-width: 359px) {
+  nav.topnav { padding-left: 0.7rem; padding-right: 0.7rem; }
+  .nav-left { gap: 0.4rem; }
+  .topnav .logo-img { height: 26px; }
+  .fmcsa-badge { padding-right: 0.38rem; }
+  .fmcsa-badge .fb-dot { display: none; }
+  .topnav .nav-phone { font-size: 0.62rem; }
+}
+/* 320px-class phones: the badge keeps "USDOT Verified" and drops "MC Active". */
+@media (max-width: 339px) {
+  .fmcsa-badge .fb-sep, .fmcsa-badge .fb-active { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .fmcsa-badge::after, .fmcsa-badge .fb-dot { animation: none; }
