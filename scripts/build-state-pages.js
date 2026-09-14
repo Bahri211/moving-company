@@ -656,7 +656,7 @@ ${stat('cover', 'gold', '$1M', 'Liability coverage', 'Bonded &amp; insured')}
   <div class="ph-about">
     <div class="ph-media">
       <figure class="ph-photo-main">
-        <img src="/assets/images/gallery/crew-packing.jpg" alt="50STATEMOVERS crew taping a carton and shrink-wrapping furniture before a move out of ${esc(s.name)}" width="1600" height="1066" loading="lazy" decoding="async" />
+        <img src="/assets/images/gallery/in-kitchen-crew.jpg" alt="50STATEMOVERS crew packing kitchen items into moving boxes with a smiling customer before a move out of ${esc(s.name)}" width="1600" height="893" loading="lazy" decoding="async" />
       </figure>
       <figure class="ph-photo-inset">
         <img src="/assets/images/gallery/road-inset.jpg" alt="Moving truck on an open highway at sunrise" width="900" height="672" loading="lazy" decoding="async" />
@@ -833,7 +833,7 @@ body { overflow-x: clip; }
   border-radius: 26px;
   box-shadow: 0 40px 80px -40px rgba(12, 26, 43, 0.55);
 }
-.ph-photo-main img { object-position: 38% center; }
+.ph-photo-main img { object-position: 55% center; }
 .ph-photo-inset {
   position: absolute; right: 0; bottom: 0;
   width: 44%; aspect-ratio: 4 / 3;
