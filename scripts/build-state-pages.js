@@ -1134,15 +1134,15 @@ body { overflow-x: clip; }
     background:
       linear-gradient(180deg,
         rgba(9, 20, 34, 0.72) 0,
-        rgba(9, 20, 34, 0.55) 34vw,
-        rgba(9, 20, 34, 0.05) 50vw,
-        rgba(9, 20, 34, 0.08) 92vw,
-        rgba(9, 20, 34, 0.86) 112vw,
-        var(--navy-deep) 164vw),
-      var(--navy-deep) url('/assets/images/hero-bg-coast-mobile.jpg') center -15vw / 100% auto no-repeat;
+        rgba(9, 20, 34, 0.5) 30vw,
+        rgba(9, 20, 34, 0.05) 44vw,
+        rgba(9, 20, 34, 0.08) 80vw,
+        rgba(9, 20, 34, 0.86) 100vw,
+        var(--navy-deep) 145vw),
+      var(--navy-deep) url('/assets/images/hero-bg-coast-mobile.jpg') center -32vw / 100% auto no-repeat;
   }
-  /* Photo drawn at full width is ~179vw tall and pulled up 15vw, so the truck
-     runs from ~58vw to ~98vw down.
+  /* Photo drawn at full width is ~179vw tall and pulled up 32vw, so the truck
+     runs from ~49vw to ~80vw down.
      The form starts just under the lettering, above the wheels, so most of the
      truck shows and the card still clears the sticky call bar on common phones. */
   .hero-photo .hero-form-col { margin-top: 44vw; }
