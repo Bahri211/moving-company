@@ -1014,8 +1014,8 @@ nav.topnav.scrolled {
      phone this heading is the first thing that explains the card. */
   .hero-form-header h3 { font-size: 1.4rem; }
 }
-</style><link rel="preload" as="image" href="/assets/images/hero-bg-road.jpg" media="(min-width: 769px)">
-<link rel="preload" as="image" href="/assets/images/hero-bg-road-mobile.jpg" media="(max-width: 768px)">
+</style><link rel="preload" as="image" href="/assets/images/hero-bg-coast.jpg" media="(min-width: 769px)">
+<link rel="preload" as="image" href="/assets/images/hero-bg-coast-mobile.jpg" media="(max-width: 768px)">
 <style>
 /* Photo hero ---------------------------------------------------------------
    Truck on an open road behind the full width of the hero. The wash is darkest
@@ -1040,9 +1040,9 @@ body { overflow-x: clip; }
   opacity: 1;
   z-index: -1;
   background:
-    linear-gradient(90deg, rgba(9, 20, 34, 0.92) 0%, rgba(9, 20, 34, 0.78) 38%, rgba(9, 20, 34, 0.3) 72%, rgba(9, 20, 34, 0.4) 100%),
-    linear-gradient(180deg, rgba(9, 20, 34, 0.35) 0%, rgba(9, 20, 34, 0) 30%, rgba(9, 20, 34, 0) 70%, rgba(9, 20, 34, 0.5) 100%),
-    var(--navy-deep) url('/assets/images/hero-bg-road.jpg') 70% 62% / cover no-repeat;
+    radial-gradient(ellipse 46% 30% at 25% 50%, rgba(9, 20, 34, 0.66), rgba(9, 20, 34, 0) 100%),
+    linear-gradient(180deg, rgba(9, 20, 34, 0.5) 0%, rgba(9, 20, 34, 0.18) 40%, rgba(9, 20, 34, 0.1) 72%, rgba(9, 20, 34, 0.45) 100%),
+    var(--navy-deep) url('/assets/images/hero-bg-coast.jpg') 100% 0% / auto 140% no-repeat;
 }
 .hero-photo .hero-content { align-self: center; }
 .hero-photo h1 { color: #fff; text-shadow: 0 2px 24px rgba(0, 0, 0, 0.3); }
@@ -1421,15 +1421,15 @@ body { overflow-x: clip; }
     background:
       linear-gradient(180deg,
         rgba(9, 20, 34, 0.72) 0,
-        rgba(9, 20, 34, 0.6) 34vw,
-        rgba(9, 20, 34, 0.06) 45vw,
-        rgba(9, 20, 34, 0.1) 74vw,
-        rgba(9, 20, 34, 0.86) 100vw,
-        var(--navy-deep) 166vw),
-      var(--navy-deep) url('/assets/images/hero-bg-road-mobile.jpg') center -10vw / 100% auto no-repeat;
+        rgba(9, 20, 34, 0.55) 34vw,
+        rgba(9, 20, 34, 0.05) 50vw,
+        rgba(9, 20, 34, 0.08) 92vw,
+        rgba(9, 20, 34, 0.86) 112vw,
+        var(--navy-deep) 164vw),
+      var(--navy-deep) url('/assets/images/hero-bg-coast-mobile.jpg') center -15vw / 100% auto no-repeat;
   }
-  /* Photo drawn at full width is ~179vw tall and pulled up 10vw, so the truck
-     runs from ~40vw to ~98vw down.
+  /* Photo drawn at full width is ~179vw tall and pulled up 15vw, so the truck
+     runs from ~58vw to ~98vw down.
      The form starts just under the lettering, above the wheels, so most of the
      truck shows and the card still clears the sticky call bar on common phones. */
   .hero-photo .hero-form-col { margin-top: 44vw; }
