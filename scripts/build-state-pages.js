@@ -356,16 +356,16 @@ ${items.map(([f, alt, h, p]) => `    <div class="service-card illus-card">
 </section>`;
 }
 
-/* Photo-hero page version of the band: the same three points as numbered steps
-   on a timeline, each with a crew or truck photograph instead of an icon tile.
-   On phones the steps become a swipeable row with progress dots. */
+/* Photo-hero page version of the band: the three points as a bento of
+   photographs — loading tall on the left, the road and the crew stacked on
+   the right — with each step's words set on its photo over a navy fade. */
 function stepsBand(s) {
   const steps = [
-    ['step-packing.jpg', '50STATEMOVERS crew loading blanket-wrapped furniture and cartons into the truck', 'Before loading',
+    ['step-packing.jpg', 1400, 781, '50STATEMOVERS crew loading blanket-wrapped furniture and cartons into the truck', 'Before loading',
      pick('bandPackingTitle', s), pick('bandPacking', s)],
-    ['step-route.jpg', 'Moving truck on an open highway at sunrise', 'On the road',
+    ['step-route.jpg', 900, 562, 'Moving truck on an open highway at sunrise', 'On the road',
      pick('bandRoutesTitle', s), pick('bandRoutes', s)],
-    ['step-crew.jpg', 'Two 50STATEMOVERS crew carrying a wrapped item to the moving truck', 'At your door',
+    ['step-crew.jpg', 900, 502, 'Two 50STATEMOVERS crew carrying a wrapped item to the moving truck', 'At your door',
      pick('bandCrewTitle', s), pick('bandCrew', s)],
   ];
   return `<section id="how-it-works" class="steps-band">
@@ -375,34 +375,22 @@ function stepsBand(s) {
         <span class="steps-kicker">${pick('bandKicker', s)}</span>
         <h2>${pick('bandHead', s)}</h2>
       </div>
-      <p>${pick('bandLede', s)}</p>
+      <div class="steps-aside">
+        <p>${pick('bandLede', s)}</p>
+        <a href="#get-quote" class="ph-btn">Get my fixed price</a>
+      </div>
     </div>
-    <ol class="steps-list">
-${steps.map(([f, alt, tag, h, p], i) => `      <li class="step">
-        <div class="step-mark" aria-hidden="true"><span>${String(i + 1).padStart(2, '0')}</span></div>
-        <article class="step-card">
-          <figure class="step-photo">
-            <img src="/assets/images/gallery/${f}" alt="${alt}" width="900" height="560" loading="lazy" decoding="async" />
-            <figcaption>${tag}</figcaption>
-          </figure>
-          <div class="step-body">
-            <h3>${h}</h3>
-            <p>${p}</p>
-          </div>
-        </article>
+    <ol class="bento">
+${steps.map(([f, w, h, alt, tag, title, text], i) => `      <li class="bento-tile bento-${i + 1}">
+        <img src="/assets/images/gallery/${f}" alt="${alt}" width="${w}" height="${h}" loading="lazy" decoding="async" />
+        <div class="bento-copy">
+          <span class="bento-tag"><b>${String(i + 1).padStart(2, '0')}</b>${tag}</span>
+          <h3>${title}</h3>
+          <p>${text}</p>
+        </div>
       </li>`).join('\n')}
     </ol>
-    <div class="steps-dots" aria-hidden="true"><span class="is-on"></span><span></span><span></span></div>
   </div>
-  <script>(function () {
-    var band = document.currentScript.parentNode;
-    var list = band.querySelector('.steps-list'), dots = band.querySelectorAll('.steps-dots span');
-    list.addEventListener('scroll', function () {
-      var max = list.scrollWidth - list.clientWidth;
-      var on = max > 0 ? Math.round(list.scrollLeft / max * (dots.length - 1)) : 0;
-      dots.forEach(function (d, i) { d.classList.toggle('is-on', i === on); });
-    }, { passive: true });
-  })();</script>
 </section>`;
 }
 
@@ -951,96 +939,80 @@ body { overflow-x: clip; }
 .ph-road span:empty { display: none; }
 
 /* Steps band --------------------------------------------------------------
-   Navy ground with two soft glows, a heading row, then three photo cards
-   under a numbered timeline whose dashed rule runs from one step to the next. */
-.steps-band {
-  position: relative;
-  padding: 6.5rem 2rem;
-  background:
-    radial-gradient(900px 520px at 88% 0%, rgba(200, 85, 44, 0.2), transparent 60%),
-    radial-gradient(700px 520px at 0% 100%, rgba(63, 174, 107, 0.1), transparent 60%),
-    var(--navy-deep);
-  color: #fff;
-  overflow: hidden;
-}
+   White ground between the cream sections. Heading on the left, the lede and
+   a CTA on the right, then a bento of three photographs: loading tall on the
+   left, the road and the crew stacked on the right. Each step's words sit on
+   its photo over a navy fade, behind a numbered tag. */
+.steps-band { padding: 6.5rem 2rem; background: #fff; }
 .steps-inner { max-width: 1240px; margin: 0 auto; }
-.steps-head { display: grid; grid-template-columns: 1.3fr 1fr; align-items: end; gap: 1.25rem 4rem; margin-bottom: 3.25rem; }
-.steps-kicker { display: block; margin-bottom: 0.8rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #f4a37f; }
-.steps-head h2 { margin: 0; font-size: clamp(2.1rem, 3.6vw, 3.1rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.06; color: #fff; }
-.steps-head h2 em { font-style: normal; color: #f4a37f; }
-.steps-head p { justify-self: end; max-width: 30rem; margin: 0; font-size: 1.05rem; line-height: 1.7; color: rgba(255, 255, 255, 0.7); }
-.steps-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-.step { display: flex; flex-direction: column; }
-.step-mark { display: flex; align-items: center; margin-bottom: 1.1rem; }
-.step-mark span {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 42px; height: 42px; flex-shrink: 0;
-  border-radius: 50%;
-  background: rgba(244, 163, 127, 0.12);
-  box-shadow: inset 0 0 0 1.5px #f4a37f;
-  font-size: 0.85rem; font-weight: 700; color: #f4a37f; font-variant-numeric: tabular-nums;
+.steps-head { display: grid; grid-template-columns: 1.25fr 1fr; align-items: end; gap: 1.5rem 4rem; margin-bottom: 2.75rem; }
+.steps-kicker { display: block; margin-bottom: 0.8rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green); }
+.steps-head h2 { margin: 0; font-size: clamp(2.1rem, 3.6vw, 3.1rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.06; color: var(--ink); }
+.steps-head h2 em { font-style: normal; color: var(--accent); }
+.steps-aside { justify-self: end; max-width: 30rem; }
+.steps-aside p { margin: 0 0 1.25rem; font-size: 1.05rem; line-height: 1.7; color: var(--ink-soft); }
+.bento {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: 1.15fr 1fr; grid-template-rows: repeat(2, minmax(270px, auto));
+  gap: 1.25rem;
 }
-.step-mark::after { content: ""; flex: 1; margin: 0 -1.5rem 0 0.9rem; border-top: 2px dashed rgba(244, 163, 127, 0.35); }
-.step:last-child .step-mark::after { visibility: hidden; }
-.step-card {
-  flex: 1; display: flex; flex-direction: column;
-  border-radius: 22px; overflow: hidden;
-  background: rgba(255, 255, 255, 0.045);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s;
+.bento-1 { grid-row: 1 / 3; }
+.bento-tile {
+  position: relative; isolation: isolate;
+  display: flex; align-items: flex-end;
+  min-height: 270px;
+  border-radius: 24px; overflow: hidden;
+  background: var(--navy);
+  box-shadow: 0 30px 60px -36px rgba(12, 26, 43, 0.55);
 }
-.step-card:hover { transform: translateY(-4px); background: rgba(255, 255, 255, 0.07); }
-.step-photo { position: relative; margin: 0; aspect-ratio: 16 / 10; overflow: hidden; }
-.step-photo img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
-.step-card:hover .step-photo img { transform: scale(1.05); }
-.step-photo::after { content: ""; position: absolute; inset: auto 0 0; height: 45%; background: linear-gradient(transparent, rgba(12, 26, 43, 0.5)); }
-.step-photo figcaption {
-  position: absolute; left: 1rem; top: 1rem; z-index: 1;
-  padding: 0.38rem 0.75rem; border-radius: 999px;
-  background: rgba(12, 26, 43, 0.72);
-  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff;
+.bento-tile img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.bento-tile:hover img { transform: scale(1.04); }
+/* The road and crew shots put a white truck body right behind the words, so
+   their fade starts higher and runs darker than the loading shot's. */
+.bento-tile::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(9, 20, 34, 0.05) 0%, rgba(9, 20, 34, 0.7) 42%, rgba(9, 20, 34, 0.95) 100%); }
+.bento-copy h3, .bento-copy p { text-shadow: 0 1px 12px rgba(9, 20, 34, 0.55); }
+.bento-1::after { background: linear-gradient(180deg, rgba(9, 20, 34, 0) 40%, rgba(9, 20, 34, 0.6) 66%, rgba(9, 20, 34, 0.94) 100%); }
+.bento-copy { max-width: 34rem; padding: 1.6rem 1.75rem 1.7rem; color: #fff; }
+.bento-1 .bento-copy { padding: 2.25rem 2.4rem 2.4rem; }
+.bento-tag {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  margin-bottom: 0.8rem; padding: 0.3rem 0.85rem 0.3rem 0.3rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
 }
-.step-body { padding: 1.4rem 1.5rem 1.65rem; }
-.step-body h3 { margin: 0 0 0.5rem; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; color: #fff; }
-.step-body p { margin: 0; font-size: 0.95rem; line-height: 1.65; color: rgba(255, 255, 255, 0.68); }
-.steps-dots { display: none; }
+.bento-tag b { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); font-size: 0.68rem; letter-spacing: 0; }
+.bento-copy h3 { margin: 0 0 0.45rem; font-size: 1.45rem; font-weight: 600; letter-spacing: -0.025em; line-height: 1.15; color: #fff; }
+.bento-1 h3 { font-size: clamp(1.8rem, 2.6vw, 2.3rem); }
+.bento-copy p { margin: 0; font-size: 0.93rem; line-height: 1.6; color: rgba(255, 255, 255, 0.84); }
+.bento-1 p { max-width: 28rem; font-size: 1.02rem; }
 
 @media (max-width: 1100px) {
   .steps-head { grid-template-columns: 1fr; }
-  .steps-head p { justify-self: start; }
-  .steps-list { gap: 1rem; }
-  .step-mark::after { margin-right: -1rem; }
-  .step-body { padding: 1.2rem 1.2rem 1.4rem; }
+  .steps-aside { justify-self: start; }
 }
-/* Phones: a swipeable row. Each card takes most of the width so the next one
-   peeks in, and the dots under the row track the scroll position. */
+@media (max-width: 900px) {
+  .bento { grid-template-columns: 1fr; grid-template-rows: none; }
+  .bento-1 { grid-row: auto; min-height: 420px; }
+}
+/* Phones: the tiles stack, the first one tallest, and the CTA runs full width. */
 @media (max-width: 768px) {
-  .steps-band { padding: 3.75rem 0 3.25rem; }
-  .steps-head { gap: 0.75rem; margin-bottom: 1.75rem; padding: 0 1.25rem; }
+  .steps-band { padding: 3.5rem 1.25rem; }
+  .steps-head { gap: 0.9rem; margin-bottom: 1.6rem; }
   .steps-kicker { margin-bottom: 0.55rem; font-size: 0.66rem; }
   .steps-head h2 { font-size: 1.8rem; }
-  .steps-head p { font-size: 0.92rem; line-height: 1.6; }
-  .steps-list {
-    display: flex; gap: 0.9rem;
-    overflow-x: auto; overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory; scroll-padding: 0 1.25rem;
-    padding: 0 1.25rem 0.25rem;
-    scrollbar-width: none;
-  }
-  .steps-list::-webkit-scrollbar { display: none; }
-  .steps-list::after { content: ""; flex: 0 0 0.35rem; }
-  .step { flex: 0 0 84%; scroll-snap-align: start; }
-  .step-mark { margin-bottom: 0.8rem; }
-  .step-mark span { width: 34px; height: 34px; font-size: 0.75rem; }
-  .step-mark::after { margin-right: -0.9rem; }
-  .step-card:hover { transform: none; }
-  .step-body { padding: 1.1rem 1.15rem 1.3rem; }
-  .step-body h3 { font-size: 1.08rem; }
-  .step-body p { font-size: 0.86rem; line-height: 1.6; }
-  .steps-dots { display: flex; justify-content: center; gap: 0.4rem; margin-top: 1.4rem; }
-  .steps-dots span { width: 7px; height: 7px; border-radius: 99px; background: rgba(255, 255, 255, 0.25); transition: width 0.3s, background 0.3s; }
-  .steps-dots span.is-on { width: 22px; background: #f4a37f; }
+  .steps-aside p { margin-bottom: 1rem; font-size: 0.92rem; line-height: 1.6; }
+  .steps-aside .ph-btn { display: flex; }
+  .bento { gap: 0.85rem; }
+  .bento-tile { min-height: 300px; border-radius: 18px; }
+  .bento-1 { min-height: 360px; }
+  .bento-copy, .bento-1 .bento-copy { padding: 1.15rem 1.15rem 1.25rem; }
+  .bento-tag { margin-bottom: 0.6rem; font-size: 0.62rem; }
+  .bento-tag b { width: 20px; height: 20px; font-size: 0.6rem; }
+  .bento-copy h3, .bento-1 h3 { font-size: 1.2rem; }
+  .bento-copy p, .bento-1 p { font-size: 0.85rem; line-height: 1.55; }
+  .bento-tile:hover img { transform: none; }
 }
 
 /* Step form card -----------------------------------------------------------
