@@ -598,16 +598,20 @@ const PH_ROW_ICONS = {
    and the band after it is a dark photo, so this runs light — a white stats card
    lifted over the hero's bottom edge, then the intro and the state's highways. */
 function photoProof(s) {
-  const stat = (icon, num, label) => `    <div class="ph-stat">
+  const stat = (icon, tone, num, label, sub) => `    <div class="ph-stat ph-tone-${tone}">
       <span class="ph-stat-icon" aria-hidden="true">${PH_ICONS[icon]}</span>
-      <div><strong>${num}</strong><span>${label}</span></div>
+      <div class="ph-stat-body">
+        <strong>${num}</strong>
+        <span class="ph-stat-label">${label}</span>
+        <span class="ph-stat-sub">${sub}</span>
+      </div>
     </div>`;
   return `<section class="ph-proof">
   <div class="ph-stats">
-${stat('price', '100%', 'Fixed-price moves')}
-${stat('shield', '0.3%', 'Damage claim rate')}
-${stat('support', '24/7', 'Customer support')}
-${stat('cover', '$1M', 'Liability coverage')}
+${stat('price', 'green', '100%', 'Fixed-price moves', 'Price locked at booking')}
+${stat('shield', 'orange', '0.3%', 'Damage claim rate', 'Across all our moves')}
+${stat('support', 'blue', '24/7', 'Customer support', 'Real people, any hour')}
+${stat('cover', 'gold', '$1M', 'Liability coverage', 'Bonded &amp; insured')}
   </div>
 
   <div class="ph-about">
@@ -727,22 +731,44 @@ body { overflow-x: clip; }
   max-width: 1240px;
   margin: -4.75rem auto 0;
   display: grid; grid-template-columns: repeat(4, 1fr);
-  padding: 1.6rem 0.75rem;
+  padding: 1.5rem 0.6rem;
   background: #fff;
-  border-radius: 20px;
+  border-radius: 22px;
   box-shadow: 0 34px 70px -34px rgba(12, 26, 43, 0.45), 0 0 0 1px rgba(12, 26, 43, 0.05);
 }
-.ph-stat { display: flex; align-items: center; gap: 0.95rem; padding: 0.35rem 1.5rem; }
-.ph-stat + .ph-stat { border-left: 1px solid #ece6dc; }
+/* Each stat carries its own colour: the tone tints the icon tile and strokes
+   the icon. The four rise in one after another as the card lands. */
+.ph-tone-green  { --tone: #2f9a5b; --tint: #e5f4ea; }
+.ph-tone-orange { --tone: #c8552c; --tint: #fbe9e1; }
+.ph-tone-blue   { --tone: #1f4f99; --tint: #e6edf8; }
+.ph-tone-gold   { --tone: #b3771c; --tint: #faefd9; }
+.ph-stat {
+  position: relative;
+  display: flex; align-items: center; gap: 1rem;
+  padding: 0.5rem 1.6rem;
+  animation: phStatIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.ph-stat:nth-child(1) { animation-delay: 0.35s; }
+.ph-stat:nth-child(2) { animation-delay: 0.45s; }
+.ph-stat:nth-child(3) { animation-delay: 0.55s; }
+.ph-stat:nth-child(4) { animation-delay: 0.65s; }
+@keyframes phStatIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.ph-stat + .ph-stat::before {
+  content: ""; position: absolute; left: 0; top: 10%; bottom: 10%; width: 1px;
+  background: linear-gradient(180deg, transparent, #e4dccf 25%, #e4dccf 75%, transparent);
+}
 .ph-stat-icon {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 48px; height: 48px; flex-shrink: 0;
-  border-radius: 14px;
-  background: #e9f4ed;
+  width: 56px; height: 56px; flex-shrink: 0;
+  border-radius: 17px;
+  background: var(--tint);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.03);
 }
-.ph-stat-icon svg { width: 24px; height: 24px; fill: none; stroke: var(--green); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.ph-stat strong { display: block; font-size: 1.7rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--navy); }
-.ph-stat div > span { display: block; margin-top: 0.15rem; font-size: 0.82rem; color: var(--muted); }
+.ph-stat-icon svg { width: 27px; height: 27px; fill: none; stroke: var(--tone); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.ph-stat-body { min-width: 0; }
+.ph-stat strong { display: block; font-size: 2rem; font-weight: 700; letter-spacing: -0.035em; line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; }
+.ph-stat-label { display: block; margin-top: 0.35rem; font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+.ph-stat-sub { display: block; margin-top: 0.1rem; font-size: 0.76rem; color: var(--muted); }
 
 /* About: photo collage on the left (crew photo, road inset, a floating
    coverage badge), the intro, the three local points and two CTAs on the right. */
@@ -955,9 +981,12 @@ body { overflow-x: clip; }
 
 @media (max-width: 1100px) {
   .hero.hero-photo { column-gap: 2rem; }
-  .ph-stat { padding: 0.35rem 0.9rem; gap: 0.7rem; }
-  .ph-stat-icon { width: 40px; height: 40px; }
-  .ph-stat strong { font-size: 1.4rem; }
+  .ph-stat { padding: 0.5rem 1rem; gap: 0.75rem; }
+  .ph-stat-icon { width: 44px; height: 44px; border-radius: 14px; }
+  .ph-stat-icon svg { width: 22px; height: 22px; }
+  .ph-stat strong { font-size: 1.55rem; }
+  .ph-stat-label { font-size: 0.84rem; }
+  .ph-stat-sub { font-size: 0.72rem; }
   .ph-about { gap: 3rem; }
   .ph-media { padding: 0 2.5rem 2.5rem 0; }
   .ph-badge { left: 1rem; top: 1rem; }
@@ -1009,15 +1038,25 @@ body { overflow-x: clip; }
   .qs-card .form-row select { min-height: 48px; border: 1px solid #ddd6cb; background-color: #faf8f4; }
 
   .ph-proof { padding: 0 1.25rem 2.75rem; }
-  .ph-stats { margin-top: -4rem; grid-template-columns: 1fr 1fr; padding: 0.4rem; border-radius: 18px; }
-  .ph-stat { flex-direction: column; text-align: center; gap: 0.5rem; padding: 1rem 0.4rem; }
-  .ph-stat + .ph-stat { border-left: 0; }
-  .ph-stat:nth-child(even) { border-left: 1px solid #ece6dc; }
-  .ph-stat:nth-child(n+3) { border-top: 1px solid #ece6dc; }
-  .ph-stat-icon { width: 40px; height: 40px; border-radius: 12px; }
-  .ph-stat-icon svg { width: 20px; height: 20px; }
-  .ph-stat strong { font-size: 1.35rem; }
-  .ph-stat div > span { font-size: 0.74rem; }
+  /* Phones: a 2×2 card. Each tile puts the icon beside the number, with the
+     label and its one-line promise underneath, over a faint wash of its tone. */
+  .ph-stats { margin-top: -4rem; grid-template-columns: 1fr 1fr; padding: 0; border-radius: 20px; overflow: hidden; }
+  .ph-stat {
+    display: grid; grid-template-columns: auto 1fr; align-items: center;
+    gap: 0 0.6rem;
+    padding: 1rem 0.95rem 1.05rem;
+    background: linear-gradient(160deg, var(--tint) 0%, rgba(255, 255, 255, 0) 62%);
+  }
+  .ph-stat + .ph-stat::before { display: none; }
+  .ph-stat:nth-child(even) { box-shadow: inset 1px 0 0 #eee6da; }
+  .ph-stat:nth-child(n+3) { box-shadow: inset 0 1px 0 #eee6da; }
+  .ph-stat:nth-child(4) { box-shadow: inset 1px 0 0 #eee6da, inset 0 1px 0 #eee6da; }
+  .ph-stat-body { display: contents; }
+  .ph-stat-icon { width: 36px; height: 36px; border-radius: 11px; background: #fff; box-shadow: 0 4px 10px -4px rgba(12, 26, 43, 0.25); }
+  .ph-stat-icon svg { width: 19px; height: 19px; stroke-width: 2; }
+  .ph-stat strong { font-size: 1.6rem; }
+  .ph-stat-label { grid-column: 1 / -1; margin-top: 0.7rem; font-size: 0.82rem; line-height: 1.25; }
+  .ph-stat-sub { grid-column: 1 / -1; margin-top: 0.15rem; font-size: 0.7rem; line-height: 1.3; }
   /* Compact on phones: photo first with a smaller inset and badge, smaller
      type, the local points as wrapping pills, and the at-a-glance band in
      one column. */
@@ -1062,7 +1101,7 @@ body { overflow-x: clip; }
   .ph-road span:not(.ph-sign) { font-size: 0.7rem; line-height: 1.35; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .qs-step.is-active { animation: none; }
+  .qs-step.is-active, .ph-stat { animation: none; }
 }
 </style>`;
 
