@@ -489,7 +489,7 @@ function quoteForm(originState) {
 // the state hub rather than a same-page anchor.
 /* ------------------------------------------- step form test (West Virginia)
    Trial of the multi-step quote form many movers use: two fields per screen
-   (route → move details → phone and email), no name field and no SMS consent, in a plain white card over a photo hero. Gated on its own set
+   (route → move details → phone, email and SMS consent), no name field, in a plain white card over a photo hero. Gated on its own set
    so the other state pages keep the eight-field form and their paper hero.
    site.js drives the steps and reports each one to GA as quote_form_step. */
 const STEP_FORM_STATES = new Set(['West Virginia']);
@@ -560,6 +560,16 @@ function quoteFormSteps(originState) {
             <input type="email" id="qf-email" placeholder="you@email.com" autocomplete="email" />
             <div class="field-error" id="error-email" role="alert"></div>
           </div>
+        </div>
+        <div class="form-row-consent">
+          <label class="sms-consent-label" for="qf-sms">
+            <span class="sms-checkbox-wrap">
+              <input type="checkbox" id="qf-sms" />
+              <span class="sms-checkbox-box" aria-hidden="true"></span>
+            </span>
+            <span class="sms-consent-text">I agree to receive SMS messages from 50STATEMOVERS INC about my quote.<span class="sms-more" id="sms-more" hidden> Msg &amp; data rates may apply. Message frequency varies. Reply STOP to opt out at any time. See our <a href="/privacy-policy" target="_blank">Privacy Policy</a>.</span><button type="button" class="sms-toggle" id="sms-toggle" aria-expanded="false" aria-controls="sms-more">Read more</button></span>
+          </label>
+          <div class="sms-error" id="sms-error" role="alert"></div>
         </div>
         <div class="qs-nav">
           <button type="button" class="qs-back" aria-label="Back">←</button>
@@ -780,6 +790,7 @@ body { overflow-x: clip; }
 
 .qs-card .form-row { margin-bottom: 1rem; }
 .qs-card .form-row-2 { gap: 0.8rem; }
+.qs-card .form-row-consent { margin: -0.15rem 0 0.95rem; }
 .qs-card .form-row label { font-size: 0.84rem; font-weight: 600; color: var(--ink-soft); margin-bottom: 0.35rem; }
 .qs-card .form-row > div:focus-within > label { color: var(--ink); }
 .qs-card .form-row input,
