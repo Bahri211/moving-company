@@ -935,9 +935,9 @@ body { overflow-x: clip; }
       var(--navy-deep) url('/assets/images/hero-bg-road-mobile.jpg') center top / 100% auto no-repeat;
   }
   /* Photo drawn at full width is ~179vw tall, truck from ~50vw to ~108vw down.
-     The form starts under the lettering rather than the wheels, so the whole
-     card still clears the sticky call bar on a 375x667 phone. */
-  .hero-photo .hero-form-col { margin-top: 40vw; }
+     The form starts just under the lettering, above the wheels, so most of the
+     truck shows and the card still clears the sticky call bar on common phones. */
+  .hero-photo .hero-form-col { margin-top: 50vw; }
   /* The accent rule tied the copy to the clip above it as a caption; with the
      clip gone it has nothing to caption. */
   .hero-photo .hero-lede { border-left: 0; padding-left: 0; }
