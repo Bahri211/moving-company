@@ -710,34 +710,35 @@ body { overflow-x: clip; }
   line-height: 1.55;
   color: rgba(245, 240, 232, 0.9);
 }
-/* The three promises as frosted cards on the photo: icon tile, claim, and one
-   line of proof beside it, stacked. Three across squeezed each title onto two
-   lines even on a 1440px hero. */
+/* The three promises as solid white cards on the photo, the same surface as
+   the quote form: a green accent rule on the left edge, a solid green icon
+   tile, the claim and one line of proof. Stacked; three across squeezed each
+   title onto two lines even on a 1440px hero. */
 .ph-cards {
   list-style: none; margin: 0; padding: 0;
-  display: grid; grid-template-columns: 1fr; gap: 0.65rem;
+  display: grid; grid-template-columns: 1fr; gap: 0.6rem;
   max-width: 460px;
 }
 .ph-card {
-  display: flex; flex-direction: row; align-items: center; gap: 0.95rem;
-  padding: 0.9rem 1.05rem;
-  border-radius: 16px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  -webkit-backdrop-filter: blur(12px) saturate(1.2); backdrop-filter: blur(12px) saturate(1.2);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 20px 40px -26px rgba(0, 0, 0, 0.7);
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s, background 0.3s;
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; gap: 0.9rem;
+  padding: 0.8rem 1.1rem 0.8rem 1rem;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 18px 36px -22px rgba(0, 0, 0, 0.65), 0 1px 2px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s;
 }
-.ph-card:hover { transform: translateY(-3px); border-color: rgba(125, 220, 163, 0.45); background: linear-gradient(180deg, rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0.07)); }
-.ph-card strong { display: block; font-size: 0.96rem; font-weight: 600; line-height: 1.3; letter-spacing: -0.005em; color: #fff; }
-.ph-card span:not(.ph-check) { display: block; margin-top: 0.3rem; font-size: 0.78rem; line-height: 1.4; color: rgba(245, 240, 232, 0.72); }
+.ph-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--green); }
+.ph-card:hover { transform: translateY(-2px); box-shadow: 0 22px 40px -22px rgba(0, 0, 0, 0.7), 0 1px 2px rgba(0, 0, 0, 0.08); }
+.ph-card strong { display: block; font-size: 0.96rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; color: var(--ink); }
+.ph-card span:not(.ph-check) { display: block; margin-top: 0.15rem; font-size: 0.8rem; line-height: 1.4; color: var(--muted); }
 .ph-check {
   display: inline-flex; align-items: center; justify-content: center;
   width: 40px; height: 40px; flex-shrink: 0;
-  border-radius: 12px;
-  color: #7ddca3;
-  background: linear-gradient(180deg, rgba(95, 208, 139, 0.24), rgba(95, 208, 139, 0.1));
-  box-shadow: inset 0 0 0 1px rgba(95, 208, 139, 0.4);
+  border-radius: 11px;
+  color: #fff;
+  background: linear-gradient(135deg, #3fae6b, #2a7d50);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 6px 14px -8px rgba(42, 125, 80, 0.9);
 }
 .ph-check svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 @media (prefers-reduced-motion: reduce) {
