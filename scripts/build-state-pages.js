@@ -727,8 +727,8 @@ function hwyShield(h) {
   return `<span class="ph-sign" aria-hidden="true">${svg}</span>`;
 }
 
-const STEP_FORM_HEAD = `<link rel="preload" as="image" href="/assets/images/hero-bg-coast.jpg" media="(min-width: 769px)">
-<link rel="preload" as="image" href="/assets/images/hero-bg-coast-mobile.jpg" media="(max-width: 768px)">
+const STEP_FORM_HEAD = `<link rel="preload" as="image" href="/assets/images/hero-bg-mountain.jpg" media="(min-width: 769px)">
+<link rel="preload" as="image" href="/assets/images/hero-bg-mountain-mobile.jpg" media="(max-width: 768px)">
 <style>
 /* Photo hero ---------------------------------------------------------------
    Truck on an open road behind the full width of the hero. The wash is darkest
@@ -755,7 +755,7 @@ body { overflow-x: clip; }
   background:
     radial-gradient(ellipse 46% 30% at 25% 50%, rgba(9, 20, 34, 0.66), rgba(9, 20, 34, 0) 100%),
     linear-gradient(180deg, rgba(9, 20, 34, 0.5) 0%, rgba(9, 20, 34, 0.18) 40%, rgba(9, 20, 34, 0.1) 72%, rgba(9, 20, 34, 0.45) 100%),
-    var(--navy-deep) url('/assets/images/hero-bg-coast.jpg') 100% 0% / auto 140% no-repeat;
+    var(--navy-deep) url('/assets/images/hero-bg-mountain.jpg') 100% 0% / auto 140% no-repeat;
 }
 .hero-photo .hero-content { align-self: center; }
 .hero-photo h1 { color: #fff; text-shadow: 0 2px 24px rgba(0, 0, 0, 0.3); }
@@ -1139,7 +1139,7 @@ body { overflow-x: clip; }
         rgba(9, 20, 34, 0.08) 80vw,
         rgba(9, 20, 34, 0.86) 100vw,
         var(--navy-deep) 145vw),
-      var(--navy-deep) url('/assets/images/hero-bg-coast-mobile.jpg') center -32vw / 100% auto no-repeat;
+      var(--navy-deep) url('/assets/images/hero-bg-mountain-mobile.jpg') center -32vw / 100% auto no-repeat;
   }
   /* Photo drawn at full width is ~179vw tall and pulled up 32vw, so the truck
      runs from ~49vw to ~80vw down.
