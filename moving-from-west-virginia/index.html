@@ -1507,33 +1507,26 @@ body { overflow-x: clip; }
   .ph-road span:not(.ph-sign) { font-size: 0.7rem; line-height: 1.35; }
 }
 /* Hero seal (trial) --------------------------------------------------------
-   The round seal replaces the navbar pill on this page. Wide desktop: in the
-   open road between the headline and the form, level with the card's middle.
-   Narrower desktop, where the headline runs up to the card: perched on the
-   card's top-right corner, mostly above it, clear of the card title. Phones:
-   above the card's left edge, over the empty road, so the truck's lettering
-   stays clear. */
+   The round seal replaces the navbar pill on this page. It sits in the
+   headline block. Desktop: under the headline in the open left column, out
+   of the layout flow so the headline keeps its place. Phones: centred in the
+   band between the headline and the form (see the margin rules at the end). */
 .topnav .fmcsa-badge { display: none; }
-.hero-photo .hero-form-col { position: relative; }
+.hero-photo .hero-content { position: relative; }
 .hero-seal {
   position: absolute; z-index: 4;
-  left: -6rem; top: 50%;
-  width: 150px; height: 150px;
-  transform: translate(-50%, -50%);
+  left: 0; top: 100%;
+  margin-top: 1.75rem;
+  width: 132px; height: 132px;
   filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.35));
 }
 .hero-seal svg { display: block; width: 100%; height: 100%; }
 .hero-seal text { font-family: inherit; letter-spacing: 0; }
-.hero-seal .hs-spin { transform-box: view-box; transform-origin: 70px 70px; animation: hsSpin 26s linear infinite; }
-@keyframes hsSpin { to { transform: rotate(360deg); } }
-@media (max-width: 1300px) {
-  .hero-seal { left: auto; right: 1.25rem; top: 0; width: 112px; height: 112px; transform: translateY(-86%); }
+@media (max-width: 1100px) {
+  .hero-seal { margin-top: 1.25rem; width: 108px; height: 108px; }
 }
 @media (max-width: 768px) {
-  .hero-seal { left: 0.9rem; right: auto; top: auto; bottom: 100%; width: 108px; height: 108px; transform: translateY(6%); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-seal .hs-spin { animation: none; }
+  .hero-seal { position: static; display: block; width: 96px; height: 96px; margin: 0.25rem auto 0; }
 }
 
 /* Navbar badge on phones, this page only: a bigger check seal and a smaller
@@ -1558,6 +1551,22 @@ body { overflow-x: clip; }
    of that goes to the nav, headline, the card down to Next, and the call bar,
    so the form drops as far as it can (up to 50vw) without hiding Next. */
 @media (max-width: 768px) {
+  @supports (height: 100svh) {
+    .hero-photo .hero-form-col { margin-top: clamp(4vw, calc(100svh - 31rem), 44vw); }
+  }
+}
+/* Hero seal on phones: the seal adds about 100px to the headline row, so the
+   form's drop gives the same back and the card doesn't move. Below 600px of
+   height there's no room for both, so the seal goes and the drop returns. */
+@media (max-width: 768px) {
+  .hero-photo .hero-form-col { margin-top: calc(44vw - 100px); }
+  @supports (height: 100svh) {
+    .hero-photo .hero-form-col { margin-top: clamp(0px, calc(100svh - 31rem - 100px), calc(44vw - 100px)); }
+  }
+}
+@media (max-width: 768px) and (max-height: 600px) {
+  .hero-seal { display: none; }
+  .hero-photo .hero-form-col { margin-top: 18vw; }
   @supports (height: 100svh) {
     .hero-photo .hero-form-col { margin-top: clamp(4vw, calc(100svh - 31rem), 44vw); }
   }
@@ -1867,9 +1876,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="hero-headline-wrap fade-in delay-1">
       <h1 class="h1-fit" style="--hw-d:14.091;--hw-m:16.336"><em>West Virginia</em> Interstate Movers</h1>
     </div>
-  </div>
-
-  <div class="hero-form-col form-enter">
   <div class="hero-seal" role="img" aria-label="USDOT verified, MC authority active">
     <svg viewBox="0 0 140 140" aria-hidden="true">
       <defs>
@@ -1893,6 +1899,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </g>
     </svg>
   </div>
+  </div>
+
+  <div class="hero-form-col form-enter">
   <div class="hero-form-wrap qs-card" id="get-quote">
     <div class="hero-form-header qs-header">
       <h3>Get a free quote</h3>
