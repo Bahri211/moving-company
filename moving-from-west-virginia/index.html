@@ -1519,6 +1519,15 @@ body { overflow-x: clip; }
   .ph-road strong { margin-top: 0.6rem; font-size: 0.8rem; }
   .ph-road span:not(.ph-sign) { font-size: 0.7rem; line-height: 1.35; }
 }
+/* Short phones: the 50vw drop pushed the Next button under the sticky call
+   bar once the browser toolbars take their share of the height, so the form
+   rides higher the shorter the screen, trading some truck for the button. */
+@media (max-width: 768px) and (max-height: 700px) {
+  .hero-photo .hero-form-col { margin-top: 36vw; }
+}
+@media (max-width: 768px) and (max-height: 600px) {
+  .hero-photo .hero-form-col { margin-top: 18vw; }
+}
 @media (prefers-reduced-motion: reduce) {
   .qs-step.is-active, .ph-stat { animation: none; }
 }
