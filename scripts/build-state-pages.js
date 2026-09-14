@@ -572,28 +572,6 @@ function quoteFormSteps(originState) {
   </div>`;
 }
 
-/* One icon per promise (Lucide shapes, ISC): shield-check for the licence,
-   a price tag for the fixed price, a timer for the same-day quote. */
-const PH_CHECK_ICONS = {
-  licensed: `<svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>`,
-  price: `<svg viewBox="0 0 24 24"><path d="M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.42l8.7 8.7a2.43 2.43 0 0 0 3.42 0l6.58-6.58a2.43 2.43 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r="1.2" fill="currentColor" stroke="none"/></svg>`,
-  quote: `<svg viewBox="0 0 24 24"><line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/></svg>`,
-};
-const phBadge = key => `<span class="ph-check" aria-hidden="true">${PH_CHECK_ICONS[key]}</span>`;
-
-/* The photo hero's left column: one line and three checks instead of the long
-   intro, trust line and stat cards, which move to the section below. */
-function photoHeroLede(s) {
-  return `  <div class="hero-lede">
-    <p class="ph-sub fade-in delay-2">Fixed-price moves from ${esc(s.name)} to anywhere in the continental US.</p>
-    <ul class="ph-cards fade-in delay-3">
-      <li class="ph-card">${phBadge('licensed')}<div><strong>FMCSA licensed &amp; insured</strong><span>USDOT #${USDOT} · $1M coverage</span></div></li>
-      <li class="ph-card">${phBadge('price')}<div><strong>Fixed price, no hidden fees</strong><span>The price we quote is the price you pay</span></div></li>
-      <li class="ph-card">${phBadge('quote')}<div><strong>Free quote the same day</strong><span>No obligation to book</span></div></li>
-    </ul>
-  </div>`;
-}
-
 const PH_ICONS = {
   price: `<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M7 9.5v5M17 9.5v5"/></svg>`,
   shield: `<svg viewBox="0 0 24 24"><path d="M12 2.8 4.5 5.8v5.6c0 4.9 3.2 8.8 7.5 10 4.3-1.2 7.5-5.1 7.5-10V5.8z"/><polyline points="8.8 12.2 11 14.4 15.4 9.8"/></svg>`,
@@ -671,15 +649,12 @@ const STEP_FORM_HEAD = `<link rel="preload" as="image" href="/assets/images/hero
 /* Photo hero ---------------------------------------------------------------
    Truck on an open road behind the full width of the hero. The wash is darkest
    on the left under the headline and opens up to the right, where the truck
-   and the sky show around the form. The left column is only a headline, one
-   line and three checks. */
+   and the sky show around the form. The left column is only the headline. */
 body { overflow-x: clip; }
 .hero.hero-photo {
   isolation: isolate;
-  grid-template-areas:
-    "content form"
-    "lede    form";
-  grid-template-rows: auto auto;
+  grid-template-areas: "content form";
+  grid-template-rows: auto;
   column-gap: 4rem;
   row-gap: 1.1rem;
   align-content: center;
@@ -698,52 +673,9 @@ body { overflow-x: clip; }
     linear-gradient(180deg, rgba(9, 20, 34, 0.35) 0%, rgba(9, 20, 34, 0) 30%, rgba(9, 20, 34, 0) 70%, rgba(9, 20, 34, 0.5) 100%),
     var(--navy-deep) url('/assets/images/hero-bg-road.jpg') 70% 62% / cover no-repeat;
 }
-.hero-photo .hero-content { align-self: end; }
-.hero-photo .hero-lede { align-self: start; }
+.hero-photo .hero-content { align-self: center; }
 .hero-photo h1 { color: #fff; text-shadow: 0 2px 24px rgba(0, 0, 0, 0.3); }
 .hero-photo h1 em { color: #f4a37f; }
-.hero-photo .ph-sub {
-  max-width: 30rem;
-  margin: 0 0 1.6rem;
-  font-size: 1.2rem;
-  line-height: 1.55;
-  color: rgba(245, 240, 232, 0.9);
-}
-/* The three promises as solid white cards on the photo, the same surface as
-   the quote form: a green accent rule on the left edge, a solid green icon
-   tile, the claim and one line of proof. Stacked; three across squeezed each
-   title onto two lines even on a 1440px hero. */
-.ph-cards {
-  list-style: none; margin: 0; padding: 0;
-  display: grid; grid-template-columns: 1fr; gap: 0.6rem;
-  max-width: 460px;
-}
-.ph-card {
-  position: relative; overflow: hidden;
-  display: flex; align-items: center; gap: 0.9rem;
-  padding: 0.8rem 1.1rem 0.8rem 1rem;
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 18px 36px -22px rgba(0, 0, 0, 0.65), 0 1px 2px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s;
-}
-.ph-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--green); }
-.ph-card:hover { transform: translateY(-2px); box-shadow: 0 22px 40px -22px rgba(0, 0, 0, 0.7), 0 1px 2px rgba(0, 0, 0, 0.08); }
-.ph-card strong { display: block; font-size: 0.96rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; color: var(--ink); }
-.ph-card span:not(.ph-check) { display: block; margin-top: 0.15rem; font-size: 0.8rem; line-height: 1.4; color: var(--muted); }
-.ph-check {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 40px; height: 40px; flex-shrink: 0;
-  border-radius: 11px;
-  color: #fff;
-  background: linear-gradient(135deg, #3fae6b, #2a7d50);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 6px 14px -8px rgba(42, 125, 80, 0.9);
-}
-.ph-check svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-@media (prefers-reduced-motion: reduce) {
-  .ph-card { transition: none; }
-  .ph-card:hover { transform: none; }
-}
 
 /* Proof section --------------------------------------------------------- */
 /* flow-root keeps the stats card's negative margin inside the section; it had
@@ -910,7 +842,7 @@ body { overflow-x: clip; }
 }
 @media (max-width: 768px) {
   .hero.hero-photo {
-    grid-template-areas: "content" "form" "lede";
+    grid-template-areas: "content" "form";
     grid-template-rows: auto;
     align-content: start;
     min-height: auto;
@@ -938,16 +870,6 @@ body { overflow-x: clip; }
      The form starts just under the lettering, above the wheels, so most of the
      truck shows and the card still clears the sticky call bar on common phones. */
   .hero-photo .hero-form-col { margin-top: 50vw; }
-  /* The accent rule tied the copy to the clip above it as a caption; with the
-     clip gone it has nothing to caption. */
-  .hero-photo .hero-lede { border-left: 0; padding-left: 0; }
-  .hero-photo .ph-sub { font-size: 1rem; margin-bottom: 0.9rem; }
-  .ph-cards { max-width: none; gap: 0.55rem; }
-  .ph-card { padding: 0.8rem 0.9rem; gap: 0.8rem; border-radius: 14px; }
-  .ph-card strong { font-size: 0.93rem; }
-  .ph-card span:not(.ph-check) { font-size: 0.76rem; }
-  .ph-check { width: 36px; height: 36px; border-radius: 10px; }
-  .ph-check svg { width: 18px; height: 18px; }
   .hero-form-wrap.qs-card { padding: 1.15rem 1.1rem 1rem; border-radius: 18px; }
   .qs-card .qs-header h3 { font-size: 1.35rem; }
   .qs-bar { margin-bottom: 1rem; }
@@ -2515,9 +2437,7 @@ ${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
     </div>
   </div>
 
-${STEP_FORM_STATES.has(s.name) ? `${photoHeroLede(s)}
-
-${quoteFormSteps(s)}
+${STEP_FORM_STATES.has(s.name) ? `${quoteFormSteps(s)}
 </header>
 
 ${photoProof(s, routes)}` : `  <div class="hero-lede">
