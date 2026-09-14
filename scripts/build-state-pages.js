@@ -149,35 +149,8 @@ const NAV = `<nav class="topnav">
   </div>
 </div>`;
 
-const TRUST_BAR = `<div class="trust-bar">
-  <div class="trust-item">
-    <div class="trust-number serif">100%</div>
-    <div class="trust-label">Fixed-Price Moves</div>
-  </div>
-  <div class="trust-item">
-    <div class="trust-number serif">0.3%</div>
-    <div class="trust-label">Damage claim rate</div>
-  </div>
-  <div class="trust-item">
-    <div class="trust-number serif">24/7</div>
-    <div class="trust-label">Customer support</div>
-  </div>
-</div>`;
-
-// Hero video, route animation and the services closing line are lifted from
+// The route animation and the services closing line are lifted from
 // index.html so the state pages and the homepage stay one design.
-const HERO_VIDEO = `  <div class="hero-truck-img fade-in delay-3">
-    <video
-      id="hero-video"
-      autoplay muted loop playsinline
-      preload="metadata"
-      poster="/assets/images/hero-poster.jpg"
-      aria-label="50STATEMOVERS crew loading furniture onto the truck">
-      <source src="/assets/video/Movers_loading_furniture_onto_truck_202609070457.mp4" type="video/mp4" />
-      <img src="/assets/images/hero-poster.jpg" alt="50STATEMOVERS crew loading furniture onto the truck" />
-    </video>
-  </div>`;
-
 const ROUTE_ANIM = `  <div class="route-anim">
     <svg viewBox="0 38 1200 246" role="img"
          aria-label="A 50State Movers truck driving the route from your old home to your new one: packed, on the road, delivered">
@@ -436,89 +409,6 @@ function stateOptions(selected) {
     `<option${s.name === selected ? ' selected' : ''}>${esc(s.name)}</option>`).join('');
 }
 
-function quoteForm(originState) {
-  return `  <div class="hero-form-col form-enter">
-  <div class="hero-form-wrap" id="get-quote">
-    <div class="hero-form-header">
-      <h3>Get a free quote</h3>
-      <p>Fixed price · no hidden fees · reply within same day</p>
-    </div>
-    <form class="quote-form" id="quote-form" novalidate>
-      <div class="form-row form-row-2">
-        <div>
-          <label for="qf-from">Moving from</label>
-          <select id="qf-from"><option value="">State…</option>${stateOptions(originState && originState.name)}</select>
-          <div class="field-error" id="error-from" role="alert"></div>
-        </div>
-        <div>
-          <label for="qf-to">Moving to</label>
-          <select id="qf-to"><option value="">State…</option>${stateOptions(null)}</select>
-          <div class="field-error" id="error-to" role="alert"></div>
-        </div>
-      </div>
-      <div class="form-row form-row-2">
-        <div>
-          <label for="qf-size">Home size</label>
-          <select id="qf-size">
-            <option value="">Size…</option>
-            <option>1 Bedroom</option>
-            <option>2 Bedrooms</option>
-            <option>3 Bedrooms</option>
-            <option>4 Bedrooms</option>
-            <option>5+ Bedrooms</option>
-            <option>Studio</option>
-            <option>Office / Commercial</option>
-          </select>
-        </div>
-        <div>
-          <label for="qf-date">Planned move date</label>
-          <input type="text" id="qf-date" placeholder="MM/DD/YYYY" autocomplete="off" />
-        </div>
-      </div>
-      <div class="form-row form-row-2">
-        <div>
-          <label for="qf-name">Your name</label>
-          <input type="text" id="qf-name" placeholder="Jane Doe" />
-          <div class="field-error" id="error-name" role="alert"></div>
-        </div>
-        <div>
-          <label for="qf-email">Email address</label>
-          <input type="email" id="qf-email" placeholder="jane@example.com" />
-          <div class="field-error" id="error-email" role="alert"></div>
-        </div>
-      </div>
-      <div class="form-row form-row-2">
-        <div>
-          <label for="qf-phone">Phone number</label>
-          <input type="tel" id="qf-phone" placeholder="(555) 000-0000" />
-          <div class="field-error" id="error-phone" role="alert"></div>
-        </div>
-        <div>
-          <label for="qf-notes">Special items<span class="lbl-tail"> or notes</span></label>
-          <input type="text" id="qf-notes" placeholder="Piano, antiques…" />
-        </div>
-      </div>
-      <div class="form-row-consent">
-        <label class="sms-consent-label" for="qf-sms">
-          <span class="sms-checkbox-wrap">
-            <input type="checkbox" id="qf-sms" />
-            <span class="sms-checkbox-box" aria-hidden="true"></span>
-          </span>
-          <span class="sms-consent-text">I agree to receive SMS messages from 50STATEMOVERS INC about my quote.<span class="sms-more" id="sms-more" hidden> Msg &amp; data rates may apply. Message frequency varies. Reply STOP to opt out at any time. See our <a href="/privacy-policy" target="_blank">Privacy Policy</a>.</span><button type="button" class="sms-toggle" id="sms-toggle" aria-expanded="false" aria-controls="sms-more">Read more</button></span>
-        </label>
-        <div class="sms-error" id="sms-error" role="alert"></div>
-      </div>
-      <button type="submit" class="form-submit">Submit</button>
-    </form>
-
-    <ul class="form-assurances">
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Your information is encrypted and secure</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Your details are never sold to brokers</li>
-    </ul>
-  </div>
-  </div>`;
-}
-
 
 // Footer is identical to index.html except the Company column, which points at
 // the state hub rather than a same-page anchor.
@@ -528,6 +418,19 @@ function quoteForm(originState) {
    so the other state pages keep the eight-field form and their paper hero.
    site.js drives the steps and reports each one to GA as quote_form_step. */
 const STEP_FORM_STATES = new Set(['West Virginia']);
+
+/* Every other state page and the hub wear the homepage hero: photo behind the
+   headline, the 3-step quote form and the stats cards. Both pieces are lifted
+   straight out of index.html at build time so the pages can't drift from it. */
+const HOME_HTML = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+function sliceHome(startMarker, endMarker) {
+  const start = HOME_HTML.indexOf(startMarker);
+  const end = start < 0 ? -1 : HOME_HTML.indexOf(endMarker, start);
+  if (end < 0) throw new Error(`index.html: couldn't find ${startMarker} … ${endMarker}`);
+  return HOME_HTML.slice(start, end + endMarker.length);
+}
+const HOME_HERO_HEAD = sliceHome('<link rel="preload" as="image" href="/assets/images/hero-bg-home.jpg"', '</style>');
+const HOME_STATS = sliceHome('<section class="ph-proof">', '</section>');
 
 const LOCK_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`;
 
@@ -2804,65 +2707,22 @@ ${s.quirks.map((q, i) => `      <details class="note-row js-collapse" open>
     licensingFaq,
   ];
 
-  return `${head({ title, description, canonical, schema, extraHead: (TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '') + (STEP_FORM_STATES.has(s.name) ? STEP_FORM_HEAD : '') })}
+  return `${head({ title, description, canonical, schema, extraHead: (TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '') + (STEP_FORM_STATES.has(s.name) ? STEP_FORM_HEAD : HOME_HERO_HEAD) })}
 
 ${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
 
 <!-- HERO -->
-<header class="hero${STEP_FORM_STATES.has(s.name) ? ' hero-photo' : ''}">
+<header class="hero hero-photo">
   <div class="hero-content">
     <div class="hero-headline-wrap fade-in delay-1">
       <h1${headlineFit(s)}>${headline(s)}</h1>
     </div>
   </div>
 
-${STEP_FORM_STATES.has(s.name) ? `${quoteFormSteps(s)}
+${quoteFormSteps(s)}
 </header>
 
-${photoProof(s)}` : `  <div class="hero-lede">
-    <p class="fade-in delay-2">
-      ${esc(s.intro)}
-    </p>
-
-    <div class="hero-trust fade-in delay-3">
-      <div class="ht-item"><span class="ht-dot" aria-hidden="true"></span><span>Booking moves this week</span></div>
-      <span class="ht-divider" aria-hidden="true"></span>
-      <div class="ht-item">
-        <svg class="ht-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-        <span><strong>${s.cities.length}+</strong> ${esc(s.name)} cities</span>
-      </div>
-    </div>
-  </div>
-
-${HERO_VIDEO}
-
-  <div class="hero-stat-cards fade-in delay-3">
-    <div class="hero-card hc-light float">
-      <div class="hc-label">${esc(s.name)} cities served</div>
-      <div class="hc-val serif">${s.cities.length}+</div>
-      <div class="hc-sub">${esc(s.cities.slice(0, 3).join(' · '))} and more</div>
-    </div>
-    <div class="hero-card hc-dark float delay-a">
-      <div class="hc-label">Busiest ${esc(s.abbr)} lane</div>
-      <div class="hc-val serif">${esc(s.abbr)} → ${esc(longest.dest.abbr)}</div>
-      <div class="hc-sub">${esc(s.name)} to ${esc(longest.dest.name)} · ~${longest.miles.toLocaleString()} mi</div>
-    </div>
-    <div class="hero-card hc-accent float delay-b">
-      <div class="hc-label">Free quotes</div>
-      <div class="hc-val serif">Same day</div>
-      <div class="hc-sub">No obligation, no hidden fees</div>
-    </div>
-    <div class="hero-card hc-light float delay-c">
-      <div class="hc-label">Protection</div>
-      <div class="hc-val serif">$1M</div>
-      <div class="hc-sub">Licensed, bonded &amp; insured</div>
-    </div>
-  </div>
-
-${quoteForm(s)}
-</header>
-
-${TRUST_BAR}`}
+${STEP_FORM_STATES.has(s.name) ? photoProof(s) : HOME_STATS}
 ${TRIAL_STATES.has(s.name) ? `\n${illustratedRow(s)}\n` : ''}
 <!-- COVERAGE -->
 <section id="coverage" class="coverage-section">
@@ -3028,66 +2888,23 @@ function hubPage() {
     },
   ];
 
-  return `${head({ title, description, canonical, schema, extraHead: TRIAL_HEAD })}
+  return `${head({ title, description, canonical, schema, extraHead: TRIAL_HEAD + HOME_HERO_HEAD })}
 
 ${CRED_BAR}
 ${TRIAL_HUB_NAV}
 
 <!-- HERO -->
-<header class="hero">
+<header class="hero hero-photo">
   <div class="hero-content">
-    <div class="eyebrow fade-in">
-      <a href="/">Home</a> / Movers by state
-    </div>
     <div class="hero-headline-wrap fade-in delay-1">
       <h1>Long-Distance Movers <em>By State</em></h1>
     </div>
   </div>
 
-  <div class="hero-lede">
-    <p class="fade-in delay-2">
-      A generic quote hides the things that actually decide how your move goes — building permits, HOA approvals, mountain-pass closures, spring road weight limits, hurricane windows. So we wrote a real guide for every continental state and Washington DC: which lanes we actually run out of that state, how long each takes, and what tends to go wrong there.
-    </p>
-
-    <div class="hero-trust fade-in delay-3">
-      <div class="ht-item"><span class="ht-dot" aria-hidden="true"></span><span>Booking moves this week</span></div>
-      <span class="ht-divider" aria-hidden="true"></span>
-      <div class="ht-item">
-        <svg class="ht-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-        <span><strong>${states.length}</strong> state guides</span>
-      </div>
-    </div>
-  </div>
-
-${HERO_VIDEO}
-
-  <div class="hero-stat-cards fade-in delay-3">
-    <div class="hero-card hc-light float">
-      <div class="hc-label">State moving guides</div>
-      <div class="hc-val serif">${states.length}</div>
-      <div class="hc-sub">Every continental state plus Washington DC</div>
-    </div>
-    <div class="hero-card hc-dark float delay-a">
-      <div class="hc-label">Average rating</div>
-      <div class="hc-val serif">4.96 <span class="hc-unit">/5</span></div>
-      <div class="hc-sub">Based on 2,400+ reviews</div>
-    </div>
-    <div class="hero-card hc-accent float delay-b">
-      <div class="hc-label">Free quotes</div>
-      <div class="hc-val serif">Same day</div>
-      <div class="hc-sub">No obligation, no hidden fees</div>
-    </div>
-    <div class="hero-card hc-light float delay-c">
-      <div class="hc-label">Protection</div>
-      <div class="hc-val serif">$1M</div>
-      <div class="hc-sub">Licensed, bonded &amp; insured</div>
-    </div>
-  </div>
-
-${quoteForm(null)}
+${quoteFormSteps(null)}
 </header>
 
-${TRUST_BAR}
+${HOME_STATS}
 
 <!-- COVERAGE -->
 <section id="coverage" class="coverage-section">
