@@ -1219,6 +1219,13 @@ body { overflow-x: clip; }
   .ph-road strong { margin-top: 0.6rem; font-size: 0.8rem; }
   .ph-road span:not(.ph-sign) { font-size: 0.7rem; line-height: 1.35; }
 }
+/* Navbar badge on phones, this page only: a bigger check seal and a smaller
+   label than the shared styles.css sizing. */
+@media (max-width: 768px) {
+  .fmcsa-badge { height: 27px; padding-left: 0.12rem; gap: 0.2rem; font-size: 0.41rem; }
+  .fmcsa-badge .fb-seal { width: 24px; height: 24px; }
+}
+
 /* Short phones: the 50vw drop pushed the Next button under the sticky call
    bar once the browser toolbars take their share of the height, so the form
    rides higher the shorter the screen, trading some truck for the button. */
