@@ -1253,6 +1253,16 @@ body { overflow-x: clip; }
 @media (max-width: 768px) and (max-height: 600px) {
   .hero-photo .hero-form-col { margin-top: 18vw; }
 }
+/* Where svh is supported, size the drop from the small viewport instead —
+   the height left while the browser toolbars show, which is shorter in
+   Chrome (address bar plus toolbar) than in Safari's compact bar. About 30rem
+   of that goes to the nav, headline, the card down to Next, and the call bar,
+   so the form drops as far as it can (up to 50vw) without hiding Next. */
+@media (max-width: 768px) {
+  @supports (height: 100svh) {
+    .hero-photo .hero-form-col { margin-top: clamp(4vw, calc(100svh - 30rem), 50vw); }
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .qs-step.is-active, .ph-stat { animation: none; }
 }
