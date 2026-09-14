@@ -636,7 +636,7 @@ ${stat('cover', '$1M', 'Liability coverage')}
 ${s.quirks.slice(0, 3).map(q => `        <li>${PH_POINT_TICK}${esc(q.title)}</li>`).join('\n')}
       </ul>
       <div class="ph-cta">
-        <a href="#quote-form" class="ph-btn">Get my fixed price<span aria-hidden="true">→</span></a>
+        <a href="#get-quote" class="ph-btn">Get my fixed price</a>
         <a href="tel:${PHONE_HREF}" class="ph-call"><span class="ph-call-icon" aria-hidden="true">${PH_PHONE_ICON}</span>${PHONE_DISPLAY}</a>
       </div>
     </div>
@@ -820,8 +820,6 @@ body { overflow-x: clip; }
   transition: background 0.2s, transform 0.2s;
 }
 .ph-btn:hover { background: #b24a24; transform: translateY(-1px); }
-.ph-btn span { transition: transform 0.2s; }
-.ph-btn:hover span { transform: translateX(3px); }
 .ph-call { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.98rem; font-weight: 600; color: var(--ink); text-decoration: none; }
 .ph-call:hover { color: var(--accent); }
 .ph-call-icon {
