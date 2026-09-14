@@ -604,6 +604,7 @@ function photoProof(s, routes) {
       <span class="ph-stat-icon" aria-hidden="true">${PH_ICONS[icon]}</span>
       <div><strong>${num}</strong><span>${label}</span></div>
     </div>`;
+  const maxMiles = Math.max(...routes.map(r => r.miles));
   return `<section class="ph-proof">
   <div class="ph-stats">
 ${stat('price', '100%', 'Fixed-price moves')}
@@ -613,44 +614,76 @@ ${stat('cover', '$1M', 'Liability coverage')}
   </div>
 
   <div class="ph-about">
+    <div class="ph-media">
+      <figure class="ph-photo-main">
+        <img src="/assets/images/gallery/crew-packing.jpg" alt="50STATEMOVERS crew taping a carton and shrink-wrapping furniture before a move out of ${esc(s.name)}" width="1600" height="1066" loading="lazy" decoding="async" />
+      </figure>
+      <figure class="ph-photo-inset">
+        <img src="/assets/images/gallery/road-inset.jpg" alt="Moving truck on an open highway at sunrise" width="900" height="672" loading="lazy" decoding="async" />
+      </figure>
+      <div class="ph-badge">
+        <span class="ph-badge-icon" aria-hidden="true">${PH_ROW_ICONS.pin}</span>
+        <div><strong>Every town in ${esc(s.name)}</strong><span>Cities, villages &amp; back roads</span></div>
+      </div>
+    </div>
+
     <div class="ph-about-text">
       <span class="ph-kicker">Moving from ${esc(s.name)}</span>
-      <h2>Moving out of <em>${esc(s.name)}</em></h2>
+      <h2>Moving out of <em>${esc(s.name)}</em>, planned to the last mile</h2>
       <p>${esc(s.intro)}</p>
       <button type="button" class="ph-more" aria-expanded="false">Read more</button>
       <ul class="ph-points">
 ${s.quirks.slice(0, 3).map(q => `        <li>${PH_POINT_TICK}${esc(q.title)}</li>`).join('\n')}
       </ul>
+      <div class="ph-cta">
+        <a href="#quote-form" class="ph-btn">Get my fixed price<span aria-hidden="true">→</span></a>
+        <a href="tel:${PHONE_HREF}" class="ph-call"><span class="ph-call-icon" aria-hidden="true">${PH_PHONE_ICON}</span>${PHONE_DISPLAY}</a>
+      </div>
     </div>
-
-    <aside class="ph-glance" aria-label="${esc(s.name)} at a glance">
-      <h3>${esc(s.name)} at a glance</h3>
-      <div class="ph-row">
-        <span class="ph-row-icon" aria-hidden="true">${PH_ROW_ICONS.pin}</span>
-        <div>
-          <span class="ph-row-label">Where we serve</span>
-          <p class="ph-row-text">We serve every city, village, and town in ${esc(s.name)}.</p>
-        </div>
-      </div>
-      <div class="ph-row">
-        <span class="ph-row-icon" aria-hidden="true">${PH_ROW_ICONS.route}</span>
-        <div>
-          <span class="ph-row-label">Popular destinations</span>
-          <ul class="ph-routes">
-${routes.map(r => `            <li>${esc(r.dest.name)}<span>~${r.miles.toLocaleString()} mi</span></li>`).join('\n')}
-          </ul>
-        </div>
-      </div>
-      <div class="ph-row">
-        <span class="ph-row-icon" aria-hidden="true">${PH_ROW_ICONS.road}</span>
-        <div>
-          <span class="ph-row-label">Main highways</span>
-          <div class="ph-hwys">${s.highways.map(h => `<span>${esc(h)}</span>`).join('')}</div>
-        </div>
-      </div>
-    </aside>
   </div>
+
+  <aside class="ph-glance" aria-label="${esc(s.name)} at a glance">
+    <div class="ph-glance-head">
+      <h3>${esc(s.name)} at a glance</h3>
+      <p>Where we pick up, where ${esc(s.name)} families are headed, and the roads in between.</p>
+    </div>
+    <div class="ph-glance-grid">
+      <div class="ph-col">
+        <span class="ph-row-label"><span aria-hidden="true">${PH_ROW_ICONS.pin}</span>Where we serve</span>
+        <p class="ph-row-text">Every city, village, and town in ${esc(s.name)}, including</p>
+        <ul class="ph-cities">
+${s.cities.slice(0, 8).map(c => `          <li>${esc(c)}</li>`).join('\n')}
+          <li class="ph-city-more"><a href="#coverage">All cities →</a></li>
+        </ul>
+      </div>
+      <div class="ph-col">
+        <span class="ph-row-label"><span aria-hidden="true">${PH_ROW_ICONS.route}</span>Popular destinations</span>
+        <ul class="ph-routes">
+${routes.map(r => `          <li>${esc(r.dest.name)}<span>~${r.miles.toLocaleString()} mi</span><i class="ph-bar" aria-hidden="true"><i style="width:${Math.max(8, Math.round(r.miles / maxMiles * 100))}%"></i></i></li>`).join('\n')}
+        </ul>
+      </div>
+      <div class="ph-col">
+        <span class="ph-row-label"><span aria-hidden="true">${PH_ROW_ICONS.road}</span>Main highways</span>
+        <div class="ph-hwys">${s.highways.map(hwyShield).join('')}</div>
+      </div>
+    </div>
+  </aside>
 </section>`;
+}
+
+const PH_PHONE_ICON = `<svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>`;
+
+/* Highway names drawn as road signs: red-and-blue shield for interstates,
+   white shield for US routes, a plain plate for anything else. */
+function hwyShield(h) {
+  const m = /^(I|US)-(.+)$/.exec(h);
+  if (!m) return `<span class="ph-shield ph-shield-plate">${esc(h)}</span>`;
+  const [, type, num] = m;
+  const small = num.length > 2 ? ' ph-shield-sm' : '';
+  const svg = type === 'I'
+    ? `<svg viewBox="0 0 40 42" aria-hidden="true"><path class="s-i" d="M2.5 4.5Q11 7.5 20 2.2 29 7.5 37.5 4.5 40.8 17 38 26 34.5 35.5 20 40.2 5.5 35.5 2 26-.8 17 2.5 4.5Z"/><path class="s-i-top" d="M2.5 4.5Q11 7.5 20 2.2 29 7.5 37.5 4.5 38.4 8.6 38.8 12.5H1.2Q1.6 8.6 2.5 4.5Z"/></svg>`
+    : `<svg viewBox="0 0 40 42" aria-hidden="true"><path class="s-us" d="M4.5 2.5h31q1 4 3 5.5.5 11-3.5 19Q31 35 20 40 9 35 5 27 1 19 1.5 8q2-1.5 3-5.5Z"/></svg>`;
+  return `<span class="ph-shield ph-shield-${type.toLowerCase()}${small}" role="img" aria-label="${type === 'I' ? 'Interstate' : 'US Route'} ${esc(num)}">${svg}<b aria-hidden="true">${esc(num)}</b></span>`;
 }
 
 const STEP_FORM_HEAD = `<link rel="preload" as="image" href="/assets/images/hero-bg-road.jpg" media="(min-width: 769px)">
@@ -713,19 +746,91 @@ body { overflow-x: clip; }
 .ph-stat strong { display: block; font-size: 1.7rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--navy); }
 .ph-stat div > span { display: block; margin-top: 0.15rem; font-size: 0.82rem; color: var(--muted); }
 
+/* About: photo collage on the left (crew photo, road inset, a floating
+   coverage badge), the intro, the three local points and two CTAs on the right. */
 .ph-about {
   max-width: 1240px;
-  margin: 5rem auto 0;
-  display: grid; grid-template-columns: 1.1fr 1fr;
-  gap: 4.5rem; align-items: start;
+  margin: 5.5rem auto 0;
+  display: grid; grid-template-columns: 1.05fr 1fr;
+  gap: 5rem; align-items: center;
 }
+.ph-media { position: relative; padding: 0 3.5rem 3.5rem 0; }
+.ph-media::before {
+  content: ""; position: absolute; top: -1.6rem; right: 1.25rem;
+  width: 150px; height: 150px;
+  background-image: radial-gradient(var(--accent) 1.6px, transparent 1.8px);
+  background-size: 15px 15px;
+  opacity: 0.3;
+}
+.ph-media figure { margin: 0; overflow: hidden; }
+.ph-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ph-photo-main {
+  position: relative;
+  aspect-ratio: 1 / 0.86;
+  border-radius: 26px;
+  box-shadow: 0 40px 80px -40px rgba(12, 26, 43, 0.55);
+}
+.ph-photo-main img { object-position: 38% center; }
+.ph-photo-inset {
+  position: absolute; right: 0; bottom: 0;
+  width: 44%; aspect-ratio: 4 / 3;
+  border: 7px solid var(--paper);
+  border-radius: 22px;
+  box-shadow: 0 30px 50px -24px rgba(12, 26, 43, 0.55);
+}
+.ph-badge {
+  position: absolute; left: -1.5rem; top: 2.25rem;
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.75rem 1.15rem 0.75rem 0.75rem;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 24px 44px -20px rgba(12, 26, 43, 0.45), 0 0 0 1px rgba(12, 26, 43, 0.04);
+}
+.ph-badge-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; flex-shrink: 0;
+  border-radius: 12px; background: var(--accent);
+}
+.ph-badge-icon svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ph-badge strong { display: block; font-size: 0.92rem; font-weight: 700; color: var(--ink); line-height: 1.25; }
+.ph-badge div > span { display: block; font-size: 0.76rem; color: var(--muted); }
+
 .ph-kicker { display: block; margin-bottom: 0.7rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green); }
-.ph-about h2 { margin: 0 0 1.1rem; font-size: clamp(1.9rem, 3vw, 2.6rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.1; color: var(--ink); }
+.ph-about h2 { margin: 0 0 1.15rem; font-size: clamp(2rem, 3.1vw, 2.75rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.08; color: var(--ink); }
 .ph-about h2 em { font-style: normal; color: var(--accent); }
-.ph-about-text p { max-width: 36rem; font-size: 1.02rem; line-height: 1.75; color: var(--ink-soft); }
+.ph-about-text p { max-width: 36rem; margin: 0; font-size: 1.02rem; line-height: 1.75; color: var(--ink-soft); }
 .ph-more { display: none; }
-.ph-points { list-style: none; margin: 1.6rem 0 0; padding: 1.4rem 0 0; border-top: 1px solid #e7e0d5; display: grid; gap: 0.8rem; }
-.ph-points li { display: flex; align-items: center; gap: 0.75rem; font-size: 0.98rem; font-weight: 600; color: var(--ink); }
+.ph-points { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; gap: 0.6rem; }
+.ph-points li {
+  display: flex; align-items: center; gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(12, 26, 43, 0.06), 0 10px 24px -18px rgba(12, 26, 43, 0.35);
+  font-size: 0.98rem; font-weight: 600; color: var(--ink);
+}
+.ph-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; margin-top: 1.9rem; }
+.ph-btn {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  padding: 0.95rem 1.55rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff; font-size: 0.98rem; font-weight: 600; text-decoration: none;
+  box-shadow: 0 16px 30px -14px rgba(200, 85, 44, 0.75);
+  transition: background 0.2s, transform 0.2s;
+}
+.ph-btn:hover { background: #b24a24; transform: translateY(-1px); }
+.ph-btn span { transition: transform 0.2s; }
+.ph-btn:hover span { transform: translateX(3px); }
+.ph-call { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.98rem; font-weight: 600; color: var(--ink); text-decoration: none; }
+.ph-call:hover { color: var(--accent); }
+.ph-call-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--navy);
+}
+.ph-call-icon svg { width: 17px; height: 17px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ph-btn:focus-visible, .ph-call:focus-visible, .ph-city-more a:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
 .ph-tick {
   display: inline-flex; align-items: center; justify-content: center;
   width: 26px; height: 26px; flex-shrink: 0;
@@ -733,33 +838,58 @@ body { overflow-x: clip; }
 }
 .ph-tick svg { width: 14px; height: 14px; fill: none; stroke: var(--green); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 
-/* At-a-glance card: the state's own data (cities, lanes, corridors) as a
-   scannable reference rather than two big-number tiles. */
+/* At-a-glance band: the state's own data (cities, lanes, corridors) on navy,
+   with distance bars for the lanes and real road-sign shields for highways. */
 .ph-glance {
-  padding: 1.75rem 1.9rem 0.6rem;
-  border-radius: 20px;
-  background: #fff;
-  box-shadow: 0 0 0 1px rgba(12, 26, 43, 0.06), 0 30px 60px -36px rgba(12, 26, 43, 0.4);
+  max-width: 1240px;
+  margin: 5.5rem auto 0;
+  padding: 2.4rem 2.75rem 2.6rem;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 100% 0, rgba(200, 85, 44, 0.24), transparent 42%),
+    radial-gradient(circle at 0 100%, rgba(63, 174, 107, 0.12), transparent 40%),
+    var(--navy);
+  color: #fff;
+  box-shadow: 0 40px 80px -44px rgba(12, 26, 43, 0.7);
 }
-.ph-glance h3 { margin: 0 0 0.4rem; font-size: 1.15rem; font-weight: 700; letter-spacing: -0.015em; color: var(--ink); }
-.ph-row { display: grid; grid-template-columns: 40px 1fr; gap: 1rem; padding: 1.15rem 0; }
-.ph-row + .ph-row { border-top: 1px solid #eee8de; }
-.ph-row-icon {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 40px; height: 40px;
-  border-radius: 12px; background: #eef2f7;
+.ph-glance-head {
+  display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 0.5rem 2rem;
+  padding-bottom: 1.6rem; margin-bottom: 1.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-.ph-row-icon svg { width: 20px; height: 20px; fill: none; stroke: var(--navy); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
-.ph-row-label { display: block; margin: 0.1rem 0 0.6rem; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-.ph-row-text { margin: 0; font-size: 0.98rem; font-weight: 600; line-height: 1.45; color: var(--ink); }
-.ph-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
-.ph-chips li { padding: 0.3rem 0.7rem; border-radius: 999px; background: #f5f1ea; font-size: 0.82rem; color: var(--ink-soft); }
-.ph-chips .ph-chip-more { background: none; box-shadow: inset 0 0 0 1px #ddd5c8; color: var(--muted); }
-.ph-routes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1.5rem; }
-.ph-routes li { display: flex; justify-content: space-between; gap: 0.75rem; font-size: 0.9rem; font-weight: 600; color: var(--ink); }
-.ph-routes span { font-weight: 400; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.ph-hwys { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-.ph-hwys span { padding: 0.28rem 0.55rem; border-radius: 6px; background: var(--navy); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.02em; color: #fff; }
+.ph-glance h3 { margin: 0; font-size: 1.6rem; font-weight: 600; letter-spacing: -0.025em; color: #fff; }
+.ph-glance-head p { margin: 0; max-width: 29rem; font-size: 0.95rem; line-height: 1.55; color: rgba(255, 255, 255, 0.62); }
+.ph-glance-grid { display: grid; grid-template-columns: 1.15fr 1.15fr 0.85fr; gap: 2.5rem; }
+.ph-col + .ph-col { padding-left: 2.5rem; border-left: 1px solid rgba(255, 255, 255, 0.1); }
+.ph-row-label {
+  display: flex; align-items: center; gap: 0.5rem;
+  margin: 0 0 0.9rem;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255, 255, 255, 0.55);
+}
+.ph-row-label > span { display: inline-flex; }
+.ph-row-label svg { width: 16px; height: 16px; fill: none; stroke: #f4a37f; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ph-row-text { margin: 0 0 0.85rem; font-size: 0.98rem; font-weight: 600; line-height: 1.45; color: #fff; }
+.ph-cities { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.ph-cities li { padding: 0.32rem 0.72rem; border-radius: 999px; background: rgba(255, 255, 255, 0.08); font-size: 0.82rem; color: rgba(255, 255, 255, 0.88); }
+.ph-cities .ph-city-more { padding: 0; background: none; }
+.ph-city-more a { display: block; padding: 0.32rem 0.72rem; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(244, 163, 127, 0.55); font-weight: 600; color: #f4a37f; text-decoration: none; }
+.ph-city-more a:hover { background: rgba(244, 163, 127, 0.12); }
+.ph-routes { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.8rem; }
+.ph-routes li { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 0.4rem 0.75rem; font-size: 0.92rem; font-weight: 600; color: #fff; }
+.ph-routes li > span { font-size: 0.84rem; font-weight: 400; color: rgba(255, 255, 255, 0.6); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ph-bar { grid-column: 1 / -1; display: block; height: 4px; border-radius: 99px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+.ph-bar i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, #f4a37f, var(--accent)); }
+.ph-hwys { display: flex; flex-wrap: wrap; gap: 0.7rem; }
+.ph-shield { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 54px; height: 57px; }
+.ph-shield svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ph-shield b { position: relative; font-size: 1.12rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+.ph-shield-sm b { font-size: 0.82rem; }
+.s-i { fill: #1f4f99; stroke: #fff; stroke-width: 1.6; }
+.s-i-top { fill: #c8312f; }
+.ph-shield-i b { margin-top: 0.7rem; color: #fff; }
+.s-us { fill: #fff; stroke: #0f0f0f; stroke-width: 1.8; }
+.ph-shield-us b { margin-top: -0.1rem; color: #111; }
+.ph-shield-plate { width: auto; height: auto; padding: 0.45rem 0.7rem; border-radius: 8px; background: #fff; font-size: 0.8rem; font-weight: 700; color: var(--ink); }
 
 /* Step form card -----------------------------------------------------------
    Plain white on the photo: a heading, a step count, the fields and one line
@@ -841,15 +971,20 @@ body { overflow-x: clip; }
 }
 .qs-secure svg { width: 13px; height: 13px; fill: none; stroke: var(--green); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 
-/* Two columns of destinations wrap "North Carolina" once the card narrows. */
-@media (max-width: 1180px) {
-  .ph-routes { grid-template-columns: 1fr; gap: 0.5rem; }
-}
 @media (max-width: 1100px) {
   .hero.hero-photo { column-gap: 2rem; }
   .ph-stat { padding: 0.35rem 0.9rem; gap: 0.7rem; }
   .ph-stat-icon { width: 40px; height: 40px; }
   .ph-stat strong { font-size: 1.4rem; }
+  .ph-about { gap: 3rem; }
+  .ph-media { padding: 0 2.5rem 2.5rem 0; }
+  .ph-badge { left: 1rem; top: 1rem; }
+  .ph-glance-grid { grid-template-columns: 1fr 1fr; }
+  .ph-col:last-child { grid-column: 1 / -1; padding: 1.75rem 0 0; border-left: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+}
+@media (max-width: 900px) {
+  .ph-about { grid-template-columns: 1fr; }
+  .ph-media { max-width: 640px; }
 }
 @media (max-width: 768px) {
   .hero.hero-photo {
@@ -899,10 +1034,19 @@ body { overflow-x: clip; }
   .ph-stat-icon svg { width: 20px; height: 20px; }
   .ph-stat strong { font-size: 1.35rem; }
   .ph-stat div > span { font-size: 0.74rem; }
-  /* Compact on phones: smaller type, the local points and the destinations
-     as wrapping pills, and no row icons, so the section is about two thirds
-     of its desktop-stacked height. */
-  .ph-about { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 2.25rem; }
+  /* Compact on phones: photo first with a smaller inset and badge, smaller
+     type, the local points as wrapping pills, and the at-a-glance band in
+     one column. */
+  .ph-about { grid-template-columns: 1fr; gap: 1.75rem; margin-top: 2.5rem; }
+  .ph-media { padding: 0 0 1.75rem; }
+  .ph-media::before { display: none; }
+  .ph-photo-main { aspect-ratio: 4 / 3; border-radius: 18px; }
+  .ph-photo-inset { right: 0.75rem; width: 40%; border-width: 4px; border-radius: 14px; }
+  .ph-badge { left: 0.65rem; top: 0.65rem; gap: 0.55rem; padding: 0.5rem 0.8rem 0.5rem 0.5rem; border-radius: 12px; }
+  .ph-badge-icon { width: 30px; height: 30px; border-radius: 9px; }
+  .ph-badge-icon svg { width: 16px; height: 16px; }
+  .ph-badge strong { font-size: 0.8rem; }
+  .ph-badge div > span { font-size: 0.68rem; }
   .ph-kicker { margin-bottom: 0.45rem; font-size: 0.66rem; }
   .ph-about h2 { margin-bottom: 0.7rem; font-size: 1.5rem; }
   .ph-about-text p { font-size: 0.92rem; line-height: 1.62; }
@@ -920,16 +1064,26 @@ body { overflow-x: clip; }
   .ph-points li { gap: 0.35rem; padding: 0.3rem 0.7rem 0.3rem 0.35rem; border-radius: 999px; background: #fff; box-shadow: 0 0 0 1px rgba(12, 26, 43, 0.08); font-size: 0.78rem; }
   .ph-tick { width: 18px; height: 18px; }
   .ph-tick svg { width: 10px; height: 10px; }
-  .ph-glance { padding: 1rem 1.1rem 0.2rem; border-radius: 16px; }
-  .ph-glance h3 { margin-bottom: 0.1rem; font-size: 1rem; }
-  .ph-row { grid-template-columns: 1fr; gap: 0; padding: 0.85rem 0; }
-  .ph-row-icon { display: none; }
-  .ph-row-label { margin: 0 0 0.45rem; font-size: 0.64rem; }
-  .ph-row-text { font-size: 0.9rem; }
-  .ph-routes { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-  .ph-routes li { gap: 0.3rem; padding: 0.28rem 0.6rem; border-radius: 999px; background: #f5f1ea; font-size: 0.8rem; }
-  .ph-routes span { font-size: 0.76rem; }
-  .ph-hwys span { padding: 0.22rem 0.45rem; font-size: 0.72rem; }
+  /* The sticky call bar already carries the phone number on phones. */
+  .ph-cta { margin-top: 1.25rem; }
+  .ph-btn { flex: 1 1 100%; justify-content: center; padding: 0.9rem 1.2rem; font-size: 0.95rem; }
+  .ph-call { display: none; }
+  .ph-glance { margin-top: 2.5rem; padding: 1.35rem 1.2rem 1.5rem; border-radius: 18px; }
+  .ph-glance-head { padding-bottom: 1rem; margin-bottom: 1.1rem; }
+  .ph-glance h3 { font-size: 1.2rem; }
+  .ph-glance-head p { font-size: 0.82rem; }
+  .ph-glance-grid { grid-template-columns: 1fr; gap: 0; }
+  .ph-col + .ph-col,
+  .ph-col:last-child { grid-column: auto; margin-top: 1.1rem; padding: 1.1rem 0 0; border-left: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+  .ph-row-label { margin-bottom: 0.65rem; font-size: 0.64rem; }
+  .ph-row-text { margin-bottom: 0.65rem; font-size: 0.88rem; }
+  .ph-cities li, .ph-city-more a { padding: 0.28rem 0.6rem; font-size: 0.76rem; }
+  .ph-cities .ph-city-more { padding: 0; }
+  .ph-routes { grid-template-columns: 1fr 1fr; gap: 0.7rem 1.1rem; }
+  .ph-routes li { font-size: 0.8rem; gap: 0.3rem 0.4rem; }
+  .ph-routes li > span { font-size: 0.72rem; }
+  .ph-shield { width: 46px; height: 48px; }
+  .ph-shield b { font-size: 0.98rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .qs-step.is-active { animation: none; }
