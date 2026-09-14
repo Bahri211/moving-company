@@ -1421,14 +1421,15 @@ body { overflow-x: clip; }
     background:
       linear-gradient(180deg,
         rgba(9, 20, 34, 0.72) 0,
-        rgba(9, 20, 34, 0.6) 40vw,
-        rgba(9, 20, 34, 0.06) 54vw,
-        rgba(9, 20, 34, 0.1) 84vw,
-        rgba(9, 20, 34, 0.86) 110vw,
-        var(--navy-deep) 176vw),
-      var(--navy-deep) url('/assets/images/hero-bg-road-mobile.jpg') center top / 100% auto no-repeat;
+        rgba(9, 20, 34, 0.6) 34vw,
+        rgba(9, 20, 34, 0.06) 45vw,
+        rgba(9, 20, 34, 0.1) 74vw,
+        rgba(9, 20, 34, 0.86) 100vw,
+        var(--navy-deep) 166vw),
+      var(--navy-deep) url('/assets/images/hero-bg-road-mobile.jpg') center -10vw / 100% auto no-repeat;
   }
-  /* Photo drawn at full width is ~179vw tall, truck from ~50vw to ~108vw down.
+  /* Photo drawn at full width is ~179vw tall and pulled up 10vw, so the truck
+     runs from ~40vw to ~98vw down.
      The form starts just under the lettering, above the wheels, so most of the
      truck shows and the card still clears the sticky call bar on common phones. */
   .hero-photo .hero-form-col { margin-top: 44vw; }
@@ -1506,29 +1507,6 @@ body { overflow-x: clip; }
   .ph-road strong { margin-top: 0.6rem; font-size: 0.8rem; }
   .ph-road span:not(.ph-sign) { font-size: 0.7rem; line-height: 1.35; }
 }
-/* Hero seal (trial) --------------------------------------------------------
-   The round seal replaces the navbar pill on this page. It sits in the
-   headline block. Desktop: under the headline in the open left column, out
-   of the layout flow so the headline keeps its place. Phones: centred in the
-   band between the headline and the form (see the margin rules at the end). */
-.topnav .fmcsa-badge { display: none; }
-.hero-photo .hero-content { position: relative; }
-.hero-seal {
-  position: absolute; z-index: 4;
-  left: 0; top: 100%;
-  margin-top: 1.75rem;
-  width: 132px; height: 132px;
-  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.35));
-}
-.hero-seal svg { display: block; width: 100%; height: 100%; }
-.hero-seal text { font-family: inherit; letter-spacing: 0; }
-@media (max-width: 1100px) {
-  .hero-seal { margin-top: 1.25rem; width: 108px; height: 108px; }
-}
-@media (max-width: 768px) {
-  .hero-seal { position: static; display: block; width: 96px; height: 96px; margin: 0.25rem auto 0; }
-}
-
 /* Navbar badge on phones, this page only: a bigger check seal and a smaller
    label than the shared styles.css sizing. */
 @media (max-width: 768px) {
@@ -1551,22 +1529,6 @@ body { overflow-x: clip; }
    of that goes to the nav, headline, the card down to Next, and the call bar,
    so the form drops as far as it can (up to 50vw) without hiding Next. */
 @media (max-width: 768px) {
-  @supports (height: 100svh) {
-    .hero-photo .hero-form-col { margin-top: clamp(4vw, calc(100svh - 31rem), 44vw); }
-  }
-}
-/* Hero seal on phones: the seal adds about 100px to the headline row, so the
-   form's drop gives the same back and the card doesn't move. Below 600px of
-   height there's no room for both, so the seal goes and the drop returns. */
-@media (max-width: 768px) {
-  .hero-photo .hero-form-col { margin-top: calc(44vw - 100px); }
-  @supports (height: 100svh) {
-    .hero-photo .hero-form-col { margin-top: clamp(0px, calc(100svh - 31rem - 100px), calc(44vw - 100px)); }
-  }
-}
-@media (max-width: 768px) and (max-height: 600px) {
-  .hero-seal { display: none; }
-  .hero-photo .hero-form-col { margin-top: 18vw; }
   @supports (height: 100svh) {
     .hero-photo .hero-form-col { margin-top: clamp(4vw, calc(100svh - 31rem), 44vw); }
   }
@@ -1876,29 +1838,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="hero-headline-wrap fade-in delay-1">
       <h1 class="h1-fit" style="--hw-d:14.091;--hw-m:16.336"><em>West Virginia</em> Interstate Movers</h1>
     </div>
-  <div class="hero-seal" role="img" aria-label="USDOT verified, MC authority active">
-    <svg viewBox="0 0 140 140" aria-hidden="true">
-      <defs>
-        <path id="hsRing" d="M19 70a51 51 0 1 1 102 0a51 51 0 1 1-102 0"/>
-        <linearGradient id="hsGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#43c27a"/>
-          <stop offset="1" stop-color="#1f6a41"/>
-        </linearGradient>
-      </defs>
-      <circle cx="70" cy="70" r="68" fill="#fff"/>
-      <circle cx="70" cy="70" r="64" fill="none" stroke="#237046" stroke-width="1" stroke-dasharray="2 3" opacity="0.4"/>
-      <g class="hs-spin">
-        <text font-size="10.2" font-weight="700" fill="#12263f"><textPath href="#hsRing" textLength="318" lengthAdjust="spacing">USDOT VERIFIED • MC ACTIVE • USDOT VERIFIED • MC ACTIVE •</textPath></text>
-      </g>
-      <circle cx="70" cy="70" r="38" fill="#eef7f1"/>
-      <g transform="translate(40 40) scale(1.6667)">
-        <polygon fill="url(#hsGrad)" points="18.00 0.50 20.97 3.09 24.70 1.83 26.44 5.36 30.37 5.63 30.64 9.56 34.17 11.30 32.91 15.03 35.50 18.00 32.91 20.97 34.17 24.70 30.64 26.44 30.37 30.37 26.44 30.64 24.70 34.17 20.97 32.91 18.00 35.50 15.03 32.91 11.30 34.17 9.56 30.64 5.63 30.37 5.36 26.44 1.83 24.70 3.09 20.97 0.50 18.00 3.09 15.03 1.83 11.30 5.36 9.56 5.63 5.63 9.56 5.36 11.30 1.83 15.03 3.09"/>
-        <circle cx="18" cy="18" r="12.2" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="0.8" stroke-dasharray="1.2 1.4"/>
-        <path d="M18 9.5 12 11.9v4.6c0 3.7 2.5 6.9 6 8.1 3.5-1.2 6-4.4 6-8.1v-4.6z" fill="#fff"/>
-        <polyline points="15.2 17.2 17.3 19.3 21 15.3" fill="none" stroke="#237046" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
-      </g>
-    </svg>
-  </div>
   </div>
 
   <div class="hero-form-col form-enter">
