@@ -537,6 +537,7 @@ const LOCK_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11
 
 function quoteFormSteps(originState) {
   return `  <div class="hero-form-col form-enter">
+${HERO_SEAL}
   <div class="hero-form-wrap qs-card" id="get-quote">
     <div class="hero-form-header qs-header">
       <h3>Get a free quote</h3>
@@ -726,6 +727,35 @@ function hwyShield(h) {
     : `<svg viewBox="0 0 100 100"><rect x="3" y="3" width="94" height="94" rx="9" fill="#111"/><path d="M17 12H83Q85 21 91 24Q93 51 82 69Q71 86 50 92Q29 86 18 69Q7 51 9 24Q15 21 17 12Z" fill="#fff"/><text x="50" y="${num.length > 2 ? 64 : 67}" font-size="${size}" fill="#111" text-anchor="middle">${esc(num)}</text></svg>`;
   return `<span class="ph-sign" aria-hidden="true">${svg}</span>`;
 }
+
+/* Trial, West Virginia only: the navbar's FMCSA pill becomes a round seal in
+   the middle of the hero — the green check seal in the centre with
+   "USDOT VERIFIED • MC ACTIVE" running round it on a slowly turning ring.
+   The navbar pill is only hidden on this page (STEP_FORM_HEAD), so deleting
+   this and the two CSS blocks marked "Hero seal" brings the pill back. */
+const HERO_SEAL = `  <div class="hero-seal" role="img" aria-label="USDOT verified, MC authority active">
+    <svg viewBox="0 0 140 140" aria-hidden="true">
+      <defs>
+        <path id="hsRing" d="M19 70a51 51 0 1 1 102 0a51 51 0 1 1-102 0"/>
+        <linearGradient id="hsGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#43c27a"/>
+          <stop offset="1" stop-color="#1f6a41"/>
+        </linearGradient>
+      </defs>
+      <circle cx="70" cy="70" r="68" fill="#fff"/>
+      <circle cx="70" cy="70" r="64" fill="none" stroke="#237046" stroke-width="1" stroke-dasharray="2 3" opacity="0.4"/>
+      <g class="hs-spin">
+        <text font-size="10.2" font-weight="700" fill="#12263f"><textPath href="#hsRing" textLength="318" lengthAdjust="spacing">USDOT VERIFIED • MC ACTIVE • USDOT VERIFIED • MC ACTIVE •</textPath></text>
+      </g>
+      <circle cx="70" cy="70" r="38" fill="#eef7f1"/>
+      <g transform="translate(40 40) scale(1.6667)">
+        <polygon fill="url(#hsGrad)" points="18.00 0.50 20.97 3.09 24.70 1.83 26.44 5.36 30.37 5.63 30.64 9.56 34.17 11.30 32.91 15.03 35.50 18.00 32.91 20.97 34.17 24.70 30.64 26.44 30.37 30.37 26.44 30.64 24.70 34.17 20.97 32.91 18.00 35.50 15.03 32.91 11.30 34.17 9.56 30.64 5.63 30.37 5.36 26.44 1.83 24.70 3.09 20.97 0.50 18.00 3.09 15.03 1.83 11.30 5.36 9.56 5.63 5.63 9.56 5.36 11.30 1.83 15.03 3.09"/>
+        <circle cx="18" cy="18" r="12.2" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="0.8" stroke-dasharray="1.2 1.4"/>
+        <path d="M18 9.5 12 11.9v4.6c0 3.7 2.5 6.9 6 8.1 3.5-1.2 6-4.4 6-8.1v-4.6z" fill="#fff"/>
+        <polyline points="15.2 17.2 17.3 19.3 21 15.3" fill="none" stroke="#237046" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </svg>
+  </div>`;
 
 const STEP_FORM_HEAD = `<link rel="preload" as="image" href="/assets/images/hero-bg-road.jpg" media="(min-width: 769px)">
 <link rel="preload" as="image" href="/assets/images/hero-bg-road-mobile.jpg" media="(max-width: 768px)">
@@ -1219,6 +1249,36 @@ body { overflow-x: clip; }
   .ph-road strong { margin-top: 0.6rem; font-size: 0.8rem; }
   .ph-road span:not(.ph-sign) { font-size: 0.7rem; line-height: 1.35; }
 }
+/* Hero seal (trial) --------------------------------------------------------
+   The round seal replaces the navbar pill on this page. Wide desktop: in the
+   open road between the headline and the form, level with the card's middle.
+   Narrower desktop, where the headline runs up to the card: perched on the
+   card's top-right corner, mostly above it, clear of the card title. Phones:
+   above the card's left edge, over the empty road, so the truck's lettering
+   stays clear. */
+.topnav .fmcsa-badge { display: none; }
+.hero-photo .hero-form-col { position: relative; }
+.hero-seal {
+  position: absolute; z-index: 4;
+  left: -6rem; top: 50%;
+  width: 150px; height: 150px;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.35));
+}
+.hero-seal svg { display: block; width: 100%; height: 100%; }
+.hero-seal text { font-family: inherit; letter-spacing: 0; }
+.hero-seal .hs-spin { transform-box: view-box; transform-origin: 70px 70px; animation: hsSpin 26s linear infinite; }
+@keyframes hsSpin { to { transform: rotate(360deg); } }
+@media (max-width: 1300px) {
+  .hero-seal { left: auto; right: 1.25rem; top: 0; width: 112px; height: 112px; transform: translateY(-86%); }
+}
+@media (max-width: 768px) {
+  .hero-seal { left: 0.9rem; right: auto; top: auto; bottom: 100%; width: 108px; height: 108px; transform: translateY(6%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-seal .hs-spin { animation: none; }
+}
+
 /* Navbar badge on phones, this page only: a bigger check seal and a smaller
    label than the shared styles.css sizing. */
 @media (max-width: 768px) {
