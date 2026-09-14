@@ -1184,11 +1184,11 @@ body { overflow-x: clip; }
   .ph-proof { padding: 0 1.25rem 2.75rem; }
   /* Phones: a 2×2 card. Each tile puts the icon beside the number, with the
      label and its one-line promise underneath, over a faint wash of its tone. */
-  .ph-stats { margin-top: -4rem; grid-template-columns: 1fr 1fr; padding: 0; border-radius: 20px; overflow: hidden; }
+  .ph-stats { margin-top: -3.5rem; grid-template-columns: 1fr 1fr; padding: 0; border-radius: 16px; overflow: hidden; }
   .ph-stat {
     display: grid; grid-template-columns: auto 1fr; align-items: center;
-    gap: 0 0.6rem;
-    padding: 1rem 0.95rem 1.05rem;
+    gap: 0 0.5rem;
+    padding: 0.7rem 0.75rem 0.75rem;
     background: linear-gradient(160deg, var(--tint) 0%, rgba(255, 255, 255, 0) 62%);
   }
   .ph-stat + .ph-stat::before { display: none; }
@@ -1196,11 +1196,11 @@ body { overflow-x: clip; }
   .ph-stat:nth-child(n+3) { box-shadow: inset 0 1px 0 #eee6da; }
   .ph-stat:nth-child(4) { box-shadow: inset 1px 0 0 #eee6da, inset 0 1px 0 #eee6da; }
   .ph-stat-body { display: contents; }
-  .ph-stat-icon { width: 36px; height: 36px; border-radius: 11px; background: #fff; box-shadow: 0 4px 10px -4px rgba(12, 26, 43, 0.25); }
-  .ph-stat-icon svg { width: 19px; height: 19px; stroke-width: 2; }
-  .ph-stat strong { font-size: 1.6rem; }
-  .ph-stat-label { grid-column: 1 / -1; margin-top: 0.7rem; font-size: 0.82rem; line-height: 1.25; }
-  .ph-stat-sub { grid-column: 1 / -1; margin-top: 0.15rem; font-size: 0.7rem; line-height: 1.3; }
+  .ph-stat-icon { width: 28px; height: 28px; border-radius: 8px; background: #fff; box-shadow: 0 3px 8px -3px rgba(12, 26, 43, 0.25); }
+  .ph-stat-icon svg { width: 15px; height: 15px; stroke-width: 2; }
+  .ph-stat strong { font-size: 1.25rem; }
+  .ph-stat-label { grid-column: 1 / -1; margin-top: 0.4rem; font-size: 0.74rem; line-height: 1.25; }
+  .ph-stat-sub { display: none; }
   /* Compact on phones: photo first with a smaller inset and badge, smaller
      type, the local points as wrapping pills, and the at-a-glance band in
      one column. */
