@@ -592,19 +592,16 @@ const PH_ICONS = {
 const PH_POINT_TICK = `<span class="ph-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>`;
 const PH_ROW_ICONS = {
   pin: `<svg viewBox="0 0 24 24"><path d="M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>`,
-  route: `<svg viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>`,
-  road: `<svg viewBox="0 0 24 24"><path d="M12 13v8"/><path d="M12 3v3"/><path d="M4 6a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h13a2 2 0 0 0 1.15-.37l3.43-2.31a1 1 0 0 0 0-1.64l-3.43-2.31A2 2 0 0 0 17 6z"/></svg>`,
 };
 
 /* Replaces the navy trust bar on the photo-hero page: the hero is already dark
    and the band after it is a dark photo, so this runs light — a white stats card
-   lifted over the hero's bottom edge, then the intro and two route facts. */
-function photoProof(s, routes) {
+   lifted over the hero's bottom edge, then the intro and the state's highways. */
+function photoProof(s) {
   const stat = (icon, num, label) => `    <div class="ph-stat">
       <span class="ph-stat-icon" aria-hidden="true">${PH_ICONS[icon]}</span>
       <div><strong>${num}</strong><span>${label}</span></div>
     </div>`;
-  const maxMiles = Math.max(...routes.map(r => r.miles));
   return `<section class="ph-proof">
   <div class="ph-stats">
 ${stat('price', '100%', 'Fixed-price moves')}
@@ -642,48 +639,49 @@ ${s.quirks.slice(0, 3).map(q => `        <li>${PH_POINT_TICK}${esc(q.title)}</li
     </div>
   </div>
 
-  <aside class="ph-glance" aria-label="${esc(s.name)} at a glance">
-    <div class="ph-glance-head">
-      <h3>${esc(s.name)} at a glance</h3>
-      <p>Where we pick up, where ${esc(s.name)} families are headed, and the roads in between.</p>
-    </div>
-    <div class="ph-glance-grid">
-      <div class="ph-col">
-        <span class="ph-row-label"><span aria-hidden="true">${PH_ROW_ICONS.pin}</span>Where we serve</span>
-        <p class="ph-row-text">Every city, village, and town in ${esc(s.name)}, including</p>
-        <ul class="ph-cities">
-${s.cities.slice(0, 8).map(c => `          <li>${esc(c)}</li>`).join('\n')}
-          <li class="ph-city-more"><a href="#coverage">All cities →</a></li>
-        </ul>
-      </div>
-      <div class="ph-col">
-        <span class="ph-row-label"><span aria-hidden="true">${PH_ROW_ICONS.route}</span>Popular destinations</span>
-        <ul class="ph-routes">
-${routes.map(r => `          <li>${esc(r.dest.name)}<span>~${r.miles.toLocaleString()} mi</span><i class="ph-bar" aria-hidden="true"><i style="width:${Math.max(8, Math.round(r.miles / maxMiles * 100))}%"></i></i></li>`).join('\n')}
-        </ul>
-      </div>
-      <div class="ph-col">
-        <span class="ph-row-label"><span aria-hidden="true">${PH_ROW_ICONS.road}</span>Main highways</span>
-        <div class="ph-hwys">${s.highways.map(hwyShield).join('')}</div>
-      </div>
-    </div>
-  </aside>
+  <div class="ph-roads">
+    <span class="ph-kicker">On the road</span>
+    <h3>The highways we run out of <em>${esc(s.name)}</em></h3>
+    <ul class="ph-road-list" style="--n:${s.highways.length}">
+${s.highways.map(h => `      <li class="ph-road">${hwyShield(h)}<strong>${esc(hwyName(h))}</strong><span>${esc((HIGHWAY_NOTES[s.slug] || {})[h] || '')}</span></li>`).join('\n')}
+    </ul>
+  </div>
 </section>`;
 }
 
 const PH_PHONE_ICON = `<svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>`;
 
-/* Highway names drawn as road signs: red-and-blue shield for interstates,
-   white shield for US routes, a plain plate for anything else. */
+/* The towns each highway strings together, shown under its sign. States
+   without an entry show the sign and name only. */
+const HIGHWAY_NOTES = {
+  'west-virginia': {
+    'I-64': 'Huntington · Charleston · Lewisburg',
+    'I-77': 'Parkersburg · Charleston · Princeton',
+    'I-79': 'Charleston · Clarksburg · Morgantown',
+    'I-81': 'Martinsburg & the Eastern Panhandle',
+    'US-19': 'Beckley · New River Gorge · Summersville',
+  },
+};
+
+function hwyName(h) {
+  const m = /^(I|US)-(.+)$/.exec(h);
+  return m ? `${m[1] === 'I' ? 'Interstate' : 'US Route'} ${m[2]}` : h;
+}
+
+/* Highways drawn as the real signs: the red-and-blue interstate shield with
+   its INTERSTATE band, the black-square US route shield, and a plain green
+   plate for anything else. */
+const SHIELD_PATH = 'M9 7Q30 14 50 4Q70 14 91 7Q100 42 91 67Q81 91 50 98Q19 91 9 67Q0 42 9 7Z';
 function hwyShield(h) {
   const m = /^(I|US)-(.+)$/.exec(h);
-  if (!m) return `<span class="ph-shield ph-shield-plate">${esc(h)}</span>`;
+  if (!m) return `<span class="ph-sign ph-sign-plate" aria-hidden="true">${esc(h)}</span>`;
   const [, type, num] = m;
-  const small = num.length > 2 ? ' ph-shield-sm' : '';
+  const size = num.length > 2 ? 30 : 42;
+  const clip = `hw-clip-${num.replace(/[^\w]/g, '')}`;
   const svg = type === 'I'
-    ? `<svg viewBox="0 0 40 42" aria-hidden="true"><path class="s-i" d="M2.5 4.5Q11 7.5 20 2.2 29 7.5 37.5 4.5 40.8 17 38 26 34.5 35.5 20 40.2 5.5 35.5 2 26-.8 17 2.5 4.5Z"/><path class="s-i-top" d="M2.5 4.5Q11 7.5 20 2.2 29 7.5 37.5 4.5 38.4 8.6 38.8 12.5H1.2Q1.6 8.6 2.5 4.5Z"/></svg>`
-    : `<svg viewBox="0 0 40 42" aria-hidden="true"><path class="s-us" d="M4.5 2.5h31q1 4 3 5.5.5 11-3.5 19Q31 35 20 40 9 35 5 27 1 19 1.5 8q2-1.5 3-5.5Z"/></svg>`;
-  return `<span class="ph-shield ph-shield-${type.toLowerCase()}${small}" role="img" aria-label="${type === 'I' ? 'Interstate' : 'US Route'} ${esc(num)}">${svg}<b aria-hidden="true">${esc(num)}</b></span>`;
+    ? `<svg viewBox="0 0 100 100"><defs><clipPath id="${clip}"><rect width="100" height="33"/></clipPath></defs><path d="${SHIELD_PATH}" fill="#fff"/><g transform="translate(50 52) scale(.86) translate(-50 -52)"><path d="${SHIELD_PATH}" fill="#1d4d97"/><path d="${SHIELD_PATH}" fill="#c8302c" clip-path="url(#${clip})"/></g><path d="M13 35.5H87" stroke="#fff" stroke-width="2.5"/><text x="50" y="26" font-size="10.5" letter-spacing=".4" fill="#fff" text-anchor="middle">INTERSTATE</text><text x="50" y="${num.length > 2 ? 74 : 78}" font-size="${size}" fill="#fff" text-anchor="middle">${esc(num)}</text></svg>`
+    : `<svg viewBox="0 0 100 100"><rect x="3" y="3" width="94" height="94" rx="9" fill="#111"/><path d="M17 12H83Q85 21 91 24Q93 51 82 69Q71 86 50 92Q29 86 18 69Q7 51 9 24Q15 21 17 12Z" fill="#fff"/><text x="50" y="${num.length > 2 ? 64 : 67}" font-size="${size}" fill="#111" text-anchor="middle">${esc(num)}</text></svg>`;
+  return `<span class="ph-sign" aria-hidden="true">${svg}</span>`;
 }
 
 const STEP_FORM_HEAD = `<link rel="preload" as="image" href="/assets/images/hero-bg-road.jpg" media="(min-width: 769px)">
@@ -828,7 +826,7 @@ body { overflow-x: clip; }
   background: var(--navy);
 }
 .ph-call-icon svg { width: 17px; height: 17px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.ph-btn:focus-visible, .ph-call:focus-visible, .ph-city-more a:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+.ph-btn:focus-visible, .ph-call:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
 .ph-tick {
   display: inline-flex; align-items: center; justify-content: center;
   width: 26px; height: 26px; flex-shrink: 0;
@@ -836,58 +834,44 @@ body { overflow-x: clip; }
 }
 .ph-tick svg { width: 14px; height: 14px; fill: none; stroke: var(--green); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 
-/* At-a-glance band: the state's own data (cities, lanes, corridors) on navy,
-   with distance bars for the lanes and real road-sign shields for highways. */
-.ph-glance {
-  max-width: 1240px;
-  margin: 5.5rem auto 0;
-  padding: 2.4rem 2.75rem 2.6rem;
-  border-radius: 26px;
-  background:
-    radial-gradient(circle at 100% 0, rgba(200, 85, 44, 0.24), transparent 42%),
-    radial-gradient(circle at 0 100%, rgba(63, 174, 107, 0.12), transparent 40%),
-    var(--navy);
-  color: #fff;
-  box-shadow: 0 40px 80px -44px rgba(12, 26, 43, 0.7);
+/* Highway strip: the signs stand along a stretch of road with a dashed
+   centre line, each with its name and the towns it links underneath. */
+.ph-roads { max-width: 1240px; margin: 5.5rem auto 0; text-align: center; }
+.ph-roads h3 { margin: 0 auto; max-width: 48rem; font-size: clamp(1.55rem, 2.4vw, 2.1rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; color: var(--ink); }
+.ph-roads h3 em { font-style: normal; color: var(--accent); }
+.ph-road-list {
+  position: relative;
+  list-style: none; margin: 2.75rem 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(var(--n, 5), 1fr); gap: 1.5rem 1rem;
 }
-.ph-glance-head {
-  display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 0.5rem 2rem;
-  padding-bottom: 1.6rem; margin-bottom: 1.9rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+.ph-road-list::before {
+  content: ""; position: absolute; left: 4%; right: 4%; top: 44px;
+  height: 18px; margin-top: -9px; border-radius: 99px;
+  background: var(--navy);
+  box-shadow: 0 12px 24px -12px rgba(12, 26, 43, 0.5);
 }
-.ph-glance h3 { margin: 0; font-size: 1.6rem; font-weight: 600; letter-spacing: -0.025em; color: #fff; }
-.ph-glance-head p { margin: 0; max-width: 29rem; font-size: 0.95rem; line-height: 1.55; color: rgba(255, 255, 255, 0.62); }
-.ph-glance-grid { display: grid; grid-template-columns: 1.15fr 1.15fr 0.85fr; gap: 2.5rem; }
-.ph-col + .ph-col { padding-left: 2.5rem; border-left: 1px solid rgba(255, 255, 255, 0.1); }
-.ph-row-label {
-  display: flex; align-items: center; gap: 0.5rem;
-  margin: 0 0 0.9rem;
-  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255, 255, 255, 0.55);
+.ph-road-list::after {
+  content: ""; position: absolute; left: 5.5%; right: 5.5%; top: 43px;
+  border-top: 2px dashed #f2c14e;
 }
-.ph-row-label > span { display: inline-flex; }
-.ph-row-label svg { width: 16px; height: 16px; fill: none; stroke: #f4a37f; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.ph-row-text { margin: 0 0 0.85rem; font-size: 0.98rem; font-weight: 600; line-height: 1.45; color: #fff; }
-.ph-cities { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
-.ph-cities li { padding: 0.32rem 0.72rem; border-radius: 999px; background: rgba(255, 255, 255, 0.08); font-size: 0.82rem; color: rgba(255, 255, 255, 0.88); }
-.ph-cities .ph-city-more { padding: 0; background: none; }
-.ph-city-more a { display: block; padding: 0.32rem 0.72rem; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(244, 163, 127, 0.55); font-weight: 600; color: #f4a37f; text-decoration: none; }
-.ph-city-more a:hover { background: rgba(244, 163, 127, 0.12); }
-.ph-routes { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.8rem; }
-.ph-routes li { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 0.4rem 0.75rem; font-size: 0.92rem; font-weight: 600; color: #fff; }
-.ph-routes li > span { font-size: 0.84rem; font-weight: 400; color: rgba(255, 255, 255, 0.6); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.ph-bar { grid-column: 1 / -1; display: block; height: 4px; border-radius: 99px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
-.ph-bar i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, #f4a37f, var(--accent)); }
-.ph-hwys { display: flex; flex-wrap: wrap; gap: 0.7rem; }
-.ph-shield { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 54px; height: 57px; }
-.ph-shield svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.ph-shield b { position: relative; font-size: 1.12rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
-.ph-shield-sm b { font-size: 0.82rem; }
-.s-i { fill: #1f4f99; stroke: #fff; stroke-width: 1.6; }
-.s-i-top { fill: #c8312f; }
-.ph-shield-i b { margin-top: 0.7rem; color: #fff; }
-.s-us { fill: #fff; stroke: #0f0f0f; stroke-width: 1.8; }
-.ph-shield-us b { margin-top: -0.1rem; color: #111; }
-.ph-shield-plate { width: auto; height: auto; padding: 0.45rem 0.7rem; border-radius: 8px; background: #fff; font-size: 0.8rem; font-weight: 700; color: var(--ink); }
+.ph-road { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+.ph-sign {
+  display: block; width: 88px; height: 88px;
+  filter: drop-shadow(0 12px 14px rgba(12, 26, 43, 0.3));
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ph-road:hover .ph-sign { transform: translateY(-5px) rotate(-3deg); }
+.ph-sign svg { display: block; width: 100%; height: 100%; }
+.ph-sign text { font-family: inherit; font-weight: 700; }
+.ph-sign-plate {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: auto; min-width: 88px; height: 60px; margin: 14px 0; padding: 0 0.9rem;
+  border: 3px solid #fff; border-radius: 10px;
+  background: #1f6b3a; color: #fff; font-size: 1.1rem; font-weight: 700;
+}
+.ph-road strong { margin-top: 1rem; font-size: 1rem; font-weight: 700; color: var(--ink); }
+.ph-road span:not(.ph-sign) { margin-top: 0.25rem; max-width: 14rem; font-size: 0.85rem; line-height: 1.45; color: var(--muted); }
+.ph-road span:empty { display: none; }
 
 /* Step form card -----------------------------------------------------------
    Plain white on the photo: a heading, a step count, the fields and one line
@@ -977,8 +961,10 @@ body { overflow-x: clip; }
   .ph-about { gap: 3rem; }
   .ph-media { padding: 0 2.5rem 2.5rem 0; }
   .ph-badge { left: 1rem; top: 1rem; }
-  .ph-glance-grid { grid-template-columns: 1fr 1fr; }
-  .ph-col:last-child { grid-column: 1 / -1; padding: 1.75rem 0 0; border-left: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+  /* Signs wrap onto two rows here, so the road behind them goes. */
+  .ph-road-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem 1rem; }
+  .ph-road-list::before, .ph-road-list::after { display: none; }
+  .ph-road { flex: 0 0 calc((100% - 2rem) / 3); }
 }
 @media (max-width: 900px) {
   .ph-about { grid-template-columns: 1fr; }
@@ -1066,22 +1052,14 @@ body { overflow-x: clip; }
   .ph-cta { margin-top: 1.25rem; }
   .ph-btn { flex: 1 1 100%; justify-content: center; padding: 0.9rem 1.2rem; font-size: 0.95rem; }
   .ph-call { display: none; }
-  .ph-glance { margin-top: 2.5rem; padding: 1.35rem 1.2rem 1.5rem; border-radius: 18px; }
-  .ph-glance-head { padding-bottom: 1rem; margin-bottom: 1.1rem; }
-  .ph-glance h3 { font-size: 1.2rem; }
-  .ph-glance-head p { font-size: 0.82rem; }
-  .ph-glance-grid { grid-template-columns: 1fr; gap: 0; }
-  .ph-col + .ph-col,
-  .ph-col:last-child { grid-column: auto; margin-top: 1.1rem; padding: 1.1rem 0 0; border-left: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); }
-  .ph-row-label { margin-bottom: 0.65rem; font-size: 0.64rem; }
-  .ph-row-text { margin-bottom: 0.65rem; font-size: 0.88rem; }
-  .ph-cities li, .ph-city-more a { padding: 0.28rem 0.6rem; font-size: 0.76rem; }
-  .ph-cities .ph-city-more { padding: 0; }
-  .ph-routes { grid-template-columns: 1fr 1fr; gap: 0.7rem 1.1rem; }
-  .ph-routes li { font-size: 0.8rem; gap: 0.3rem 0.4rem; }
-  .ph-routes li > span { font-size: 0.72rem; }
-  .ph-shield { width: 46px; height: 48px; }
-  .ph-shield b { font-size: 0.98rem; }
+  .ph-roads { margin-top: 3rem; }
+  .ph-roads h3 { font-size: 1.35rem; }
+  .ph-road-list { margin-top: 1.6rem; gap: 1.4rem 0.5rem; }
+  .ph-road { flex-basis: calc((100% - 1rem) / 3); }
+  .ph-sign { width: 62px; height: 62px; }
+  .ph-sign-plate { min-width: 62px; height: 44px; margin: 9px 0; font-size: 0.85rem; }
+  .ph-road strong { margin-top: 0.6rem; font-size: 0.8rem; }
+  .ph-road span:not(.ph-sign) { font-size: 0.7rem; line-height: 1.35; }
 }
 @media (prefers-reduced-motion: reduce) {
   .qs-step.is-active { animation: none; }
@@ -2603,7 +2581,7 @@ ${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
 ${STEP_FORM_STATES.has(s.name) ? `${quoteFormSteps(s)}
 </header>
 
-${photoProof(s, routes)}` : `  <div class="hero-lede">
+${photoProof(s)}` : `  <div class="hero-lede">
     <p class="fade-in delay-2">
       ${esc(s.intro)}
     </p>
