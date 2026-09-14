@@ -587,10 +587,10 @@ const phBadge = key => `<span class="ph-check" aria-hidden="true">${PH_CHECK_ICO
 function photoHeroLede(s) {
   return `  <div class="hero-lede">
     <p class="ph-sub fade-in delay-2">Fixed-price moves from ${esc(s.name)} to anywhere in the continental US.</p>
-    <ul class="ph-checks fade-in delay-3">
-      <li>${phBadge('licensed')}FMCSA licensed &amp; insured</li>
-      <li>${phBadge('price')}Fixed price, no hidden fees</li>
-      <li>${phBadge('quote')}Free quote the same day</li>
+    <ul class="ph-cards fade-in delay-3">
+      <li class="ph-card">${phBadge('licensed')}<div><strong>FMCSA licensed &amp; insured</strong><span>USDOT #${USDOT} · $1M coverage</span></div></li>
+      <li class="ph-card">${phBadge('price')}<div><strong>Fixed price, no hidden fees</strong><span>The price we quote is the price you pay</span></div></li>
+      <li class="ph-card">${phBadge('quote')}<div><strong>Free quote the same day</strong><span>No obligation to book</span></div></li>
     </ul>
   </div>`;
 }
@@ -709,17 +709,40 @@ body { overflow-x: clip; }
   line-height: 1.55;
   color: rgba(245, 240, 232, 0.9);
 }
-.ph-checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.85rem; }
-.ph-checks li { display: flex; align-items: center; gap: 0.8rem; font-size: 1.02rem; font-weight: 500; color: #fff; }
+/* The three promises as frosted cards on the photo: icon tile, claim, and one
+   line of proof beside it, stacked. Three across squeezed each title onto two
+   lines even on a 1440px hero. */
+.ph-cards {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: 1fr; gap: 0.65rem;
+  max-width: 460px;
+}
+.ph-card {
+  display: flex; flex-direction: row; align-items: center; gap: 0.95rem;
+  padding: 0.9rem 1.05rem;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2); backdrop-filter: blur(12px) saturate(1.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 20px 40px -26px rgba(0, 0, 0, 0.7);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s, background 0.3s;
+}
+.ph-card:hover { transform: translateY(-3px); border-color: rgba(125, 220, 163, 0.45); background: linear-gradient(180deg, rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0.07)); }
+.ph-card strong { display: block; font-size: 0.96rem; font-weight: 600; line-height: 1.3; letter-spacing: -0.005em; color: #fff; }
+.ph-card span:not(.ph-check) { display: block; margin-top: 0.3rem; font-size: 0.78rem; line-height: 1.4; color: rgba(245, 240, 232, 0.72); }
 .ph-check {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 34px; height: 34px; flex-shrink: 0;
-  border-radius: 50%;
+  width: 40px; height: 40px; flex-shrink: 0;
+  border-radius: 12px;
   color: #7ddca3;
-  background: rgba(95, 208, 139, 0.14);
-  box-shadow: inset 0 0 0 1px rgba(95, 208, 139, 0.45);
+  background: linear-gradient(180deg, rgba(95, 208, 139, 0.24), rgba(95, 208, 139, 0.1));
+  box-shadow: inset 0 0 0 1px rgba(95, 208, 139, 0.4);
 }
-.ph-check svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ph-check svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+@media (prefers-reduced-motion: reduce) {
+  .ph-card { transition: none; }
+  .ph-card:hover { transform: none; }
+}
 
 /* Proof section --------------------------------------------------------- */
 /* flow-root keeps the stats card's negative margin inside the section; it had
@@ -916,10 +939,12 @@ body { overflow-x: clip; }
      clip gone it has nothing to caption. */
   .hero-photo .hero-lede { border-left: 0; padding-left: 0; }
   .hero-photo .ph-sub { font-size: 1rem; margin-bottom: 0.9rem; }
-  .ph-checks { gap: 0.55rem; }
-  .ph-checks li { font-size: 0.92rem; gap: 0.65rem; }
-  .ph-check { width: 30px; height: 30px; }
-  .ph-check svg { width: 15px; height: 15px; }
+  .ph-cards { max-width: none; gap: 0.55rem; }
+  .ph-card { padding: 0.8rem 0.9rem; gap: 0.8rem; border-radius: 14px; }
+  .ph-card strong { font-size: 0.93rem; }
+  .ph-card span:not(.ph-check) { font-size: 0.76rem; }
+  .ph-check { width: 36px; height: 36px; border-radius: 10px; }
+  .ph-check svg { width: 18px; height: 18px; }
   .hero-form-wrap.qs-card { padding: 1.15rem 1.1rem 1rem; border-radius: 18px; }
   .qs-card .qs-header h3 { font-size: 1.35rem; }
   .qs-bar { margin-bottom: 1rem; }
