@@ -1144,7 +1144,7 @@ body { overflow-x: clip; }
   /* Photo drawn at full width is ~179vw tall, truck from ~50vw to ~108vw down.
      The form starts just under the lettering, above the wheels, so most of the
      truck shows and the card still clears the sticky call bar on common phones. */
-  .hero-photo .hero-form-col { margin-top: 50vw; }
+  .hero-photo .hero-form-col { margin-top: 38vw; }
   .hero-form-wrap.qs-card { padding: 1.15rem 1.1rem 1rem; border-radius: 18px; }
   .qs-card .qs-header h3 { font-size: 1.35rem; }
   .qs-bar { margin-bottom: 1rem; }
@@ -1242,7 +1242,7 @@ body { overflow-x: clip; }
    so the form drops as far as it can (up to 50vw) without hiding Next. */
 @media (max-width: 768px) {
   @supports (height: 100svh) {
-    .hero-photo .hero-form-col { margin-top: clamp(4vw, calc(100svh - 30rem), 50vw); }
+    .hero-photo .hero-form-col { margin-top: clamp(4vw, calc(100svh - 32rem), 38vw); }
   }
 }
 @media (prefers-reduced-motion: reduce) {
