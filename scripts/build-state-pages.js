@@ -1222,7 +1222,7 @@ body { overflow-x: clip; }
 /* Navbar badge on phones, this page only: a bigger check seal and a smaller
    label than the shared styles.css sizing. */
 @media (max-width: 768px) {
-  .fmcsa-badge { height: 27px; padding-left: 0.12rem; gap: 0.2rem; font-size: 0.41rem; }
+  .fmcsa-badge { height: 27px; padding-left: 0.12rem; gap: 0.2rem; font-size: 0.36rem; }
   .fmcsa-badge .fb-seal { width: 24px; height: 24px; }
 }
 
