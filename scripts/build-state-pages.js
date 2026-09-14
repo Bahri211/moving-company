@@ -413,10 +413,6 @@ const gallery = s => `<section id="gallery" class="gallery-section">
       <img src="/assets/images/trucks/inside-house.jpeg" alt="Moving crew inside a home" loading="lazy" />
       <div class="gallery-caption"><div class="label">White Glove Service</div><div class="title">Handled with care</div></div>
     </div>
-    <div class="gallery-item">
-      <img src="/assets/images/trucks/packing.jpeg" alt="Professional packing service" loading="lazy" />
-      <div class="gallery-caption"><div class="label">Packing</div><div class="title">Packed right, every time</div></div>
-    </div>
   </div>
 </section>`;
 

@@ -2624,9 +2624,15 @@ a.state-item:hover { background: #fff; }
    the photo's own 3:2 so nothing is cropped. */
 .gallery-lead { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
 
+/* With an odd number of photos under the lead, the last one would sit alone
+   in its row, so it runs full width too. */
+.gallery-item:not(.gallery-lead):last-child:nth-child(odd of .gallery-item:not(.gallery-lead)) { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
+
 @media (max-width: 768px) {
   .gallery-lead { aspect-ratio: 3 / 2; }
   .gallery-lead img { height: 100%; }
+  .gallery-item:not(.gallery-lead):last-child:nth-child(odd of .gallery-item:not(.gallery-lead)) { aspect-ratio: 3 / 2; }
+  .gallery-item:not(.gallery-lead):last-child:nth-child(odd of .gallery-item:not(.gallery-lead)) img { height: 100%; }
 }
 
 /* ==========================================================================
