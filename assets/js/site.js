@@ -354,3 +354,15 @@
   window.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update, { passive: true });
 })();
+
+/* "Read more" on the photo-hero page's state intro, which phones clamp to four
+   lines. */
+(function () {
+  document.querySelectorAll('.ph-more').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var open = btn.parentElement.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', open);
+      btn.textContent = open ? 'Show less' : 'Read more';
+    });
+  });
+})();

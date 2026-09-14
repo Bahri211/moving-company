@@ -1129,6 +1129,7 @@ body { overflow-x: clip; }
 .ph-about h2 { margin: 0 0 1.1rem; font-size: clamp(1.9rem, 3vw, 2.6rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.1; color: var(--ink); }
 .ph-about h2 em { font-style: normal; color: var(--accent); }
 .ph-about-text p { max-width: 36rem; font-size: 1.02rem; line-height: 1.75; color: var(--ink-soft); }
+.ph-more { display: none; }
 .ph-points { list-style: none; margin: 1.6rem 0 0; padding: 1.4rem 0 0; border-top: 1px solid #e7e0d5; display: grid; gap: 0.8rem; }
 .ph-points li { display: flex; align-items: center; gap: 0.75rem; font-size: 0.98rem; font-weight: 600; color: var(--ink); }
 .ph-tick {
@@ -1302,7 +1303,7 @@ body { overflow-x: clip; }
   .qs-card .form-row input,
   .qs-card .form-row select { min-height: 48px; border: 1px solid #ddd6cb; background-color: #faf8f4; }
 
-  .ph-proof { padding: 0 1.25rem 3.5rem; }
+  .ph-proof { padding: 0 1.25rem 2.75rem; }
   .ph-stats { margin-top: -4rem; grid-template-columns: 1fr 1fr; padding: 0.4rem; border-radius: 18px; }
   .ph-stat { flex-direction: column; text-align: center; gap: 0.5rem; padding: 1rem 0.4rem; }
   .ph-stat + .ph-stat { border-left: 0; }
@@ -1312,17 +1313,37 @@ body { overflow-x: clip; }
   .ph-stat-icon svg { width: 20px; height: 20px; }
   .ph-stat strong { font-size: 1.35rem; }
   .ph-stat div > span { font-size: 0.74rem; }
-  .ph-about { grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
-  .ph-about h2 { font-size: 1.85rem; }
-  .ph-about-text p { font-size: 0.98rem; }
-  .ph-points { margin-top: 1.25rem; padding-top: 1.1rem; }
-  .ph-points li { font-size: 0.93rem; }
-  .ph-glance { padding: 1.3rem 1.2rem 0.3rem; border-radius: 18px; }
-  .ph-row { grid-template-columns: 34px 1fr; gap: 0.8rem; padding: 1rem 0; }
-  .ph-row-icon { width: 34px; height: 34px; border-radius: 10px; }
-  .ph-row-icon svg { width: 17px; height: 17px; }
-  .ph-routes { gap: 0.45rem 1rem; }
-  .ph-routes li { font-size: 0.85rem; }
+  /* Compact on phones: smaller type, the local points and the destinations
+     as wrapping pills, and no row icons, so the section is about two thirds
+     of its desktop-stacked height. */
+  .ph-about { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 2.25rem; }
+  .ph-kicker { margin-bottom: 0.45rem; font-size: 0.66rem; }
+  .ph-about h2 { margin-bottom: 0.7rem; font-size: 1.5rem; }
+  .ph-about-text p { font-size: 0.92rem; line-height: 1.62; }
+  /* Four lines of the intro, the rest behind Read more (site.js). The full
+     text stays in the markup. */
+  .ph-about-text p { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .ph-about-text.is-open p { display: block; overflow: visible; }
+  .ph-more {
+    display: inline-block; margin-top: 0.35rem; padding: 0;
+    border: 0; background: none; cursor: pointer;
+    font: inherit; font-size: 0.85rem; font-weight: 600;
+    color: var(--accent); text-decoration: underline; text-underline-offset: 3px;
+  }
+  .ph-points { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; padding-top: 0; border-top: 0; }
+  .ph-points li { gap: 0.35rem; padding: 0.3rem 0.7rem 0.3rem 0.35rem; border-radius: 999px; background: #fff; box-shadow: 0 0 0 1px rgba(12, 26, 43, 0.08); font-size: 0.78rem; }
+  .ph-tick { width: 18px; height: 18px; }
+  .ph-tick svg { width: 10px; height: 10px; }
+  .ph-glance { padding: 1rem 1.1rem 0.2rem; border-radius: 16px; }
+  .ph-glance h3 { margin-bottom: 0.1rem; font-size: 1rem; }
+  .ph-row { grid-template-columns: 1fr; gap: 0; padding: 0.85rem 0; }
+  .ph-row-icon { display: none; }
+  .ph-row-label { margin: 0 0 0.45rem; font-size: 0.64rem; }
+  .ph-row-text { font-size: 0.9rem; }
+  .ph-routes { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .ph-routes li { gap: 0.3rem; padding: 0.28rem 0.6rem; border-radius: 999px; background: #f5f1ea; font-size: 0.8rem; }
+  .ph-routes span { font-size: 0.76rem; }
+  .ph-hwys span { padding: 0.22rem 0.45rem; font-size: 0.72rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .qs-step.is-active { animation: none; }
@@ -1740,6 +1761,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="ph-kicker">Moving from West Virginia</span>
       <h2>Moving out of <em>West Virginia</em></h2>
       <p>West Virginia is the most topographically difficult state in the East to move in. Mountain roads with hairpin turns, one-lane bridges, hollows where a tractor-trailer physically cannot turn around, and steep driveways make access the central planning question on nearly every job. In West Virginia we treat shuttle service as routine. The Eastern Panhandle around Martinsburg is the exception — it functions as a DC exurb and moves like one.</p>
+      <button type="button" class="ph-more" aria-expanded="false">Read more</button>
       <ul class="ph-points">
         <li><span class="ph-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Hollow road access</li>
         <li><span class="ph-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Posted one-lane bridges</li>
