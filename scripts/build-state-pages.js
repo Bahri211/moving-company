@@ -1195,6 +1195,9 @@ body { overflow-x: clip; }
   .ph-stat:nth-child(even) { box-shadow: inset 1px 0 0 #eee6da; }
   .ph-stat:nth-child(n+3) { box-shadow: inset 0 1px 0 #eee6da; }
   .ph-stat:nth-child(4) { box-shadow: inset 1px 0 0 #eee6da, inset 0 1px 0 #eee6da; }
+  /* Phones keep two stats, fixed price and 24/7 support, on one row. */
+  .ph-stat:nth-child(2), .ph-stat:nth-child(4) { display: none; }
+  .ph-stat:nth-child(3) { box-shadow: inset 1px 0 0 #eee6da; }
   .ph-stat-body { display: contents; }
   .ph-stat-icon { width: 28px; height: 28px; border-radius: 8px; background: #fff; box-shadow: 0 3px 8px -3px rgba(12, 26, 43, 0.25); }
   .ph-stat-icon svg { width: 15px; height: 15px; stroke-width: 2; }
