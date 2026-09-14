@@ -7,8 +7,10 @@ module.exports = async function handler(req, res) {
 
   const { name, email, phone, message } = req.body || {};
 
-  if (!name || !email || !message) {
-    return res.status(400).json({ error: 'Name, email, and message are required.' });
+  // Name is optional: the West Virginia step-form test asks for phone and email
+  // instead. The eight-field form still requires it on the page.
+  if (!email || !message) {
+    return res.status(400).json({ error: 'Email and message are required.' });
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -20,7 +22,7 @@ module.exports = async function handler(req, res) {
   const text = `
 New Contact Message — 50STATEMOVERS INC
 
-Name:    ${name}
+Name:    ${name || 'Not provided'}
 Email:   ${email}
 Phone:   ${phone || 'Not provided'}
 
@@ -35,7 +37,7 @@ Submitted: ${new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }
       from: '50STATEMOVERS INC <contact@50statemovers.com>',
       to: 'contact@50statemovers.com',
       reply_to: email,
-      subject: `New Contact Message — ${name}`,
+      subject: `New Contact Message — ${name || phone || email}`,
       text,
     });
 

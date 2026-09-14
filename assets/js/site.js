@@ -90,7 +90,7 @@
       if (!ok) return;
     }
     showStep(current + 1);
-    track('quote_form_step', { step: current + 1, form_variant: 'steps_email_only' });
+    track('quote_form_step', { step: current + 1, form_variant: 'steps_phone_email' });
   }
 
   if (steps) {
@@ -155,7 +155,8 @@
 
     var from = $('qf-from').value;
     var to = $('qf-to').value;
-    var name = $('qf-name').value.trim();
+    var nameEl = $('qf-name');
+    var name = nameEl ? nameEl.value.trim() : '';
     var email = $('qf-email').value.trim();
     var phoneEl = $('qf-phone');
     var phone = phoneEl ? phoneEl.value.trim() : '';
@@ -163,7 +164,7 @@
 
     if (!from) { setError('error-from', 'Please select your origin state.'); valid = false; }
     if (!to) { setError('error-to', 'Please select your destination state.'); valid = false; }
-    if (!name) { setError('error-name', 'Please enter your name.'); valid = false; }
+    if (nameEl && !name) { setError('error-name', 'Please enter your name.'); valid = false; }
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setError('error-email', 'Please enter a valid email address.'); valid = false;
     }
@@ -202,7 +203,7 @@
       $('qf-date').value ? 'Planned move date: ' + $('qf-date').value : null,
       $('qf-notes') && $('qf-notes').value.trim() ? 'Notes: ' + $('qf-notes').value.trim() : null,
       sms ? 'SMS opt-in: ' + (sms.checked ? 'Yes' : 'No') : null,
-      steps ? 'Form: 3-step, email only (test)' : null,
+      steps ? 'Form: 3-step, phone + email (test)' : null,
       'Landing page: ' + window.location.pathname,
     ].filter(Boolean).join('\n');
 

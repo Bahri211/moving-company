@@ -489,8 +489,7 @@ function quoteForm(originState) {
 // the state hub rather than a same-page anchor.
 /* ------------------------------------------- step form test (West Virginia)
    Trial of the multi-step quote form many movers use: two fields per screen
-   (route → move details → contact), email only with no phone number and so no
-   SMS consent, in a plain white card over a photo hero. Gated on its own set
+   (route → move details → phone and email), no name field and no SMS consent, in a plain white card over a photo hero. Gated on its own set
    so the other state pages keep the eight-field form and their paper hero.
    site.js drives the steps and reports each one to GA as quote_form_step. */
 const STEP_FORM_STATES = new Set(['West Virginia']);
@@ -552,9 +551,9 @@ function quoteFormSteps(originState) {
       <fieldset class="qs-step" aria-label="Your contact details" hidden>
         <div class="form-row form-row-2">
           <div>
-            <label for="qf-name">Name</label>
-            <input type="text" id="qf-name" placeholder="Jane Doe" autocomplete="name" />
-            <div class="field-error" id="error-name" role="alert"></div>
+            <label for="qf-phone">Phone</label>
+            <input type="tel" id="qf-phone" placeholder="(555) 000-0000" autocomplete="tel" inputmode="tel" />
+            <div class="field-error" id="error-phone" role="alert"></div>
           </div>
           <div>
             <label for="qf-email">Email</label>
@@ -564,7 +563,7 @@ function quoteFormSteps(originState) {
         </div>
         <div class="qs-nav">
           <button type="button" class="qs-back" aria-label="Back">←</button>
-          <button type="submit" class="form-submit">Get my free quote</button>
+          <button type="submit" class="form-submit">Submit</button>
         </div>
       </fieldset>
     </form>
@@ -930,14 +929,15 @@ body { overflow-x: clip; }
         rgba(9, 20, 34, 0.72) 0,
         rgba(9, 20, 34, 0.6) 40vw,
         rgba(9, 20, 34, 0.06) 54vw,
-        rgba(9, 20, 34, 0.1) 106vw,
-        rgba(9, 20, 34, 0.86) 128vw,
+        rgba(9, 20, 34, 0.1) 84vw,
+        rgba(9, 20, 34, 0.86) 110vw,
         var(--navy-deep) 176vw),
       var(--navy-deep) url('/assets/images/hero-bg-road-mobile.jpg') center top / 100% auto no-repeat;
   }
-  /* Photo drawn at full width is ~179vw tall, truck from ~50vw to ~108vw down;
-     the form starts just under the wheels on any phone width. */
-  .hero-photo .hero-form-col { margin-top: 66vw; }
+  /* Photo drawn at full width is ~179vw tall, truck from ~50vw to ~108vw down.
+     The form starts under the lettering rather than the wheels, so the whole
+     card still clears the sticky call bar on a 375x667 phone. */
+  .hero-photo .hero-form-col { margin-top: 40vw; }
   /* The accent rule tied the copy to the clip above it as a caption; with the
      clip gone it has nothing to caption. */
   .hero-photo .hero-lede { border-left: 0; padding-left: 0; }
