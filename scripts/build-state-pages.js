@@ -637,7 +637,9 @@ const PH_ROW_ICONS = {
    and the band after it is a dark photo, so this runs light — a white stats card
    lifted over the hero's bottom edge, then the intro and the state's highways. */
 function photoProof(s) {
-  const stat = (icon, tone, num, label, sub) => `    <div class="ph-stat ph-tone-${tone}">
+  /* Numbers are split so the digits can count up (data-count) while the unit
+     around them stays put and takes the stat's tone. */
+  const stat = (icon, tone, num, label, sub, extra = '') => `    <div class="ph-stat ph-tone-${tone}">${extra}
       <span class="ph-stat-icon" aria-hidden="true">${PH_ICONS[icon]}</span>
       <div class="ph-stat-body">
         <strong>${num}</strong>
@@ -645,13 +647,32 @@ function photoProof(s) {
         <span class="ph-stat-sub">${sub}</span>
       </div>
     </div>`;
+  const live = `<span class="ph-live"><span class="ph-live-dot" aria-hidden="true"></span>Live</span>`;
   return `<section class="ph-proof">
   <div class="ph-stats">
-${stat('price', 'green', '100%', 'Fixed-price moves', 'Price locked at booking')}
-${stat('shield', 'orange', '0.3%', 'Damage claim rate', 'Across all our moves')}
-${stat('support', 'blue', '24/7', 'Customer support', 'Real people, any hour')}
-${stat('cover', 'gold', '$1M', 'Liability coverage', 'Bonded &amp; insured')}
+${stat('price', 'green', '<b data-count="100">100</b><i>%</i>', 'Fixed-price moves', 'Price locked at booking')}
+${stat('shield', 'orange', '<b data-count="0.3" data-dec="1">0.3</b><i>%</i>', 'Damage claim rate', 'Across all our moves')}
+${stat('support', 'blue', '<b data-count="24">24</b><i>/7</i>', 'Customer support', 'Real people, any hour', live)}
+${stat('cover', 'gold', '<i>$</i><b data-count="1">1</b><i>M</i>', 'Liability coverage', 'Bonded &amp; insured')}
   </div>
+  <script>
+  (function () {
+    var card = document.querySelector('.ph-stats');
+    if (!card || !('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var nums = card.querySelectorAll('[data-count]');
+    nums.forEach(function (el) { el.textContent = el.dataset.dec ? '0.0' : '0'; });
+    new IntersectionObserver(function (entries, obs) {
+      if (!entries[0].isIntersecting) return;
+      obs.disconnect();
+      var start = performance.now() + 350;
+      (function tick(now) {
+        var p = Math.max(0, Math.min((now - start) / 1500, 1)), e = 1 - Math.pow(1 - p, 3);
+        nums.forEach(function (el) { el.textContent = (+el.dataset.count * e).toFixed(+(el.dataset.dec || 0)); });
+        if (p < 1) requestAnimationFrame(tick);
+      })(performance.now());
+    }, { threshold: 0.35 }).observe(card);
+  })();
+  </script>
 
   <div class="ph-about">
     <div class="ph-media">
@@ -769,43 +790,69 @@ body { overflow-x: clip; }
   position: relative; z-index: 3;
   max-width: 1240px;
   margin: -4.75rem auto 0;
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  padding: 1.5rem 0.6rem;
-  background: #fff;
-  border-radius: 22px;
-  box-shadow: 0 34px 70px -34px rgba(12, 26, 43, 0.45), 0 0 0 1px rgba(12, 26, 43, 0.05);
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.1rem;
 }
-/* Each stat carries its own colour: the tone tints the icon tile and strokes
-   the icon. The four rise in one after another as the card lands. */
-.ph-tone-green  { --tone: #2f9a5b; --tint: #e5f4ea; }
-.ph-tone-orange { --tone: #c8552c; --tint: #fbe9e1; }
-.ph-tone-blue   { --tone: #1f4f99; --tint: #e6edf8; }
-.ph-tone-gold   { --tone: #b3771c; --tint: #faefd9; }
+/* Each stat is its own lifted card in its own colour: a tone bar along the top
+   that runs full width on hover, a soft wash in the corner, a glowing gradient
+   icon tile and the unit in the tone. The four rise in one after another. */
+.ph-tone-green  { --tone: #2f9a5b; --tone2: #55c887; --tint: #e5f4ea; }
+.ph-tone-orange { --tone: #c8552c; --tone2: #f08a57; --tint: #fbe9e1; }
+.ph-tone-blue   { --tone: #1f4f99; --tone2: #4a86dc; --tint: #e6edf8; }
+.ph-tone-gold   { --tone: #b3771c; --tone2: #e5ab45; --tint: #faefd9; }
 .ph-stat {
-  position: relative;
-  display: flex; align-items: center; gap: 1rem;
-  padding: 0.5rem 1.6rem;
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; gap: 1.1rem;
+  padding: 1.45rem 1.4rem;
+  background: radial-gradient(130% 100% at 100% 0%, var(--tint) 0%, rgba(255, 255, 255, 0) 58%), #fff;
+  border-radius: 20px;
+  box-shadow: 0 30px 60px -30px rgba(12, 26, 43, 0.5), 0 0 0 1px rgba(12, 26, 43, 0.05);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
   animation: phStatIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .ph-stat:nth-child(1) { animation-delay: 0.35s; }
 .ph-stat:nth-child(2) { animation-delay: 0.45s; }
 .ph-stat:nth-child(3) { animation-delay: 0.55s; }
 .ph-stat:nth-child(4) { animation-delay: 0.65s; }
-@keyframes phStatIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-.ph-stat + .ph-stat::before {
-  content: ""; position: absolute; left: 0; top: 10%; bottom: 10%; width: 1px;
-  background: linear-gradient(180deg, transparent, #e4dccf 25%, #e4dccf 75%, transparent);
+/* Animates translate, not transform, so the hover lift isn't pinned by the fill. */
+@keyframes phStatIn { from { opacity: 0; translate: 0 16px; } to { opacity: 1; translate: 0 0; } }
+.ph-stat::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px;
+  background: linear-gradient(90deg, var(--tone), var(--tone2));
+  transform: scaleX(0.3); transform-origin: left;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
+.ph-stat::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.75) 50%, transparent 62%);
+  transform: translateX(-110%);
+}
+.ph-stat:hover { transform: translateY(-6px); box-shadow: 0 42px 70px -30px rgba(12, 26, 43, 0.55), 0 0 0 1px rgba(12, 26, 43, 0.07); }
+.ph-stat:hover::after { transform: scaleX(1); }
+.ph-stat:hover::before { transform: translateX(110%); transition: transform 0.9s ease; }
 .ph-stat-icon {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 56px; height: 56px; flex-shrink: 0;
-  border-radius: 17px;
-  background: var(--tint);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.03);
+  width: 58px; height: 58px; flex-shrink: 0;
+  border-radius: 18px;
+  background: linear-gradient(145deg, var(--tone2), var(--tone));
+  box-shadow: 0 0 0 5px var(--tint), 0 14px 24px -10px var(--tone);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.ph-stat-icon svg { width: 27px; height: 27px; fill: none; stroke: var(--tone); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.ph-stat:hover .ph-stat-icon { transform: rotate(-8deg) scale(1.07); }
+.ph-stat-icon svg { width: 27px; height: 27px; fill: none; stroke: #fff; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 .ph-stat-body { min-width: 0; }
-.ph-stat strong { display: block; font-size: 2rem; font-weight: 700; letter-spacing: -0.035em; line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; }
+.ph-stat strong { display: block; font-size: 2.25rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ph-stat strong b { font-weight: inherit; }
+.ph-stat strong i { font-style: normal; font-size: 0.72em; color: var(--tone); margin: 0 0.04em; }
+.ph-live {
+  position: absolute; top: 0.8rem; right: 0.85rem;
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.2rem 0.5rem 0.2rem 0.4rem;
+  font-size: 0.66rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: #1f7a45; background: #e5f4ea; border-radius: 999px;
+}
+.ph-live-dot { position: relative; width: 7px; height: 7px; border-radius: 50%; background: #2f9a5b; }
+.ph-live-dot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: #2f9a5b; animation: phPulse 1.8s ease-out infinite; }
+@keyframes phPulse { from { transform: scale(1); opacity: 0.7; } to { transform: scale(3); opacity: 0; } }
 .ph-stat-label { display: block; margin-top: 0.35rem; font-size: 0.9rem; font-weight: 600; color: var(--ink); }
 .ph-stat-sub { display: block; margin-top: 0.1rem; font-size: 0.76rem; color: var(--muted); }
 
@@ -1097,10 +1144,11 @@ body { overflow-x: clip; }
 
 @media (max-width: 1100px) {
   .hero.hero-photo { column-gap: 2rem; }
-  .ph-stat { padding: 0.5rem 1rem; gap: 0.75rem; }
-  .ph-stat-icon { width: 44px; height: 44px; border-radius: 14px; }
+  .ph-stats { gap: 0.8rem; }
+  .ph-stat { flex-direction: column; align-items: flex-start; padding: 1.15rem 1.1rem 1.2rem; gap: 0.85rem; }
+  .ph-stat-icon { width: 44px; height: 44px; border-radius: 14px; box-shadow: 0 0 0 4px var(--tint), 0 10px 18px -8px var(--tone); }
   .ph-stat-icon svg { width: 22px; height: 22px; }
-  .ph-stat strong { font-size: 1.55rem; }
+  .ph-stat strong { font-size: 1.75rem; }
   .ph-stat-label { font-size: 0.84rem; }
   .ph-stat-sub { font-size: 0.72rem; }
   .ph-about { gap: 3rem; }
@@ -1157,14 +1205,22 @@ body { overflow-x: clip; }
   .ph-proof { padding: 0 1.25rem 2.75rem; }
   /* Phones: a 2×2 card. Each tile puts the icon beside the number, with the
      label and its one-line promise underneath, over a faint wash of its tone. */
-  .ph-stats { margin-top: -3.5rem; grid-template-columns: 1fr 1fr; padding: 0; border-radius: 16px; overflow: hidden; }
+  .ph-stats {
+    margin-top: -3.5rem; grid-template-columns: 1fr 1fr; gap: 0; padding: 0; border-radius: 16px; overflow: hidden;
+    background: #fff; box-shadow: 0 30px 60px -30px rgba(12, 26, 43, 0.5), 0 0 0 1px rgba(12, 26, 43, 0.05);
+  }
   .ph-stat {
     display: grid; grid-template-columns: auto 1fr; align-items: center;
-    gap: 0 0.5rem;
-    padding: 0.7rem 0.75rem 0.75rem;
+    gap: 0 0.55rem;
+    padding: 0.85rem 0.75rem 0.75rem;
+    border-radius: 0;
     background: linear-gradient(160deg, var(--tint) 0%, rgba(255, 255, 255, 0) 62%);
   }
-  .ph-stat + .ph-stat::before { display: none; }
+  .ph-stat:hover { transform: none; }
+  .ph-stat::before { display: none; }
+  .ph-stat::after { height: 3px; transform: none; }
+  .ph-live { top: 0.55rem; right: 0.55rem; padding: 0.12rem 0.4rem 0.12rem 0.32rem; font-size: 0.56rem; }
+  .ph-live-dot { width: 6px; height: 6px; }
   .ph-stat:nth-child(even) { box-shadow: inset 1px 0 0 #eee6da; }
   .ph-stat:nth-child(n+3) { box-shadow: inset 0 1px 0 #eee6da; }
   .ph-stat:nth-child(4) { box-shadow: inset 1px 0 0 #eee6da, inset 0 1px 0 #eee6da; }
@@ -1172,9 +1228,9 @@ body { overflow-x: clip; }
   .ph-stat:nth-child(2), .ph-stat:nth-child(4) { display: none; }
   .ph-stat:nth-child(3) { box-shadow: inset 1px 0 0 #eee6da; }
   .ph-stat-body { display: contents; }
-  .ph-stat-icon { width: 28px; height: 28px; border-radius: 8px; background: #fff; box-shadow: 0 3px 8px -3px rgba(12, 26, 43, 0.25); }
-  .ph-stat-icon svg { width: 15px; height: 15px; stroke-width: 2; }
-  .ph-stat strong { font-size: 1.25rem; }
+  .ph-stat-icon { width: 30px; height: 30px; border-radius: 9px; box-shadow: 0 0 0 3px var(--tint), 0 6px 12px -6px var(--tone); }
+  .ph-stat-icon svg { width: 16px; height: 16px; stroke-width: 2.1; }
+  .ph-stat strong { font-size: 1.4rem; }
   .ph-stat-label { grid-column: 1 / -1; margin-top: 0.4rem; font-size: 0.74rem; line-height: 1.25; }
   .ph-stat-sub { display: none; }
   /* Compact on phones: photo first with a smaller inset and badge, smaller
@@ -1247,7 +1303,8 @@ body { overflow-x: clip; }
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .qs-step.is-active, .ph-stat { animation: none; }
+  .qs-step.is-active, .ph-stat, .ph-live-dot::after { animation: none; }
+  .ph-stat, .ph-stat::after, .ph-stat-icon { transition: none; }
 }
 </style>`;
 
