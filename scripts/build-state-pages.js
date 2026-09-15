@@ -432,6 +432,19 @@ function sliceHome(startMarker, endMarker) {
 const HOME_HERO_HEAD = sliceHome('<link rel="preload" as="image" href="/assets/images/hero-bg-home.jpg"', '</style>');
 const HOME_STATS = sliceHome('<section class="ph-proof">', '</section>');
 
+/* A state with its own photos in assets/images/gallery/states/<slug>/ —
+   hero-bg.jpg (2400 wide) and hero-bg-mobile.jpg (1000 wide, portrait) — gets
+   them behind its hero in place of the homepage pair. Frame them like the
+   homepage shots (truck left of centre, mid-height) so the same crop holds. */
+function heroHead(s) {
+  const dir = `/assets/images/gallery/states/${s.slug}`;
+  const has = f => fs.existsSync(path.join(__dirname, '..', dir, f));
+  let css = HOME_HERO_HEAD;
+  if (has('hero-bg.jpg')) css = css.split('/assets/images/hero-bg-home.jpg').join(`${dir}/hero-bg.jpg`);
+  if (has('hero-bg-mobile.jpg')) css = css.split('/assets/images/hero-bg-home-mobile.jpg').join(`${dir}/hero-bg-mobile.jpg`);
+  return css;
+}
+
 const LOCK_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`;
 
 function quoteFormSteps(originState) {
@@ -2707,7 +2720,7 @@ ${s.quirks.map((q, i) => `      <details class="note-row js-collapse" open>
     licensingFaq,
   ];
 
-  return `${head({ title, description, canonical, schema, extraHead: (TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '') + (STEP_FORM_STATES.has(s.name) ? STEP_FORM_HEAD : HOME_HERO_HEAD) })}
+  return `${head({ title, description, canonical, schema, extraHead: (TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '') + (STEP_FORM_STATES.has(s.name) ? STEP_FORM_HEAD : heroHead(s)) })}
 
 ${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
 
