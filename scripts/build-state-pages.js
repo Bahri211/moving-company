@@ -329,35 +329,55 @@ ${items.map(([f, alt, h, p]) => `    <div class="service-card illus-card">
 </section>`;
 }
 
-/* On the job: four photographs from one real move, captioned on the picture
-   itself. Phones are ~95% of this site's traffic, so it is a compact 2x2 that
-   fits a screen — no paragraphs to scroll past — and one row on desktop. */
+/* On the job: four lines for the four things that happen on moving day, each
+   one sentence — the length the national van lines use. The photographs are
+   ours: the loaded truck leads, the other three ride under it. */
 const JOB_STEPS = [
-  ['runner-hall.jpg', 1050, 1400, '50% 45%', 'Floors protected',
-   'Blue floor runner laid down a hallway in a home before the crew starts carrying'],
-  ['wrapped-sunroom.jpg', 1600, 1200, '50% 55%', 'Everything wrapped',
-   'Sofas, tables and a mattress blanket-wrapped and shrink-wrapped, ready to carry out'],
-  ['truck-loaded.jpg', 1600, 1200, '45% 50%', 'Loaded &amp; strapped',
-   'Blanket-wrapped furniture and wardrobe cartons stacked and strapped in tiers inside the truck'],
-  ['truck-at-door.jpg', 1600, 1200, '55% 58%', 'At your new door',
-   '50STATEMOVERS box truck parked at the front door of a house on delivery day'],
+  ['Floors protected', 'Runners down and door jambs padded before a single box is carried.'],
+  ['Everything wrapped', 'Blankets, shrink and tape on every piece — not only the fragile ones.'],
+  ['Loaded &amp; strapped', 'Stacked in tiers and strapped row by row, so nothing shifts over the miles.'],
+  ['At your new door', 'Unloaded into the rooms you point to, on the date in your contract.'],
+];
+
+const JOB_THUMBS = [
+  ['runner-entry.jpg', '50% 45%', 'Blue floor runner laid from the front door through the entry of a home on moving day'],
+  ['wrapped-sunroom.jpg', '50% 55%', 'Sofas, tables and a mattress blanket-wrapped and shrink-wrapped, ready to carry out'],
+  ['truck-at-door.jpg', '55% 58%', '50STATEMOVERS box truck parked at the front door of a house on delivery day'],
 ];
 
 function jobBand(s) {
   return `<section id="how-it-works" class="job-band">
   <div class="job-inner">
-    <div class="job-head">
+    <div class="job-media">
+      <figure class="job-fig">
+        <img src="/assets/images/gallery/job/truck-loaded.jpg" alt="Blanket-wrapped furniture and wardrobe cartons stacked and strapped in tiers inside a 50STATEMOVERS truck" width="1600" height="1200" style="object-position: 45% 50%" loading="lazy" decoding="async" />
+        <figcaption class="job-badge">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+          <span><b>Licensed interstate carrier</b><span>USDOT #4575745 · MC-1820728 — our own trucks and crew</span></span>
+        </figcaption>
+      </figure>
+      <div class="job-thumbs">
+${JOB_THUMBS.map(([f, pos, alt]) => `        <img src="/assets/images/gallery/job/${f}" alt="${alt}" width="1600" height="1200" style="object-position: ${pos}" loading="lazy" decoding="async" />`).join('\n')}
+      </div>
+    </div>
+    <div class="job-intro">
       <span class="job-kicker">On the job</span>
       <h2>One ${esc(s.name)} move, <em>start to finish.</em></h2>
-      <p>Our own crews, our own photographs — in the order your day runs.</p>
+      <p class="job-lede">Photographs from our own crews — this is what the four parts of your day look like.</p>
     </div>
-    <ol class="job-steps">
-${JOB_STEPS.map(([f, w, h, pos, label, alt], i) => `      <li class="job-step">
-        <img src="/assets/images/gallery/job/${f}" alt="${alt}" width="${w}" height="${h}" style="object-position: ${pos}" loading="lazy" decoding="async" />
-        <span class="job-cap"><b>${String(i + 1).padStart(2, '0')}</b>${label}</span>
-      </li>`).join('\n')}
-    </ol>
-    <a href="#get-quote" class="ph-btn job-cta">Get my fixed price</a>
+    <div class="job-body">
+      <ol class="job-steps">
+${JOB_STEPS.map(([label, note], i) => `        <li class="job-step">
+          <span class="job-num" aria-hidden="true">${i + 1}</span>
+          <h3>${label}</h3>
+          <p>${note}</p>
+        </li>`).join('\n')}
+      </ol>
+      <div class="job-foot">
+        <a href="#get-quote" class="ph-btn job-cta">Get my fixed price</a>
+        <p class="job-note">Binding price in writing — no revisions at delivery.</p>
+      </div>
+    </div>
   </div>
 </section>`;
 }
@@ -366,7 +386,7 @@ ${JOB_STEPS.map(([f, w, h, pos, label, alt], i) => `      <li class="job-step">
 const JOB_GALLERY = [
   ['room-protected.jpg', 'Living room with wardrobe cartons stacked and a blue runner across the floor before a move', 'Floor protection', 'Runners down before the first carry'],
   ['wrapped-furniture.jpg', 'Dresser, cabinet and mattress wrapped in blue moving blankets and plastic in a bedroom', 'Wrapped for the road', 'Blankets, shrink and tape on every piece'],
-  ['runner-entry.jpg', 'Blue floor runner laid from the front door through the entry of a home on moving day', 'Your floors', 'Protected doorway to doorway'],
+  ['runner-hall.jpg', 'Blue floor runner laid down a hallway before the crew starts carrying', 'Your floors', 'Protected doorway to doorway'],
 ];
 
 function galleryFor(s) {
@@ -921,60 +941,93 @@ body { overflow-x: clip; }
 .ph-road span:empty { display: none; }
 
 /* On the job --------------------------------------------------------------
-   Four photographs, each captioned on the picture itself so the band stays
-   short: one row on desktop, a 2x2 that fits a phone screen below 768px. The
-   caption sits on a navy fade at the foot of each shot, numbered in order. */
-.job-band { padding: 5.5rem 2rem; background: #fff; }
-.job-inner { max-width: 1240px; margin: 0 auto; }
-.job-head { max-width: 46rem; margin-bottom: 2.2rem; }
+   Built the way the large van lines build this band: one photograph doing the
+   proving, the licence sitting on top of it, and the day itself as a short
+   numbered list — four lines, one sentence each — with a single button. The
+   three supporting frames ride under the lead as thumbnails. Phones get the
+   same thing stacked: photo, steps, button. Nothing to swipe. */
+.job-band { padding: 5.5rem 2rem; background: var(--paper-warm); }
+.job-inner {
+  display: grid; grid-template-columns: 1.02fr 1fr; align-items: center;
+  grid-template-areas: "media intro" "media body";
+  gap: 1.4rem 4rem;
+  max-width: 1180px; margin: 0 auto;
+}
+.job-media { grid-area: media; min-width: 0; }
+.job-intro { grid-area: intro; align-self: end; min-width: 0; }
+.job-body { grid-area: body; align-self: start; min-width: 0; }
+.job-fig {
+  position: relative; overflow: hidden; margin: 0;
+  aspect-ratio: 4 / 3; border-radius: 20px; background: #fff;
+  box-shadow: 0 30px 60px -34px rgba(12, 26, 43, 0.6);
+}
+.job-fig img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Licence plate over the photograph — the one claim people actually check. */
+.job-badge {
+  position: absolute; left: 1rem; bottom: 1rem; max-width: calc(100% - 2rem);
+  display: inline-flex; align-items: center; gap: 0.7rem;
+  padding: 0.8rem 1rem;
+  border-radius: 14px; background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 14px 30px -18px rgba(12, 26, 43, 0.7);
+}
+.job-badge svg { width: 20px; height: 20px; flex-shrink: 0; fill: none; stroke: var(--green); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.job-badge b { display: block; font-size: 0.9rem; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); }
+.job-badge span { display: block; font-size: 0.78rem; line-height: 1.4; color: var(--muted); }
+.job-thumbs { display: grid; grid-template-columns: repeat(3, 1fr); align-items: start; gap: 0.75rem; margin-top: 0.75rem; }
+.job-thumbs img {
+  width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; display: block;
+  border-radius: 12px; background: #fff;
+}
 .job-kicker { display: block; margin-bottom: 0.7rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green); }
-.job-head h2 { margin: 0 0 0.6rem; font-size: clamp(1.75rem, 3.2vw, 2.9rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.08; color: var(--ink); }
-.job-head h2 em { font-style: normal; color: var(--accent); }
-.job-head p { margin: 0; font-size: 1rem; line-height: 1.6; color: var(--ink-soft); }
-.job-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 0 0 2rem; padding: 0; list-style: none; }
-.job-step {
-  position: relative; overflow: hidden;
-  aspect-ratio: 1 / 1; border-radius: 16px;
-  background: var(--paper-warm);
-  box-shadow: 0 22px 44px -26px rgba(12, 26, 43, 0.6);
+.job-intro h2 { margin: 0 0 0.7rem; font-size: clamp(1.75rem, 2.9vw, 2.5rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.1; text-wrap: balance; color: var(--ink); }
+.job-intro h2 em { font-style: normal; color: var(--accent); }
+.job-lede { margin: 0 0 1.9rem; font-size: 1rem; line-height: 1.6; color: var(--ink-soft); }
+.job-steps { margin: 0 0 1.9rem; padding: 0; list-style: none; }
+.job-step { position: relative; padding: 0 0 1.35rem 3.1rem; }
+.job-step:last-child { padding-bottom: 0; }
+/* Rail down the numbers, so four lines read as one sequence. */
+.job-step:not(:last-child)::before {
+  content: ""; position: absolute; left: 1.07rem; top: 2.3rem; bottom: 0.35rem;
+  border-left: 2px dashed rgba(12, 26, 43, 0.18);
 }
-.job-step img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
-.job-step:hover img { transform: scale(1.06); }
-.job-step::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 58%;
-  background: linear-gradient(180deg, rgba(9, 20, 34, 0) 0%, rgba(9, 20, 34, 0.72) 70%, rgba(9, 20, 34, 0.88) 100%);
-}
-.job-cap {
-  position: absolute; left: 0.85rem; right: 0.85rem; bottom: 0.8rem; z-index: 1;
-  display: flex; align-items: center; gap: 0.5rem;
-  font-size: 0.92rem; font-weight: 600; letter-spacing: -0.01em; color: #fff;
-  text-shadow: 0 1px 10px rgba(9, 20, 34, 0.5);
-}
-.job-cap b {
+.job-num {
+  position: absolute; left: 0; top: 0;
   display: inline-flex; align-items: center; justify-content: center;
-  width: 1.6rem; height: 1.6rem; flex-shrink: 0;
-  font-size: 0.68rem; font-weight: 700;
-  background: var(--accent); border-radius: 50%;
+  width: 2.25rem; height: 2.25rem;
+  border-radius: 50%; background: var(--accent); color: #fff;
+  font-size: 0.82rem; font-weight: 700;
 }
+.job-step h3 { margin: 0.25rem 0 0.25rem; font-size: 1.08rem; font-weight: 700; letter-spacing: -0.015em; color: var(--ink); }
+.job-step p { margin: 0; font-size: 0.95rem; line-height: 1.55; color: var(--ink-soft); }
+.job-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.9rem 1.3rem; }
+.job-note { margin: 0; max-width: 17rem; font-size: 0.86rem; line-height: 1.45; color: var(--ink-soft); }
 .job-cta { display: inline-flex; }
 
 @media (max-width: 1100px) {
   .job-band { padding: 4.5rem 1.5rem; }
-  .job-steps { gap: 0.8rem; }
-  .job-cap { font-size: 0.85rem; left: 0.7rem; right: 0.7rem; bottom: 0.7rem; }
+  .job-inner { grid-template-columns: 1fr; grid-template-areas: "intro" "media" "body"; gap: 1.6rem; }
+  .job-media { max-width: none; }
+  .job-fig { aspect-ratio: 16 / 10; }
 }
-/* Phones: a 2x2 that lands in one screen, with the CTA full width under it. */
+/* Phones: heading, photograph, the four lines, one button — top to bottom. */
 @media (max-width: 768px) {
-  .job-band { padding: 2.75rem 1.25rem 3rem; }
-  .job-head { margin-bottom: 1.3rem; }
-  .job-kicker { margin-bottom: 0.5rem; font-size: 0.66rem; }
-  .job-head h2 { font-size: 1.65rem; }
-  .job-head p { font-size: 0.92rem; }
-  .job-steps { grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1.3rem; }
-  .job-step { border-radius: 14px; }
-  .job-cap { left: 0.6rem; right: 0.6rem; bottom: 0.55rem; gap: 0.4rem; font-size: 0.78rem; }
-  .job-cap b { width: 1.35rem; height: 1.35rem; font-size: 0.6rem; }
-  .job-cta { display: flex; }
+  .job-band { padding: 3rem 1.25rem 3.25rem; }
+  .job-intro h2 { font-size: 1.7rem; }
+  .job-lede { margin-bottom: 1.4rem; font-size: 0.94rem; }
+  .job-steps { margin-bottom: 1.4rem; }
+  .job-step { padding: 0 0 1.1rem 2.8rem; }
+  .job-num { width: 2rem; height: 2rem; font-size: 0.76rem; }
+  .job-step:not(:last-child)::before { left: 0.94rem; top: 2.05rem; }
+  .job-step h3 { font-size: 1rem; }
+  .job-step p { font-size: 0.9rem; }
+  .job-fig { border-radius: 16px; }
+  .job-badge { left: 0.7rem; bottom: 0.7rem; max-width: calc(100% - 1.4rem); padding: 0.65rem 0.8rem; gap: 0.55rem; }
+  .job-badge b { font-size: 0.82rem; }
+  .job-badge span { font-size: 0.72rem; }
+  .job-thumbs { gap: 0.5rem; margin-top: 0.5rem; }
+  .job-foot { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
+  .job-note { order: 2; max-width: none; margin: 0.85rem 0 0; text-align: center; }
+  .job-cta { display: flex; justify-content: center; }
 }
 
 /* Step form card -----------------------------------------------------------
