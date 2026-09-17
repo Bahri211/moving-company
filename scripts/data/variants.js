@@ -370,10 +370,4 @@ module.exports = {
     `Carried to the room you choose, inside the window we agreed in writing.`,
     `Placed where you want it at the far end, on the date we committed to.`,
   ],
-
-  jobBadge: [
-    `our own trucks and crew`,
-    `a carrier, not a broker`,
-    `we carry it ourselves`,
-  ],
 };
