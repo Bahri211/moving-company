@@ -329,43 +329,35 @@ ${items.map(([f, alt, h, p]) => `    <div class="service-card illus-card">
 </section>`;
 }
 
-/* On the job: four photographs from one real West Virginia move, in the order
-   the day runs. Replaces the old three-tile "short version" band — same job in
-   the page, told with our own pictures instead of stock ones. */
+/* On the job: four photographs from one real move, captioned on the picture
+   itself. Phones are ~95% of this site's traffic, so it is a compact 2x2 that
+   fits a screen — no paragraphs to scroll past — and one row on desktop. */
 const JOB_STEPS = [
-  ['runner-hall.jpg', 1050, 1400, '50% 45%', 'Floors first',
-   'Runners go down the hallways and stairs before a single box moves. In older houses with narrow turns, that is what keeps floors and walls unmarked.',
+  ['runner-hall.jpg', 1050, 1400, '50% 45%', 'Floors protected',
    'Blue floor runner laid down a hallway in a home before the crew starts carrying'],
-  ['wrapped-sunroom.jpg', 1600, 1200, '50% 55%', 'Wrapped, not just boxed',
-   'Blankets and shrink go on every piece — legs, corners and glass. A mountain route moves a load around far more than flat interstate miles do.',
-   'Sofas, tables and a mattress blanket-wrapped and shrink-wrapped in a sunroom, ready to carry out'],
-  ['truck-loaded.jpg', 1600, 1200, '45% 50%', 'Loaded tier by tier',
-   'The load is built in tiers and strapped off at each one, so nothing shifts when the truck takes a switchback.',
-   'Blanket-wrapped furniture and wardrobe cartons stacked and strapped in tiers inside the moving truck'],
+  ['wrapped-sunroom.jpg', 1600, 1200, '50% 55%', 'Everything wrapped',
+   'Sofas, tables and a mattress blanket-wrapped and shrink-wrapped, ready to carry out'],
+  ['truck-loaded.jpg', 1600, 1200, '45% 50%', 'Loaded &amp; strapped',
+   'Blanket-wrapped furniture and wardrobe cartons stacked and strapped in tiers inside the truck'],
   ['truck-at-door.jpg', 1600, 1200, '55% 58%', 'At your new door',
-   'The crew that loaded you unloads you — room by room, blankets off, boxes where you want them.',
    '50STATEMOVERS box truck parked at the front door of a house on delivery day'],
 ];
 
 function jobBand(s) {
   return `<section id="how-it-works" class="job-band">
   <div class="job-inner">
-    <div class="job-aside">
+    <div class="job-head">
       <span class="job-kicker">On the job</span>
       <h2>One ${esc(s.name)} move, <em>start to finish.</em></h2>
-      <p>Four moments from our own crews, photographed on real jobs — in the order your ${esc(s.name)} day actually runs.</p>
-      <a href="#get-quote" class="ph-btn">Get my fixed price</a>
+      <p>Our own crews, our own photographs — in the order your day runs.</p>
     </div>
     <ol class="job-steps">
-${JOB_STEPS.map(([f, w, h, pos, title, text, alt], i) => `      <li class="job-step">
-        <figure class="job-shot">
-          <img src="/assets/images/gallery/job/${f}" alt="${alt}" width="${w}" height="${h}" style="object-position: ${pos}" loading="lazy" decoding="async" />
-          <span class="job-num">${String(i + 1).padStart(2, '0')}</span>
-        </figure>
-        <h3>${title}</h3>
-        <p>${text}</p>
+${JOB_STEPS.map(([f, w, h, pos, label, alt], i) => `      <li class="job-step">
+        <img src="/assets/images/gallery/job/${f}" alt="${alt}" width="${w}" height="${h}" style="object-position: ${pos}" loading="lazy" decoding="async" />
+        <span class="job-cap"><b>${String(i + 1).padStart(2, '0')}</b>${label}</span>
       </li>`).join('\n')}
     </ol>
+    <a href="#get-quote" class="ph-btn job-cta">Get my fixed price</a>
   </div>
 </section>`;
 }
@@ -929,53 +921,60 @@ body { overflow-x: clip; }
 .ph-road span:empty { display: none; }
 
 /* On the job --------------------------------------------------------------
-   White ground between the cream sections. The heading column stays put while
-   the steps scroll past it; the four photographs run as a 2x2 with the right
-   column dropped half a step, so the eye reads 1-2-3-4 rather than a grid. */
-.job-band { padding: 6.5rem 2rem; background: #fff; }
-.job-inner { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 0.82fr 1.18fr; gap: 4rem; align-items: start; }
-.job-aside { position: sticky; top: 6.5rem; }
-.job-kicker { display: block; margin-bottom: 0.8rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green); }
-.job-aside h2 { margin: 0 0 1rem; font-size: clamp(2.1rem, 3.2vw, 2.9rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.07; color: var(--ink); }
-.job-aside h2 em { font-style: normal; color: var(--accent); }
-.job-aside p { margin: 0 0 1.5rem; font-size: 1.02rem; line-height: 1.7; color: var(--ink-soft); }
-.job-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 2.4rem 1.5rem; margin: 0; padding: 0; list-style: none; }
-.job-steps li:nth-child(even) { margin-top: 2.8rem; }
-.job-shot {
-  position: relative; margin: 0 0 1rem;
-  aspect-ratio: 4 / 3; border-radius: 18px; overflow: hidden;
+   Four photographs, each captioned on the picture itself so the band stays
+   short: one row on desktop, a 2x2 that fits a phone screen below 768px. The
+   caption sits on a navy fade at the foot of each shot, numbered in order. */
+.job-band { padding: 5.5rem 2rem; background: #fff; }
+.job-inner { max-width: 1240px; margin: 0 auto; }
+.job-head { max-width: 46rem; margin-bottom: 2.2rem; }
+.job-kicker { display: block; margin-bottom: 0.7rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green); }
+.job-head h2 { margin: 0 0 0.6rem; font-size: clamp(1.75rem, 3.2vw, 2.9rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.08; color: var(--ink); }
+.job-head h2 em { font-style: normal; color: var(--accent); }
+.job-head p { margin: 0; font-size: 1rem; line-height: 1.6; color: var(--ink-soft); }
+.job-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 0 0 2rem; padding: 0; list-style: none; }
+.job-step {
+  position: relative; overflow: hidden;
+  aspect-ratio: 1 / 1; border-radius: 16px;
   background: var(--paper-warm);
-  box-shadow: 0 26px 50px -28px rgba(12, 26, 43, 0.55);
+  box-shadow: 0 22px 44px -26px rgba(12, 26, 43, 0.6);
 }
-.job-shot img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
-.job-step:hover .job-shot img { transform: scale(1.05); }
-.job-num {
-  position: absolute; top: 0.9rem; left: 0.9rem;
+.job-step img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+.job-step:hover img { transform: scale(1.06); }
+.job-step::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 58%;
+  background: linear-gradient(180deg, rgba(9, 20, 34, 0) 0%, rgba(9, 20, 34, 0.72) 70%, rgba(9, 20, 34, 0.88) 100%);
+}
+.job-cap {
+  position: absolute; left: 0.85rem; right: 0.85rem; bottom: 0.8rem; z-index: 1;
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.92rem; font-weight: 600; letter-spacing: -0.01em; color: #fff;
+  text-shadow: 0 1px 10px rgba(9, 20, 34, 0.5);
+}
+.job-cap b {
   display: inline-flex; align-items: center; justify-content: center;
-  min-width: 2rem; height: 2rem; padding: 0 0.55rem;
-  font-size: 0.8rem; font-weight: 700; color: #fff;
-  background: var(--accent); border-radius: 999px;
-  box-shadow: 0 10px 18px -8px rgba(12, 26, 43, 0.8);
+  width: 1.6rem; height: 1.6rem; flex-shrink: 0;
+  font-size: 0.68rem; font-weight: 700;
+  background: var(--accent); border-radius: 50%;
 }
-.job-step h3 { margin: 0 0 0.4rem; font-size: 1.18rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; color: var(--ink); }
-.job-step p { margin: 0; font-size: 0.92rem; line-height: 1.62; color: var(--ink-soft); }
+.job-cta { display: inline-flex; }
 
 @media (max-width: 1100px) {
-  .job-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-  .job-aside { position: static; max-width: 34rem; }
-  .job-steps { gap: 1.8rem 1.25rem; }
-  .job-steps li:nth-child(even) { margin-top: 0; }
+  .job-band { padding: 4.5rem 1.5rem; }
+  .job-steps { gap: 0.8rem; }
+  .job-cap { font-size: 0.85rem; left: 0.7rem; right: 0.7rem; bottom: 0.7rem; }
 }
-/* Phones: one photograph per row, the CTA full width. */
+/* Phones: a 2x2 that lands in one screen, with the CTA full width under it. */
 @media (max-width: 768px) {
-  .job-band { padding: 3.5rem 1.25rem; }
-  .job-aside h2 { font-size: 1.8rem; }
-  .job-aside p { margin-bottom: 1.1rem; font-size: 0.92rem; line-height: 1.6; }
-  .job-aside .ph-btn { display: flex; }
-  .job-steps { grid-template-columns: 1fr; gap: 1.7rem; }
-  .job-shot { aspect-ratio: 3 / 2; border-radius: 16px; margin-bottom: 0.8rem; }
-  .job-step h3 { font-size: 1.08rem; }
-  .job-step p { font-size: 0.88rem; }
+  .job-band { padding: 2.75rem 1.25rem 3rem; }
+  .job-head { margin-bottom: 1.3rem; }
+  .job-kicker { margin-bottom: 0.5rem; font-size: 0.66rem; }
+  .job-head h2 { font-size: 1.65rem; }
+  .job-head p { font-size: 0.92rem; }
+  .job-steps { grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1.3rem; }
+  .job-step { border-radius: 14px; }
+  .job-cap { left: 0.6rem; right: 0.6rem; bottom: 0.55rem; gap: 0.4rem; font-size: 0.78rem; }
+  .job-cap b { width: 1.35rem; height: 1.35rem; font-size: 0.6rem; }
+  .job-cta { display: flex; }
 }
 
 /* Step form card -----------------------------------------------------------
@@ -1220,7 +1219,7 @@ body { overflow-x: clip; }
 }
 @media (prefers-reduced-motion: reduce) {
   .qs-step.is-active, .ph-stat, .ph-live-dot::after { animation: none; }
-  .ph-stat, .ph-stat::after, .ph-stat-icon, .job-shot img { transition: none; }
+  .ph-stat, .ph-stat::after, .ph-stat-icon, .job-step img { transition: none; }
 }
 </style>`;
 
