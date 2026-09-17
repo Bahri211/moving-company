@@ -331,7 +331,7 @@ ${items.map(([f, alt, h, p]) => `    <div class="service-card illus-card">
 
 /* On the job: four lines for the four things that happen on moving day, each
    one sentence — the length the national van lines use. The photographs are
-   ours: the loaded truck leads, the other three ride under it. */
+   ours: the truck at the door leads, the other three ride under it. */
 const JOB_STEPS = [
   ['Floors protected', 'Runners down and door jambs padded before a single box is carried.'],
   ['Everything wrapped', 'Blankets, shrink and tape on every piece — not only the fragile ones.'],
@@ -342,7 +342,7 @@ const JOB_STEPS = [
 const JOB_THUMBS = [
   ['runner-entry.jpg', '50% 45%', 'Blue floor runner laid from the front door through the entry of a home on moving day'],
   ['wrapped-sunroom.jpg', '50% 55%', 'Sofas, tables and a mattress blanket-wrapped and shrink-wrapped, ready to carry out'],
-  ['truck-at-door.jpg', '55% 58%', '50STATEMOVERS box truck parked at the front door of a house on delivery day'],
+  ['truck-loaded.jpg', '45% 50%', 'Blanket-wrapped furniture and wardrobe cartons stacked and strapped in tiers inside the truck'],
 ];
 
 function jobBand(s) {
@@ -350,7 +350,7 @@ function jobBand(s) {
   <div class="job-inner">
     <div class="job-media">
       <figure class="job-fig">
-        <img src="/assets/images/gallery/job/truck-loaded.jpg" alt="Blanket-wrapped furniture and wardrobe cartons stacked and strapped in tiers inside a 50STATEMOVERS truck" width="1600" height="1200" style="object-position: 45% 50%" loading="lazy" decoding="async" />
+        <img src="/assets/images/gallery/job/truck-at-door.jpg" alt="50STATEMOVERS box truck parked at the front door of a house on delivery day" width="1600" height="1200" style="object-position: 55% 58%" loading="lazy" decoding="async" />
         <figcaption class="job-badge">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
           <span><b>Licensed interstate carrier</b><span>USDOT #4575745 · MC-1820728 — our own trucks and crew</span></span>
