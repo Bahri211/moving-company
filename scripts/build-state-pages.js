@@ -300,7 +300,7 @@ ${cards}
 // "our work, up close", and illustrations sitting among crew photos read as a
 // mistake rather than a change of pace.
 function illustratedRow(s) {
-  if (STEP_FORM_STATES.has(s.name)) return stepsBand(s);
+  if (STEP_FORM_STATES.has(s.name)) return jobBand(s);
   const items = [
     ['packing.png', 'Hand truck stacked with packed cartons',
      pick('bandPackingTitle', s), pick('bandPacking', s)],
@@ -329,42 +329,73 @@ ${items.map(([f, alt, h, p]) => `    <div class="service-card illus-card">
 </section>`;
 }
 
-/* Photo-hero page version of the band: the three points as a bento of
-   photographs — loading tall on the left, the road and the crew stacked on
-   the right — with each step's words set on its photo over a navy fade. */
-function stepsBand(s) {
-  const steps = [
-    ['step-packing.jpg', 1400, 781, '50STATEMOVERS crew loading blanket-wrapped furniture and cartons into the truck', 'Before loading',
-     pick('bandPackingTitle', s), pick('bandPacking', s)],
-    ['step-route.jpg', 900, 562, 'Moving truck on an open highway at sunrise', 'On the road',
-     pick('bandRoutesTitle', s), pick('bandRoutes', s)],
-    ['step-crew.jpg', 900, 502, 'Two 50STATEMOVERS crew carrying a wrapped item to the moving truck', 'At your door',
-     pick('bandCrewTitle', s), pick('bandCrew', s)],
-  ];
-  return `<section id="how-it-works" class="steps-band">
-  <div class="steps-inner">
-    <div class="steps-head">
-      <div>
-        <span class="steps-kicker">${pick('bandKicker', s)}</span>
-        <h2>${pick('bandHead', s)}</h2>
-      </div>
-      <div class="steps-aside">
-        <p>${pick('bandLede', s)}</p>
-        <a href="#get-quote" class="ph-btn">Get my fixed price</a>
-      </div>
+/* On the job: four photographs from one real West Virginia move, in the order
+   the day runs. Replaces the old three-tile "short version" band — same job in
+   the page, told with our own pictures instead of stock ones. */
+const JOB_STEPS = [
+  ['runner-hall.jpg', 1050, 1400, '50% 45%', 'Floors first',
+   'Runners go down the hallways and stairs before a single box moves. In older houses with narrow turns, that is what keeps floors and walls unmarked.',
+   'Blue floor runner laid down a hallway in a home before the crew starts carrying'],
+  ['wrapped-sunroom.jpg', 1600, 1200, '50% 55%', 'Wrapped, not just boxed',
+   'Blankets and shrink go on every piece — legs, corners and glass. A mountain route moves a load around far more than flat interstate miles do.',
+   'Sofas, tables and a mattress blanket-wrapped and shrink-wrapped in a sunroom, ready to carry out'],
+  ['truck-loaded.jpg', 1600, 1200, '45% 50%', 'Loaded tier by tier',
+   'The load is built in tiers and strapped off at each one, so nothing shifts when the truck takes a switchback.',
+   'Blanket-wrapped furniture and wardrobe cartons stacked and strapped in tiers inside the moving truck'],
+  ['truck-at-door.jpg', 1600, 1200, '55% 58%', 'At your new door',
+   'The crew that loaded you unloads you — room by room, blankets off, boxes where you want them.',
+   '50STATEMOVERS box truck parked at the front door of a house on delivery day'],
+];
+
+function jobBand(s) {
+  return `<section id="how-it-works" class="job-band">
+  <div class="job-inner">
+    <div class="job-aside">
+      <span class="job-kicker">On the job</span>
+      <h2>One ${esc(s.name)} move, <em>start to finish.</em></h2>
+      <p>Four moments from our own crews, photographed on real jobs — in the order your ${esc(s.name)} day actually runs.</p>
+      <a href="#get-quote" class="ph-btn">Get my fixed price</a>
     </div>
-    <ol class="bento">
-${steps.map(([f, w, h, alt, tag, title, text], i) => `      <li class="bento-tile bento-${i + 1}">
-        <img src="/assets/images/gallery/${f}" alt="${alt}" width="${w}" height="${h}" loading="lazy" decoding="async" />
-        <div class="bento-copy">
-          <span class="bento-tag"><b>${String(i + 1).padStart(2, '0')}</b>${tag}</span>
-          <h3>${title}</h3>
-          <p>${text}</p>
-        </div>
+    <ol class="job-steps">
+${JOB_STEPS.map(([f, w, h, pos, title, text, alt], i) => `      <li class="job-step">
+        <figure class="job-shot">
+          <img src="/assets/images/gallery/job/${f}" alt="${alt}" width="${w}" height="${h}" style="object-position: ${pos}" loading="lazy" decoding="async" />
+          <span class="job-num">${String(i + 1).padStart(2, '0')}</span>
+        </figure>
+        <h3>${title}</h3>
+        <p>${text}</p>
       </li>`).join('\n')}
     </ol>
   </div>
 </section>`;
+}
+
+/* Three more frames from the same jobs close the West Virginia gallery. */
+const JOB_GALLERY = [
+  ['room-protected.jpg', 'Living room with wardrobe cartons stacked and a blue runner across the floor before a move', 'Floor protection', 'Runners down before the first carry'],
+  ['wrapped-furniture.jpg', 'Dresser, cabinet and mattress wrapped in blue moving blankets and plastic in a bedroom', 'Wrapped for the road', 'Blankets, shrink and tape on every piece'],
+  ['runner-entry.jpg', 'Blue floor runner laid from the front door through the entry of a home on moving day', 'Your floors', 'Protected doorway to doorway'],
+];
+
+function galleryFor(s) {
+  let html = gallery(s);
+  if (TRIAL_STATES.has(s.name)) {
+    html = html.replace('<div class="gallery-grid">', `<div class="gallery-grid">
+    <div class="gallery-item gallery-lead">
+      <img src="/assets/images/gallery/crew-packing.jpg" alt="Three 50STATEMOVERS crew taping a carton, shrink-wrapping an armchair and wrapping a mattress in ${a(s)} ${esc(s.name)} living room" loading="lazy" />
+      <div class="gallery-caption"><div class="label">On the job</div><div class="title">Wrapped and boxed before anything moves</div></div>
+    </div>`);
+  }
+  if (STEP_FORM_STATES.has(s.name)) {
+    html = html.replace(`  </div>
+</section>`, `${JOB_GALLERY.map(([f, alt, label, title]) => `    <div class="gallery-item">
+      <img src="/assets/images/gallery/job/${f}" alt="${alt}" loading="lazy" />
+      <div class="gallery-caption"><div class="label">${label}</div><div class="title">${title}</div></div>
+    </div>`).join('\n')}
+  </div>
+</section>`);
+  }
+  return html;
 }
 
 const gallery = s => `<section id="gallery" class="gallery-section">
@@ -897,81 +928,54 @@ body { overflow-x: clip; }
 .ph-road span:not(.ph-sign) { margin-top: 0.25rem; max-width: 14rem; font-size: 0.85rem; line-height: 1.45; color: var(--muted); }
 .ph-road span:empty { display: none; }
 
-/* Steps band --------------------------------------------------------------
-   White ground between the cream sections. Heading on the left, the lede and
-   a CTA on the right, then a bento of three photographs: loading tall on the
-   left, the road and the crew stacked on the right. Each step's words sit on
-   its photo over a navy fade, behind a numbered tag. */
-.steps-band { padding: 6.5rem 2rem; background: #fff; }
-.steps-inner { max-width: 1240px; margin: 0 auto; }
-.steps-head { display: grid; grid-template-columns: 1.25fr 1fr; align-items: end; gap: 1.5rem 4rem; margin-bottom: 2.75rem; }
-.steps-kicker { display: block; margin-bottom: 0.8rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green); }
-.steps-head h2 { margin: 0; font-size: clamp(2.1rem, 3.6vw, 3.1rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.06; color: var(--ink); }
-.steps-head h2 em { font-style: normal; color: var(--accent); }
-.steps-aside { justify-self: end; max-width: 30rem; }
-.steps-aside p { margin: 0 0 1.25rem; font-size: 1.05rem; line-height: 1.7; color: var(--ink-soft); }
-.bento {
-  list-style: none; margin: 0; padding: 0;
-  display: grid; grid-template-columns: 1.15fr 1fr; grid-template-rows: repeat(2, minmax(270px, auto));
-  gap: 1.25rem;
+/* On the job --------------------------------------------------------------
+   White ground between the cream sections. The heading column stays put while
+   the steps scroll past it; the four photographs run as a 2x2 with the right
+   column dropped half a step, so the eye reads 1-2-3-4 rather than a grid. */
+.job-band { padding: 6.5rem 2rem; background: #fff; }
+.job-inner { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 0.82fr 1.18fr; gap: 4rem; align-items: start; }
+.job-aside { position: sticky; top: 6.5rem; }
+.job-kicker { display: block; margin-bottom: 0.8rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green); }
+.job-aside h2 { margin: 0 0 1rem; font-size: clamp(2.1rem, 3.2vw, 2.9rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.07; color: var(--ink); }
+.job-aside h2 em { font-style: normal; color: var(--accent); }
+.job-aside p { margin: 0 0 1.5rem; font-size: 1.02rem; line-height: 1.7; color: var(--ink-soft); }
+.job-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 2.4rem 1.5rem; margin: 0; padding: 0; list-style: none; }
+.job-steps li:nth-child(even) { margin-top: 2.8rem; }
+.job-shot {
+  position: relative; margin: 0 0 1rem;
+  aspect-ratio: 4 / 3; border-radius: 18px; overflow: hidden;
+  background: var(--paper-warm);
+  box-shadow: 0 26px 50px -28px rgba(12, 26, 43, 0.55);
 }
-.bento-1 { grid-row: 1 / 3; }
-.bento-tile {
-  position: relative; isolation: isolate;
-  display: flex; align-items: flex-end;
-  min-height: 270px;
-  border-radius: 24px; overflow: hidden;
-  background: var(--navy);
-  box-shadow: 0 30px 60px -36px rgba(12, 26, 43, 0.55);
+.job-shot img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+.job-step:hover .job-shot img { transform: scale(1.05); }
+.job-num {
+  position: absolute; top: 0.9rem; left: 0.9rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 2rem; height: 2rem; padding: 0 0.55rem;
+  font-size: 0.8rem; font-weight: 700; color: #fff;
+  background: var(--accent); border-radius: 999px;
+  box-shadow: 0 10px 18px -8px rgba(12, 26, 43, 0.8);
 }
-.bento-tile img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
-.bento-tile:hover img { transform: scale(1.04); }
-/* The road and crew shots put a white truck body right behind the words, so
-   their fade starts higher and runs darker than the loading shot's. */
-.bento-tile::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(9, 20, 34, 0.05) 0%, rgba(9, 20, 34, 0.7) 42%, rgba(9, 20, 34, 0.95) 100%); }
-.bento-copy h3, .bento-copy p { text-shadow: 0 1px 12px rgba(9, 20, 34, 0.55); }
-.bento-1::after { background: linear-gradient(180deg, rgba(9, 20, 34, 0) 40%, rgba(9, 20, 34, 0.6) 66%, rgba(9, 20, 34, 0.94) 100%); }
-.bento-copy { max-width: 34rem; padding: 1.6rem 1.75rem 1.7rem; color: #fff; }
-.bento-1 .bento-copy { padding: 2.25rem 2.4rem 2.4rem; }
-.bento-tag {
-  display: inline-flex; align-items: center; gap: 0.55rem;
-  margin-bottom: 0.8rem; padding: 0.3rem 0.85rem 0.3rem 0.3rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-}
-.bento-tag b { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); font-size: 0.68rem; letter-spacing: 0; }
-.bento-copy h3 { margin: 0 0 0.45rem; font-size: 1.45rem; font-weight: 600; letter-spacing: -0.025em; line-height: 1.15; color: #fff; }
-.bento-1 h3 { font-size: clamp(1.8rem, 2.6vw, 2.3rem); }
-.bento-copy p { margin: 0; font-size: 0.93rem; line-height: 1.6; color: rgba(255, 255, 255, 0.84); }
-.bento-1 p { max-width: 28rem; font-size: 1.02rem; }
+.job-step h3 { margin: 0 0 0.4rem; font-size: 1.18rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; color: var(--ink); }
+.job-step p { margin: 0; font-size: 0.92rem; line-height: 1.62; color: var(--ink-soft); }
 
 @media (max-width: 1100px) {
-  .steps-head { grid-template-columns: 1fr; }
-  .steps-aside { justify-self: start; }
+  .job-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .job-aside { position: static; max-width: 34rem; }
+  .job-steps { gap: 1.8rem 1.25rem; }
+  .job-steps li:nth-child(even) { margin-top: 0; }
 }
-@media (max-width: 900px) {
-  .bento { grid-template-columns: 1fr; grid-template-rows: none; }
-  .bento-1 { grid-row: auto; min-height: 420px; }
-}
-/* Phones: the tiles stack, the first one tallest, and the CTA runs full width. */
+/* Phones: one photograph per row, the CTA full width. */
 @media (max-width: 768px) {
-  .steps-band { padding: 3.5rem 1.25rem; }
-  .steps-head { gap: 0.9rem; margin-bottom: 1.6rem; }
-  .steps-kicker { margin-bottom: 0.55rem; font-size: 0.66rem; }
-  .steps-head h2 { font-size: 1.8rem; }
-  .steps-aside p { margin-bottom: 1rem; font-size: 0.92rem; line-height: 1.6; }
-  .steps-aside .ph-btn { display: flex; }
-  .bento { gap: 0.85rem; }
-  .bento-tile { min-height: 300px; border-radius: 18px; }
-  .bento-1 { min-height: 360px; }
-  .bento-copy, .bento-1 .bento-copy { padding: 1.15rem 1.15rem 1.25rem; }
-  .bento-tag { margin-bottom: 0.6rem; font-size: 0.62rem; }
-  .bento-tag b { width: 20px; height: 20px; font-size: 0.6rem; }
-  .bento-copy h3, .bento-1 h3 { font-size: 1.2rem; }
-  .bento-copy p, .bento-1 p { font-size: 0.85rem; line-height: 1.55; }
-  .bento-tile:hover img { transform: none; }
+  .job-band { padding: 3.5rem 1.25rem; }
+  .job-aside h2 { font-size: 1.8rem; }
+  .job-aside p { margin-bottom: 1.1rem; font-size: 0.92rem; line-height: 1.6; }
+  .job-aside .ph-btn { display: flex; }
+  .job-steps { grid-template-columns: 1fr; gap: 1.7rem; }
+  .job-shot { aspect-ratio: 3 / 2; border-radius: 16px; margin-bottom: 0.8rem; }
+  .job-step h3 { font-size: 1.08rem; }
+  .job-step p { font-size: 0.88rem; }
 }
 
 /* Step form card -----------------------------------------------------------
@@ -1216,7 +1220,7 @@ body { overflow-x: clip; }
 }
 @media (prefers-reduced-motion: reduce) {
   .qs-step.is-active, .ph-stat, .ph-live-dot::after { animation: none; }
-  .ph-stat, .ph-stat::after, .ph-stat-icon { transition: none; }
+  .ph-stat, .ph-stat::after, .ph-stat-icon, .job-shot img { transition: none; }
 }
 </style>`;
 
@@ -2800,13 +2804,7 @@ ${quirkCards}
 </section>
 
 <!-- GALLERY -->
-${TRIAL_STATES.has(s.name)
-  ? gallery(s).replace('<div class="gallery-grid">', `<div class="gallery-grid">
-    <div class="gallery-item gallery-lead">
-      <img src="/assets/images/gallery/crew-packing.jpg" alt="Three 50STATEMOVERS crew taping a carton, shrink-wrapping an armchair and wrapping a mattress in ${a(s)} ${esc(s.name)} living room" loading="lazy" />
-      <div class="gallery-caption"><div class="label">On the job</div><div class="title">Wrapped and boxed before anything moves</div></div>
-    </div>`)
-  : gallery(s)}
+${galleryFor(s)}
 
 <!-- FAQ -->
 ${faqSection(`    <div class="section-kicker">FAQ</div>

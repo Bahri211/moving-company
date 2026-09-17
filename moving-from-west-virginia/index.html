@@ -1251,81 +1251,54 @@ body { overflow-x: clip; }
 .ph-road span:not(.ph-sign) { margin-top: 0.25rem; max-width: 14rem; font-size: 0.85rem; line-height: 1.45; color: var(--muted); }
 .ph-road span:empty { display: none; }
 
-/* Steps band --------------------------------------------------------------
-   White ground between the cream sections. Heading on the left, the lede and
-   a CTA on the right, then a bento of three photographs: loading tall on the
-   left, the road and the crew stacked on the right. Each step's words sit on
-   its photo over a navy fade, behind a numbered tag. */
-.steps-band { padding: 6.5rem 2rem; background: #fff; }
-.steps-inner { max-width: 1240px; margin: 0 auto; }
-.steps-head { display: grid; grid-template-columns: 1.25fr 1fr; align-items: end; gap: 1.5rem 4rem; margin-bottom: 2.75rem; }
-.steps-kicker { display: block; margin-bottom: 0.8rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green); }
-.steps-head h2 { margin: 0; font-size: clamp(2.1rem, 3.6vw, 3.1rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.06; color: var(--ink); }
-.steps-head h2 em { font-style: normal; color: var(--accent); }
-.steps-aside { justify-self: end; max-width: 30rem; }
-.steps-aside p { margin: 0 0 1.25rem; font-size: 1.05rem; line-height: 1.7; color: var(--ink-soft); }
-.bento {
-  list-style: none; margin: 0; padding: 0;
-  display: grid; grid-template-columns: 1.15fr 1fr; grid-template-rows: repeat(2, minmax(270px, auto));
-  gap: 1.25rem;
+/* On the job --------------------------------------------------------------
+   White ground between the cream sections. The heading column stays put while
+   the steps scroll past it; the four photographs run as a 2x2 with the right
+   column dropped half a step, so the eye reads 1-2-3-4 rather than a grid. */
+.job-band { padding: 6.5rem 2rem; background: #fff; }
+.job-inner { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 0.82fr 1.18fr; gap: 4rem; align-items: start; }
+.job-aside { position: sticky; top: 6.5rem; }
+.job-kicker { display: block; margin-bottom: 0.8rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green); }
+.job-aside h2 { margin: 0 0 1rem; font-size: clamp(2.1rem, 3.2vw, 2.9rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.07; color: var(--ink); }
+.job-aside h2 em { font-style: normal; color: var(--accent); }
+.job-aside p { margin: 0 0 1.5rem; font-size: 1.02rem; line-height: 1.7; color: var(--ink-soft); }
+.job-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 2.4rem 1.5rem; margin: 0; padding: 0; list-style: none; }
+.job-steps li:nth-child(even) { margin-top: 2.8rem; }
+.job-shot {
+  position: relative; margin: 0 0 1rem;
+  aspect-ratio: 4 / 3; border-radius: 18px; overflow: hidden;
+  background: var(--paper-warm);
+  box-shadow: 0 26px 50px -28px rgba(12, 26, 43, 0.55);
 }
-.bento-1 { grid-row: 1 / 3; }
-.bento-tile {
-  position: relative; isolation: isolate;
-  display: flex; align-items: flex-end;
-  min-height: 270px;
-  border-radius: 24px; overflow: hidden;
-  background: var(--navy);
-  box-shadow: 0 30px 60px -36px rgba(12, 26, 43, 0.55);
+.job-shot img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+.job-step:hover .job-shot img { transform: scale(1.05); }
+.job-num {
+  position: absolute; top: 0.9rem; left: 0.9rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 2rem; height: 2rem; padding: 0 0.55rem;
+  font-size: 0.8rem; font-weight: 700; color: #fff;
+  background: var(--accent); border-radius: 999px;
+  box-shadow: 0 10px 18px -8px rgba(12, 26, 43, 0.8);
 }
-.bento-tile img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
-.bento-tile:hover img { transform: scale(1.04); }
-/* The road and crew shots put a white truck body right behind the words, so
-   their fade starts higher and runs darker than the loading shot's. */
-.bento-tile::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(9, 20, 34, 0.05) 0%, rgba(9, 20, 34, 0.7) 42%, rgba(9, 20, 34, 0.95) 100%); }
-.bento-copy h3, .bento-copy p { text-shadow: 0 1px 12px rgba(9, 20, 34, 0.55); }
-.bento-1::after { background: linear-gradient(180deg, rgba(9, 20, 34, 0) 40%, rgba(9, 20, 34, 0.6) 66%, rgba(9, 20, 34, 0.94) 100%); }
-.bento-copy { max-width: 34rem; padding: 1.6rem 1.75rem 1.7rem; color: #fff; }
-.bento-1 .bento-copy { padding: 2.25rem 2.4rem 2.4rem; }
-.bento-tag {
-  display: inline-flex; align-items: center; gap: 0.55rem;
-  margin-bottom: 0.8rem; padding: 0.3rem 0.85rem 0.3rem 0.3rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-}
-.bento-tag b { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); font-size: 0.68rem; letter-spacing: 0; }
-.bento-copy h3 { margin: 0 0 0.45rem; font-size: 1.45rem; font-weight: 600; letter-spacing: -0.025em; line-height: 1.15; color: #fff; }
-.bento-1 h3 { font-size: clamp(1.8rem, 2.6vw, 2.3rem); }
-.bento-copy p { margin: 0; font-size: 0.93rem; line-height: 1.6; color: rgba(255, 255, 255, 0.84); }
-.bento-1 p { max-width: 28rem; font-size: 1.02rem; }
+.job-step h3 { margin: 0 0 0.4rem; font-size: 1.18rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; color: var(--ink); }
+.job-step p { margin: 0; font-size: 0.92rem; line-height: 1.62; color: var(--ink-soft); }
 
 @media (max-width: 1100px) {
-  .steps-head { grid-template-columns: 1fr; }
-  .steps-aside { justify-self: start; }
+  .job-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .job-aside { position: static; max-width: 34rem; }
+  .job-steps { gap: 1.8rem 1.25rem; }
+  .job-steps li:nth-child(even) { margin-top: 0; }
 }
-@media (max-width: 900px) {
-  .bento { grid-template-columns: 1fr; grid-template-rows: none; }
-  .bento-1 { grid-row: auto; min-height: 420px; }
-}
-/* Phones: the tiles stack, the first one tallest, and the CTA runs full width. */
+/* Phones: one photograph per row, the CTA full width. */
 @media (max-width: 768px) {
-  .steps-band { padding: 3.5rem 1.25rem; }
-  .steps-head { gap: 0.9rem; margin-bottom: 1.6rem; }
-  .steps-kicker { margin-bottom: 0.55rem; font-size: 0.66rem; }
-  .steps-head h2 { font-size: 1.8rem; }
-  .steps-aside p { margin-bottom: 1rem; font-size: 0.92rem; line-height: 1.6; }
-  .steps-aside .ph-btn { display: flex; }
-  .bento { gap: 0.85rem; }
-  .bento-tile { min-height: 300px; border-radius: 18px; }
-  .bento-1 { min-height: 360px; }
-  .bento-copy, .bento-1 .bento-copy { padding: 1.15rem 1.15rem 1.25rem; }
-  .bento-tag { margin-bottom: 0.6rem; font-size: 0.62rem; }
-  .bento-tag b { width: 20px; height: 20px; font-size: 0.6rem; }
-  .bento-copy h3, .bento-1 h3 { font-size: 1.2rem; }
-  .bento-copy p, .bento-1 p { font-size: 0.85rem; line-height: 1.55; }
-  .bento-tile:hover img { transform: none; }
+  .job-band { padding: 3.5rem 1.25rem; }
+  .job-aside h2 { font-size: 1.8rem; }
+  .job-aside p { margin-bottom: 1.1rem; font-size: 0.92rem; line-height: 1.6; }
+  .job-aside .ph-btn { display: flex; }
+  .job-steps { grid-template-columns: 1fr; gap: 1.7rem; }
+  .job-shot { aspect-ratio: 3 / 2; border-radius: 16px; margin-bottom: 0.8rem; }
+  .job-step h3 { font-size: 1.08rem; }
+  .job-step p { font-size: 0.88rem; }
 }
 
 /* Step form card -----------------------------------------------------------
@@ -1570,7 +1543,7 @@ body { overflow-x: clip; }
 }
 @media (prefers-reduced-motion: reduce) {
   .qs-step.is-active, .ph-stat, .ph-live-dot::after { animation: none; }
-  .ph-stat, .ph-stat::after, .ph-stat-icon { transition: none; }
+  .ph-stat, .ph-stat::after, .ph-stat-icon, .job-shot img { transition: none; }
 }
 </style>
 <script type="application/ld+json">
@@ -2059,42 +2032,46 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </section>
 
-<section id="how-it-works" class="steps-band">
-  <div class="steps-inner">
-    <div class="steps-head">
-      <div>
-        <span class="steps-kicker">The short version</span>
-        <h2>What a long-distance move <em>actually involves.</em></h2>
-      </div>
-      <div class="steps-aside">
-        <p>Whether a West Virginia move goes smoothly comes down to three things, each settled in advance.</p>
-        <a href="#get-quote" class="ph-btn">Get my fixed price</a>
-      </div>
+<section id="how-it-works" class="job-band">
+  <div class="job-inner">
+    <div class="job-aside">
+      <span class="job-kicker">On the job</span>
+      <h2>One West Virginia move, <em>start to finish.</em></h2>
+      <p>Four moments from our own crews, photographed on real jobs — in the order your West Virginia day actually runs.</p>
+      <a href="#get-quote" class="ph-btn">Get my fixed price</a>
     </div>
-    <ol class="bento">
-      <li class="bento-tile bento-1">
-        <img src="/assets/images/gallery/step-packing.jpg" alt="50STATEMOVERS crew loading blanket-wrapped furniture and cartons into the truck" width="1400" height="781" loading="lazy" decoding="async" />
-        <div class="bento-copy">
-          <span class="bento-tag"><b>01</b>Before loading</span>
-          <h3>Packed for the road ahead</h3>
-          <p>Cartons made for a cross-country haul are not the cartons you'd use across town. We pack for the distance your load is travelling.</p>
-        </div>
+    <ol class="job-steps">
+      <li class="job-step">
+        <figure class="job-shot">
+          <img src="/assets/images/gallery/job/runner-hall.jpg" alt="Blue floor runner laid down a hallway in a home before the crew starts carrying" width="1050" height="1400" style="object-position: 50% 45%" loading="lazy" decoding="async" />
+          <span class="job-num">01</span>
+        </figure>
+        <h3>Floors first</h3>
+        <p>Runners go down the hallways and stairs before a single box moves. In older houses with narrow turns, that is what keeps floors and walls unmarked.</p>
       </li>
-      <li class="bento-tile bento-2">
-        <img src="/assets/images/gallery/step-route.jpg" alt="Moving truck on an open highway at sunrise" width="900" height="562" loading="lazy" decoding="async" />
-        <div class="bento-copy">
-          <span class="bento-tag"><b>02</b>On the road</span>
-          <h3>Routed, not guessed</h3>
-          <p>West Virginia shipments are slotted into an existing schedule rather than held until something passes through. The result is a delivery window you get in writing at booking.</p>
-        </div>
+      <li class="job-step">
+        <figure class="job-shot">
+          <img src="/assets/images/gallery/job/wrapped-sunroom.jpg" alt="Sofas, tables and a mattress blanket-wrapped and shrink-wrapped in a sunroom, ready to carry out" width="1600" height="1200" style="object-position: 50% 55%" loading="lazy" decoding="async" />
+          <span class="job-num">02</span>
+        </figure>
+        <h3>Wrapped, not just boxed</h3>
+        <p>Blankets and shrink go on every piece — legs, corners and glass. A mountain route moves a load around far more than flat interstate miles do.</p>
       </li>
-      <li class="bento-tile bento-3">
-        <img src="/assets/images/gallery/step-crew.jpg" alt="Two 50STATEMOVERS crew carrying a wrapped item to the moving truck" width="900" height="502" loading="lazy" decoding="async" />
-        <div class="bento-copy">
-          <span class="bento-tag"><b>03</b>At your door</span>
-          <h3>One crew, both ends</h3>
-          <p>The people who pack and load are the people who deliver. We don't broker moves out to whoever is nearest.</p>
-        </div>
+      <li class="job-step">
+        <figure class="job-shot">
+          <img src="/assets/images/gallery/job/truck-loaded.jpg" alt="Blanket-wrapped furniture and wardrobe cartons stacked and strapped in tiers inside the moving truck" width="1600" height="1200" style="object-position: 45% 50%" loading="lazy" decoding="async" />
+          <span class="job-num">03</span>
+        </figure>
+        <h3>Loaded tier by tier</h3>
+        <p>The load is built in tiers and strapped off at each one, so nothing shifts when the truck takes a switchback.</p>
+      </li>
+      <li class="job-step">
+        <figure class="job-shot">
+          <img src="/assets/images/gallery/job/truck-at-door.jpg" alt="50STATEMOVERS box truck parked at the front door of a house on delivery day" width="1600" height="1200" style="object-position: 55% 58%" loading="lazy" decoding="async" />
+          <span class="job-num">04</span>
+        </figure>
+        <h3>At your new door</h3>
+        <p>The crew that loaded you unloads you — room by room, blankets off, boxes where you want them.</p>
       </li>
     </ol>
   </div>
@@ -2429,6 +2406,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="gallery-item">
       <img src="/assets/images/trucks/inside-house.jpeg" alt="Moving crew inside a home" loading="lazy" />
       <div class="gallery-caption"><div class="label">White Glove Service</div><div class="title">Handled with care</div></div>
+    </div>
+    <div class="gallery-item">
+      <img src="/assets/images/gallery/job/room-protected.jpg" alt="Living room with wardrobe cartons stacked and a blue runner across the floor before a move" loading="lazy" />
+      <div class="gallery-caption"><div class="label">Floor protection</div><div class="title">Runners down before the first carry</div></div>
+    </div>
+    <div class="gallery-item">
+      <img src="/assets/images/gallery/job/wrapped-furniture.jpg" alt="Dresser, cabinet and mattress wrapped in blue moving blankets and plastic in a bedroom" loading="lazy" />
+      <div class="gallery-caption"><div class="label">Wrapped for the road</div><div class="title">Blankets, shrink and tape on every piece</div></div>
+    </div>
+    <div class="gallery-item">
+      <img src="/assets/images/gallery/job/runner-entry.jpg" alt="Blue floor runner laid from the front door through the entry of a home on moving day" loading="lazy" />
+      <div class="gallery-caption"><div class="label">Your floors</div><div class="title">Protected doorway to doorway</div></div>
     </div>
   </div>
 </section>
