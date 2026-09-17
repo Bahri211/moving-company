@@ -313,7 +313,7 @@ function jobBand(s) {
   <div class="job-inner">
     <div class="job-media">
       <figure class="job-fig">
-        <img src="/assets/images/gallery/job/truck-at-door.jpg" alt="50STATEMOVERS box truck parked at the front door of a house on delivery day after ${a(s)} ${esc(s.name)} move" width="1600" height="1200" style="object-position: 55% 58%" loading="lazy" decoding="async" />
+        <img src="/assets/images/gallery/job/truck-branded.jpg" alt="50STATE MOVERS INC box truck in its own livery parked at the front door of a house on delivery day after ${a(s)} ${esc(s.name)} move" width="1600" height="1194" style="object-position: 50% 55%" loading="lazy" decoding="async" />
         <figcaption class="job-badge">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
           <span><b>Licensed interstate carrier</b><span>USDOT #${USDOT} · ${MC} — ${pick('jobBadge', s)}</span></span>
