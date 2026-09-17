@@ -285,4 +285,95 @@ module.exports = {
     `Your move stays with one team from door to door — no broker taking a cut, no unknown carrier inheriting your goods.`,
     `The people who pack and load are the people who deliver. We don't broker moves out to whoever is nearest.`,
   ],
+
+  /* ------------------------------------------------------- on-the-job band */
+
+  jobKicker: [
+    `On the job`,
+    `On moving day`,
+    `How the day runs`,
+    `The day itself`,
+  ],
+
+  jobHead: [
+    `The four parts of {{a}} {{state}} move, <em>in order.</em>`,
+    `One {{state}} move, <em>start to finish.</em>`,
+    `Moving day in {{state}}, <em>from door to door.</em>`,
+    `What moving day <em>actually looks like.</em>`,
+    `Your {{state}} load, <em>step by step.</em>`,
+  ],
+
+  jobLede: [
+    `One job, four stages — photographed on our own {{state}} work, not bought in.`,
+    `Photographs from our own crews — this is what the four parts of your day look like.`,
+    `Our own crews, our own photographs: the four things that happen between your two doors.`,
+    `No stock photography. These are our crews, in the order the day actually runs.`,
+    `Four stages on every {{state}} job — this is what each of them looks like.`,
+  ],
+
+  jobStep1Title: [
+    `Floors protected`,
+    `Protection goes down first`,
+    `The house comes first`,
+    `Floors and doorways first`,
+  ],
+
+  jobStep1: [
+    `Runners, jamb pads and corner guards before the first carry.`,
+    `Runners down and door jambs padded before a single box is carried.`,
+    `Floor runners and jamb pads go in before anything is lifted.`,
+    `Walkways covered and corners padded before the first carry out.`,
+    `Protection is laid at both ends before any furniture moves.`,
+  ],
+
+  jobStep2Title: [
+    `Nothing travels bare`,
+    `Everything wrapped`,
+    `Wrapped before it moves`,
+    `Blanket-wrapped`,
+    `Wrapped, then lifted`,
+  ],
+
+  jobStep2: [
+    `Blankets, shrink and tape on every piece — not only the fragile ones.`,
+    `Every piece gets a blanket and shrink, not just the obvious fragiles.`,
+    `Furniture is blanket-wrapped and shrink-wrapped before it leaves the room.`,
+    `Blankets and shrink on all of it, cartons for anything that fits in one.`,
+  ],
+
+  jobStep3Title: [
+    `Loaded &amp; strapped`,
+    `Tiered and strapped`,
+    `Strapped for the miles`,
+    `Loaded tight`,
+  ],
+
+  jobStep3: [
+    `Built in strapped tiers, because a load that cannot shift cannot rub.`,
+    `Stacked in tiers and strapped row by row, so nothing shifts over the miles.`,
+    `The load is built in tiers and tied off, so nothing moves on the highway.`,
+    `Each tier is strapped before the next goes up — that is what stops shifting.`,
+    `Strapped row by row, so the load rides the same at mile 900 as at mile one.`,
+  ],
+
+  jobStep4Title: [
+    `Into the right room`,
+    `At your new door`,
+    `Delivered to the room`,
+    `Unloaded where you want it`,
+    `At the far end`,
+  ],
+
+  jobStep4: [
+    `Unloaded into the rooms you point to, on the date in your contract.`,
+    `Set down room by room, on the delivery date your contract names.`,
+    `Carried to the room you choose, inside the window we agreed in writing.`,
+    `Placed where you want it at the far end, on the date we committed to.`,
+  ],
+
+  jobBadge: [
+    `our own trucks and crew`,
+    `a carrier, not a broker`,
+    `we carry it ourselves`,
+  ],
 };

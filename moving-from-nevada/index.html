@@ -1014,6 +1014,105 @@ nav.topnav.scrolled {
      phone this heading is the first thing that explains the card. */
   .hero-form-header h3 { font-size: 1.4rem; }
 }
+</style><style>
+/* On the job --------------------------------------------------------------
+   Built the way the large van lines build this band: one photograph doing the
+   proving, the licence sitting on top of it, and the day itself as a short
+   numbered list — four lines, one sentence each — with a single button. The
+   three supporting frames ride under the lead as thumbnails. Phones get the
+   same thing stacked: photo, steps, button. Nothing to swipe. */
+.job-band { padding: 5.5rem 2rem; background: var(--paper-warm); }
+.job-inner {
+  display: grid; grid-template-columns: 1.02fr 1fr; align-items: center;
+  grid-template-areas: "media intro" "media body";
+  gap: 1.4rem 4rem;
+  max-width: 1180px; margin: 0 auto;
+}
+.job-media { grid-area: media; min-width: 0; }
+.job-intro { grid-area: intro; align-self: end; min-width: 0; }
+.job-body { grid-area: body; align-self: start; min-width: 0; }
+.job-fig {
+  position: relative; overflow: hidden; margin: 0;
+  aspect-ratio: 4 / 3; border-radius: 20px; background: #fff;
+  box-shadow: 0 30px 60px -34px rgba(12, 26, 43, 0.6);
+}
+.job-fig img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Licence plate over the photograph — the one claim people actually check. */
+.job-badge {
+  position: absolute; left: 1rem; bottom: 1rem; max-width: calc(100% - 2rem);
+  display: inline-flex; align-items: center; gap: 0.7rem;
+  padding: 0.8rem 1rem;
+  border-radius: 14px; background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 14px 30px -18px rgba(12, 26, 43, 0.7);
+}
+.job-badge svg { width: 20px; height: 20px; flex-shrink: 0; fill: none; stroke: var(--green); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.job-badge b { display: block; font-size: 0.9rem; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); }
+.job-badge span { display: block; font-size: 0.78rem; line-height: 1.4; color: var(--muted); }
+.job-thumbs { display: grid; grid-template-columns: repeat(3, 1fr); align-items: start; gap: 0.75rem; margin-top: 0.75rem; }
+.job-thumbs img {
+  width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; display: block;
+  border-radius: 12px; background: #fff;
+}
+.job-kicker { display: block; margin-bottom: 0.7rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green); }
+.job-intro h2 { margin: 0 0 0.7rem; font-size: clamp(1.75rem, 2.9vw, 2.5rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.1; text-wrap: balance; color: var(--ink); }
+.job-intro h2 em { font-style: normal; color: var(--accent); }
+.job-lede { margin: 0 0 1.9rem; font-size: 1rem; line-height: 1.6; color: var(--ink-soft); }
+.job-steps { margin: 0 0 1.9rem; padding: 0; list-style: none; }
+.job-step { position: relative; padding: 0 0 1.35rem 3.1rem; }
+.job-step:last-child { padding-bottom: 0; }
+/* Rail down the numbers, so four lines read as one sequence. */
+.job-step:not(:last-child)::before {
+  content: ""; position: absolute; left: 1.07rem; top: 2.3rem; bottom: 0.35rem;
+  border-left: 2px dashed rgba(12, 26, 43, 0.18);
+}
+.job-num {
+  position: absolute; left: 0; top: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.25rem; height: 2.25rem;
+  border-radius: 50%; background: var(--green-deep); color: #fff;
+  font-size: 0.82rem; font-weight: 700;
+}
+.job-step h3 { margin: 0.25rem 0 0.25rem; font-size: 1.08rem; font-weight: 700; letter-spacing: -0.015em; color: var(--ink); }
+.job-step p { margin: 0; font-size: 0.95rem; line-height: 1.55; color: var(--ink-soft); }
+.job-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.9rem 1.3rem; }
+/* The band carries its own button: .ph-btn only ships on the step-form pages. */
+.job-cta {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  padding: 0.95rem 1.55rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff; font-size: 0.98rem; font-weight: 600; text-decoration: none;
+  box-shadow: 0 16px 30px -14px rgba(200, 85, 44, 0.75);
+  transition: background 0.2s, transform 0.2s;
+}
+.job-cta:hover { background: #b24a24; transform: translateY(-1px); }
+.job-cta:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+
+@media (max-width: 1100px) {
+  .job-band { padding: 4.5rem 1.5rem; }
+  .job-inner { grid-template-columns: 1fr; grid-template-areas: "intro" "media" "body"; gap: 1.6rem; }
+  .job-media { max-width: none; }
+  .job-fig { aspect-ratio: 16 / 10; }
+}
+/* Phones: heading, photograph, the four lines, one button — top to bottom. */
+@media (max-width: 768px) {
+  .job-band { padding: 3rem 1.25rem 3.25rem; }
+  .job-intro h2 { font-size: 1.7rem; }
+  .job-lede { margin-bottom: 1.4rem; font-size: 0.94rem; }
+  .job-steps { margin-bottom: 1.4rem; }
+  .job-step { padding: 0 0 1.1rem 2.8rem; }
+  .job-num { width: 2rem; height: 2rem; font-size: 0.76rem; }
+  .job-step:not(:last-child)::before { left: 0.94rem; top: 2.05rem; }
+  .job-step h3 { font-size: 1rem; }
+  .job-step p { font-size: 0.9rem; }
+  .job-fig { border-radius: 16px; }
+  .job-badge { left: 0.7rem; bottom: 0.7rem; max-width: calc(100% - 1.4rem); padding: 0.65rem 0.8rem; gap: 0.55rem; }
+  .job-badge b { font-size: 0.82rem; }
+  .job-badge span { font-size: 0.72rem; }
+  .job-thumbs { gap: 0.5rem; margin-top: 0.5rem; }
+  .job-foot { display: block; }
+  .job-cta { display: flex; justify-content: center; padding: 0.9rem 1.2rem; font-size: 0.95rem; }
+}
 </style><link rel="preload" as="image" href="/assets/images/hero-bg-home.jpg" media="(min-width: 769px)">
 <link rel="preload" as="image" href="/assets/images/hero-bg-home-mobile.jpg" media="(max-width: 768px)">
 <style>
@@ -1750,31 +1849,53 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </script>
 </section>
 
-<section id="how-it-works" class="illus-band">
-  <picture class="band-bg" aria-hidden="true">
-    <source media="(max-width: 768px)" srcset="/assets/images/gallery/street-loading-mobile.jpg" width="1100" height="1970" />
-    <img src="/assets/images/gallery/street-loading.jpg" alt="" loading="lazy" width="2200" height="1227" />
-  </picture>
-  <div class="section-header">
-    <div class="section-kicker">At a glance</div>
-    <h2>What we do with <em>Nevada</em> loads.</h2>
-    <p>Three decisions make or break a Nevada move, and all three happen before loading day.</p>
-  </div>
-  <div class="services">
-    <div class="service-card illus-card">
-      <img class="illus" src="/assets/images/gallery/packing.png" alt="Hand truck stacked with packed cartons" width="900" height="560" loading="lazy" decoding="async" />
-      <h3>Built to travel</h3>
-      <p>A box that survives a 2,000-mile ride is built differently from one that crosses town. We pack to the lane, not to the room count.</p>
+<section id="how-it-works" class="job-band">
+  <div class="job-inner">
+    <div class="job-media">
+      <figure class="job-fig">
+        <img src="/assets/images/gallery/job/truck-at-door.jpg" alt="50STATEMOVERS box truck parked at the front door of a house on delivery day after a Nevada move" width="1600" height="1200" style="object-position: 55% 58%" loading="lazy" decoding="async" />
+        <figcaption class="job-badge">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+          <span><b>Licensed interstate carrier</b><span>USDOT #4575745 · MC-1820728 — a carrier, not a broker</span></span>
+        </figcaption>
+      </figure>
+      <div class="job-thumbs">
+        <img src="/assets/images/gallery/job/runner-entry.jpg" alt="Blue floor runner laid from the front door through the entry of a Nevada home on moving day" width="1600" height="1200" style="object-position: 50% 45%" loading="lazy" decoding="async" />
+        <img src="/assets/images/gallery/job/wrapped-sunroom.jpg" alt="Sofas, tables and a mattress blanket-wrapped and shrink-wrapped, ready to carry out of a Nevada home" width="1600" height="1200" style="object-position: 50% 55%" loading="lazy" decoding="async" />
+        <img src="/assets/images/gallery/job/truck-loaded.jpg" alt="Blanket-wrapped furniture and wardrobe cartons stacked and strapped in tiers inside the truck" width="1600" height="1200" style="object-position: 45% 50%" loading="lazy" decoding="async" />
+      </div>
     </div>
-    <div class="service-card illus-card">
-      <img class="illus" src="/assets/images/gallery/routes.png" alt="Map of the United States with a long-distance route marked" width="900" height="560" loading="lazy" decoding="async" />
-      <h3>A route, not a maybe</h3>
-      <p>Loads out of Nevada go onto a route we already run. Nothing sits in a warehouse waiting for a half-empty trailer, which is how we can commit to a transit window before you sign.</p>
+    <div class="job-intro">
+      <span class="job-kicker">On the job</span>
+      <h2>Your Nevada load, <em>step by step.</em></h2>
+      <p class="job-lede">Photographs from our own crews — this is what the four parts of your day look like.</p>
     </div>
-    <div class="service-card illus-card">
-      <img class="illus" src="/assets/images/gallery/transport.png" alt="Long-haul moving truck in 50STATEMOVERS livery" width="900" height="560" loading="lazy" decoding="async" />
-      <h3>Carried by our own crew</h3>
-      <p>Your move stays with one team from door to door — no broker taking a cut, no unknown carrier inheriting your goods.</p>
+    <div class="job-body">
+      <ol class="job-steps">
+        <li class="job-step">
+          <span class="job-num" aria-hidden="true">1</span>
+          <h3>The house comes first</h3>
+          <p>Walkways covered and corners padded before the first carry out.</p>
+        </li>
+        <li class="job-step">
+          <span class="job-num" aria-hidden="true">2</span>
+          <h3>Nothing travels bare</h3>
+          <p>Furniture is blanket-wrapped and shrink-wrapped before it leaves the room.</p>
+        </li>
+        <li class="job-step">
+          <span class="job-num" aria-hidden="true">3</span>
+          <h3>Loaded tight</h3>
+          <p>Built in strapped tiers, because a load that cannot shift cannot rub.</p>
+        </li>
+        <li class="job-step">
+          <span class="job-num" aria-hidden="true">4</span>
+          <h3>At the far end</h3>
+          <p>Unloaded into the rooms you point to, on the date in your contract.</p>
+        </li>
+      </ol>
+      <div class="job-foot">
+        <a href="#get-quote" class="job-cta">Get my fixed price</a>
+      </div>
     </div>
   </div>
 </section>
