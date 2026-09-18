@@ -538,6 +538,149 @@ body { overflow-x: clip; }
 }
 </style>
 
+<style>
+/* What we do -------------------------------------------------------------
+   Rebuilt off the six-card grid. The grid gave every service the same weight
+   and the same box, so the eye had nothing to follow; this reads as a printed
+   index instead — the heading holds the left column and stays put while the
+   six services run down the right as ruled rows, each one numbered with its
+   drawing at thumbnail size. Homepage only: the classes are svc-* so the
+   shared .service-card rules (still in use on the 49 state pages) are left
+   alone. */
+.svc-band { background: var(--paper); }
+.svc-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  gap: 4.5rem;
+  max-width: 1180px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+/* Left column: the section header, unpicked from .section-header so it can
+   sit flush left and stick alongside the list. */
+.svc-intro { position: sticky; top: calc(var(--nav-h) + 3rem); }
+.svc-intro h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 3.6vw, 3.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  margin-bottom: 1.15rem;
+}
+.svc-intro h2 em { font-style: italic; color: var(--accent); font-weight: 300; }
+.svc-intro p { color: var(--ink-soft); font-size: 1.05rem; max-width: 34ch; }
+.svc-intro .section-kicker::before { display: none; }
+
+.svc-cta {
+  display: inline-flex; align-items: center; gap: 0.9rem;
+  margin-top: 2rem;
+  padding: 0.4rem 0.4rem 0.4rem 1.35rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--paper);
+  font-weight: 600; font-size: 0.95rem;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+.svc-cta:hover { background: var(--accent-deep); transform: translateY(-2px); }
+.svc-cta-chip {
+  display: grid; place-items: center;
+  width: 2.1rem; height: 2.1rem;
+  border-radius: 50%;
+  background: rgba(245, 240, 232, 0.2);
+}
+.svc-cta-chip svg {
+  width: 16px; height: 16px;
+  fill: none; stroke: currentColor; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* Right column: the six rows. A hairline between rows does the dividing that
+   six separate borders used to do. */
+.svc-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.svc-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.6rem 92px minmax(0, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.6rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+  transition: background 0.35s ease;
+}
+/* The accent rule grows in from the left on hover — the one bit of motion the
+   old cards had, kept. */
+.svc-row::before {
+  content: '';
+  position: absolute;
+  left: 0; top: -1px; bottom: -1px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-deep));
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.svc-row:hover { background: var(--paper-warm); }
+.svc-row:hover::before { transform: scaleY(1); }
+
+.svc-index {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1rem;
+  color: var(--accent);
+  align-self: start;
+  padding-top: 0.2rem;
+}
+.svc-art { display: block; }
+.svc-art img {
+  width: 92px; height: auto;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.svc-row:hover .svc-art img { transform: scale(1.06); }
+
+.svc-text h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.4rem;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.35rem;
+}
+.svc-text p { color: var(--ink-soft); font-size: 0.95rem; line-height: 1.6; }
+
+/* Tablets: the heading stops sticking and sits above the list. */
+@media (max-width: 1000px) {
+  .svc-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .svc-intro { position: static; max-width: 620px; }
+  .svc-intro p { max-width: none; }
+}
+
+/* Phones: number and drawing share the first line with the title, so the
+   copy keeps its full width. */
+@media (max-width: 768px) {
+  .svc-band { padding: 3.25rem 1.25rem; }
+  .svc-intro h2 { font-size: 1.85rem; }
+  .svc-intro p { font-size: 0.95rem; }
+  .svc-cta { margin-top: 1.5rem; font-size: 0.9rem; }
+  .svc-row {
+    grid-template-columns: 62px minmax(0, 1fr);
+    gap: 0.4rem 1rem;
+    padding: 1.15rem 0.75rem;
+  }
+  .svc-index { grid-column: 1; grid-row: 1; align-self: center; padding-top: 0; font-size: 0.9rem; text-align: center; }
+  .svc-art { grid-column: 1; grid-row: 2; }
+  .svc-art img { width: 62px; }
+  .svc-text { grid-column: 2; grid-row: 1 / span 2; }
+  .svc-text h3 { font-size: 1.1rem; }
+  .svc-text p { font-size: 0.88rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svc-row, .svc-row::before, .svc-art img, .svc-cta { transition: none; }
+}
+</style>
+
 </head>
 <body>
 
@@ -903,49 +1046,64 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- SERVICES -->
-<section id="services">
-  <div class="section-header">
-    <div class="section-kicker">What we do</div>
-    <h2>Services built around <em>your</em> move.</h2>
-    <p>Whether you're relocating an apartment or a full office, we tailor the approach to what you're actually moving — and where it needs to go.</p>
-  </div>
-  <div class="services">
-    <div class="service-card">
-      <div class="service-num">01</div>
-      <div class="service-illus"><img src="/assets/images/gallery/svc-long-distance.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
-      <h3>Long Distance</h3>
-      <p>Cross-country and interstate relocations. We coordinate logistics, customs paperwork, and destination unpacking — all door to door.</p>
+<section id="services" class="svc-band">
+  <div class="svc-inner">
+    <div class="svc-intro">
+      <div class="section-kicker">What we do</div>
+      <h2>Services built around <em>your</em> move.</h2>
+      <p>Whether you're relocating an apartment or a full office, we tailor the approach to what you're actually moving — and where it needs to go.</p>
+      <a href="#get-quote" class="svc-cta"><span>Get my fixed price</span><span class="svc-cta-chip" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
     </div>
-    <div class="service-card">
-      <div class="service-num">02</div>
-      <div class="service-illus"><img src="/assets/images/gallery/svc-white-glove.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
-      <h3>White Glove</h3>
-      <p>The top tier. Concierge-level service: we'll pack, transport, unpack, arrange, and even hang the art on the walls before we leave.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">03</div>
-      <div class="service-illus"><img src="/assets/images/gallery/svc-residential.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
-      <h3>Residential</h3>
-      <p>From studio apartments to five-bedroom homes. We disassemble, transport, and reassemble — and we never leave before everything's in its place.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">04</div>
-      <div class="service-illus"><img src="/assets/images/gallery/svc-commercial.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
-      <h3>Commercial</h3>
-      <p>Office relocations handled after hours or over weekends, so your team is working from the new space on Monday morning — no downtime.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">05</div>
-      <div class="service-illus"><img src="/assets/images/gallery/svc-packing.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
-      <h3>Packing &amp; Crating</h3>
-      <p>Museum-grade packing for art, antiques, and anything fragile. We build custom crates on site when off-the-shelf won't do.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">06</div>
-      <div class="service-illus"><img src="/assets/images/gallery/svc-storage.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
-      <h3>Storage</h3>
-      <p>Climate-controlled, 24-hour-monitored units in secure facilities. Short-term overflow or long-term, fully insured and inventoried throughout.</p>
-    </div>
+    <ol class="svc-list">
+      <li class="svc-row">
+        <span class="svc-index" aria-hidden="true">01</span>
+        <span class="svc-art"><img src="/assets/images/gallery/svc-long-distance.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
+        <div class="svc-text">
+          <h3>Long Distance</h3>
+          <p>Cross-country and interstate relocations. We coordinate logistics, customs paperwork, and destination unpacking — all door to door.</p>
+        </div>
+      </li>
+      <li class="svc-row">
+        <span class="svc-index" aria-hidden="true">02</span>
+        <span class="svc-art"><img src="/assets/images/gallery/svc-white-glove.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
+        <div class="svc-text">
+          <h3>White Glove</h3>
+          <p>The top tier. Concierge-level service: we'll pack, transport, unpack, arrange, and even hang the art on the walls before we leave.</p>
+        </div>
+      </li>
+      <li class="svc-row">
+        <span class="svc-index" aria-hidden="true">03</span>
+        <span class="svc-art"><img src="/assets/images/gallery/svc-residential.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
+        <div class="svc-text">
+          <h3>Residential</h3>
+          <p>From studio apartments to five-bedroom homes. We disassemble, transport, and reassemble — and we never leave before everything's in its place.</p>
+        </div>
+      </li>
+      <li class="svc-row">
+        <span class="svc-index" aria-hidden="true">04</span>
+        <span class="svc-art"><img src="/assets/images/gallery/svc-commercial.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
+        <div class="svc-text">
+          <h3>Commercial</h3>
+          <p>Office relocations handled after hours or over weekends, so your team is working from the new space on Monday morning — no downtime.</p>
+        </div>
+      </li>
+      <li class="svc-row">
+        <span class="svc-index" aria-hidden="true">05</span>
+        <span class="svc-art"><img src="/assets/images/gallery/svc-packing.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
+        <div class="svc-text">
+          <h3>Packing &amp; Crating</h3>
+          <p>Museum-grade packing for art, antiques, and anything fragile. We build custom crates on site when off-the-shelf won't do.</p>
+        </div>
+      </li>
+      <li class="svc-row">
+        <span class="svc-index" aria-hidden="true">06</span>
+        <span class="svc-art"><img src="/assets/images/gallery/svc-storage.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
+        <div class="svc-text">
+          <h3>Storage</h3>
+          <p>Climate-controlled, 24-hour-monitored units in secure facilities. Short-term overflow or long-term, fully insured and inventoried throughout.</p>
+        </div>
+      </li>
+    </ol>
   </div>
 </section>
 
@@ -1548,7 +1706,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   // Scroll reveal
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const staggerSelectors = ['.trust-item', '.service-card', '.process-step', '.gallery-item', '.footer-col', '.faq-item'];
+    const staggerSelectors = ['.trust-item', '.svc-row', '.process-step', '.gallery-item', '.footer-col', '.faq-item'];
     staggerSelectors.forEach(sel => {
       document.querySelectorAll(sel).forEach(el => {
         const siblings = [...el.parentElement.children].filter(c => c.matches(sel));
@@ -1558,7 +1716,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
 
     const revealTargets = document.querySelectorAll(
-      '.section-header, .trust-item, .service-card, .process-step, .gallery-item, .faq-item, .footer-brand, .footer-col, .cs-text, .cs-ctas, .states-grid'
+      '.section-header, .svc-intro, .trust-item, .svc-row, .process-step, .gallery-item, .faq-item, .footer-brand, .footer-col, .cs-text, .cs-ctas, .states-grid'
     );
 
     const revealObserver = new IntersectionObserver((entries) => {
