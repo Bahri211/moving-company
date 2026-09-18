@@ -155,12 +155,13 @@ body { overflow-x: clip; }
 .ph-proof { position: relative; display: flow-root; background: var(--paper); padding: 0 2rem 5.5rem; }
 .ph-stats {
   position: relative; z-index: 3;
-  /* Was 1240px, the page's own width. Three cards stretched across it left
-     the text in the first third of each and the slack on the right. */
-  max-width: 1000px;
-  margin: -4.75rem auto 0;
+  /* Edge to edge rather than a centred card: the section pads 2rem a side, so
+     the strip pulls that back out and runs the full width of the screen. No
+     radius — rounded corners against the viewport edge read as a mistake. */
+  max-width: none;
+  margin: -4.75rem -2rem 0;
   display: grid; grid-template-columns: repeat(3, 1fr);
-  border-radius: 18px; overflow: hidden;
+  overflow: hidden;
   box-shadow: 0 30px 60px -34px rgba(12, 26, 43, 0.45);
 }
 /* Three figures, each on its own brand ground — orange, navy, cyan — butted
@@ -320,7 +321,7 @@ body { overflow-x: clip; }
   /* Phones: the same panel as a 2x2 — all four figures, none dropped. The
      type steps down a notch so a two-word label like "Fixed-price moves"
      stays on one line and the panel reads as a strip, not four cards. */
-  .ph-stats { margin-top: -3.25rem; grid-template-columns: repeat(3, 1fr); border-radius: 14px; }
+  .ph-stats { margin: -3.25rem -1.25rem 0; grid-template-columns: repeat(3, 1fr); }
   .ph-stat { padding: 0.8rem 0.45rem 0.85rem; text-align: center; }
   .ph-stat strong { font-size: 1.1rem; }
   .ph-stat-label { margin-top: 0.3rem; font-size: 0.63rem; line-height: 1.25; text-wrap: balance; }
