@@ -1332,7 +1332,9 @@ body { overflow-x: clip; }
   .qs-card .form-row select { min-height: 48px; border: 1px solid #ddd6cb; background-color: #faf8f4; }
 
   .ph-proof { padding: 0 1.25rem 2.75rem; }
-  /* Phones: the same panel as a 2x2 — all four figures, none dropped. */
+  /* Phones: the same panel as a 2x2 — all four figures, none dropped. The
+     type steps down a notch so a two-word label like "Fixed-price moves"
+     stays on one line and the panel reads as a strip, not four cards. */
   .ph-stats { margin-top: -3.25rem; grid-template-columns: repeat(3, 1fr); border-radius: 14px; }
   .ph-stat { padding: 0.8rem 0.45rem 0.85rem; text-align: center; }
   .ph-stat strong { font-size: 1.1rem; }
@@ -1371,66 +1373,42 @@ body { overflow-x: clip; }
 </style><style>
 .ph-stats {
   position: relative; z-index: 3;
-  /* No max-width, so the strip runs as wide as the page allows — but it keeps
-     the section's own 2rem gutter rather than reaching the viewport edge, and
-     keeps its radius, so it still reads as a card laid over the hero. */
-  max-width: none;
+  max-width: 1240px;
   margin: -4.75rem auto 0;
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
-  border-radius: 18px; overflow: hidden;
-  box-shadow: 0 30px 60px -34px rgba(12, 26, 43, 0.45);
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  background: #fff; border-radius: 18px; overflow: hidden;
+  box-shadow: 0 30px 60px -34px rgba(12, 26, 43, 0.45), 0 0 0 1px rgba(12, 26, 43, 0.06);
 }
-/* Centred, as on phones: the slack then sits either side of the text instead
-   of collecting on one edge. */
 .ph-stat {
-  display: block; padding: 1.7rem 1.5rem; text-align: center;
-  border-radius: 0; animation: none; transform: none;
+  display: block; padding: 1.7rem 1.75rem;
+  background: none; border-radius: 0; animation: none; transform: none;
   box-shadow: none;
 }
 .ph-stat::before, .ph-stat::after { content: none; }
 .ph-stat:hover { transform: none; box-shadow: none; }
-/* Three figures, each on its own brand ground — orange, navy, cyan — butted
-   together so the strip reads as one band of colour. The hairlines that used
-   to separate them are gone; the colour change is the divider. */
-.ph-stat:nth-child(1) { background: #e9541f; }
-.ph-stat:nth-child(2) { background: #0c1628; }
-.ph-stat:nth-child(3) { background: #36bacb; }
-/* White on the orange, cream on the navy, and navy ink on the cyan — the one
-   ground light enough to carry dark type at the sub-line's size. */
+.ph-stat + .ph-stat { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09); }
 .ph-stat strong {
   display: block; font-size: 2.15rem; font-weight: 700; letter-spacing: -0.04em;
-  line-height: 1; color: #0c1628; font-variant-numeric: tabular-nums; white-space: nowrap;
+  line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; white-space: nowrap;
 }
-.ph-stat strong i { font-style: normal; font-size: 0.6em; font-weight: 600; color: rgba(12, 22, 40, 0.58); margin: 0 0.05em; }
-.ph-stat-label { display: block; margin-top: 0.6rem; font-size: 0.93rem; font-weight: 600; letter-spacing: -0.01em; color: #0c1628; }
-.ph-stat-sub { display: block; margin-top: 0.18rem; font-size: 0.8rem; line-height: 1.4; color: rgba(12, 22, 40, 0.74); }
-.ph-stat:nth-child(1) strong,
-.ph-stat:nth-child(1) .ph-stat-label { color: #fff; }
-.ph-stat:nth-child(1) strong i { color: rgba(255, 255, 255, 0.72); }
-.ph-stat:nth-child(1) .ph-stat-sub { color: rgba(255, 255, 255, 0.88); }
-.ph-stat:nth-child(2) strong,
-.ph-stat:nth-child(2) .ph-stat-label { color: var(--paper); }
-.ph-stat:nth-child(2) strong i { color: rgba(246, 241, 233, 0.6); }
-.ph-stat:nth-child(2) .ph-stat-sub { color: rgba(246, 241, 233, 0.76); }
+.ph-stat strong i { font-style: normal; font-size: 0.6em; font-weight: 600; color: var(--muted); margin: 0 0.05em; }
+.ph-stat-label { display: block; margin-top: 0.6rem; font-size: 0.93rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+.ph-stat-sub { display: block; margin-top: 0.18rem; font-size: 0.8rem; line-height: 1.4; color: var(--muted); }
 
 @media (max-width: 1100px) {
 }
 /* Phones: the same panel as a 2x2 — all four figures, none dropped. */
 @media (max-width: 768px) {
-  .ph-stats { margin-top: -3.25rem; grid-template-columns: repeat(3, 1fr); gap: 0; padding: 0; border-radius: 14px; }
-  .ph-stat { padding: 0.8rem 0.45rem 0.85rem; text-align: center; }
+  .ph-stats { margin-top: -3.25rem; grid-template-columns: 1fr 1fr; gap: 0; padding: 0; border-radius: 14px; }
+  .ph-stat { padding: 1rem 0.9rem 1.05rem; }
   .ph-stat, .ph-stat + .ph-stat { box-shadow: none; }
-  .ph-stat:nth-child(2) { display: block; }
-  .ph-stat strong { font-size: 1.1rem; }
-  .ph-stat-label { grid-column: auto; margin-top: 0.3rem; font-size: 0.63rem; line-height: 1.25; text-wrap: balance; }
-  .ph-stat-sub { display: block; margin-top: 0.1rem; font-size: 0.56rem; line-height: 1.3; text-wrap: balance; }
-}
-/* Narrow phones: one more step down so the labels never wrap to three lines. */
-@media (max-width: 380px) {
-  .ph-stat { padding: 0.65rem 0.3rem 0.7rem; }
-  .ph-stat strong { font-size: 1rem; }
-  .ph-stat-label { font-size: 0.59rem; }
-  .ph-stat-sub { font-size: 0.53rem; }
+  .ph-stat:nth-child(even) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09); }
+  .ph-stat:nth-child(n+3) { box-shadow: inset 0 1px 0 rgba(12, 26, 43, 0.09); }
+  .ph-stat:nth-child(4) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09), inset 0 1px 0 rgba(12, 26, 43, 0.09); }
+  .ph-stat:nth-child(2), .ph-stat:nth-child(4) { display: block; }
+  .ph-stat strong { font-size: 1.5rem; }
+  .ph-stat-label { grid-column: auto; margin-top: 0.4rem; font-size: 0.8rem; line-height: 1.3; }
+  .ph-stat-sub { display: block; margin-top: 0.12rem; font-size: 0.72rem; }
 }
 </style><style>
 .cov-road { position: relative; isolation: isolate; }
@@ -1477,6 +1455,191 @@ body { overflow-x: clip; }
 }
 @media (prefers-reduced-motion: reduce) {
   #states-toggle, #states-toggle svg { transition: none; }
+}
+</style><style>
+/* What we do -------------------------------------------------------------
+   Rebuilt off the six-card grid. The grid gave every service the same weight
+   and the same box, so the eye had nothing to follow; this reads as a printed
+   index instead — the heading holds the left column and stays put while the
+   six services run down the right as colour cards, each with its drawing at
+   thumbnail size. The classes are svc-* so the shared .service-card rules —
+   still in use for the cost and local-notes cards — are left alone. Sliced
+   into the 49 state pages and the hub by scripts/build-state-pages.js, so
+   edit it here and rebuild rather than touching the generated pages. */
+.svc-band { background: var(--paper); }
+.svc-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  gap: 4.5rem;
+  max-width: 1180px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+/* Left column: the section header, unpicked from .section-header so it can
+   sit flush left and stick alongside the list. */
+.svc-intro { position: sticky; top: calc(var(--nav-h) + 3rem); }
+.svc-intro h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 3.6vw, 3.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  margin-bottom: 1.15rem;
+}
+.svc-intro h2 em { font-style: italic; color: var(--accent); font-weight: 300; }
+.svc-intro p { color: var(--ink-soft); font-size: 1.05rem; max-width: 34ch; }
+.svc-intro .section-kicker::before { display: none; }
+
+.svc-cta {
+  display: inline-flex; align-items: center; gap: 0.9rem;
+  margin-top: 2rem;
+  padding: 0.4rem 0.4rem 0.4rem 1.35rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--paper);
+  font-weight: 600; font-size: 0.95rem;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+.svc-cta:hover { background: var(--accent-deep); transform: translateY(-2px); }
+.svc-cta-chip {
+  display: grid; place-items: center;
+  width: 2.1rem; height: 2.1rem;
+  border-radius: 50%;
+  background: rgba(245, 240, 232, 0.2);
+}
+.svc-cta-chip svg {
+  width: 16px; height: 16px;
+  fill: none; stroke: currentColor; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* Right column: the six services as solid colour cards, the three off the
+   stat band under the hero cycled down the list. Ink flips per card the way
+   it does up there: white on the orange, paper on the navy, near-black on the
+   cyan. The drawings are line art in terracotta and navy, so each one keeps a
+   paper tile inside its card — on a solid orange or navy ground the art would
+   disappear. */
+.svc-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.85rem; }
+
+.svc-row:nth-child(3n + 1) { --svc-c: #e9541f; --svc-ink: #fff; --svc-ink-soft: rgba(255, 255, 255, 0.88); }
+.svc-row:nth-child(3n + 2) { --svc-c: #0c1628; --svc-ink: var(--paper); --svc-ink-soft: rgba(246, 241, 233, 0.78); }
+.svc-row:nth-child(3n + 3) { --svc-c: #36bacb; --svc-ink: #0c1628; --svc-ink-soft: rgba(12, 22, 40, 0.8); }
+
+/* Title line and copy are separate blocks so phones can hide the copy. On
+   desktop the head dissolves into the card's own grid (display: contents), so
+   drawing, title and copy sit in one two-column grid and the drawing spans
+   both text rows — the copy tucks straight under the title rather than under
+   the drawing. */
+.svc-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  align-items: start;
+  gap: 0 1.6rem;
+  padding: 1.5rem 1.6rem;
+  border-radius: 18px;
+  background: var(--svc-c);
+  color: var(--svc-ink);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+}
+.svc-row:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 40px -24px rgba(12, 22, 40, 0.55);
+}
+.svc-head { display: contents; }
+/* The chevron only means anything on phones, where the cards collapse. */
+.svc-chev { display: none; }
+
+.svc-art {
+  grid-row: span 2;
+  align-self: center;
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+  border-radius: 14px;
+  padding: 0.65rem;
+}
+.svc-art img {
+  width: 100%; height: auto;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Fallback for a page built without the illustrations: the line glyph on the
+   same paper tile. */
+.svc-glyph svg {
+  display: block;
+  width: 34px; height: 34px;
+  fill: none; stroke: var(--svc-c); stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.svc-row:hover .svc-art img { transform: scale(1.06); }
+
+.svc-head h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.4rem;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.35rem;
+  color: var(--svc-ink);
+}
+.svc-body { grid-column: 2; }
+.svc-body p { color: var(--svc-ink-soft); font-size: 0.95rem; line-height: 1.6; }
+
+/* Tablets: the heading stops sticking and sits above the list. */
+@media (max-width: 1000px) {
+  .svc-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .svc-intro { position: static; max-width: 620px; }
+  .svc-intro p { max-width: none; }
+}
+
+/* Phones: six paragraphs open at once made this the longest scroll on the
+   page, so the rows collapse to a tapable index — drawing and title — and
+   open one at a time. JS adds .is-collapsible, so with scripting off
+   every row stays open and nothing is lost. */
+@media (max-width: 768px) {
+  .svc-band { padding: 2.75rem 1.25rem 3rem; }
+  .svc-intro h2 { font-size: 1.75rem; margin-bottom: 0.9rem; }
+  .svc-intro p { font-size: 0.94rem; }
+  .svc-cta { margin-top: 1.25rem; font-size: 0.9rem; }
+  .svc-list { gap: 0.6rem; }
+  .svc-row { display: block; padding: 0; border-radius: 14px; }
+  .svc-row:hover { transform: none; box-shadow: none; }
+  .svc-head {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr) 1.1rem;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.7rem 0.85rem;
+  }
+  .svc-art { grid-row: auto; border-radius: 10px; padding: 0.35rem; }
+  .svc-head h3 { font-size: 1.05rem; margin-bottom: 0; }
+  .svc-chev {
+    display: block;
+    width: 1.1rem; height: 1.1rem;
+    fill: none; stroke: var(--svc-ink-soft); stroke-width: 1.8;
+    stroke-linecap: round; stroke-linejoin: round;
+    transition: transform 0.3s ease;
+  }
+  .svc-body { padding: 0 0.85rem 0.95rem calc(52px + 0.85rem + 0.85rem); }
+  .svc-body p { font-size: 0.88rem; line-height: 1.55; }
+
+  /* Collapsed state, only once the script has wired the cards up. */
+  .svc-row.is-collapsible .svc-head { cursor: pointer; }
+  .svc-row.is-collapsible .svc-body { display: none; }
+  .svc-row.is-collapsible.is-open .svc-body { display: block; }
+  .svc-row.is-collapsible.is-open .svc-chev { transform: rotate(180deg); stroke: var(--svc-ink); }
+  .svc-head:focus-visible { outline: 2px solid var(--svc-ink); outline-offset: -3px; border-radius: 10px; }
+}
+
+/* Above the phone breakpoint the copy is never hidden, whatever the script
+   left on the row. */
+@media (min-width: 769px) {
+  .svc-row .svc-body { display: block; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svc-row, .svc-art img, .svc-cta, .svc-chev { transition: none; }
 }
 </style>
 <script type="application/ld+json">
@@ -1875,6 +2038,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="ph-stat-sub">Price locked at booking</span>
     </div>
     <div class="ph-stat">
+      <strong>0.3<i>%</i></strong>
+      <span class="ph-stat-label">Damage claim rate</span>
+      <span class="ph-stat-sub">Across all our moves</span>
+    </div>
+    <div class="ph-stat">
       <strong>24<i>/7</i></strong>
       <span class="ph-stat-label">Customer support</span>
       <span class="ph-stat-sub">Real people, any hour</span>
@@ -2092,49 +2260,76 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- SERVICES -->
-<section id="services">
-  <div class="section-header">
-    <div class="section-kicker">What we do</div>
-    <h2>Six ways we <em>handle</em> a move.</h2>
-    <p>Montana is dominated by long-distance inbound work with a heavy packing component. Households arriving from California or Washington generally want the full job handled, and storage is frequently necessary because a Bozeman or Flathead closing rarely aligns with a move-out 1,200 miles away.</p>
-  </div>
-  <div class="services">
-    <div class="service-card">
-      <div class="service-num">01</div>
-      <div class="service-illus"><img src="/assets/images/gallery/svc-long-distance.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
-      <h3>Long Distance</h3>
-      <p>Long-haul household relocations across the continental map — scheduling, documentation, and unpacking on arrival included, with one crew responsible throughout.</p>
+<section id="services" class="svc-band">
+  <div class="svc-inner">
+    <div class="svc-intro">
+      <div class="section-kicker">What we do</div>
+      <h2>Six ways we <em>handle</em> a move.</h2>
+      <p>Montana is dominated by long-distance inbound work with a heavy packing component. Households arriving from California or Washington generally want the full job handled, and storage is frequently necessary because a Bozeman or Flathead closing rarely aligns with a move-out 1,200 miles away.</p>
+      <a href="#get-quote" class="svc-cta"><span>Get my fixed price</span><span class="svc-cta-chip" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
     </div>
-    <div class="service-card">
-      <div class="service-num">02</div>
-      <div class="service-illus"><img src="/assets/images/gallery/svc-white-glove.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
-      <h3>White Glove</h3>
-      <p>The top tier. Concierge-level service: we'll pack, transport, unpack, arrange, and even hang the art on the walls before we leave.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">03</div>
-      <div class="service-illus"><img src="/assets/images/gallery/svc-residential.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
-      <h3>Residential</h3>
-      <p>Household moves of every scale. Beds, wardrobes and tables are dismantled, transported and reassembled, and nobody drives off until it is all where it belongs.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">04</div>
-      <div class="service-illus"><img src="/assets/images/gallery/svc-commercial.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
-      <h3>Commercial</h3>
-      <p>Offices, studios and workspaces relocated outside trading hours. The aim is simple: no lost working days between the old address and the new one.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">05</div>
-      <div class="service-illus"><img src="/assets/images/gallery/svc-packing.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
-      <h3>Packing &amp; Crating</h3>
-      <p>Art, heirlooms, instruments, and glass packed the way galleries pack them, with bespoke crates constructed in your home for anything off-size.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-num">06</div>
-      <div class="service-illus"><img src="/assets/images/gallery/svc-storage.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>
-      <h3>Storage</h3>
-      <p>Warehousing with climate control and 24-hour security. Use it for a week between closings or indefinitely; the inventory and the insurance run throughout.</p>
-    </div>
+    <ol class="svc-list">
+      <li class="svc-row">
+        <div class="svc-head">
+          <span class="svc-art"><img src="/assets/images/gallery/svc-long-distance.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
+          <h3>Long Distance</h3>
+          <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="svc-body" id="svc-body-1">
+          <p>Long-haul household relocations across the continental map — scheduling, documentation, and unpacking on arrival included, with one crew responsible throughout.</p>
+        </div>
+      </li>
+      <li class="svc-row">
+        <div class="svc-head">
+          <span class="svc-art"><img src="/assets/images/gallery/svc-white-glove.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
+          <h3>White Glove</h3>
+          <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="svc-body" id="svc-body-2">
+          <p>The top tier. Concierge-level service: we'll pack, transport, unpack, arrange, and even hang the art on the walls before we leave.</p>
+        </div>
+      </li>
+      <li class="svc-row">
+        <div class="svc-head">
+          <span class="svc-art"><img src="/assets/images/gallery/svc-residential.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
+          <h3>Residential</h3>
+          <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="svc-body" id="svc-body-3">
+          <p>Household moves of every scale. Beds, wardrobes and tables are dismantled, transported and reassembled, and nobody drives off until it is all where it belongs.</p>
+        </div>
+      </li>
+      <li class="svc-row">
+        <div class="svc-head">
+          <span class="svc-art"><img src="/assets/images/gallery/svc-commercial.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
+          <h3>Commercial</h3>
+          <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="svc-body" id="svc-body-4">
+          <p>Offices, studios and workspaces relocated outside trading hours. The aim is simple: no lost working days between the old address and the new one.</p>
+        </div>
+      </li>
+      <li class="svc-row">
+        <div class="svc-head">
+          <span class="svc-art"><img src="/assets/images/gallery/svc-packing.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
+          <h3>Packing &amp; Crating</h3>
+          <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="svc-body" id="svc-body-5">
+          <p>Art, heirlooms, instruments, and glass packed the way galleries pack them, with bespoke crates constructed in your home for anything off-size.</p>
+        </div>
+      </li>
+      <li class="svc-row">
+        <div class="svc-head">
+          <span class="svc-art"><img src="/assets/images/gallery/svc-storage.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
+          <h3>Storage</h3>
+          <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="svc-body" id="svc-body-6">
+          <p>Warehousing with climate control and 24-hour security. Use it for a week between closings or indefinitely; the inventory and the insurance run throughout.</p>
+        </div>
+      </li>
+    </ol>
   </div>
 </section>
 

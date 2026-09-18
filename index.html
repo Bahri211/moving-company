@@ -544,9 +544,10 @@ body { overflow-x: clip; }
    and the same box, so the eye had nothing to follow; this reads as a printed
    index instead — the heading holds the left column and stays put while the
    six services run down the right as colour cards, each with its drawing at
-   thumbnail size. Homepage only: the classes are svc-* so the
-   shared .service-card rules (still in use on the 49 state pages) are left
-   alone. */
+   thumbnail size. The classes are svc-* so the shared .service-card rules —
+   still in use for the cost and local-notes cards — are left alone. Sliced
+   into the 49 state pages and the hub by scripts/build-state-pages.js, so
+   edit it here and rebuild rather than touching the generated pages. */
 .svc-band { background: var(--paper); }
 .svc-inner {
   display: grid;
@@ -645,6 +646,14 @@ body { overflow-x: clip; }
 .svc-art img {
   width: 100%; height: auto;
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Fallback for a page built without the illustrations: the line glyph on the
+   same paper tile. */
+.svc-glyph svg {
+  display: block;
+  width: 34px; height: 34px;
+  fill: none; stroke: var(--svc-c); stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round;
 }
 .svc-row:hover .svc-art img { transform: scale(1.06); }
 

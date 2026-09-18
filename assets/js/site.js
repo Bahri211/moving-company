@@ -246,7 +246,7 @@
   // ---- scroll reveal (same targets and stagger as index.html) -------------
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  var staggerSelectors = ['.trust-item', '.service-card', '.process-step', '.gallery-item', '.footer-col', '.faq-item'];
+  var staggerSelectors = ['.trust-item', '.svc-row', '.service-card', '.process-step', '.gallery-item', '.footer-col', '.faq-item'];
   staggerSelectors.forEach(function (sel) {
     document.querySelectorAll(sel).forEach(function (el) {
       var siblings = [].slice.call(el.parentElement.children).filter(function (c) { return c.matches(sel); });
@@ -256,7 +256,7 @@
   });
 
   var revealTargets = document.querySelectorAll(
-    '.section-header, .trust-item, .service-card, .process-step, .gallery-item, .faq-item, ' +
+    '.section-header, .svc-intro, .trust-item, .svc-row, .service-card, .process-step, .gallery-item, .faq-item, ' +
     '.footer-brand, .footer-col, .cs-text, .cs-ctas, .states-grid'
   );
   var observer = new IntersectionObserver(function (entries) {
@@ -304,6 +304,58 @@
   apply();
   if (wide.addEventListener) wide.addEventListener('change', apply);
   else wide.addListener(apply);
+})();
+
+/* Services: on phones the six colour cards collapse to an index and open one
+ * at a time — six paragraphs open at once was the longest scroll on the page.
+ * Wired here rather than in the markup so a browser without JS just gets all
+ * six open, which is the desktop layout. Mirrors the block in index.html. */
+(function () {
+  var rows = [].slice.call(document.querySelectorAll('#services .svc-row'));
+  if (!rows.length) return;
+  var phone = window.matchMedia('(max-width: 768px)');
+
+  function open(row, isOpen) {
+    row.classList.toggle('is-open', isOpen);
+    row.querySelector('.svc-head').setAttribute('aria-expanded', String(isOpen));
+  }
+
+  function sync() {
+    rows.forEach(function (row, i) {
+      var head = row.querySelector('.svc-head');
+      var body = row.querySelector('.svc-body');
+      if (!phone.matches) {
+        row.classList.remove('is-collapsible', 'is-open');
+        ['role', 'tabindex', 'aria-expanded', 'aria-controls'].forEach(function (attr) {
+          head.removeAttribute(attr);
+        });
+        return;
+      }
+      row.classList.add('is-collapsible');
+      head.setAttribute('role', 'button');
+      head.setAttribute('tabindex', '0');
+      head.setAttribute('aria-controls', body.id);
+      // The first service stays open so the pattern is obvious on arrival.
+      open(row, i === 0);
+    });
+  }
+
+  rows.forEach(function (row) {
+    var head = row.querySelector('.svc-head');
+    head.addEventListener('click', function () {
+      if (!row.classList.contains('is-collapsible')) return;
+      var willOpen = !row.classList.contains('is-open');
+      rows.forEach(function (r) { open(r, false); });
+      open(row, willOpen);
+    });
+    head.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); head.click(); }
+    });
+  });
+
+  sync();
+  if (phone.addEventListener) phone.addEventListener('change', sync);
+  else phone.addListener(sync);
 })();
 
 /* Marks the nav link for the section you are currently reading.

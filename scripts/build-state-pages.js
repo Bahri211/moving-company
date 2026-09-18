@@ -266,30 +266,42 @@ const SERVICE_ILLUS = {
   'Storage': 'svc-storage.png',
 };
 
-// `illus` swaps the 54px line-icon tile for the commissioned illustrations.
-// The tile is dropped rather than filled: it turns --accent on hover, which
-// would swallow the terracotta the artwork is drawn in.
+// The six services as the solid colour cards the homepage uses: the three
+// colours off the stat band under the hero, cycled down the list. `illus`
+// swaps the line icon for the commissioned illustration; either way the art
+// sits on a paper tile inside the coloured card, since terracotta-and-navy
+// line work is lost on a solid orange or navy ground. The rows collapse to a
+// tapable index on phones (site.js) — six paragraphs open at once made this
+// the longest scroll on the page.
 function servicesSection(intro, illus, s) {
-  const cards = SERVICE_CARDS.map(([num, icon, title, bodyKey]) => {
+  const chev = `<svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>`;
+  const cards = SERVICE_CARDS.map(([num, icon, title, bodyKey], i) => {
     const body = pick(bodyKey, s);
     const art = illus && SERVICE_ILLUS[title]
-      ? `      <div class="service-illus"><img src="/assets/images/gallery/${SERVICE_ILLUS[title]}" alt="" width="700" height="520" loading="lazy" decoding="async" /></div>`
-      : `      <div class="service-icon">${icon}</div>`;
-    return `    <div class="service-card">
-      <div class="service-num">${num}</div>
-${art}
-      <h3>${title}</h3>
-      <p>${body}</p>
-    </div>`;
+      ? `<img src="/assets/images/gallery/${SERVICE_ILLUS[title]}" alt="" width="700" height="520" loading="lazy" decoding="async" />`
+      : `<span class="svc-glyph">${icon}</span>`;
+    return `      <li class="svc-row">
+        <div class="svc-head">
+          <span class="svc-art">${art}</span>
+          <h3>${title}</h3>
+          ${chev}
+        </div>
+        <div class="svc-body" id="svc-body-${i + 1}">
+          <p>${body}</p>
+        </div>
+      </li>`;
   }).join('\n');
-  return `<section id="services">
-  <div class="section-header">
-    <div class="section-kicker">What we do</div>
-    <h2>${pick('servicesHead', s)}</h2>
-    <p>${esc(intro)}</p>
-  </div>
-  <div class="services">
+  return `<section id="services" class="svc-band">
+  <div class="svc-inner">
+    <div class="svc-intro">
+      <div class="section-kicker">What we do</div>
+      <h2>${pick('servicesHead', s)}</h2>
+      <p>${esc(intro)}</p>
+      <a href="#get-quote" class="svc-cta"><span>Get my fixed price</span><span class="svc-cta-chip" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
+    </div>
+    <ol class="svc-list">
 ${cards}
+    </ol>
   </div>
 </section>`;
 }
@@ -434,6 +446,10 @@ function sliceHome(startMarker, endMarker) {
   return HOME_HTML.slice(start, end + endMarker.length);
 }
 const HOME_HERO_HEAD = sliceHome('<link rel="preload" as="image" href="/assets/images/hero-bg-home.jpg"', '</style>');
+/* What we do --------------------------------------------------------------
+   Sliced out of index.html with the rest, so the six colour cards can't drift
+   from the homepage's. Ships on every generated page. */
+const SERVICES_HEAD = sliceHome('<style>\n/* What we do ---', '</style>');
 /* Stats band --------------------------------------------------------------
    Ships on every generated page, after the hero head, so it also overrides the
    homepage's own treatment of this band that those pages inherit: the tinted
@@ -2814,7 +2830,7 @@ ${s.quirks.map((q, i) => `      <details class="note-row js-collapse" open>
     licensingFaq,
   ];
 
-  return `${head({ title, description, canonical, schema, extraHead: (TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '') + JOB_HEAD + (STEP_FORM_STATES.has(s.name) ? STEP_FORM_HEAD : heroHead(s)) + STATS_HEAD + COVERAGE_HEAD })}
+  return `${head({ title, description, canonical, schema, extraHead: (TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '') + JOB_HEAD + (STEP_FORM_STATES.has(s.name) ? STEP_FORM_HEAD : heroHead(s)) + STATS_HEAD + COVERAGE_HEAD + SERVICES_HEAD })}
 
 ${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
 
@@ -2991,7 +3007,7 @@ function hubPage() {
     },
   ];
 
-  return `${head({ title, description, canonical, schema, extraHead: TRIAL_HEAD + HOME_HERO_HEAD + STATS_HEAD + COVERAGE_HEAD })}
+  return `${head({ title, description, canonical, schema, extraHead: TRIAL_HEAD + HOME_HERO_HEAD + STATS_HEAD + COVERAGE_HEAD + SERVICES_HEAD })}
 
 ${CRED_BAR}
 ${TRIAL_HUB_NAV}
