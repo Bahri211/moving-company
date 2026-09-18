@@ -599,16 +599,25 @@ body { overflow-x: clip; }
 /* Right column: the six rows. A hairline between rows does the dividing that
    six separate borders used to do. */
 .svc-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+/* Title line and copy are separate blocks so phones can hide the copy. On
+   desktop the head dissolves into the row's own grid (display: contents), so
+   number, drawing, title and copy sit in one three-column grid and the
+   drawing spans both text rows — the copy tucks straight under the title
+   rather than under the drawing. */
 .svc-row {
   position: relative;
   display: grid;
   grid-template-columns: 2.6rem 92px minmax(0, 1fr);
-  align-items: center;
-  gap: 1.5rem;
-  padding: 1.6rem 1.1rem;
+  align-items: start;
+  gap: 0 1.5rem;
+  padding: 1.35rem 1.1rem;
   border-bottom: 1px solid var(--line);
   transition: background 0.35s ease;
 }
+.svc-head { display: contents; }
+.svc-art { grid-row: span 2; align-self: center; }
+/* The chevron only means anything on phones, where the rows collapse. */
+.svc-chev { display: none; }
 /* The accent rule grows in from the left on hover — the one bit of motion the
    old cards had, kept. */
 .svc-row::before {
@@ -630,8 +639,7 @@ body { overflow-x: clip; }
   font-weight: 300;
   font-size: 1rem;
   color: var(--accent);
-  align-self: start;
-  padding-top: 0.2rem;
+  padding-top: 0.45rem;
 }
 .svc-art { display: block; }
 .svc-art img {
@@ -640,14 +648,16 @@ body { overflow-x: clip; }
 }
 .svc-row:hover .svc-art img { transform: scale(1.06); }
 
-.svc-text h3 {
+.svc-head h3 {
   font-family: var(--font-display);
   font-weight: 500;
   font-size: 1.4rem;
   letter-spacing: -0.01em;
   margin-bottom: 0.35rem;
 }
-.svc-text p { color: var(--ink-soft); font-size: 0.95rem; line-height: 1.6; }
+.svc-body p { color: var(--ink-soft); font-size: 0.95rem; line-height: 1.6; }
+/* Desktop keeps the copy under the title, aligned with it. */
+.svc-body { grid-column: 3; }
 
 /* Tablets: the heading stops sticking and sits above the list. */
 @media (max-width: 1000px) {
@@ -656,28 +666,55 @@ body { overflow-x: clip; }
   .svc-intro p { max-width: none; }
 }
 
-/* Phones: number and drawing share the first line with the title, so the
-   copy keeps its full width. */
+/* Phones: six paragraphs open at once made this the longest scroll on the
+   page, so the rows collapse to a tapable index — drawing, number, title —
+   and open one at a time. JS adds .is-collapsible, so with scripting off
+   every row stays open and nothing is lost. */
 @media (max-width: 768px) {
-  .svc-band { padding: 3.25rem 1.25rem; }
-  .svc-intro h2 { font-size: 1.85rem; }
-  .svc-intro p { font-size: 0.95rem; }
-  .svc-cta { margin-top: 1.5rem; font-size: 0.9rem; }
-  .svc-row {
-    grid-template-columns: 62px minmax(0, 1fr);
-    gap: 0.4rem 1rem;
-    padding: 1.15rem 0.75rem;
+  .svc-band { padding: 2.75rem 1.25rem 3rem; }
+  .svc-intro h2 { font-size: 1.75rem; margin-bottom: 0.9rem; }
+  .svc-intro p { font-size: 0.94rem; }
+  .svc-cta { margin-top: 1.25rem; font-size: 0.9rem; }
+  .svc-row { display: block; padding: 0; }
+  .svc-head {
+    display: grid;
+    grid-template-columns: 44px auto minmax(0, 1fr) 1.1rem;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.85rem 0.55rem;
   }
-  .svc-index { grid-column: 1; grid-row: 1; align-self: center; padding-top: 0; font-size: 0.9rem; text-align: center; }
-  .svc-art { grid-column: 1; grid-row: 2; }
-  .svc-art img { width: 62px; }
-  .svc-text { grid-column: 2; grid-row: 1 / span 2; }
-  .svc-text h3 { font-size: 1.1rem; }
-  .svc-text p { font-size: 0.88rem; }
+  .svc-art { grid-row: auto; }
+  .svc-index { padding-top: 0; font-size: 0.85rem; }
+  .svc-art img { width: 44px; }
+  .svc-head h3 { font-size: 1.05rem; margin-bottom: 0; }
+  .svc-chev {
+    display: block;
+    width: 1.1rem; height: 1.1rem;
+    fill: none; stroke: var(--muted); stroke-width: 1.8;
+    stroke-linecap: round; stroke-linejoin: round;
+    transition: transform 0.3s ease;
+  }
+  .svc-body { padding: 0 0.55rem 1rem calc(44px + 0.85rem + 0.55rem); }
+  .svc-body p { font-size: 0.88rem; line-height: 1.55; }
+
+  /* Collapsed state, only once the script has wired the rows up. */
+  .svc-row.is-collapsible .svc-head { cursor: pointer; }
+  .svc-row.is-collapsible .svc-body { display: none; }
+  .svc-row.is-collapsible.is-open .svc-body { display: block; }
+  .svc-row.is-collapsible.is-open .svc-chev { transform: rotate(180deg); stroke: var(--accent); }
+  .svc-row.is-collapsible.is-open { background: var(--paper-warm); }
+  .svc-row.is-collapsible.is-open::before { transform: scaleY(1); }
+  .svc-head:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 6px; }
+}
+
+/* Above the phone breakpoint the copy is never hidden, whatever the script
+   left on the row. */
+@media (min-width: 769px) {
+  .svc-row .svc-body { display: block; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .svc-row, .svc-row::before, .svc-art img, .svc-cta { transition: none; }
+  .svc-row, .svc-row::before, .svc-art img, .svc-cta, .svc-chev { transition: none; }
 }
 </style>
 
@@ -1056,50 +1093,68 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <ol class="svc-list">
       <li class="svc-row">
-        <span class="svc-index" aria-hidden="true">01</span>
-        <span class="svc-art"><img src="/assets/images/gallery/svc-long-distance.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
-        <div class="svc-text">
+        <div class="svc-head">
+          <span class="svc-index" aria-hidden="true">01</span>
+          <span class="svc-art"><img src="/assets/images/gallery/svc-long-distance.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
           <h3>Long Distance</h3>
+          <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="svc-body" id="svc-body-1">
           <p>Cross-country and interstate relocations. We coordinate logistics, customs paperwork, and destination unpacking — all door to door.</p>
         </div>
       </li>
       <li class="svc-row">
-        <span class="svc-index" aria-hidden="true">02</span>
-        <span class="svc-art"><img src="/assets/images/gallery/svc-white-glove.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
-        <div class="svc-text">
+        <div class="svc-head">
+          <span class="svc-index" aria-hidden="true">02</span>
+          <span class="svc-art"><img src="/assets/images/gallery/svc-white-glove.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
           <h3>White Glove</h3>
+          <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="svc-body" id="svc-body-2">
           <p>The top tier. Concierge-level service: we'll pack, transport, unpack, arrange, and even hang the art on the walls before we leave.</p>
         </div>
       </li>
       <li class="svc-row">
-        <span class="svc-index" aria-hidden="true">03</span>
-        <span class="svc-art"><img src="/assets/images/gallery/svc-residential.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
-        <div class="svc-text">
+        <div class="svc-head">
+          <span class="svc-index" aria-hidden="true">03</span>
+          <span class="svc-art"><img src="/assets/images/gallery/svc-residential.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
           <h3>Residential</h3>
+          <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="svc-body" id="svc-body-3">
           <p>From studio apartments to five-bedroom homes. We disassemble, transport, and reassemble — and we never leave before everything's in its place.</p>
         </div>
       </li>
       <li class="svc-row">
-        <span class="svc-index" aria-hidden="true">04</span>
-        <span class="svc-art"><img src="/assets/images/gallery/svc-commercial.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
-        <div class="svc-text">
+        <div class="svc-head">
+          <span class="svc-index" aria-hidden="true">04</span>
+          <span class="svc-art"><img src="/assets/images/gallery/svc-commercial.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
           <h3>Commercial</h3>
+          <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="svc-body" id="svc-body-4">
           <p>Office relocations handled after hours or over weekends, so your team is working from the new space on Monday morning — no downtime.</p>
         </div>
       </li>
       <li class="svc-row">
-        <span class="svc-index" aria-hidden="true">05</span>
-        <span class="svc-art"><img src="/assets/images/gallery/svc-packing.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
-        <div class="svc-text">
+        <div class="svc-head">
+          <span class="svc-index" aria-hidden="true">05</span>
+          <span class="svc-art"><img src="/assets/images/gallery/svc-packing.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
           <h3>Packing &amp; Crating</h3>
+          <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="svc-body" id="svc-body-5">
           <p>Museum-grade packing for art, antiques, and anything fragile. We build custom crates on site when off-the-shelf won't do.</p>
         </div>
       </li>
       <li class="svc-row">
-        <span class="svc-index" aria-hidden="true">06</span>
-        <span class="svc-art"><img src="/assets/images/gallery/svc-storage.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
-        <div class="svc-text">
+        <div class="svc-head">
+          <span class="svc-index" aria-hidden="true">06</span>
+          <span class="svc-art"><img src="/assets/images/gallery/svc-storage.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
           <h3>Storage</h3>
+          <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="svc-body" id="svc-body-6">
           <p>Climate-controlled, 24-hour-monitored units in secure facilities. Short-term overflow or long-term, fully insured and inventoried throughout.</p>
         </div>
       </li>
@@ -1738,6 +1793,55 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       }
     });
   }
+
+  /* Services: on phones the six rows collapse to an index and open one at a
+     time — six paragraphs open at once was the longest scroll on the page.
+     Wired here rather than in the markup so a browser without JS just gets
+     all six rows open, which is the desktop layout. */
+  (function () {
+    const rows = [...document.querySelectorAll('#services .svc-row')];
+    if (!rows.length) return;
+    const phone = window.matchMedia('(max-width: 768px)');
+
+    function open(row, isOpen) {
+      row.classList.toggle('is-open', isOpen);
+      row.querySelector('.svc-head').setAttribute('aria-expanded', String(isOpen));
+    }
+
+    function sync() {
+      rows.forEach((row, i) => {
+        const head = row.querySelector('.svc-head');
+        const body = row.querySelector('.svc-body');
+        if (!phone.matches) {
+          row.classList.remove('is-collapsible', 'is-open');
+          ['role', 'tabindex', 'aria-expanded', 'aria-controls'].forEach(a => head.removeAttribute(a));
+          return;
+        }
+        row.classList.add('is-collapsible');
+        head.setAttribute('role', 'button');
+        head.setAttribute('tabindex', '0');
+        head.setAttribute('aria-controls', body.id);
+        // The first service stays open so the pattern is obvious on arrival.
+        open(row, i === 0);
+      });
+    }
+
+    rows.forEach(row => {
+      const head = row.querySelector('.svc-head');
+      head.addEventListener('click', () => {
+        if (!row.classList.contains('is-collapsible')) return;
+        const willOpen = !row.classList.contains('is-open');
+        rows.forEach(r => open(r, false));
+        open(row, willOpen);
+      });
+      head.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); head.click(); }
+      });
+    });
+
+    sync();
+    phone.addEventListener('change', sync);
+  })();
 
   function toggleStates() {
     const grid = document.getElementById('states-grid');
