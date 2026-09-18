@@ -151,7 +151,9 @@ const NAV = `<nav class="topnav">
 
 // The route animation and the services closing line are lifted from
 // index.html so the state pages and the homepage stay one design.
-const ROUTE_ANIM = `  <div class="route-anim">
+const ROUTE_ANIM = `  <div class="cov-road">
+    <img class="cov-road-photo" src="/assets/images/hero-bg-road.jpg" alt="" width="1920" height="1433" loading="lazy" decoding="async" aria-hidden="true" />
+  <div class="route-anim">
     <svg viewBox="0 38 1200 246" role="img"
          aria-label="A 50State Movers truck driving the route from your old home to your new one: packed, on the road, delivered">
 
@@ -241,6 +243,7 @@ const ROUTE_ANIM = `  <div class="route-anim">
       </g>
       </g>
     </svg>
+  </div>
   </div>`;
 
 // The six service cards, verbatim from index.html — these describe the company,
@@ -437,6 +440,59 @@ const HOME_HERO_HEAD = sliceHome('<link rel="preload" as="image" href="/assets/i
    cards, gradient icon tiles, tone bar, gloss sweep, pulsing dot and count-up.
    These are the claims a customer checks us on, so they are set as plain type
    on one white panel, hairlines between the four. */
+/* Coverage ----------------------------------------------------------------
+   Ships on every generated page, after TRIAL_HEAD, so its button rules win.
+   The open-road frame sits behind the drawn route, masked out to nothing on
+   every edge and warmed into the ground, so the vector route rides over a
+   real road without the photograph taking the section. */
+const COVERAGE_HEAD = `<style>
+.cov-road { position: relative; isolation: isolate; }
+.cov-road-photo {
+  position: absolute; z-index: -1; inset: -8% 0 6%;
+  width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%;
+  opacity: 0.32; filter: saturate(0.55) sepia(0.2) contrast(0.92);
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%),
+    linear-gradient(180deg, transparent 4%, #000 34%, #000 66%, transparent 96%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%),
+    linear-gradient(180deg, transparent 4%, #000 34%, #000 66%, transparent 96%);
+  mask-composite: intersect;
+  pointer-events: none;
+}
+
+/* The list opens on a button, so the button should look like one. */
+#states-toggle {
+  display: flex; align-items: center; gap: 0.5rem;
+  width: fit-content; margin: 1.6rem auto 0;
+  padding: 0.7rem 1.4rem;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: #fff; color: var(--ink);
+  font-family: var(--font-body); font-size: 0.92rem; font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.25s, color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+#states-toggle svg {
+  width: 16px; height: 16px; fill: none; stroke: currentColor;
+  stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform 0.3s ease;
+}
+#states-toggle:hover {
+  border-color: var(--accent); color: var(--accent);
+  transform: translateY(-1px); box-shadow: 0 14px 26px -18px rgba(12, 26, 43, 0.6);
+}
+#states-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+@media (max-width: 768px) {
+  .cov-road-photo { inset: -4% 0 4%; opacity: 0.24; }
+  #states-toggle { margin-top: 1.2rem; padding: 0.62rem 1.15rem; font-size: 0.87rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #states-toggle, #states-toggle svg { transition: none; }
+}
+</style>`;
+
 const STATS_HEAD = `<style>
 .ph-stats {
   position: relative; z-index: 3;
@@ -2701,7 +2757,7 @@ ${s.quirks.map((q, i) => `      <details class="note-row js-collapse" open>
     licensingFaq,
   ];
 
-  return `${head({ title, description, canonical, schema, extraHead: (TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '') + JOB_HEAD + (STEP_FORM_STATES.has(s.name) ? STEP_FORM_HEAD : heroHead(s)) + STATS_HEAD })}
+  return `${head({ title, description, canonical, schema, extraHead: (TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '') + JOB_HEAD + (STEP_FORM_STATES.has(s.name) ? STEP_FORM_HEAD : heroHead(s)) + STATS_HEAD + COVERAGE_HEAD })}
 
 ${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
 
@@ -2732,7 +2788,7 @@ ${ROUTE_ANIM}
   <div class="states-grid" id="states-grid">
 ${cityItems}
   </div>
-  ${coverageCities.length > 12 ? `<button class="states-toggle" id="states-toggle" aria-expanded="false" aria-controls="states-grid">Show all ${coverageCities.length} cities ↓</button>` : ''}
+  ${coverageCities.length > 12 ? `<button class="states-toggle" id="states-toggle" aria-expanded="false" aria-controls="states-grid"><span>See all ${coverageCities.length} cities</span><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>` : ''}
 </section>
 
 <!-- SERVICES -->
@@ -2878,7 +2934,7 @@ function hubPage() {
     },
   ];
 
-  return `${head({ title, description, canonical, schema, extraHead: TRIAL_HEAD + HOME_HERO_HEAD + STATS_HEAD })}
+  return `${head({ title, description, canonical, schema, extraHead: TRIAL_HEAD + HOME_HERO_HEAD + STATS_HEAD + COVERAGE_HEAD })}
 
 ${CRED_BAR}
 ${TRIAL_HUB_NAV}
@@ -2905,7 +2961,7 @@ ${STATS_BAND}
   <div class="states-grid" id="states-grid">
 ${allStates}
   </div>
-  <button class="states-toggle" id="states-toggle" aria-expanded="false">Show all ${states.length} states ↓</button>
+  <button class="states-toggle" id="states-toggle" aria-expanded="false" aria-controls="states-grid"><span>See all ${states.length} states</span><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
 </section>
 
 <!-- POPULAR DESTINATIONS -->

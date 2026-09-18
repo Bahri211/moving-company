@@ -366,16 +366,10 @@ body { overflow-x: clip; }
    a button at every width rather than only on small phones. Collapsed it
    shows two rows fading into the ground, which reads as "there is more here"
    without the button having to say so. */
-#coverage .states-grid {
-  max-height: 7.3rem; overflow: hidden;
-  transition: max-height 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-  -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent 100%);
-  mask-image: linear-gradient(180deg, #000 45%, transparent 100%);
-}
-#coverage .states-grid.expanded {
-  max-height: 200rem;
-  -webkit-mask-image: none; mask-image: none;
-}
+#coverage .states-grid { max-height: none; overflow: visible; }
+/* Twelve first — two full rows on desktop — then the button shows the rest.
+   Hidden by count rather than a height clip, which cut a row in half. */
+#coverage .states-grid:not(.expanded) .state-item:nth-child(n+13) { display: none; }
 #coverage .states-toggle {
   display: flex; align-items: center; gap: 0.5rem;
   width: fit-content; margin: 1.4rem auto 0; padding: 0.7rem 1.4rem;
@@ -397,11 +391,10 @@ body { overflow-x: clip; }
 #coverage .states-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
 
 @media (max-width: 768px) {
-  #coverage .states-grid { max-height: 5.6rem; }
   #coverage .states-toggle { margin-top: 1.1rem; padding: 0.62rem 1.15rem; font-size: 0.87rem; }
 }
 @media (prefers-reduced-motion: reduce) {
-  #coverage .states-grid, #coverage .states-toggle, #coverage .states-toggle svg { transition: none; }
+  #coverage .states-toggle, #coverage .states-toggle svg { transition: none; }
 }
 </style>
 

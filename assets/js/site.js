@@ -234,11 +234,12 @@
   var statesToggle = document.getElementById('states-toggle');
   var statesGrid = document.getElementById('states-grid');
   if (statesToggle && statesGrid) {
-    var collapsedLabel = statesToggle.textContent;
+    var label = statesToggle.querySelector('span') || statesToggle;
+    var collapsedLabel = label.textContent;
     statesToggle.addEventListener('click', function () {
       var expanded = statesGrid.classList.toggle('expanded');
       statesToggle.setAttribute('aria-expanded', expanded);
-      statesToggle.textContent = expanded ? 'Show less \u2191' : collapsedLabel;
+      label.textContent = expanded ? 'Show fewer' : collapsedLabel;
     });
   }
 
