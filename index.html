@@ -155,7 +155,9 @@ body { overflow-x: clip; }
 .ph-proof { position: relative; display: flow-root; background: var(--paper); padding: 0 2rem 5.5rem; }
 .ph-stats {
   position: relative; z-index: 3;
-  max-width: 1240px;
+  /* Was 1240px, the page's own width. Three cards stretched across it left
+     the text in the first third of each and the slack on the right. */
+  max-width: 1000px;
   margin: -4.75rem auto 0;
   display: grid; grid-template-columns: repeat(3, 1fr);
   border-radius: 18px; overflow: hidden;
@@ -164,7 +166,9 @@ body { overflow-x: clip; }
 /* Three figures, each on its own brand ground — orange, navy, cyan — butted
    together so the strip reads as one band of colour. The hairlines that used
    to separate them are gone; the colour change is the divider. */
-.ph-stat { padding: 1.7rem 1.75rem; }
+/* Centred, as on phones: the slack then sits either side of the text instead
+   of collecting on one edge. */
+.ph-stat { padding: 1.7rem 1.5rem; text-align: center; }
 .ph-stat:nth-child(1) { background: #e9541f; }
 .ph-stat:nth-child(2) { background: #0c1628; }
 .ph-stat:nth-child(3) { background: #36bacb; }
@@ -268,7 +272,7 @@ body { overflow-x: clip; }
 
 @media (max-width: 1100px) {
   .hero.hero-photo { column-gap: 2rem; }
-  .ph-stat { padding: 1.2rem 1.05rem; }
+  .ph-stat { padding: 1.2rem 0.9rem; }
   .ph-stat strong { font-size: 1.7rem; }
   .ph-stat-label { font-size: 0.82rem; }
   .ph-stat-sub { font-size: 0.72rem; }
