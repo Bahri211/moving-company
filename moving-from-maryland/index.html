@@ -1157,7 +1157,11 @@ body { overflow-x: clip; }
   background:
     radial-gradient(ellipse 46% 30% at 25% 50%, rgba(9, 20, 34, 0.66), rgba(9, 20, 34, 0) 100%),
     linear-gradient(180deg, rgba(9, 20, 34, 0.5) 0%, rgba(9, 20, 34, 0.18) 40%, rgba(9, 20, 34, 0.1) 72%, rgba(9, 20, 34, 0.45) 100%),
-    var(--navy-deep) url('/assets/images/gallery/states/maryland/hero-bg.jpg') 100% 0% / auto 140% no-repeat;
+    /* Anchored left, not right: this truck runs from 5% to 62% across its
+       frame, and at auto 140% the photo renders wider than the viewport, so
+       the right anchor cut its whole rear off. What gets cropped now is the
+       empty road on the right instead. */
+    var(--navy-deep) url('/assets/images/gallery/states/maryland/hero-bg.jpg') 0% 0% / auto 140% no-repeat;
 }
 .hero-photo .hero-content { align-self: center; }
 .hero-photo h1 { color: #fff; text-shadow: 0 2px 24px rgba(0, 0, 0, 0.3); }
