@@ -1387,19 +1387,22 @@ body { overflow-x: clip; }
 .ph-stat::before, .ph-stat::after { content: none; }
 .ph-stat:hover { transform: none; box-shadow: none; }
 .ph-stat + .ph-stat { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09); }
-/* The homepage paints its three cards in the hero colours and flips the ink on
-   the first two to match. This band is four claims on one white panel, so both
-   have to be cancelled at the same weight the homepage sets them — a bare
-   .ph-stat loses to its :nth-child rules, which left the third card's "/7" and
-   sub-line in warm grey on cyan. */
-.ph-stats .ph-stat:nth-child(n) { background: none; }
-.ph-stats .ph-stat:nth-child(n) strong {
+.ph-stat strong {
   display: block; font-size: 2.15rem; font-weight: 700; letter-spacing: -0.04em;
   line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; white-space: nowrap;
 }
-.ph-stats .ph-stat:nth-child(n) strong i { font-style: normal; font-size: 0.6em; font-weight: 600; color: var(--muted); margin: 0 0.05em; }
-.ph-stats .ph-stat:nth-child(n) .ph-stat-label { display: block; margin-top: 0.6rem; font-size: 0.93rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
-.ph-stats .ph-stat:nth-child(n) .ph-stat-sub { display: block; margin-top: 0.18rem; font-size: 0.8rem; line-height: 1.4; color: var(--muted); }
+.ph-stat strong i { font-style: normal; font-size: 0.6em; font-weight: 600; color: var(--muted); margin: 0 0.05em; }
+.ph-stat-label { display: block; margin-top: 0.6rem; font-size: 0.93rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+.ph-stat-sub { display: block; margin-top: 0.18rem; font-size: 0.8rem; line-height: 1.4; color: var(--muted); }
+/* The third card sits on the cyan the homepage gives it, but the homepage
+   only flips the ink on the first two — its own band stops at three cards, so
+   the third is its dark-on-cyan default, which these rules above were
+   overwriting with warm grey. Restated here as near-black, the way the cyan
+   card under the hero reads. */
+.ph-stats .ph-stat:nth-child(3) strong { color: #0c1628; }
+.ph-stats .ph-stat:nth-child(3) strong i { color: rgba(12, 22, 40, 0.64); }
+.ph-stats .ph-stat:nth-child(3) .ph-stat-label { color: #0c1628; }
+.ph-stats .ph-stat:nth-child(3) .ph-stat-sub { color: rgba(12, 22, 40, 0.8); }
 
 @media (max-width: 1100px) {
 }
@@ -1412,9 +1415,9 @@ body { overflow-x: clip; }
   .ph-stat:nth-child(n+3) { box-shadow: inset 0 1px 0 rgba(12, 26, 43, 0.09); }
   .ph-stat:nth-child(4) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09), inset 0 1px 0 rgba(12, 26, 43, 0.09); }
   .ph-stat:nth-child(2), .ph-stat:nth-child(4) { display: block; }
-  .ph-stats .ph-stat:nth-child(n) strong { font-size: 1.5rem; }
-  .ph-stats .ph-stat:nth-child(n) .ph-stat-label { grid-column: auto; margin-top: 0.4rem; font-size: 0.8rem; line-height: 1.3; }
-  .ph-stats .ph-stat:nth-child(n) .ph-stat-sub { display: block; margin-top: 0.12rem; font-size: 0.72rem; }
+  .ph-stat strong { font-size: 1.5rem; }
+  .ph-stat-label { grid-column: auto; margin-top: 0.4rem; font-size: 0.8rem; line-height: 1.3; }
+  .ph-stat-sub { display: block; margin-top: 0.12rem; font-size: 0.72rem; }
 }
 </style><style>
 .cov-road { position: relative; isolation: isolate; }
