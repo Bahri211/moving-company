@@ -1177,15 +1177,16 @@ body { overflow-x: clip; }
   max-width: 1240px;
   margin: 5.5rem auto 0;
   padding: 4rem 3.5rem;
-  border: 1px solid var(--line);
   border-radius: 28px;
-  background: #fdfaf4;
-  box-shadow: 0 30px 60px -45px rgba(12, 26, 43, 0.4);
+  background: linear-gradient(165deg, var(--navy-soft) 0%, var(--navy) 45%, var(--navy-deep) 100%);
+  box-shadow: 0 40px 80px -50px rgba(10, 23, 39, 0.8);
   display: grid; grid-template-columns: 1.05fr 1fr;
   gap: 5rem; align-items: center;
 }
 /* The inset photo's frame reads as a cut-out of whatever is behind it. */
-.ph-about .ph-photo-inset { border-color: #fdfaf4; }
+.ph-about .ph-photo-inset { border-color: var(--navy); }
+/* The dot grid was terracotta at low opacity, which sank into the navy. */
+.ph-about .ph-media::before { background-image: radial-gradient(rgba(246, 241, 233, 0.55) 1.6px, transparent 1.8px); opacity: 0.5; }
 .ph-media { position: relative; padding: 0 3.5rem 3.5rem 0; }
 .ph-media::before {
   content: ""; position: absolute; top: -1.6rem; right: 1.25rem;
@@ -1303,6 +1304,33 @@ body { overflow-x: clip; }
   border-radius: 50%; background: #e9f4ed;
 }
 .ph-tick svg { width: 14px; height: 14px; fill: none; stroke: var(--green); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* On the navy panel ------------------------------------------------------
+   Everything inside the block was drawn for dark type on cream, so the panel
+   flips each piece: cream headings and copy, the state name in the lighter
+   terracotta the hero kicker already uses, and the white point cards and call
+   disc redrawn as translucent glass so they read as raised, not pasted on. */
+.ph-about .ph-kicker {
+  border-color: rgba(99, 201, 141, 0.35);
+  background: rgba(47, 143, 91, 0.2);
+  color: #8fdcb0;
+}
+.ph-about h2 { color: var(--paper); }
+.ph-about h2 em { color: #e8a98c; }
+.ph-about-text p { color: rgba(246, 241, 233, 0.78); }
+.ph-about .ph-more { color: #e8a98c; }
+.ph-about .ph-points li {
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.11);
+  color: var(--paper);
+}
+.ph-about .ph-tick { background: rgba(99, 201, 141, 0.18); }
+.ph-about .ph-tick svg { stroke: #8fdcb0; }
+.ph-about .ph-call { color: var(--paper); }
+.ph-about .ph-call:hover { color: #e8a98c; }
+.ph-about .ph-call-icon { background: rgba(255, 255, 255, 0.1); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16); }
+.ph-about .ph-btn:focus-visible,
+.ph-about .ph-call:focus-visible { outline-color: #8fdcb0; }
 
 /* Highway strip: the signs stand along a stretch of road with a dashed
    centre line, each with its name and the towns it links underneath. */
