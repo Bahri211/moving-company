@@ -1418,7 +1418,7 @@ body { overflow-x: clip; }
 
 @media (max-width: 1100px) {
   .hero.hero-photo { column-gap: 2rem; }
-  .ph-stat { padding: 1.2rem 1.05rem; }
+  .ph-stat { padding: 1.2rem 0.9rem; }
   .ph-stat strong { font-size: 1.7rem; }
   .ph-stat-label { font-size: 0.82rem; }
   .ph-stat-sub { font-size: 0.72rem; }
@@ -1568,14 +1568,19 @@ body { overflow-x: clip; }
 </style><style>
 .ph-stats {
   position: relative; z-index: 3;
-  max-width: 1240px;
+  /* No max-width, so the strip runs as wide as the page allows — but it keeps
+     the section's own 2rem gutter rather than reaching the viewport edge, and
+     keeps its radius, so it still reads as a card laid over the hero. */
+  max-width: none;
   margin: -4.75rem auto 0;
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
   border-radius: 18px; overflow: hidden;
   box-shadow: 0 30px 60px -34px rgba(12, 26, 43, 0.45);
 }
+/* Centred, as on phones: the slack then sits either side of the text instead
+   of collecting on one edge. */
 .ph-stat {
-  display: block; padding: 1.7rem 1.75rem;
+  display: block; padding: 1.7rem 1.5rem; text-align: center;
   border-radius: 0; animation: none; transform: none;
   box-shadow: none;
 }
