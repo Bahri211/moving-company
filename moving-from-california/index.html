@@ -1608,49 +1608,65 @@ body { overflow-x: clip; }
   stroke-linecap: round; stroke-linejoin: round;
 }
 
-/* Right column: the six services as solid colour cards, the three off the
-   stat band under the hero cycled down the list. Ink flips per card the way
-   it does up there: white on the orange, paper on the navy, near-black on the
-   cyan. The drawings are line art in terracotta and navy, so each one keeps a
-   paper tile inside its card — on a solid orange or navy ground the art would
-   disappear. */
+/* Right column: the six services on plain paper cards. The three hero colours
+   filled the whole card first and that was too much of them at once — six
+   saturated blocks stacked up fight each other and the copy on them. The
+   colour now lives in one place per card: the arrow chip, cycling orange,
+   navy, cyan down the list. The card itself is paper with a hairline, so the
+   drawings and the type read as they do everywhere else on the page. */
 .svc-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.85rem; }
 
-.svc-row:nth-child(3n + 1) { --svc-c: #e9541f; --svc-ink: #fff; --svc-ink-soft: rgba(255, 255, 255, 0.88); }
-.svc-row:nth-child(3n + 2) { --svc-c: #0c1628; --svc-ink: var(--paper); --svc-ink-soft: rgba(246, 241, 233, 0.78); }
-.svc-row:nth-child(3n + 3) { --svc-c: #36bacb; --svc-ink: #0c1628; --svc-ink-soft: rgba(12, 22, 40, 0.8); }
+.svc-row:nth-child(3n + 1) { --svc-c: #e9541f; }
+.svc-row:nth-child(3n + 2) { --svc-c: #0c1628; }
+.svc-row:nth-child(3n + 3) { --svc-c: #36bacb; }
 
 /* Title line and copy are separate blocks so phones can hide the copy. On
    desktop the head dissolves into the card's own grid (display: contents), so
-   drawing, title and copy sit in one two-column grid and the drawing spans
-   both text rows — the copy tucks straight under the title rather than under
-   the drawing. */
+   drawing, title, copy and chip sit in one grid and the drawing and the chip
+   each span both text rows — the copy tucks straight under the title rather
+   than under the drawing. */
 .svc-row {
   position: relative;
   display: grid;
-  grid-template-columns: 104px minmax(0, 1fr);
+  grid-template-columns: 104px minmax(0, 1fr) auto;
   align-items: start;
   gap: 0 1.6rem;
   padding: 1.5rem 1.6rem;
   border-radius: 18px;
-  background: var(--svc-c);
-  color: var(--svc-ink);
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  transition: border-color 0.35s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
 }
 .svc-row:hover {
   transform: translateY(-3px);
-  box-shadow: 0 22px 40px -24px rgba(12, 22, 40, 0.55);
+  border-color: var(--svc-c);
+  box-shadow: 0 22px 40px -26px rgba(12, 22, 40, 0.4);
 }
 .svc-head { display: contents; }
-/* The chevron only means anything on phones, where the cards collapse. */
-.svc-chev { display: none; }
+
+/* The chip is the colour. One glyph does both jobs: it points right on the
+   desktop card and down on phones, where it opens the card. */
+.svc-chev {
+  grid-column: 3;
+  grid-row: span 2;
+  align-self: center;
+  flex: 0 0 auto;
+  width: 2.5rem; height: 2.5rem;
+  padding: 0.7rem;
+  border-radius: 50%;
+  background: var(--svc-c);
+  fill: none; stroke: #fff; stroke-width: 2.2;
+  stroke-linecap: round; stroke-linejoin: round;
+  transform: rotate(-90deg);
+  transition: transform 0.35s ease, background 0.35s ease;
+}
 
 .svc-art {
   grid-row: span 2;
   align-self: center;
   display: grid;
   place-items: center;
-  background: var(--paper);
+  background: var(--paper-warm);
   border-radius: 14px;
   padding: 0.65rem;
 }
@@ -1659,7 +1675,7 @@ body { overflow-x: clip; }
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 /* Fallback for a page built without the illustrations: the line glyph on the
-   same paper tile. */
+   same tile. */
 .svc-glyph svg {
   display: block;
   width: 34px; height: 34px;
@@ -1674,10 +1690,10 @@ body { overflow-x: clip; }
   font-size: 1.4rem;
   letter-spacing: -0.01em;
   margin-bottom: 0.35rem;
-  color: var(--svc-ink);
+  color: var(--ink);
 }
 .svc-body { grid-column: 2; }
-.svc-body p { color: var(--svc-ink-soft); font-size: 0.95rem; line-height: 1.6; }
+.svc-body p { color: var(--ink-soft); font-size: 0.95rem; line-height: 1.6; }
 
 /* Tablets: the heading stops sticking and sits above the list. */
 @media (max-width: 1000px) {
@@ -1697,22 +1713,24 @@ body { overflow-x: clip; }
   .svc-cta { margin-top: 1.25rem; font-size: 0.9rem; }
   .svc-list { gap: 0.6rem; }
   .svc-row { display: block; padding: 0; border-radius: 14px; }
-  .svc-row:hover { transform: none; box-shadow: none; }
+  .svc-row:hover { transform: none; box-shadow: none; border-color: var(--line); }
   .svc-head {
     display: grid;
-    grid-template-columns: 52px minmax(0, 1fr) 1.1rem;
+    grid-template-columns: 52px minmax(0, 1fr) auto;
     align-items: center;
     gap: 0.85rem;
     padding: 0.7rem 0.85rem;
   }
   .svc-art { grid-row: auto; border-radius: 10px; padding: 0.35rem; }
   .svc-head h3 { font-size: 1.05rem; margin-bottom: 0; }
+  /* Pointing down: here the chip is the control that opens the card. */
   .svc-chev {
-    display: block;
-    width: 1.1rem; height: 1.1rem;
-    fill: none; stroke: var(--svc-ink-soft); stroke-width: 1.8;
-    stroke-linecap: round; stroke-linejoin: round;
-    transition: transform 0.3s ease;
+    grid-column: auto;
+    grid-row: auto;
+    width: 2rem; height: 2rem;
+    padding: 0.5rem;
+    stroke-width: 2.4;
+    transform: none;
   }
   .svc-body { padding: 0 0.85rem 0.95rem calc(52px + 0.85rem + 0.85rem); }
   .svc-body p { font-size: 0.88rem; line-height: 1.55; }
@@ -1721,8 +1739,8 @@ body { overflow-x: clip; }
   .svc-row.is-collapsible .svc-head { cursor: pointer; }
   .svc-row.is-collapsible .svc-body { display: none; }
   .svc-row.is-collapsible.is-open .svc-body { display: block; }
-  .svc-row.is-collapsible.is-open .svc-chev { transform: rotate(180deg); stroke: var(--svc-ink); }
-  .svc-head:focus-visible { outline: 2px solid var(--svc-ink); outline-offset: -3px; border-radius: 10px; }
+  .svc-row.is-collapsible.is-open .svc-chev { transform: rotate(180deg); }
+  .svc-head:focus-visible { outline: 2px solid var(--svc-c); outline-offset: -3px; border-radius: 10px; }
 }
 
 /* Above the phone breakpoint the copy is never hidden, whatever the script
