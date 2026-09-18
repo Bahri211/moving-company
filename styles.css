@@ -1750,10 +1750,10 @@ section { padding: 6rem 2rem; }
   padding: 0.85rem 1.25rem;
   /* A true orange rather than the page's terracotta, so the one action in the
      card stands apart from the accent colour used for headings and links.
-     White on the #e2560b middle is 3.8:1 — AA for large text, which the label
-     is at 700 weight and 1.17rem (18.7px). A brighter orange drops white text
-     below 3:1. */
-  background: linear-gradient(135deg, #f47521 0%, #e2560b 50%, #c8440c 100%);
+     Flat, not a gradient: white on #e2560b is 3.8:1 — AA for large text, which
+     the label is at 700 weight and 1.17rem (18.7px). A brighter orange drops
+     white text below 3:1. */
+  background: #e2560b;
   color: #fff;
   border: none;
   border-radius: 999px;
@@ -1764,9 +1764,7 @@ section { padding: 6rem 2rem; }
   text-shadow: 0 1px 1px rgba(120, 40, 0, 0.25);
   cursor: pointer;
   margin-top: 0.65rem;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    0 12px 26px -12px rgba(226, 86, 11, 0.75);
+  box-shadow: 0 12px 26px -12px rgba(226, 86, 11, 0.75);
   transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s, filter 0.3s;
 }
 
@@ -1786,9 +1784,7 @@ section { padding: 6rem 2rem; }
 .form-submit:hover:not(:disabled) {
   transform: translateY(-2px);
   filter: brightness(1.06) saturate(1.05);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.25),
-    0 18px 34px -14px rgba(226, 86, 11, 0.8);
+  box-shadow: 0 18px 34px -14px rgba(226, 86, 11, 0.8);
 }
 
 .form-submit:hover:not(:disabled)::before { left: 115%; }
@@ -1796,9 +1792,7 @@ section { padding: 6rem 2rem; }
 .form-submit:active:not(:disabled) {
   transform: translateY(0);
   filter: brightness(0.97);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    0 8px 18px -10px rgba(226, 86, 11, 0.7);
+  box-shadow: 0 8px 18px -10px rgba(226, 86, 11, 0.7);
 }
 
 .form-submit:focus-visible {
