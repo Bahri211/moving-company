@@ -336,7 +336,7 @@ ${JOB_STEPS.map((key, i) => `        <li class="job-step">
         </li>`).join('\n')}
       </ol>
       <div class="job-foot">
-        <a href="#get-quote" class="job-cta">Get my fixed price<svg class="job-cta-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <a href="#get-quote" class="job-cta"><span>Get my fixed price</span><span class="job-cta-chip" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
       </div>
     </div>
   </div>
@@ -811,40 +811,45 @@ const JOB_HEAD = `<style>
 .job-step p { margin: 0; font-size: 0.95rem; line-height: 1.55; color: var(--ink-soft); }
 .job-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.9rem 1.3rem; }
 /* The band carries its own button: .ph-btn only ships on the step-form pages.
-   Soft, not loud — a wide pill with the shadow tinted to its own colour, an
-   arrow that steps forward on hover, and the press taking it back down. */
+   The arrow rides in its own disc inside the pill, so the shape has a centre
+   of gravity instead of a floating glyph. Two shadows — a tight contact one
+   and a wide ambient one — keep it sitting on the paper rather than hovering
+   over it, and the disc, not the whole button, does the moving on hover. */
 .job-cta {
-  display: inline-flex; align-items: center; gap: 0.6rem;
-  padding: 1.05rem 1.8rem;
+  display: inline-flex; align-items: center; gap: 1.05rem;
+  padding: 0.5rem 0.5rem 0.5rem 1.7rem;
   border-radius: 999px;
   background: var(--accent);
   color: #fff; font-size: 1rem; font-weight: 600; letter-spacing: -0.005em;
   text-decoration: none; white-space: nowrap;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.18) inset,
-              0 10px 20px -12px rgba(200, 85, 44, 0.85),
-              0 22px 40px -26px rgba(12, 26, 43, 0.6);
-  transition: background 0.25s ease,
-              transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.25s ease;
+  box-shadow: 0 2px 4px -2px rgba(120, 40, 15, 0.5),
+              0 18px 34px -20px rgba(120, 40, 15, 0.75);
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.job-cta-arrow {
-  width: 17px; height: 17px; flex-shrink: 0;
+.job-cta-chip {
+  display: inline-grid; place-items: center;
+  width: 2.5rem; height: 2.5rem; flex-shrink: 0;
+  border-radius: 50%; background: rgba(255, 255, 255, 0.17);
+  transition: background 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.job-cta-chip svg {
+  width: 16px; height: 16px;
   fill: none; stroke: currentColor; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round;
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .job-cta:hover {
-  background: #b64c26; transform: translateY(-2px);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.18) inset,
-              0 14px 26px -12px rgba(200, 85, 44, 0.9),
-              0 30px 50px -28px rgba(12, 26, 43, 0.65);
+  background: #b64c26;
+  box-shadow: 0 2px 4px -2px rgba(120, 40, 15, 0.55),
+              0 26px 44px -22px rgba(120, 40, 15, 0.8);
+  transform: translateY(-1px);
 }
-.job-cta:hover .job-cta-arrow { transform: translateX(3px); }
-.job-cta:active { transform: translateY(0); box-shadow: 0 6px 14px -10px rgba(200, 85, 44, 0.9); }
+.job-cta:hover .job-cta-chip { background: rgba(255, 255, 255, 0.26); transform: translateX(2px); }
+.job-cta:hover .job-cta-chip svg { transform: translateX(1px); }
+.job-cta:active { transform: translateY(0); box-shadow: 0 2px 4px -2px rgba(120, 40, 15, 0.6); }
 .job-cta:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
-  .job-cta, .job-cta-arrow { transition: none; }
-  .job-cta:hover { transform: none; }
-  .job-cta:hover .job-cta-arrow { transform: none; }
+  .job-cta, .job-cta-chip, .job-cta-chip svg { transition: none; }
+  .job-cta:hover, .job-cta:hover .job-cta-chip, .job-cta:hover .job-cta-chip svg { transform: none; }
 }
 
 @media (max-width: 1100px) {
@@ -867,7 +872,8 @@ const JOB_HEAD = `<style>
   .job-fig { border-radius: 16px; }
   .job-thumbs { gap: 0.5rem; margin-top: 0.5rem; }
   .job-foot { display: block; }
-  .job-cta { display: flex; justify-content: center; padding: 1rem 1.3rem; font-size: 0.97rem; }
+  .job-cta { display: flex; justify-content: center; gap: 0.8rem; padding: 0.45rem 0.45rem 0.45rem 1.4rem; font-size: 0.97rem; }
+  .job-cta-chip { width: 2.3rem; height: 2.3rem; }
 }
 </style>`;
 
