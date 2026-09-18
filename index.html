@@ -543,7 +543,7 @@ body { overflow-x: clip; }
    Rebuilt off the six-card grid. The grid gave every service the same weight
    and the same box, so the eye had nothing to follow; this reads as a printed
    index instead — the heading holds the left column and stays put while the
-   six services run down the right as ruled rows, each with its drawing at
+   six services run down the right as colour cards, each with its drawing at
    thumbnail size. Homepage only: the classes are svc-* so the
    shared .service-card rules (still in use on the 49 state pages) are left
    alone. */
@@ -596,57 +596,51 @@ body { overflow-x: clip; }
   stroke-linecap: round; stroke-linejoin: round;
 }
 
-/* Right column: the six rows. A hairline between rows does the dividing that
-   six separate borders used to do. */
-.svc-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+/* Right column: the six services as solid colour cards, the three off the
+   stat band under the hero cycled down the list. Ink flips per card the way
+   it does up there: white on the orange, paper on the navy, near-black on the
+   cyan. The drawings are line art in terracotta and navy, so each one keeps a
+   paper tile inside its card — on a solid orange or navy ground the art would
+   disappear. */
+.svc-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.85rem; }
+
+.svc-row:nth-child(3n + 1) { --svc-c: #e9541f; --svc-ink: #fff; --svc-ink-soft: rgba(255, 255, 255, 0.88); }
+.svc-row:nth-child(3n + 2) { --svc-c: #0c1628; --svc-ink: var(--paper); --svc-ink-soft: rgba(246, 241, 233, 0.78); }
+.svc-row:nth-child(3n + 3) { --svc-c: #36bacb; --svc-ink: #0c1628; --svc-ink-soft: rgba(12, 22, 40, 0.8); }
+
 /* Title line and copy are separate blocks so phones can hide the copy. On
-   desktop the head dissolves into the row's own grid (display: contents), so
+   desktop the head dissolves into the card's own grid (display: contents), so
    drawing, title and copy sit in one two-column grid and the drawing spans
-   both text rows — the copy tucks straight under the title
-   rather than under the drawing. */
+   both text rows — the copy tucks straight under the title rather than under
+   the drawing. */
 .svc-row {
   position: relative;
   display: grid;
-  grid-template-columns: 92px minmax(0, 1fr);
+  grid-template-columns: 104px minmax(0, 1fr);
   align-items: start;
-  gap: 0 1.75rem;
-  padding: 1.35rem 1.1rem;
-  border-bottom: 1px solid var(--line);
-  transition: background 0.35s ease;
+  gap: 0 1.6rem;
+  padding: 1.5rem 1.6rem;
+  border-radius: 18px;
+  background: var(--svc-c);
+  color: var(--svc-ink);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+}
+.svc-row:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 40px -24px rgba(12, 22, 40, 0.55);
 }
 .svc-head { display: contents; }
-.svc-art { grid-row: span 2; align-self: center; }
-/* The chevron only means anything on phones, where the rows collapse. */
+/* The chevron only means anything on phones, where the cards collapse. */
 .svc-chev { display: none; }
-/* The three colours off the stat cards under the hero, cycled down the list:
-   orange, near-black navy, cyan. Each row carries its own as --svc-c, with a
-   wash of it behind the drawing and a lighter tint for hover — the drawings
-   are line art and would be lost on a solid fill, so the solid colour stays
-   in the left rule and the tile stays pale. */
-.svc-row:nth-child(3n + 1) { --svc-c: #e9541f; --svc-wash: rgba(233, 84, 31, 0.13); --svc-tint: rgba(233, 84, 31, 0.06); }
-.svc-row:nth-child(3n + 2) { --svc-c: #0c1628; --svc-wash: rgba(12, 22, 40, 0.10); --svc-tint: rgba(12, 22, 40, 0.05); }
-.svc-row:nth-child(3n + 3) { --svc-c: #36bacb; --svc-wash: rgba(54, 186, 203, 0.18); --svc-tint: rgba(54, 186, 203, 0.08); }
-
-/* The rule carries the row's colour at full strength — it is the only place
-   the solid navy reads as navy rather than as grey — and widens on hover. */
-.svc-row::before {
-  content: '';
-  position: absolute;
-  left: 0; top: -1px; bottom: -1px;
-  width: 3px;
-  background: var(--svc-c);
-  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.svc-row:hover { background: var(--svc-tint); }
-.svc-row:hover::before { width: 6px; }
 
 .svc-art {
+  grid-row: span 2;
+  align-self: center;
   display: grid;
   place-items: center;
-  background: var(--svc-wash);
-  border-radius: 16px;
-  padding: 0.7rem;
-  transition: background 0.35s ease;
+  background: var(--paper);
+  border-radius: 14px;
+  padding: 0.65rem;
 }
 .svc-art img {
   width: 100%; height: auto;
@@ -660,10 +654,10 @@ body { overflow-x: clip; }
   font-size: 1.4rem;
   letter-spacing: -0.01em;
   margin-bottom: 0.35rem;
+  color: var(--svc-ink);
 }
-.svc-body p { color: var(--ink-soft); font-size: 0.95rem; line-height: 1.6; }
-/* Desktop keeps the copy under the title, aligned with it. */
 .svc-body { grid-column: 2; }
+.svc-body p { color: var(--svc-ink-soft); font-size: 0.95rem; line-height: 1.6; }
 
 /* Tablets: the heading stops sticking and sits above the list. */
 @media (max-width: 1000px) {
@@ -681,34 +675,34 @@ body { overflow-x: clip; }
   .svc-intro h2 { font-size: 1.75rem; margin-bottom: 0.9rem; }
   .svc-intro p { font-size: 0.94rem; }
   .svc-cta { margin-top: 1.25rem; font-size: 0.9rem; }
-  .svc-row { display: block; padding: 0; }
+  .svc-list { gap: 0.6rem; }
+  .svc-row { display: block; padding: 0; border-radius: 14px; }
+  .svc-row:hover { transform: none; box-shadow: none; }
   .svc-head {
     display: grid;
     grid-template-columns: 52px minmax(0, 1fr) 1.1rem;
     align-items: center;
     gap: 0.85rem;
-    padding: 0.85rem 0.55rem;
+    padding: 0.7rem 0.85rem;
   }
-  .svc-art { grid-row: auto; border-radius: 12px; padding: 0.4rem; }
+  .svc-art { grid-row: auto; border-radius: 10px; padding: 0.35rem; }
   .svc-head h3 { font-size: 1.05rem; margin-bottom: 0; }
   .svc-chev {
     display: block;
     width: 1.1rem; height: 1.1rem;
-    fill: none; stroke: var(--muted); stroke-width: 1.8;
+    fill: none; stroke: var(--svc-ink-soft); stroke-width: 1.8;
     stroke-linecap: round; stroke-linejoin: round;
     transition: transform 0.3s ease;
   }
-  .svc-body { padding: 0 0.55rem 1rem calc(52px + 0.85rem + 0.55rem); }
+  .svc-body { padding: 0 0.85rem 0.95rem calc(52px + 0.85rem + 0.85rem); }
   .svc-body p { font-size: 0.88rem; line-height: 1.55; }
 
-  /* Collapsed state, only once the script has wired the rows up. */
+  /* Collapsed state, only once the script has wired the cards up. */
   .svc-row.is-collapsible .svc-head { cursor: pointer; }
   .svc-row.is-collapsible .svc-body { display: none; }
   .svc-row.is-collapsible.is-open .svc-body { display: block; }
-  .svc-row.is-collapsible.is-open .svc-chev { transform: rotate(180deg); stroke: var(--svc-c); }
-  .svc-row.is-collapsible.is-open { background: var(--svc-tint); }
-  .svc-row.is-collapsible.is-open::before { width: 6px; }
-  .svc-head:focus-visible { outline: 2px solid var(--svc-c); outline-offset: -2px; border-radius: 6px; }
+  .svc-row.is-collapsible.is-open .svc-chev { transform: rotate(180deg); stroke: var(--svc-ink); }
+  .svc-head:focus-visible { outline: 2px solid var(--svc-ink); outline-offset: -3px; border-radius: 10px; }
 }
 
 /* Above the phone breakpoint the copy is never hidden, whatever the script
@@ -718,7 +712,7 @@ body { overflow-x: clip; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .svc-row, .svc-row::before, .svc-art, .svc-art img, .svc-cta, .svc-chev { transition: none; }
+  .svc-row, .svc-art img, .svc-cta, .svc-chev { transition: none; }
 }
 </style>
 
