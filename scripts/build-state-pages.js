@@ -829,7 +829,7 @@ const JOB_HEAD = `<style>
 .job-cta-chip {
   display: inline-grid; place-items: center;
   width: 2.5rem; height: 2.5rem; flex-shrink: 0;
-  border-radius: 50%; background: rgba(255, 255, 255, 0.17);
+  border-radius: 50%; background: #fff; color: #269382;
   transition: background 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .job-cta-chip svg {
@@ -843,7 +843,7 @@ const JOB_HEAD = `<style>
               0 26px 44px -22px rgba(120, 40, 15, 0.8);
   transform: translateY(-1px);
 }
-.job-cta:hover .job-cta-chip { background: rgba(255, 255, 255, 0.26); transform: translateX(2px); }
+.job-cta:hover .job-cta-chip { color: #1f7a6c; transform: translateX(2px); }
 .job-cta:hover .job-cta-chip svg { transform: translateX(1px); }
 .job-cta:active { transform: translateY(0); box-shadow: 0 2px 4px -2px rgba(120, 40, 15, 0.6); }
 .job-cta:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
@@ -996,7 +996,7 @@ body { overflow-x: clip; }
 .ph-btn-chip {
   display: inline-grid; place-items: center;
   width: 2.5rem; height: 2.5rem; flex-shrink: 0;
-  border-radius: 50%; background: rgba(255, 255, 255, 0.17);
+  border-radius: 50%; background: #fff; color: #269382;
   transition: background 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .ph-btn-chip svg {
@@ -1009,7 +1009,7 @@ body { overflow-x: clip; }
   box-shadow: 0 2px 4px -2px rgba(120, 40, 15, 0.55),
               0 26px 44px -22px rgba(120, 40, 15, 0.8);
 }
-.ph-btn:hover .ph-btn-chip { background: rgba(255, 255, 255, 0.26); transform: translateX(2px); }
+.ph-btn:hover .ph-btn-chip { color: #1f7a6c; transform: translateX(2px); }
 .ph-btn:hover .ph-btn-chip svg { transform: translateX(1px); }
 .ph-btn:active { transform: translateY(0); box-shadow: 0 2px 4px -2px rgba(120, 40, 15, 0.6); }
 @media (prefers-reduced-motion: reduce) {
