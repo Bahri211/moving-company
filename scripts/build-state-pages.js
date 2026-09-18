@@ -804,7 +804,7 @@ const JOB_HEAD = `<style>
   position: absolute; left: 0; top: 0;
   display: inline-flex; align-items: center; justify-content: center;
   width: 2.25rem; height: 2.25rem;
-  border-radius: 50%; background: var(--green-deep); color: #fff;
+  border-radius: 50%; background: #269382; color: #fff;
   font-size: 0.82rem; font-weight: 700;
 }
 .job-step h3 { margin: 0.25rem 0 0.25rem; font-size: 1.08rem; font-weight: 700; letter-spacing: -0.015em; color: var(--ink); }
@@ -1237,13 +1237,13 @@ body { overflow-x: clip; }
 .job-num {
   top: -0.1rem;
   width: 2.5rem; height: 2.5rem;
-  background: var(--green-deep);
-  box-shadow: 0 0 0 5px var(--paper-warm), 0 10px 20px -12px rgba(46, 139, 87, 0.9);
+  background: #269382;
+  box-shadow: 0 0 0 5px var(--paper-warm), 0 10px 20px -12px rgba(38, 147, 130, 0.9);
   font-size: 0.92rem;
 }
 .job-step:not(:last-child)::before {
   left: 1.25rem; top: 2.5rem; bottom: -0.2rem;
-  border-left: 2px solid rgba(46, 139, 87, 0.22);
+  border-left: 2px solid rgba(38, 147, 130, 0.28);
 }
 .job-step h3 { margin: 0.45rem 0 0.3rem; font-size: 1.12rem; }
 .job-step p { font-size: 0.96rem; line-height: 1.6; }
