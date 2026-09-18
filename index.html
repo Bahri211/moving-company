@@ -361,6 +361,48 @@ body { overflow-x: clip; }
 @media (max-width: 768px) {
   .cov-road-photo { inset: -4% 0 4%; opacity: 0.24; }
 }
+
+/* The state list is long enough to bury the rest of the page, so it opens on
+   a button at every width rather than only on small phones. Collapsed it
+   shows two rows fading into the ground, which reads as "there is more here"
+   without the button having to say so. */
+#coverage .states-grid {
+  max-height: 7.3rem; overflow: hidden;
+  transition: max-height 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 45%, transparent 100%);
+}
+#coverage .states-grid.expanded {
+  max-height: 200rem;
+  -webkit-mask-image: none; mask-image: none;
+}
+#coverage .states-toggle {
+  display: flex; align-items: center; gap: 0.5rem;
+  width: fit-content; margin: 1.4rem auto 0; padding: 0.7rem 1.4rem;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: #fff; color: var(--ink);
+  font-family: var(--font-body); font-size: 0.92rem; font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.25s, color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+#coverage .states-toggle svg {
+  width: 16px; height: 16px; fill: none; stroke: currentColor;
+  stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform 0.3s ease;
+}
+#coverage .states-toggle:hover {
+  border-color: var(--accent); color: var(--accent);
+  transform: translateY(-1px); box-shadow: 0 14px 26px -18px rgba(12, 26, 43, 0.6);
+}
+#coverage .states-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+@media (max-width: 768px) {
+  #coverage .states-grid { max-height: 5.6rem; }
+  #coverage .states-toggle { margin-top: 1.1rem; padding: 0.62rem 1.15rem; font-size: 0.87rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #coverage .states-grid, #coverage .states-toggle, #coverage .states-toggle svg { transition: none; }
+}
 </style>
 
 
@@ -817,7 +859,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <a class="state-item" href="/moving-from-wyoming/"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Wyoming</a>
     <a class="state-item" href="/moving-from-washington-dc/"><svg class="state-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Washington D.C.</a>
   </div>
-  <button class="states-toggle" id="states-toggle" onclick="toggleStates()" aria-expanded="false">Show all 48 states ↓</button>
+  <button class="states-toggle" id="states-toggle" onclick="toggleStates()" aria-expanded="false" aria-controls="states-grid"><span>See all 48 states + D.C.</span><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
 </section>
 
 <!-- SERVICES -->
@@ -1504,7 +1546,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const btn = document.getElementById('states-toggle');
     const expanded = grid.classList.toggle('expanded');
     btn.setAttribute('aria-expanded', expanded);
-    btn.textContent = expanded ? 'Show less ↑' : 'Show all 48 states ↓';
+    btn.querySelector('span').textContent = expanded ? 'Show fewer states' : 'See all 48 states + D.C.';
   }
 </script>
 
