@@ -1231,6 +1231,35 @@ body { overflow-x: clip; }
   .qs-step.is-active, .ph-stat, .ph-live-dot::after { animation: none; }
   .ph-stat, .ph-stat::after, .ph-stat-icon, .job-step img { transition: none; }
 }
+
+/* On the job, the numbers — West Virginia trial ----------------------------
+   Overrides JOB_HEAD's list (this block ships after it, so equal-specificity
+   rules win). The dashed hairline and small dots read as an afterthought; the
+   order is the point of the list, so the numbers get weight, a solid rail runs
+   through them, and each title sits on its number's centre line. */
+.job-step { padding: 0 0 1.7rem 3.9rem; }
+.job-step:last-child { padding-bottom: 0; }
+.job-num {
+  top: -0.1rem;
+  width: 2.5rem; height: 2.5rem;
+  background: var(--green-deep);
+  box-shadow: 0 0 0 5px var(--paper-warm), 0 10px 20px -12px rgba(46, 139, 87, 0.9);
+  font-size: 0.92rem;
+}
+.job-step:not(:last-child)::before {
+  left: 1.25rem; top: 2.5rem; bottom: -0.2rem;
+  border-left: 2px solid rgba(46, 139, 87, 0.22);
+}
+.job-step h3 { margin: 0.45rem 0 0.3rem; font-size: 1.12rem; }
+.job-step p { font-size: 0.96rem; line-height: 1.6; }
+
+@media (max-width: 768px) {
+  .job-step { padding: 0 0 1.35rem 3.4rem; }
+  .job-num { width: 2.2rem; height: 2.2rem; font-size: 0.84rem; box-shadow: 0 0 0 4px var(--paper-warm), 0 8px 16px -10px rgba(46, 139, 87, 0.9); }
+  .job-step:not(:last-child)::before { left: 1.1rem; top: 2.2rem; }
+  .job-step h3 { margin-top: 0.3rem; font-size: 1.02rem; }
+  .job-step p { font-size: 0.9rem; }
+}
 </style>`;
 
 const FOOTER = `<section id="contact" class="contact-strip">
