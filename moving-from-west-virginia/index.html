@@ -1137,27 +1137,6 @@ body { overflow-x: clip; }
 /* flow-root keeps the stats card's negative margin inside the section; it had
    collapsed through and pulled the cream ground up over the hero instead. */
 .ph-proof { position: relative; display: flow-root; background: var(--paper); padding: 0 2rem 5.5rem; }
-.ph-stats {
-  position: relative; z-index: 3;
-  max-width: 1240px;
-  margin: -4.75rem auto 0;
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  background: #fff; border-radius: 18px; overflow: hidden;
-  box-shadow: 0 30px 60px -34px rgba(12, 26, 43, 0.45), 0 0 0 1px rgba(12, 26, 43, 0.06);
-}
-/* One panel, four figures, hairlines between them. The tinted tiles, tone
-   bars, gloss sweep and pulsing dot read as a dashboard rather than a carrier;
-   these are claims a customer checks, so they are set as plain type. */
-.ph-stat { padding: 1.7rem 1.75rem; }
-.ph-stat + .ph-stat { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09); }
-.ph-stat strong {
-  display: block; font-size: 2.15rem; font-weight: 700; letter-spacing: -0.04em;
-  line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; white-space: nowrap;
-}
-.ph-stat strong b { font-weight: inherit; }
-.ph-stat strong i { font-style: normal; font-size: 0.6em; font-weight: 600; color: var(--muted); margin: 0 0.05em; }
-.ph-stat-label { display: block; margin-top: 0.6rem; font-size: 0.93rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
-.ph-stat-sub { display: block; margin-top: 0.18rem; font-size: 0.8rem; line-height: 1.4; color: var(--muted); }
 
 /* About: photo collage on the left (crew photo, road inset, a floating
    coverage badge), the intro, the three local points and two CTAs on the right. */
@@ -1426,16 +1405,6 @@ body { overflow-x: clip; }
   .qs-card .form-row select { min-height: 48px; border: 1px solid #ddd6cb; background-color: #faf8f4; }
 
   .ph-proof { padding: 0 1.25rem 2.75rem; }
-  /* Phones: the same panel as a 2x2, hairlines between the four. */
-  .ph-stats { margin-top: -3.25rem; grid-template-columns: 1fr 1fr; border-radius: 14px; }
-  .ph-stat { padding: 1rem 0.9rem 1.05rem; }
-  .ph-stat + .ph-stat { box-shadow: none; }
-  .ph-stat:nth-child(even) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09); }
-  .ph-stat:nth-child(n+3) { box-shadow: inset 0 1px 0 rgba(12, 26, 43, 0.09); }
-  .ph-stat:nth-child(4) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09), inset 0 1px 0 rgba(12, 26, 43, 0.09); }
-  .ph-stat strong { font-size: 1.5rem; }
-  .ph-stat-label { margin-top: 0.4rem; font-size: 0.8rem; line-height: 1.3; }
-  .ph-stat-sub { margin-top: 0.12rem; font-size: 0.72rem; }
   /* Compact on phones: photo first with a smaller inset and badge, smaller
      type, the local points as wrapping pills, and the at-a-glance band in
      one column. */
@@ -1537,6 +1506,46 @@ body { overflow-x: clip; }
   .job-step:not(:last-child)::before { left: 1.1rem; top: 2.2rem; }
   .job-step h3 { margin-top: 0.3rem; font-size: 1.02rem; }
   .job-step p { font-size: 0.9rem; }
+}
+</style><style>
+.ph-stats {
+  position: relative; z-index: 3;
+  max-width: 1240px;
+  margin: -4.75rem auto 0;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  background: #fff; border-radius: 18px; overflow: hidden;
+  box-shadow: 0 30px 60px -34px rgba(12, 26, 43, 0.45), 0 0 0 1px rgba(12, 26, 43, 0.06);
+}
+.ph-stat {
+  display: block; padding: 1.7rem 1.75rem;
+  background: none; border-radius: 0; animation: none; transform: none;
+  box-shadow: none;
+}
+.ph-stat::before, .ph-stat::after { content: none; }
+.ph-stat:hover { transform: none; box-shadow: none; }
+.ph-stat + .ph-stat { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09); }
+.ph-stat strong {
+  display: block; font-size: 2.15rem; font-weight: 700; letter-spacing: -0.04em;
+  line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.ph-stat strong i { font-style: normal; font-size: 0.6em; font-weight: 600; color: var(--muted); margin: 0 0.05em; }
+.ph-stat-label { display: block; margin-top: 0.6rem; font-size: 0.93rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+.ph-stat-sub { display: block; margin-top: 0.18rem; font-size: 0.8rem; line-height: 1.4; color: var(--muted); }
+
+@media (max-width: 1100px) {
+}
+/* Phones: the same panel as a 2x2 — all four figures, none dropped. */
+@media (max-width: 768px) {
+  .ph-stats { margin-top: -3.25rem; grid-template-columns: 1fr 1fr; gap: 0; padding: 0; border-radius: 14px; }
+  .ph-stat { padding: 1rem 0.9rem 1.05rem; }
+  .ph-stat, .ph-stat + .ph-stat { box-shadow: none; }
+  .ph-stat:nth-child(even) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09); }
+  .ph-stat:nth-child(n+3) { box-shadow: inset 0 1px 0 rgba(12, 26, 43, 0.09); }
+  .ph-stat:nth-child(4) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09), inset 0 1px 0 rgba(12, 26, 43, 0.09); }
+  .ph-stat:nth-child(2), .ph-stat:nth-child(4) { display: block; }
+  .ph-stat strong { font-size: 1.5rem; }
+  .ph-stat-label { grid-column: auto; margin-top: 0.4rem; font-size: 0.8rem; line-height: 1.3; }
+  .ph-stat-sub { display: block; margin-top: 0.12rem; font-size: 0.72rem; }
 }
 </style>
 <script type="application/ld+json">

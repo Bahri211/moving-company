@@ -431,7 +431,69 @@ function sliceHome(startMarker, endMarker) {
   return HOME_HTML.slice(start, end + endMarker.length);
 }
 const HOME_HERO_HEAD = sliceHome('<link rel="preload" as="image" href="/assets/images/hero-bg-home.jpg"', '</style>');
-const HOME_STATS = sliceHome('<section class="ph-proof">', '</section>');
+/* Stats band --------------------------------------------------------------
+   Ships on every generated page, after the hero head, so it also overrides the
+   homepage's own treatment of this band that those pages inherit: the tinted
+   cards, gradient icon tiles, tone bar, gloss sweep, pulsing dot and count-up.
+   These are the claims a customer checks us on, so they are set as plain type
+   on one white panel, hairlines between the four. */
+const STATS_HEAD = `<style>
+.ph-stats {
+  position: relative; z-index: 3;
+  max-width: 1240px;
+  margin: -4.75rem auto 0;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  background: #fff; border-radius: 18px; overflow: hidden;
+  box-shadow: 0 30px 60px -34px rgba(12, 26, 43, 0.45), 0 0 0 1px rgba(12, 26, 43, 0.06);
+}
+.ph-stat {
+  display: block; padding: 1.7rem 1.75rem;
+  background: none; border-radius: 0; animation: none; transform: none;
+  box-shadow: none;
+}
+.ph-stat::before, .ph-stat::after { content: none; }
+.ph-stat:hover { transform: none; box-shadow: none; }
+.ph-stat + .ph-stat { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09); }
+.ph-stat strong {
+  display: block; font-size: 2.15rem; font-weight: 700; letter-spacing: -0.04em;
+  line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.ph-stat strong i { font-style: normal; font-size: 0.6em; font-weight: 600; color: var(--muted); margin: 0 0.05em; }
+.ph-stat-label { display: block; margin-top: 0.6rem; font-size: 0.93rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+.ph-stat-sub { display: block; margin-top: 0.18rem; font-size: 0.8rem; line-height: 1.4; color: var(--muted); }
+
+@media (max-width: 1100px) {
+}
+/* Phones: the same panel as a 2x2 — all four figures, none dropped. */
+@media (max-width: 768px) {
+  .ph-stats { margin-top: -3.25rem; grid-template-columns: 1fr 1fr; gap: 0; padding: 0; border-radius: 14px; }
+  .ph-stat { padding: 1rem 0.9rem 1.05rem; }
+  .ph-stat, .ph-stat + .ph-stat { box-shadow: none; }
+  .ph-stat:nth-child(even) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09); }
+  .ph-stat:nth-child(n+3) { box-shadow: inset 0 1px 0 rgba(12, 26, 43, 0.09); }
+  .ph-stat:nth-child(4) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09), inset 0 1px 0 rgba(12, 26, 43, 0.09); }
+  .ph-stat:nth-child(2), .ph-stat:nth-child(4) { display: block; }
+  .ph-stat strong { font-size: 1.5rem; }
+  .ph-stat-label { grid-column: auto; margin-top: 0.4rem; font-size: 0.8rem; line-height: 1.3; }
+  .ph-stat-sub { display: block; margin-top: 0.12rem; font-size: 0.72rem; }
+}
+</style>`;
+
+/* The four figures, shared by every generated page. */
+const STATS_BAND = `<section class="ph-proof">
+  <div class="ph-stats">
+${[['100<i>%</i>', 'Fixed-price moves', 'Price locked at booking'],
+   ['0.3<i>%</i>', 'Damage claim rate', 'Across all our moves'],
+   ['24<i>/7</i>', 'Customer support', 'Real people, any hour'],
+   ['<i>$</i>1<i>M</i>', 'Liability coverage', 'Bonded &amp; insured']]
+  .map(([num, label, sub]) => `    <div class="ph-stat">
+      <strong>${num}</strong>
+      <span class="ph-stat-label">${label}</span>
+      <span class="ph-stat-sub">${sub}</span>
+    </div>`).join('\n')}
+  </div>
+</section>`;
+
 
 /* A state with its own photos in assets/images/gallery/states/<slug>/ —
    hero-bg.jpg (2400 wide) and hero-bg-mobile.jpg (1000 wide, portrait) — gets
@@ -767,27 +829,6 @@ body { overflow-x: clip; }
 /* flow-root keeps the stats card's negative margin inside the section; it had
    collapsed through and pulled the cream ground up over the hero instead. */
 .ph-proof { position: relative; display: flow-root; background: var(--paper); padding: 0 2rem 5.5rem; }
-.ph-stats {
-  position: relative; z-index: 3;
-  max-width: 1240px;
-  margin: -4.75rem auto 0;
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  background: #fff; border-radius: 18px; overflow: hidden;
-  box-shadow: 0 30px 60px -34px rgba(12, 26, 43, 0.45), 0 0 0 1px rgba(12, 26, 43, 0.06);
-}
-/* One panel, four figures, hairlines between them. The tinted tiles, tone
-   bars, gloss sweep and pulsing dot read as a dashboard rather than a carrier;
-   these are claims a customer checks, so they are set as plain type. */
-.ph-stat { padding: 1.7rem 1.75rem; }
-.ph-stat + .ph-stat { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09); }
-.ph-stat strong {
-  display: block; font-size: 2.15rem; font-weight: 700; letter-spacing: -0.04em;
-  line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; white-space: nowrap;
-}
-.ph-stat strong b { font-weight: inherit; }
-.ph-stat strong i { font-style: normal; font-size: 0.6em; font-weight: 600; color: var(--muted); margin: 0 0.05em; }
-.ph-stat-label { display: block; margin-top: 0.6rem; font-size: 0.93rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
-.ph-stat-sub { display: block; margin-top: 0.18rem; font-size: 0.8rem; line-height: 1.4; color: var(--muted); }
 
 /* About: photo collage on the left (crew photo, road inset, a floating
    coverage badge), the intro, the three local points and two CTAs on the right. */
@@ -1056,16 +1097,6 @@ body { overflow-x: clip; }
   .qs-card .form-row select { min-height: 48px; border: 1px solid #ddd6cb; background-color: #faf8f4; }
 
   .ph-proof { padding: 0 1.25rem 2.75rem; }
-  /* Phones: the same panel as a 2x2, hairlines between the four. */
-  .ph-stats { margin-top: -3.25rem; grid-template-columns: 1fr 1fr; border-radius: 14px; }
-  .ph-stat { padding: 1rem 0.9rem 1.05rem; }
-  .ph-stat + .ph-stat { box-shadow: none; }
-  .ph-stat:nth-child(even) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09); }
-  .ph-stat:nth-child(n+3) { box-shadow: inset 0 1px 0 rgba(12, 26, 43, 0.09); }
-  .ph-stat:nth-child(4) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09), inset 0 1px 0 rgba(12, 26, 43, 0.09); }
-  .ph-stat strong { font-size: 1.5rem; }
-  .ph-stat-label { margin-top: 0.4rem; font-size: 0.8rem; line-height: 1.3; }
-  .ph-stat-sub { margin-top: 0.12rem; font-size: 0.72rem; }
   /* Compact on phones: photo first with a smaller inset and badge, smaller
      type, the local points as wrapping pills, and the at-a-glance band in
      one column. */
@@ -2670,7 +2701,7 @@ ${s.quirks.map((q, i) => `      <details class="note-row js-collapse" open>
     licensingFaq,
   ];
 
-  return `${head({ title, description, canonical, schema, extraHead: (TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '') + JOB_HEAD + (STEP_FORM_STATES.has(s.name) ? STEP_FORM_HEAD : heroHead(s)) })}
+  return `${head({ title, description, canonical, schema, extraHead: (TRIAL_STATES.has(s.name) ? TRIAL_HEAD : '') + JOB_HEAD + (STEP_FORM_STATES.has(s.name) ? STEP_FORM_HEAD : heroHead(s)) + STATS_HEAD })}
 
 ${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
 
@@ -2685,7 +2716,7 @@ ${TRIAL_STATES.has(s.name) ? CRED_BAR + '\n' + TRIAL_NAV : NAV}
 ${quoteFormSteps(s)}
 </header>
 
-${STEP_FORM_STATES.has(s.name) ? photoProof(s) : HOME_STATS}
+${STEP_FORM_STATES.has(s.name) ? photoProof(s) : STATS_BAND}
 
 ${jobBand(s)}
 
@@ -2847,7 +2878,7 @@ function hubPage() {
     },
   ];
 
-  return `${head({ title, description, canonical, schema, extraHead: TRIAL_HEAD + HOME_HERO_HEAD })}
+  return `${head({ title, description, canonical, schema, extraHead: TRIAL_HEAD + HOME_HERO_HEAD + STATS_HEAD })}
 
 ${CRED_BAR}
 ${TRIAL_HUB_NAV}
@@ -2863,7 +2894,7 @@ ${TRIAL_HUB_NAV}
 ${quoteFormSteps(null)}
 </header>
 
-${HOME_STATS}
+${STATS_BAND}
 
 <!-- COVERAGE -->
 <section id="coverage" class="coverage-section">

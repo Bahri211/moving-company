@@ -1391,6 +1391,46 @@ body { overflow-x: clip; }
   .qs-step.is-active, .ph-stat, .ph-live-dot::after { animation: none; }
   .ph-stat, .ph-stat::after, .ph-stat-icon { transition: none; }
 }
+</style><style>
+.ph-stats {
+  position: relative; z-index: 3;
+  max-width: 1240px;
+  margin: -4.75rem auto 0;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  background: #fff; border-radius: 18px; overflow: hidden;
+  box-shadow: 0 30px 60px -34px rgba(12, 26, 43, 0.45), 0 0 0 1px rgba(12, 26, 43, 0.06);
+}
+.ph-stat {
+  display: block; padding: 1.7rem 1.75rem;
+  background: none; border-radius: 0; animation: none; transform: none;
+  box-shadow: none;
+}
+.ph-stat::before, .ph-stat::after { content: none; }
+.ph-stat:hover { transform: none; box-shadow: none; }
+.ph-stat + .ph-stat { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09); }
+.ph-stat strong {
+  display: block; font-size: 2.15rem; font-weight: 700; letter-spacing: -0.04em;
+  line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.ph-stat strong i { font-style: normal; font-size: 0.6em; font-weight: 600; color: var(--muted); margin: 0 0.05em; }
+.ph-stat-label { display: block; margin-top: 0.6rem; font-size: 0.93rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+.ph-stat-sub { display: block; margin-top: 0.18rem; font-size: 0.8rem; line-height: 1.4; color: var(--muted); }
+
+@media (max-width: 1100px) {
+}
+/* Phones: the same panel as a 2x2 — all four figures, none dropped. */
+@media (max-width: 768px) {
+  .ph-stats { margin-top: -3.25rem; grid-template-columns: 1fr 1fr; gap: 0; padding: 0; border-radius: 14px; }
+  .ph-stat { padding: 1rem 0.9rem 1.05rem; }
+  .ph-stat, .ph-stat + .ph-stat { box-shadow: none; }
+  .ph-stat:nth-child(even) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09); }
+  .ph-stat:nth-child(n+3) { box-shadow: inset 0 1px 0 rgba(12, 26, 43, 0.09); }
+  .ph-stat:nth-child(4) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09), inset 0 1px 0 rgba(12, 26, 43, 0.09); }
+  .ph-stat:nth-child(2), .ph-stat:nth-child(4) { display: block; }
+  .ph-stat strong { font-size: 1.5rem; }
+  .ph-stat-label { grid-column: auto; margin-top: 0.4rem; font-size: 0.8rem; line-height: 1.3; }
+  .ph-stat-sub { display: block; margin-top: 0.12rem; font-size: 0.72rem; }
+}
 </style>
 <script type="application/ld+json">
 {
@@ -1782,57 +1822,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <section class="ph-proof">
   <div class="ph-stats">
-    <div class="ph-stat ph-tone-green">
-      <span class="ph-stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M7 9.5v5M17 9.5v5"/></svg></span>
-      <div class="ph-stat-body">
-        <strong><b data-count="100">100</b><i>%</i></strong>
-        <span class="ph-stat-label">Fixed-price moves</span>
-        <span class="ph-stat-sub">Price locked at booking</span>
-      </div>
+    <div class="ph-stat">
+      <strong>100<i>%</i></strong>
+      <span class="ph-stat-label">Fixed-price moves</span>
+      <span class="ph-stat-sub">Price locked at booking</span>
     </div>
-    <div class="ph-stat ph-tone-orange">
-      <span class="ph-stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2.8 4.5 5.8v5.6c0 4.9 3.2 8.8 7.5 10 4.3-1.2 7.5-5.1 7.5-10V5.8z"/><polyline points="8.8 12.2 11 14.4 15.4 9.8"/></svg></span>
-      <div class="ph-stat-body">
-        <strong><b data-count="0.3" data-dec="1">0.3</b><i>%</i></strong>
-        <span class="ph-stat-label">Damage claim rate</span>
-        <span class="ph-stat-sub">Across all our moves</span>
-      </div>
+    <div class="ph-stat">
+      <strong>0.3<i>%</i></strong>
+      <span class="ph-stat-label">Damage claim rate</span>
+      <span class="ph-stat-sub">Across all our moves</span>
     </div>
-    <div class="ph-stat ph-tone-blue"><span class="ph-live"><span class="ph-live-dot" aria-hidden="true"></span>Live</span>
-      <span class="ph-stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/><path d="M19 19a3 3 0 0 1-3 3h-3"/></svg></span>
-      <div class="ph-stat-body">
-        <strong><b data-count="24">24</b><i>/7</i></strong>
-        <span class="ph-stat-label">Customer support</span>
-        <span class="ph-stat-sub">Real people, any hour</span>
-      </div>
+    <div class="ph-stat">
+      <strong>24<i>/7</i></strong>
+      <span class="ph-stat-label">Customer support</span>
+      <span class="ph-stat-sub">Real people, any hour</span>
     </div>
-    <div class="ph-stat ph-tone-gold">
-      <span class="ph-stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.8 9.2c-.5-.9-1.6-1.4-2.8-1.4-1.6 0-2.8.8-2.8 2.1 0 2.9 5.8 1.4 5.8 4.3 0 1.3-1.3 2.2-3 2.2-1.3 0-2.5-.6-3-1.6M12 6.3v1.5M12 16.7v1.5"/></svg></span>
-      <div class="ph-stat-body">
-        <strong><i>$</i><b data-count="1">1</b><i>M</i></strong>
-        <span class="ph-stat-label">Liability coverage</span>
-        <span class="ph-stat-sub">Bonded &amp; insured</span>
-      </div>
+    <div class="ph-stat">
+      <strong><i>$</i>1<i>M</i></strong>
+      <span class="ph-stat-label">Liability coverage</span>
+      <span class="ph-stat-sub">Bonded &amp; insured</span>
     </div>
   </div>
-  <script>
-  (function () {
-    var card = document.querySelector('.ph-stats');
-    if (!card || !('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var nums = card.querySelectorAll('[data-count]');
-    nums.forEach(function (el) { el.textContent = el.dataset.dec ? '0.0' : '0'; });
-    new IntersectionObserver(function (entries, obs) {
-      if (!entries[0].isIntersecting) return;
-      obs.disconnect();
-      var start = performance.now() + 350;
-      (function tick(now) {
-        var p = Math.max(0, Math.min((now - start) / 1500, 1)), e = 1 - Math.pow(1 - p, 3);
-        nums.forEach(function (el) { el.textContent = (+el.dataset.count * e).toFixed(+(el.dataset.dec || 0)); });
-        if (p < 1) requestAnimationFrame(tick);
-      })(performance.now());
-    }, { threshold: 0.35 }).observe(card);
-  })();
-  </script>
 </section>
 
 <section id="how-it-works" class="job-band">
