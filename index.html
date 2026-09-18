@@ -301,16 +301,25 @@ body { overflow-x: clip; }
   .qs-card .form-row select { min-height: 48px; border: 1px solid #ddd6cb; background-color: #faf8f4; }
 
   .ph-proof { padding: 0 1.25rem 2.75rem; }
-  /* Phones: the same panel as a 2x2 — all four figures, none dropped. */
+  /* Phones: the same panel as a 2x2 — all four figures, none dropped. The
+     type steps down a notch so a two-word label like "Fixed-price moves"
+     stays on one line and the panel reads as a strip, not four cards. */
   .ph-stats { margin-top: -3.25rem; grid-template-columns: 1fr 1fr; border-radius: 14px; }
-  .ph-stat { padding: 1rem 0.9rem 1.05rem; }
+  .ph-stat { padding: 0.85rem 0.75rem 0.9rem; }
   .ph-stat + .ph-stat { box-shadow: none; }
   .ph-stat:nth-child(even) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09); }
   .ph-stat:nth-child(n+3) { box-shadow: inset 0 1px 0 rgba(12, 26, 43, 0.09); }
   .ph-stat:nth-child(4) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09), inset 0 1px 0 rgba(12, 26, 43, 0.09); }
-  .ph-stat strong { font-size: 1.5rem; }
-  .ph-stat-label { margin-top: 0.4rem; font-size: 0.8rem; line-height: 1.3; }
-  .ph-stat-sub { margin-top: 0.12rem; font-size: 0.72rem; }
+  .ph-stat strong { font-size: 1.3rem; }
+  .ph-stat-label { margin-top: 0.3rem; font-size: 0.72rem; line-height: 1.25; }
+  .ph-stat-sub { margin-top: 0.1rem; font-size: 0.66rem; line-height: 1.3; }
+}
+/* Narrow phones: one more step down so the labels never wrap to three lines. */
+@media (max-width: 380px) {
+  .ph-stat { padding: 0.75rem 0.6rem 0.8rem; }
+  .ph-stat strong { font-size: 1.18rem; }
+  .ph-stat-label { font-size: 0.68rem; }
+  .ph-stat-sub { font-size: 0.62rem; }
 }
 /* Short phones: the 50vw drop pushed the Next button under the sticky call
    bar once the browser toolbars take their share of the height, so the form
