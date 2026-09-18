@@ -338,51 +338,28 @@ body { overflow-x: clip; }
 
 <style>
 /* Coverage ----------------------------------------------------------------
-   The section was type on cream over a thin vector road: no photograph in the
-   part of the page that claims we run the whole country. The open-road frame
-   now carries it, with the claim and what it means beside it; the route line
-   and the state list follow underneath as before. */
-.cov-top {
-  display: grid; grid-template-columns: 1.05fr 1fr; align-items: center;
-  gap: 3.5rem; max-width: 1240px; margin: 0 auto 1.75rem;
-}
-.cov-photo {
-  position: relative; overflow: hidden; margin: 0;
-  aspect-ratio: 4 / 3; border-radius: 20px; background: var(--paper);
-  box-shadow: 0 30px 60px -34px rgba(12, 26, 43, 0.6);
-}
-.cov-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-/* The count sits on the picture: it is the one fact this section exists for. */
-.cov-chip {
-  position: absolute; left: 1rem; bottom: 1rem;
-  display: inline-flex; align-items: baseline; gap: 0.5rem;
-  padding: 0.7rem 1rem; border-radius: 14px;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 14px 30px -18px rgba(12, 26, 43, 0.7);
-}
-.cov-chip b { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); }
-.cov-chip span { font-size: 0.8rem; color: var(--muted); }
-.cov-copy .section-header { max-width: none; margin: 0; text-align: left; }
-.cov-points { list-style: none; margin: 1.7rem 0 0; padding: 0; display: grid; gap: 0.75rem; }
-.cov-points li { display: flex; align-items: flex-start; gap: 0.7rem; font-size: 0.97rem; line-height: 1.55; color: var(--ink-soft); }
-.cov-points svg {
-  width: 20px; height: 20px; flex-shrink: 0; margin-top: 0.2rem;
-  fill: none; stroke: var(--green-deep); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
+   The section was type on cream over a thin vector road. The open-road frame
+   sits behind the route line now, faded into the ground on every edge, so the
+   drawn route rides over a real road without the photograph taking the
+   section over — the layout above and below it is unchanged. */
+.cov-road { position: relative; isolation: isolate; }
+.cov-road-photo {
+  position: absolute; z-index: -1; inset: -8% 0 6%;
+  width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%;
+  opacity: 0.32; filter: saturate(0.55) sepia(0.2) contrast(0.92);
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%),
+    linear-gradient(180deg, transparent 4%, #000 34%, #000 66%, transparent 96%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%),
+    linear-gradient(180deg, transparent 4%, #000 34%, #000 66%, transparent 96%);
+  mask-composite: intersect;
+  pointer-events: none;
 }
 
-@media (max-width: 1100px) {
-  .cov-top { grid-template-columns: 1fr; gap: 2.2rem; margin-bottom: 1.5rem; }
-  .cov-photo { aspect-ratio: 16 / 9; }
-}
 @media (max-width: 768px) {
-  .cov-top { gap: 1.6rem; margin-bottom: 1rem; }
-  .cov-photo { border-radius: 16px; }
-  .cov-chip { left: 0.7rem; bottom: 0.7rem; padding: 0.55rem 0.8rem; }
-  .cov-chip b { font-size: 1rem; }
-  .cov-chip span { font-size: 0.74rem; }
-  .cov-points { margin-top: 1.2rem; gap: 0.6rem; }
-  .cov-points li { font-size: 0.92rem; }
-  .cov-points svg { width: 18px; height: 18px; }
+  .cov-road-photo { inset: -4% 0 4%; opacity: 0.24; }
 }
 </style>
 
@@ -689,24 +666,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- COVERAGE -->
 <section id="coverage" class="coverage-section">
-  <div class="cov-top">
-    <figure class="cov-photo">
-      <img src="/assets/images/hero-bg-road.jpg" alt="A moving truck on an open two-lane highway at dusk, on a long-distance run between states" width="1920" height="1433" loading="lazy" decoding="async" />
-      <figcaption class="cov-chip"><b>48 states + D.C.</b><span>every lane, both directions</span></figcaption>
-    </figure>
-    <div class="cov-copy">
-      <div class="section-header">
-        <div class="section-kicker">Coverage</div>
-        <h2>Moving to or from <em>the Continental USA.</em></h2>
-        <p>From Maine to California, Texas to Washington — wherever you're headed in the Continental US, we have a crew ready for you.</p>
-      </div>
-      <ul class="cov-points">
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Every lane runs both ways — the page for the state you are leaving and the one you are heading to both apply.</li>
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Our own trucks and crews on the long haul, not a broker passing your move on.</li>
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>One fixed price agreed before you book, whatever the distance.</li>
-      </ul>
-    </div>
+  <div class="section-header">
+    <div class="section-kicker">Coverage</div>
+    <h2>Moving to or from <em>the Continental USA.</em></h2>
+    <p>From Maine to California, Texas to Washington — wherever you're headed in the Continental US, we have a crew ready for you.</p>
   </div>
+  <div class="cov-road">
+    <img class="cov-road-photo" src="/assets/images/hero-bg-road.jpg" alt="" width="1920" height="1433" loading="lazy" decoding="async" aria-hidden="true" />
   <div class="route-anim">
     <svg viewBox="0 38 1200 246" role="img"
          aria-label="A 50State Movers truck driving the route from your old home to your new one: packed, on the road, delivered">
@@ -797,6 +763,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </g>
       </g>
     </svg>
+  </div>
   </div>
 
   <div class="states-grid" id="states-grid">
