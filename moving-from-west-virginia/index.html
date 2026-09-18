@@ -1581,33 +1581,45 @@ body { overflow-x: clip; }
   .ph-stat, .ph-stat::after, .ph-stat-icon, .job-step img { transition: none; }
 }
 
-/* On the job, the numbers — West Virginia trial ----------------------------
+/* On the job, the steps — West Virginia trial ------------------------------
    Overrides JOB_HEAD's list (this block ships after it, so equal-specificity
-   rules win). The dashed hairline and small dots read as an afterthought; the
-   order is the point of the list, so the numbers get weight, a solid rail runs
-   through them, and each title sits on its number's centre line. */
-.job-step { padding: 0 0 1.7rem 3.9rem; }
-.job-step:last-child { padding-bottom: 0; }
+   rules win). Four lines hanging off a hairline gave the steps no shape and
+   left the column looking thin. Each step becomes a panel of its own on the
+   paper: the number is a plate down the left edge, the title and the line sit
+   beside it, and the four panels stack tight enough to hold the column. */
+.job-steps { margin: 0 0 1.6rem; }
+.job-step {
+  display: grid; grid-template-columns: 3.4rem 1fr; align-items: center;
+  grid-template-areas: "num title" "num text";
+  gap: 0.2rem 1.1rem; padding: 0.95rem 1.2rem 0.95rem 0.95rem;
+  border-radius: 16px; background: #fff;
+  box-shadow: 0 0 0 1px rgba(12, 26, 43, 0.05), 0 16px 34px -30px rgba(12, 26, 43, 0.8);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.job-step + .job-step { margin-top: 0.65rem; }
+.job-step:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(12, 26, 43, 0.05), 0 24px 40px -28px rgba(12, 26, 43, 0.75); }
+/* No rail: the plates carry the order on their own. */
+.job-step:not(:last-child)::before { display: none; }
 .job-num {
-  top: -0.1rem;
-  width: 2.5rem; height: 2.5rem;
-  background: var(--green-deep);
-  box-shadow: 0 0 0 5px var(--paper-warm), 0 10px 20px -12px rgba(46, 139, 87, 0.9);
-  font-size: 0.92rem;
+  position: static; grid-area: num; align-self: center;
+  width: 3.4rem; height: 3.4rem;
+  border-radius: 13px;
+  background: linear-gradient(160deg, #3b9e69 0%, var(--green-deep) 100%);
+  font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em;
+  box-shadow: 0 10px 20px -14px rgba(46, 139, 87, 0.95);
 }
-.job-step:not(:last-child)::before {
-  left: 1.25rem; top: 2.5rem; bottom: -0.2rem;
-  border-left: 2px solid rgba(46, 139, 87, 0.22);
-}
-.job-step h3 { margin: 0.45rem 0 0.3rem; font-size: 1.12rem; }
-.job-step p { font-size: 0.96rem; line-height: 1.6; }
+.job-step h3 { grid-area: title; align-self: end; margin: 0; font-size: 1.05rem; }
+.job-step p { grid-area: text; align-self: start; font-size: 0.93rem; line-height: 1.5; }
 
 @media (max-width: 768px) {
-  .job-step { padding: 0 0 1.35rem 3.4rem; }
-  .job-num { width: 2.2rem; height: 2.2rem; font-size: 0.84rem; box-shadow: 0 0 0 4px var(--paper-warm), 0 8px 16px -10px rgba(46, 139, 87, 0.9); }
-  .job-step:not(:last-child)::before { left: 1.1rem; top: 2.2rem; }
-  .job-step h3 { margin-top: 0.3rem; font-size: 1.02rem; }
-  .job-step p { font-size: 0.9rem; }
+  .job-step { grid-template-columns: 2.7rem 1fr; gap: 0.2rem 0.85rem; padding: 0.8rem 0.9rem 0.8rem 0.8rem; border-radius: 14px; }
+  .job-step + .job-step { margin-top: 0.55rem; }
+  .job-num { width: 2.7rem; height: 2.7rem; border-radius: 11px; font-size: 1rem; }
+  .job-step h3 { font-size: 0.98rem; }
+  .job-step p { font-size: 0.88rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .job-step, .job-step:hover { transition: none; transform: none; }
 }
 </style>
 <script type="application/ld+json">
