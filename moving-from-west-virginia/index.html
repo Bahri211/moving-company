@@ -1170,12 +1170,22 @@ body { overflow-x: clip; }
 
 /* About: photo collage on the left (crew photo, road inset, a floating
    coverage badge), the intro, the three local points and two CTAs on the right. */
+/* The block sat straight on the cream page, so photo, intro and CTAs read as
+   loose parts rather than one section. It is now a lighter panel with a
+   hairline and a soft lift, which gives the section an edge to sit in. */
 .ph-about {
   max-width: 1240px;
   margin: 5.5rem auto 0;
+  padding: 4rem 3.5rem;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: #fdfaf4;
+  box-shadow: 0 30px 60px -45px rgba(12, 26, 43, 0.4);
   display: grid; grid-template-columns: 1.05fr 1fr;
   gap: 5rem; align-items: center;
 }
+/* The inset photo's frame reads as a cut-out of whatever is behind it. */
+.ph-about .ph-photo-inset { border-color: #fdfaf4; }
 .ph-media { position: relative; padding: 0 3.5rem 3.5rem 0; }
 .ph-media::before {
   content: ""; position: absolute; top: -1.6rem; right: 1.25rem;
@@ -1419,7 +1429,7 @@ body { overflow-x: clip; }
   .ph-stat strong { font-size: 1.8rem; }
   .ph-stat-label { font-size: 0.86rem; }
   .ph-stat-sub { font-size: 0.75rem; }
-  .ph-about { gap: 3rem; }
+  .ph-about { padding: 3rem 2.5rem; gap: 3rem; }
   .ph-media { padding: 0 2.5rem 2.5rem 0; }
   .ph-badge { left: 1rem; top: 1rem; }
   /* Signs wrap onto two rows here, so the road behind them goes. */
@@ -1474,7 +1484,7 @@ body { overflow-x: clip; }
   /* Compact on phones: photo first with a smaller inset and badge, smaller
      type, the local points as wrapping pills, and the at-a-glance band in
      one column. */
-  .ph-about { grid-template-columns: 1fr; gap: 1.75rem; margin-top: 2.5rem; }
+  .ph-about { grid-template-columns: 1fr; gap: 1.75rem; margin-top: 2.5rem; padding: 1.5rem 1.25rem 1.75rem; border-radius: 18px; }
   .ph-media { padding: 0 0 1.75rem; }
   .ph-media::before { display: none; }
   .ph-photo-main { aspect-ratio: 4 / 3; border-radius: 18px; }
