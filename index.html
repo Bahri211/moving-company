@@ -618,24 +618,38 @@ body { overflow-x: clip; }
 .svc-art { grid-row: span 2; align-self: center; }
 /* The chevron only means anything on phones, where the rows collapse. */
 .svc-chev { display: none; }
-/* The accent rule grows in from the left on hover — the one bit of motion the
-   old cards had, kept. */
+/* The three colours off the stat cards under the hero, cycled down the list:
+   orange, near-black navy, cyan. Each row carries its own as --svc-c, with a
+   wash of it behind the drawing and a lighter tint for hover — the drawings
+   are line art and would be lost on a solid fill, so the solid colour stays
+   in the left rule and the tile stays pale. */
+.svc-row:nth-child(3n + 1) { --svc-c: #e9541f; --svc-wash: rgba(233, 84, 31, 0.13); --svc-tint: rgba(233, 84, 31, 0.06); }
+.svc-row:nth-child(3n + 2) { --svc-c: #0c1628; --svc-wash: rgba(12, 22, 40, 0.10); --svc-tint: rgba(12, 22, 40, 0.05); }
+.svc-row:nth-child(3n + 3) { --svc-c: #36bacb; --svc-wash: rgba(54, 186, 203, 0.18); --svc-tint: rgba(54, 186, 203, 0.08); }
+
+/* The rule carries the row's colour at full strength — it is the only place
+   the solid navy reads as navy rather than as grey — and widens on hover. */
 .svc-row::before {
   content: '';
   position: absolute;
   left: 0; top: -1px; bottom: -1px;
-  width: 2px;
-  background: linear-gradient(180deg, var(--accent), var(--accent-deep));
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  width: 3px;
+  background: var(--svc-c);
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.svc-row:hover { background: var(--paper-warm); }
-.svc-row:hover::before { transform: scaleY(1); }
+.svc-row:hover { background: var(--svc-tint); }
+.svc-row:hover::before { width: 6px; }
 
-.svc-art { display: block; }
+.svc-art {
+  display: grid;
+  place-items: center;
+  background: var(--svc-wash);
+  border-radius: 16px;
+  padding: 0.7rem;
+  transition: background 0.35s ease;
+}
 .svc-art img {
-  width: 92px; height: auto;
+  width: 100%; height: auto;
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .svc-row:hover .svc-art img { transform: scale(1.06); }
@@ -670,13 +684,12 @@ body { overflow-x: clip; }
   .svc-row { display: block; padding: 0; }
   .svc-head {
     display: grid;
-    grid-template-columns: 44px minmax(0, 1fr) 1.1rem;
+    grid-template-columns: 52px minmax(0, 1fr) 1.1rem;
     align-items: center;
     gap: 0.85rem;
     padding: 0.85rem 0.55rem;
   }
-  .svc-art { grid-row: auto; }
-  .svc-art img { width: 44px; }
+  .svc-art { grid-row: auto; border-radius: 12px; padding: 0.4rem; }
   .svc-head h3 { font-size: 1.05rem; margin-bottom: 0; }
   .svc-chev {
     display: block;
@@ -685,17 +698,17 @@ body { overflow-x: clip; }
     stroke-linecap: round; stroke-linejoin: round;
     transition: transform 0.3s ease;
   }
-  .svc-body { padding: 0 0.55rem 1rem calc(44px + 0.85rem + 0.55rem); }
+  .svc-body { padding: 0 0.55rem 1rem calc(52px + 0.85rem + 0.55rem); }
   .svc-body p { font-size: 0.88rem; line-height: 1.55; }
 
   /* Collapsed state, only once the script has wired the rows up. */
   .svc-row.is-collapsible .svc-head { cursor: pointer; }
   .svc-row.is-collapsible .svc-body { display: none; }
   .svc-row.is-collapsible.is-open .svc-body { display: block; }
-  .svc-row.is-collapsible.is-open .svc-chev { transform: rotate(180deg); stroke: var(--accent); }
-  .svc-row.is-collapsible.is-open { background: var(--paper-warm); }
-  .svc-row.is-collapsible.is-open::before { transform: scaleY(1); }
-  .svc-head:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 6px; }
+  .svc-row.is-collapsible.is-open .svc-chev { transform: rotate(180deg); stroke: var(--svc-c); }
+  .svc-row.is-collapsible.is-open { background: var(--svc-tint); }
+  .svc-row.is-collapsible.is-open::before { width: 6px; }
+  .svc-head:focus-visible { outline: 2px solid var(--svc-c); outline-offset: -2px; border-radius: 6px; }
 }
 
 /* Above the phone breakpoint the copy is never hidden, whatever the script
@@ -705,7 +718,7 @@ body { overflow-x: clip; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .svc-row, .svc-row::before, .svc-art img, .svc-cta, .svc-chev { transition: none; }
+  .svc-row, .svc-row::before, .svc-art, .svc-art img, .svc-cta, .svc-chev { transition: none; }
 }
 </style>
 
