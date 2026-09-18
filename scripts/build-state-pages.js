@@ -707,7 +707,7 @@ ${stat('<i>$</i>1<i>M</i>', 'Liability coverage', 'Bonded &amp; insured')}
 ${s.quirks.slice(0, 3).map(q => `        <li>${PH_POINT_TICK}${esc(q.title)}</li>`).join('\n')}
       </ul>
       <div class="ph-cta">
-        <a href="#get-quote" class="ph-btn">Get my fixed price</a>
+        <a href="#get-quote" class="ph-btn"><span>Get my fixed price</span><span class="ph-btn-chip" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
         <a href="tel:${PHONE_HREF}" class="ph-call"><span class="ph-call-icon" aria-hidden="true">${PH_PHONE_ICON}</span>${PHONE_DISPLAY}</a>
       </div>
     </div>
@@ -980,16 +980,42 @@ body { overflow-x: clip; }
   font-size: 0.98rem; font-weight: 600; color: var(--ink);
 }
 .ph-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; margin-top: 1.9rem; }
+/* Same shape as the on-moving-day button: the arrow rides in its own disc,
+   and the disc, not the whole pill, does the moving on hover. */
 .ph-btn {
-  display: inline-flex; align-items: center; gap: 0.55rem;
-  padding: 0.95rem 1.55rem;
+  display: inline-flex; align-items: center; gap: 1.05rem;
+  padding: 0.5rem 0.5rem 0.5rem 1.7rem;
   border-radius: 999px;
   background: var(--accent);
-  color: #fff; font-size: 0.98rem; font-weight: 600; text-decoration: none;
-  box-shadow: 0 16px 30px -14px rgba(200, 85, 44, 0.75);
-  transition: background 0.2s, transform 0.2s;
+  color: #fff; font-size: 1rem; font-weight: 600; letter-spacing: -0.005em;
+  text-decoration: none; white-space: nowrap;
+  box-shadow: 0 2px 4px -2px rgba(120, 40, 15, 0.5),
+              0 18px 34px -20px rgba(120, 40, 15, 0.75);
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.ph-btn:hover { background: #b24a24; transform: translateY(-1px); }
+.ph-btn-chip {
+  display: inline-grid; place-items: center;
+  width: 2.5rem; height: 2.5rem; flex-shrink: 0;
+  border-radius: 50%; background: rgba(255, 255, 255, 0.17);
+  transition: background 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ph-btn-chip svg {
+  width: 16px; height: 16px;
+  fill: none; stroke: currentColor; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ph-btn:hover {
+  background: #b64c26; transform: translateY(-1px);
+  box-shadow: 0 2px 4px -2px rgba(120, 40, 15, 0.55),
+              0 26px 44px -22px rgba(120, 40, 15, 0.8);
+}
+.ph-btn:hover .ph-btn-chip { background: rgba(255, 255, 255, 0.26); transform: translateX(2px); }
+.ph-btn:hover .ph-btn-chip svg { transform: translateX(1px); }
+.ph-btn:active { transform: translateY(0); box-shadow: 0 2px 4px -2px rgba(120, 40, 15, 0.6); }
+@media (prefers-reduced-motion: reduce) {
+  .ph-btn, .ph-btn-chip, .ph-btn-chip svg { transition: none; }
+  .ph-btn:hover, .ph-btn:hover .ph-btn-chip, .ph-btn:hover .ph-btn-chip svg { transform: none; }
+}
 .ph-call { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.98rem; font-weight: 600; color: var(--ink); text-decoration: none; }
 .ph-call:hover { color: var(--accent); }
 .ph-call-icon {
@@ -1215,7 +1241,8 @@ body { overflow-x: clip; }
   .ph-tick svg { width: 10px; height: 10px; }
   /* The sticky call bar already carries the phone number on phones. */
   .ph-cta { margin-top: 1.25rem; }
-  .ph-btn { flex: 1 1 100%; justify-content: center; padding: 0.9rem 1.2rem; font-size: 0.95rem; }
+  .ph-btn { flex: 1 1 100%; justify-content: center; gap: 0.8rem; padding: 0.45rem 0.45rem 0.45rem 1.4rem; font-size: 0.97rem; }
+  .ph-btn-chip { width: 2.3rem; height: 2.3rem; }
   .ph-call { display: none; }
   .ph-roads { margin-top: 3rem; }
   .ph-roads h3 { font-size: 1.35rem; }
