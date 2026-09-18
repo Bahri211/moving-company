@@ -543,8 +543,8 @@ body { overflow-x: clip; }
    Rebuilt off the six-card grid. The grid gave every service the same weight
    and the same box, so the eye had nothing to follow; this reads as a printed
    index instead — the heading holds the left column and stays put while the
-   six services run down the right as ruled rows, each one numbered with its
-   drawing at thumbnail size. Homepage only: the classes are svc-* so the
+   six services run down the right as ruled rows, each with its drawing at
+   thumbnail size. Homepage only: the classes are svc-* so the
    shared .service-card rules (still in use on the 49 state pages) are left
    alone. */
 .svc-band { background: var(--paper); }
@@ -601,15 +601,15 @@ body { overflow-x: clip; }
 .svc-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
 /* Title line and copy are separate blocks so phones can hide the copy. On
    desktop the head dissolves into the row's own grid (display: contents), so
-   number, drawing, title and copy sit in one three-column grid and the
-   drawing spans both text rows — the copy tucks straight under the title
+   drawing, title and copy sit in one two-column grid and the drawing spans
+   both text rows — the copy tucks straight under the title
    rather than under the drawing. */
 .svc-row {
   position: relative;
   display: grid;
-  grid-template-columns: 2.6rem 92px minmax(0, 1fr);
+  grid-template-columns: 92px minmax(0, 1fr);
   align-items: start;
-  gap: 0 1.5rem;
+  gap: 0 1.75rem;
   padding: 1.35rem 1.1rem;
   border-bottom: 1px solid var(--line);
   transition: background 0.35s ease;
@@ -633,14 +633,6 @@ body { overflow-x: clip; }
 .svc-row:hover { background: var(--paper-warm); }
 .svc-row:hover::before { transform: scaleY(1); }
 
-.svc-index {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 300;
-  font-size: 1rem;
-  color: var(--accent);
-  padding-top: 0.45rem;
-}
 .svc-art { display: block; }
 .svc-art img {
   width: 92px; height: auto;
@@ -657,7 +649,7 @@ body { overflow-x: clip; }
 }
 .svc-body p { color: var(--ink-soft); font-size: 0.95rem; line-height: 1.6; }
 /* Desktop keeps the copy under the title, aligned with it. */
-.svc-body { grid-column: 3; }
+.svc-body { grid-column: 2; }
 
 /* Tablets: the heading stops sticking and sits above the list. */
 @media (max-width: 1000px) {
@@ -667,8 +659,8 @@ body { overflow-x: clip; }
 }
 
 /* Phones: six paragraphs open at once made this the longest scroll on the
-   page, so the rows collapse to a tapable index — drawing, number, title —
-   and open one at a time. JS adds .is-collapsible, so with scripting off
+   page, so the rows collapse to a tapable index — drawing and title — and
+   open one at a time. JS adds .is-collapsible, so with scripting off
    every row stays open and nothing is lost. */
 @media (max-width: 768px) {
   .svc-band { padding: 2.75rem 1.25rem 3rem; }
@@ -678,13 +670,12 @@ body { overflow-x: clip; }
   .svc-row { display: block; padding: 0; }
   .svc-head {
     display: grid;
-    grid-template-columns: 44px auto minmax(0, 1fr) 1.1rem;
+    grid-template-columns: 44px minmax(0, 1fr) 1.1rem;
     align-items: center;
     gap: 0.85rem;
     padding: 0.85rem 0.55rem;
   }
   .svc-art { grid-row: auto; }
-  .svc-index { padding-top: 0; font-size: 0.85rem; }
   .svc-art img { width: 44px; }
   .svc-head h3 { font-size: 1.05rem; margin-bottom: 0; }
   .svc-chev {
@@ -1094,7 +1085,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <ol class="svc-list">
       <li class="svc-row">
         <div class="svc-head">
-          <span class="svc-index" aria-hidden="true">01</span>
           <span class="svc-art"><img src="/assets/images/gallery/svc-long-distance.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
           <h3>Long Distance</h3>
           <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
@@ -1105,7 +1095,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </li>
       <li class="svc-row">
         <div class="svc-head">
-          <span class="svc-index" aria-hidden="true">02</span>
           <span class="svc-art"><img src="/assets/images/gallery/svc-white-glove.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
           <h3>White Glove</h3>
           <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
@@ -1116,7 +1105,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </li>
       <li class="svc-row">
         <div class="svc-head">
-          <span class="svc-index" aria-hidden="true">03</span>
           <span class="svc-art"><img src="/assets/images/gallery/svc-residential.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
           <h3>Residential</h3>
           <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
@@ -1127,7 +1115,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </li>
       <li class="svc-row">
         <div class="svc-head">
-          <span class="svc-index" aria-hidden="true">04</span>
           <span class="svc-art"><img src="/assets/images/gallery/svc-commercial.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
           <h3>Commercial</h3>
           <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
@@ -1138,7 +1125,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </li>
       <li class="svc-row">
         <div class="svc-head">
-          <span class="svc-index" aria-hidden="true">05</span>
           <span class="svc-art"><img src="/assets/images/gallery/svc-packing.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
           <h3>Packing &amp; Crating</h3>
           <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
@@ -1149,7 +1135,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </li>
       <li class="svc-row">
         <div class="svc-head">
-          <span class="svc-index" aria-hidden="true">06</span>
           <span class="svc-art"><img src="/assets/images/gallery/svc-storage.png" alt="" width="700" height="520" loading="lazy" decoding="async" /></span>
           <h3>Storage</h3>
           <svg class="svc-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
