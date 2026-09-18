@@ -1056,19 +1056,19 @@ body { overflow-x: clip; }
   position: relative; z-index: 3;
   max-width: 1240px;
   margin: -4.75rem auto 0;
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: grid; grid-template-columns: repeat(3, 1fr);
   border-radius: 18px; overflow: hidden;
   box-shadow: 0 30px 60px -34px rgba(12, 26, 43, 0.45);
 }
-/* Four figures, each on its own brand ground — orange, navy, cyan, orange —
-   butted together so the strip reads as one band of colour. The hairlines
-   that used to separate them are gone; the colour change is the divider. */
+/* Three figures, each on its own brand ground — orange, navy, cyan — butted
+   together so the strip reads as one band of colour. The hairlines that used
+   to separate them are gone; the colour change is the divider. */
 .ph-stat { padding: 1.7rem 1.75rem; }
-.ph-stat:nth-child(1), .ph-stat:nth-child(4) { background: #e9541f; }
+.ph-stat:nth-child(1) { background: #e9541f; }
 .ph-stat:nth-child(2) { background: #0c1628; }
 .ph-stat:nth-child(3) { background: #36bacb; }
-/* Navy ink on the two bright grounds and cream on the dark one: white on the
-   orange and the cyan left the 0.66rem sub-line under 4.5:1. */
+/* White on the orange, cream on the navy, and navy ink on the cyan — the one
+   ground light enough to carry dark type at the sub-line's size. */
 .ph-stat strong {
   display: block; font-size: 2.15rem; font-weight: 700; letter-spacing: -0.04em;
   line-height: 1; color: #0c1628; font-variant-numeric: tabular-nums; white-space: nowrap;
@@ -1076,6 +1076,10 @@ body { overflow-x: clip; }
 .ph-stat strong i { font-style: normal; font-size: 0.6em; font-weight: 600; color: rgba(12, 22, 40, 0.58); margin: 0 0.05em; }
 .ph-stat-label { display: block; margin-top: 0.6rem; font-size: 0.93rem; font-weight: 600; letter-spacing: -0.01em; color: #0c1628; }
 .ph-stat-sub { display: block; margin-top: 0.18rem; font-size: 0.8rem; line-height: 1.4; color: rgba(12, 22, 40, 0.74); }
+.ph-stat:nth-child(1) strong,
+.ph-stat:nth-child(1) .ph-stat-label { color: #fff; }
+.ph-stat:nth-child(1) strong i { color: rgba(255, 255, 255, 0.72); }
+.ph-stat:nth-child(1) .ph-stat-sub { color: rgba(255, 255, 255, 0.88); }
 .ph-stat:nth-child(2) strong,
 .ph-stat:nth-child(2) .ph-stat-label { color: var(--paper); }
 .ph-stat:nth-child(2) strong i { color: rgba(246, 241, 233, 0.6); }
@@ -1210,6 +1214,8 @@ body { overflow-x: clip; }
   .ph-proof { padding: 0 1.25rem 2.75rem; }
   /* Phones: the same panel as a 2x2 — all four figures, none dropped. */
   .ph-stats { margin-top: -3.25rem; grid-template-columns: 1fr 1fr; border-radius: 14px; }
+  /* Three cards: two across, the third running the full width under them. */
+  .ph-stat:nth-child(3) { grid-column: 1 / -1; }
   .ph-stat { padding: 0.7rem 0.7rem 0.75rem; }
   .ph-stat strong { font-size: 1.15rem; }
   .ph-stat-label { margin-top: 0.25rem; font-size: 0.68rem; line-height: 1.25; }
@@ -1249,7 +1255,7 @@ body { overflow-x: clip; }
   position: relative; z-index: 3;
   max-width: 1240px;
   margin: -4.75rem auto 0;
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
   border-radius: 18px; overflow: hidden;
   box-shadow: 0 30px 60px -34px rgba(12, 26, 43, 0.45);
 }
@@ -1260,14 +1266,14 @@ body { overflow-x: clip; }
 }
 .ph-stat::before, .ph-stat::after { content: none; }
 .ph-stat:hover { transform: none; box-shadow: none; }
-/* Four figures, each on its own brand ground — orange, navy, cyan, orange —
-   butted together so the strip reads as one band of colour. The hairlines
-   that used to separate them are gone; the colour change is the divider. */
-.ph-stat:nth-child(1), .ph-stat:nth-child(4) { background: #e9541f; }
+/* Three figures, each on its own brand ground — orange, navy, cyan — butted
+   together so the strip reads as one band of colour. The hairlines that used
+   to separate them are gone; the colour change is the divider. */
+.ph-stat:nth-child(1) { background: #e9541f; }
 .ph-stat:nth-child(2) { background: #0c1628; }
 .ph-stat:nth-child(3) { background: #36bacb; }
-/* Navy ink on the two bright grounds and cream on the dark one: white on the
-   orange and the cyan left the 0.61rem sub-line under 4.5:1. */
+/* White on the orange, cream on the navy, and navy ink on the cyan — the one
+   ground light enough to carry dark type at the sub-line's size. */
 .ph-stat strong {
   display: block; font-size: 2.15rem; font-weight: 700; letter-spacing: -0.04em;
   line-height: 1; color: #0c1628; font-variant-numeric: tabular-nums; white-space: nowrap;
@@ -1275,6 +1281,10 @@ body { overflow-x: clip; }
 .ph-stat strong i { font-style: normal; font-size: 0.6em; font-weight: 600; color: rgba(12, 22, 40, 0.58); margin: 0 0.05em; }
 .ph-stat-label { display: block; margin-top: 0.6rem; font-size: 0.93rem; font-weight: 600; letter-spacing: -0.01em; color: #0c1628; }
 .ph-stat-sub { display: block; margin-top: 0.18rem; font-size: 0.8rem; line-height: 1.4; color: rgba(12, 22, 40, 0.74); }
+.ph-stat:nth-child(1) strong,
+.ph-stat:nth-child(1) .ph-stat-label { color: #fff; }
+.ph-stat:nth-child(1) strong i { color: rgba(255, 255, 255, 0.72); }
+.ph-stat:nth-child(1) .ph-stat-sub { color: rgba(255, 255, 255, 0.88); }
 .ph-stat:nth-child(2) strong,
 .ph-stat:nth-child(2) .ph-stat-label { color: var(--paper); }
 .ph-stat:nth-child(2) strong i { color: rgba(246, 241, 233, 0.6); }
@@ -1285,6 +1295,8 @@ body { overflow-x: clip; }
 /* Phones: the same panel as a 2x2 — all four figures, none dropped. */
 @media (max-width: 768px) {
   .ph-stats { margin-top: -3.25rem; grid-template-columns: 1fr 1fr; gap: 0; padding: 0; border-radius: 14px; }
+  /* Three cards: two across, the third running the full width under them. */
+  .ph-stat:nth-child(3) { grid-column: 1 / -1; }
   .ph-stat { padding: 0.7rem 0.7rem 0.75rem; }
   .ph-stat, .ph-stat + .ph-stat { box-shadow: none; }
   .ph-stat:nth-child(2), .ph-stat:nth-child(4) { display: block; }
@@ -1860,11 +1872,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <strong>100<i>%</i></strong>
       <span class="ph-stat-label">Fixed-price moves</span>
       <span class="ph-stat-sub">Price locked at booking</span>
-    </div>
-    <div class="ph-stat">
-      <strong>0.3<i>%</i></strong>
-      <span class="ph-stat-label">Damage claim rate</span>
-      <span class="ph-stat-sub">Across all our moves</span>
     </div>
     <div class="ph-stat">
       <strong>24<i>/7</i></strong>
