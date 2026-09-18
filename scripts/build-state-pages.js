@@ -554,8 +554,38 @@ const STATS_HEAD = `<style>
 .ph-stats .ph-stat:nth-child(2) strong i { color: rgba(246, 241, 233, 0.6); }
 .ph-stats .ph-stat:nth-child(2) .ph-stat-sub { color: rgba(246, 241, 233, 0.76); }
 
+/* The three line icons the cards were drawn for. They ship as white-on-alpha
+   PNGs, so they are used as masks rather than images: the ink then follows the
+   card it sits on — white on the orange, cream on the navy, near-black on the
+   cyan — instead of staying white on a ground light enough to lose it. */
+.ph-stat-icon {
+  display: block;
+  width: 36px; height: 36px;
+  margin: 0 auto 0.8rem;
+  background: currentColor;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center; mask-position: center;
+  -webkit-mask-size: contain; mask-size: contain;
+}
+.ph-stats .ph-stat:nth-child(1) .ph-stat-icon {
+  color: #fff;
+  -webkit-mask-image: url("/assets/images/icons/price-tag.png");
+  mask-image: url("/assets/images/icons/price-tag.png");
+}
+.ph-stats .ph-stat:nth-child(2) .ph-stat-icon {
+  color: var(--paper);
+  -webkit-mask-image: url("/assets/images/icons/headset.png");
+  mask-image: url("/assets/images/icons/headset.png");
+}
+.ph-stats .ph-stat:nth-child(3) .ph-stat-icon {
+  color: #0c1628;
+  -webkit-mask-image: url("/assets/images/icons/shield-check.png");
+  mask-image: url("/assets/images/icons/shield-check.png");
+}
+
 @media (max-width: 1100px) {
   .ph-stat { padding: 1.2rem 0.9rem; }
+  .ph-stat-icon { width: 30px; height: 30px; margin-bottom: 0.65rem; }
   .ph-stat strong { font-size: 1.7rem; }
   .ph-stat-label { font-size: 0.82rem; }
   .ph-stat-sub { font-size: 0.72rem; }
@@ -567,6 +597,7 @@ const STATS_HEAD = `<style>
   .ph-stats { margin-top: -3.25rem; grid-template-columns: repeat(3, 1fr); gap: 0; padding: 0; border-radius: 14px; }
   .ph-stat { padding: 0.8rem 0.45rem 0.85rem; text-align: center; }
   .ph-stat, .ph-stat + .ph-stat { box-shadow: none; }
+  .ph-stat-icon { width: 18px; height: 18px; margin-bottom: 0.35rem; }
   .ph-stat strong { font-size: 1.1rem; }
   .ph-stat-label { grid-column: auto; margin-top: 0.3rem; font-size: 0.63rem; line-height: 1.25; text-wrap: balance; }
   .ph-stat-sub { display: block; margin-top: 0.1rem; font-size: 0.56rem; line-height: 1.3; text-wrap: balance; }
@@ -574,6 +605,7 @@ const STATS_HEAD = `<style>
 /* Narrow phones: one more step down so the labels never wrap to three lines. */
 @media (max-width: 380px) {
   .ph-stat { padding: 0.65rem 0.3rem 0.7rem; }
+  .ph-stat-icon { width: 16px; height: 16px; margin-bottom: 0.3rem; }
   .ph-stat strong { font-size: 1rem; }
   .ph-stat-label { font-size: 0.59rem; }
   .ph-stat-sub { font-size: 0.53rem; }
@@ -590,6 +622,7 @@ ${[['100<i>%</i>', 'Fixed-price moves', 'Price locked at booking'],
    ['24<i>/7</i>', 'Customer support', 'Real people, any hour'],
    ['<i>$</i>1<i>M</i>', 'Liability coverage', 'Bonded &amp; insured']]
   .map(([num, label, sub]) => `    <div class="ph-stat">
+      <span class="ph-stat-icon" aria-hidden="true"></span>
       <strong>${num}</strong>
       <span class="ph-stat-label">${label}</span>
       <span class="ph-stat-sub">${sub}</span>
@@ -719,6 +752,7 @@ function photoProof(s) {
      grounds — these are the claims a customer checks us on, so they read the
      same wherever they meet them. */
   const stat = (num, label, sub) => `    <div class="ph-stat">
+      <span class="ph-stat-icon" aria-hidden="true"></span>
       <strong>${num}</strong>
       <span class="ph-stat-label">${label}</span>
       <span class="ph-stat-sub">${sub}</span>
