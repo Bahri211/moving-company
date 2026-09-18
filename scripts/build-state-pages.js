@@ -510,61 +510,83 @@ const COVERAGE_HEAD = `<style>
 </style>`;
 
 const STATS_HEAD = `<style>
+/* The band the homepage carries under its hero, restated here so every
+   generated page wears the same three cards at the same size, in the same
+   grounds and type: orange, navy, cyan butted together, the colour change
+   doing the dividing. Ships last of the heads, so it also clears what the
+   older treatment left on these pages — icon tiles, tone bar, gloss sweep,
+   pulsing dot and count-up. */
+.ph-proof { position: relative; display: flow-root; background: var(--paper); padding: 0 2rem 5.5rem; }
 .ph-stats {
   position: relative; z-index: 3;
-  max-width: 1240px;
+  max-width: none;
   margin: -4.75rem auto 0;
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
-  background: #fff; border-radius: 18px; overflow: hidden;
-  box-shadow: 0 30px 60px -34px rgba(12, 26, 43, 0.45), 0 0 0 1px rgba(12, 26, 43, 0.06);
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+  background: none;
+  border-radius: 18px; overflow: hidden;
+  box-shadow: 0 30px 60px -34px rgba(12, 26, 43, 0.45);
 }
 .ph-stat {
-  display: block; padding: 1.7rem 1.75rem;
-  background: none; border-radius: 0; animation: none; transform: none;
-  box-shadow: none;
+  padding: 1.7rem 1.5rem; text-align: center;
+  border-radius: 0; animation: none; transform: none; box-shadow: none;
 }
 .ph-stat::before, .ph-stat::after { content: none; }
 .ph-stat:hover { transform: none; box-shadow: none; }
-.ph-stat + .ph-stat { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09); }
+.ph-stat + .ph-stat { box-shadow: none; }
+.ph-stats .ph-stat:nth-child(1) { background: #e9541f; }
+.ph-stats .ph-stat:nth-child(2) { background: #0c1628; }
+.ph-stats .ph-stat:nth-child(3) { background: #36bacb; }
+/* White on the orange, cream on the navy, and navy ink on the cyan — the one
+   ground light enough to carry dark type at the sub-line's size. */
 .ph-stat strong {
   display: block; font-size: 2.15rem; font-weight: 700; letter-spacing: -0.04em;
-  line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; white-space: nowrap;
+  line-height: 1; color: #0c1628; font-variant-numeric: tabular-nums; white-space: nowrap;
 }
-.ph-stat strong i { font-style: normal; font-size: 0.6em; font-weight: 600; color: var(--muted); margin: 0 0.05em; }
-.ph-stat-label { display: block; margin-top: 0.6rem; font-size: 0.93rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
-.ph-stat-sub { display: block; margin-top: 0.18rem; font-size: 0.8rem; line-height: 1.4; color: var(--muted); }
-/* The third card sits on the cyan the homepage gives it, but the homepage
-   only flips the ink on the first two — its own band stops at three cards, so
-   the third is its dark-on-cyan default, which these rules above were
-   overwriting with warm grey. Restated here as near-black, the way the cyan
-   card under the hero reads. */
-.ph-stats .ph-stat:nth-child(3) strong { color: #0c1628; }
-.ph-stats .ph-stat:nth-child(3) strong i { color: rgba(12, 22, 40, 0.64); }
-.ph-stats .ph-stat:nth-child(3) .ph-stat-label { color: #0c1628; }
-.ph-stats .ph-stat:nth-child(3) .ph-stat-sub { color: rgba(12, 22, 40, 0.8); }
+.ph-stat strong i { font-style: normal; font-size: 0.6em; font-weight: 600; color: rgba(12, 22, 40, 0.58); margin: 0 0.05em; }
+.ph-stat-label { display: block; margin-top: 0.6rem; font-size: 0.93rem; font-weight: 600; letter-spacing: -0.01em; color: #0c1628; }
+.ph-stat-sub { display: block; margin-top: 0.18rem; font-size: 0.8rem; line-height: 1.4; color: rgba(12, 22, 40, 0.74); }
+.ph-stats .ph-stat:nth-child(1) strong,
+.ph-stats .ph-stat:nth-child(1) .ph-stat-label { color: #fff; }
+.ph-stats .ph-stat:nth-child(1) strong i { color: rgba(255, 255, 255, 0.72); }
+.ph-stats .ph-stat:nth-child(1) .ph-stat-sub { color: rgba(255, 255, 255, 0.88); }
+.ph-stats .ph-stat:nth-child(2) strong,
+.ph-stats .ph-stat:nth-child(2) .ph-stat-label { color: var(--paper); }
+.ph-stats .ph-stat:nth-child(2) strong i { color: rgba(246, 241, 233, 0.6); }
+.ph-stats .ph-stat:nth-child(2) .ph-stat-sub { color: rgba(246, 241, 233, 0.76); }
 
 @media (max-width: 1100px) {
+  .ph-stat { padding: 1.2rem 0.9rem; }
+  .ph-stat strong { font-size: 1.7rem; }
+  .ph-stat-label { font-size: 0.82rem; }
+  .ph-stat-sub { font-size: 0.72rem; }
 }
-/* Phones: the same panel as a 2x2 — all four figures, none dropped. */
+/* Phones: the same three across, type stepped down a notch so a two-word
+   label stays on one line and the panel reads as a strip, not three cards. */
 @media (max-width: 768px) {
-  .ph-stats { margin-top: -3.25rem; grid-template-columns: 1fr 1fr; gap: 0; padding: 0; border-radius: 14px; }
-  .ph-stat { padding: 1rem 0.9rem 1.05rem; }
+  .ph-proof { padding: 0 1.25rem 2.75rem; }
+  .ph-stats { margin-top: -3.25rem; grid-template-columns: repeat(3, 1fr); gap: 0; padding: 0; border-radius: 14px; }
+  .ph-stat { padding: 0.8rem 0.45rem 0.85rem; text-align: center; }
   .ph-stat, .ph-stat + .ph-stat { box-shadow: none; }
-  .ph-stat:nth-child(even) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09); }
-  .ph-stat:nth-child(n+3) { box-shadow: inset 0 1px 0 rgba(12, 26, 43, 0.09); }
-  .ph-stat:nth-child(4) { box-shadow: inset 1px 0 0 rgba(12, 26, 43, 0.09), inset 0 1px 0 rgba(12, 26, 43, 0.09); }
-  .ph-stat:nth-child(2), .ph-stat:nth-child(4) { display: block; }
-  .ph-stat strong { font-size: 1.5rem; }
-  .ph-stat-label { grid-column: auto; margin-top: 0.4rem; font-size: 0.8rem; line-height: 1.3; }
-  .ph-stat-sub { display: block; margin-top: 0.12rem; font-size: 0.72rem; }
+  .ph-stat strong { font-size: 1.1rem; }
+  .ph-stat-label { grid-column: auto; margin-top: 0.3rem; font-size: 0.63rem; line-height: 1.25; text-wrap: balance; }
+  .ph-stat-sub { display: block; margin-top: 0.1rem; font-size: 0.56rem; line-height: 1.3; text-wrap: balance; }
+}
+/* Narrow phones: one more step down so the labels never wrap to three lines. */
+@media (max-width: 380px) {
+  .ph-stat { padding: 0.65rem 0.3rem 0.7rem; }
+  .ph-stat strong { font-size: 1rem; }
+  .ph-stat-label { font-size: 0.59rem; }
+  .ph-stat-sub { font-size: 0.53rem; }
 }
 </style>`;
 
-/* The four figures, shared by every generated page. */
+/* The three figures, shared by every generated page — the same cards the
+   homepage carries under its hero, in the same order, wearing the same
+   grounds and type. The band's look comes from HOME_HERO_HEAD, which every
+   generated page already ships, so there is nothing to restate here. */
 const STATS_BAND = `<section class="ph-proof">
   <div class="ph-stats">
 ${[['100<i>%</i>', 'Fixed-price moves', 'Price locked at booking'],
-   ['0.3<i>%</i>', 'Damage claim rate', 'Across all our moves'],
    ['24<i>/7</i>', 'Customer support', 'Real people, any hour'],
    ['<i>$</i>1<i>M</i>', 'Liability coverage', 'Bonded &amp; insured']]
   .map(([num, label, sub]) => `    <div class="ph-stat">
@@ -693,9 +715,9 @@ const PH_ROW_ICONS = {
    and the band after it is a dark photo, so this runs light — a white stats card
    lifted over the hero's bottom edge, then the intro and the state's highways. */
 function photoProof(s) {
-  /* Four plain figures on one white panel. No icon tiles, no tone colours and
-     no count-up: these are the claims a customer checks us on, and dressing
-     them up made the band read like a game dashboard. */
+  /* The same three figures as every other page, on the homepage's coloured
+     grounds — these are the claims a customer checks us on, so they read the
+     same wherever they meet them. */
   const stat = (num, label, sub) => `    <div class="ph-stat">
       <strong>${num}</strong>
       <span class="ph-stat-label">${label}</span>
@@ -704,7 +726,6 @@ function photoProof(s) {
   return `<section class="ph-proof">
   <div class="ph-stats">
 ${stat('100<i>%</i>', 'Fixed-price moves', 'Price locked at booking')}
-${stat('0.3<i>%</i>', 'Damage claim rate', 'Across all our moves')}
 ${stat('24<i>/7</i>', 'Customer support', 'Real people, any hour')}
 ${stat('<i>$</i>1<i>M</i>', 'Liability coverage', 'Bonded &amp; insured')}
   </div>
