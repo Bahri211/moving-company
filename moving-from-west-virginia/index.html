@@ -1178,13 +1178,13 @@ body { overflow-x: clip; }
   margin: 5.5rem auto 0;
   padding: 4rem 3.5rem;
   border-radius: 28px;
-  background: linear-gradient(165deg, var(--navy-soft) 0%, var(--navy) 45%, var(--navy-deep) 100%);
-  box-shadow: 0 40px 80px -50px rgba(10, 23, 39, 0.8);
+  background: linear-gradient(165deg, #e4f0f9 0%, #d3e6f5 55%, #c6ddf1 100%);
+  box-shadow: 0 30px 70px -50px rgba(16, 36, 60, 0.55);
   display: grid; grid-template-columns: 1.05fr 1fr;
   gap: 5rem; align-items: center;
 }
 /* The inset photo's frame reads as a cut-out of whatever is behind it. */
-.ph-about .ph-photo-inset { border-color: var(--navy); }
+.ph-about .ph-photo-inset { border-color: #dbeaf6; }
 .ph-media { position: relative; padding: 0 3.5rem 3.5rem 0; }
 .ph-media figure { margin: 0; overflow: hidden; }
 .ph-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -1219,13 +1219,13 @@ body { overflow-x: clip; }
 .ph-notes li {
   display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 1.1rem;
   padding: 1.15rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.13);
+  border-top: 1px solid rgba(16, 36, 60, 0.16);
 }
-.ph-notes li:last-child { border-bottom: 1px solid rgba(255, 255, 255, 0.13); }
+.ph-notes li:last-child { border-bottom: 1px solid rgba(16, 36, 60, 0.16); }
 .ph-note-icon {
   grid-row: span 2; align-self: start;
   display: inline-flex; margin-top: 0.1rem;
-  color: #e8a98c;
+  color: var(--accent);
 }
 .ph-note-icon svg {
   width: 38px; height: 38px;
@@ -1233,8 +1233,8 @@ body { overflow-x: clip; }
 }
 /* The posted weight on the bridge sign is set type, not a drawn shape. */
 .ph-note-icon svg text { fill: currentColor; stroke: none; }
-.ph-note-title { font-size: 1.02rem; font-weight: 650; letter-spacing: -0.01em; color: var(--paper); }
-.ph-note-body { margin: 0.3rem 0 0; font-size: 0.92rem; line-height: 1.6; color: rgba(246, 241, 233, 0.66); }
+.ph-note-title { font-size: 1.02rem; font-weight: 650; letter-spacing: -0.01em; color: var(--navy-deep); }
+.ph-note-body { margin: 0.3rem 0 0; font-size: 0.92rem; line-height: 1.6; color: #46607a; }
 .ph-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; margin-top: 1.9rem; }
 /* Same shape as the on-moving-day button: the arrow rides in its own disc,
    and the disc, not the whole pill, does the moving on hover. */
@@ -1282,20 +1282,11 @@ body { overflow-x: clip; }
 .ph-call-icon svg { width: 17px; height: 17px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .ph-btn:focus-visible, .ph-call:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
 
-/* On the navy panel ------------------------------------------------------
-   Everything inside the block was drawn for dark type on cream, so the panel
-   flips each piece: cream headings and copy, the state name in the lighter
-   terracotta the hero kicker already uses, and the call disc redrawn as a
-   hairline ring so it reads as raised, not pasted on. */
-.ph-about .ph-kicker { color: #8fdcb0; }
-.ph-about h2 { color: var(--paper); }
-.ph-about h2 em { color: #e8a98c; }
-.ph-about-text p { color: rgba(246, 241, 233, 0.78); }
-.ph-about .ph-call { color: var(--paper); }
-.ph-about .ph-call:hover { color: #e8a98c; }
-.ph-about .ph-call-icon { background: rgba(255, 255, 255, 0.1); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16); }
-.ph-about .ph-btn:focus-visible,
-.ph-about .ph-call:focus-visible { outline-color: #8fdcb0; }
+/* On the sky panel: a light ground, so the type keeps its dark ink. The
+   headline goes navy to sit in the blue rather than on it, and the copy
+   softens to hold it apart from the headline. */
+.ph-about h2 { color: var(--navy-deep); }
+.ph-about-text p { color: #3d5468; }
 
 /* Highway strip: the signs stand along a stretch of road with a dashed
    centre line, each with its name and the towns it links underneath. */
