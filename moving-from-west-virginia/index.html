@@ -1185,16 +1185,7 @@ body { overflow-x: clip; }
 }
 /* The inset photo's frame reads as a cut-out of whatever is behind it. */
 .ph-about .ph-photo-inset { border-color: var(--navy); }
-/* The dot grid was terracotta at low opacity, which sank into the navy. */
-.ph-about .ph-media::before { background-image: radial-gradient(rgba(246, 241, 233, 0.55) 1.6px, transparent 1.8px); opacity: 0.5; }
 .ph-media { position: relative; padding: 0 3.5rem 3.5rem 0; }
-.ph-media::before {
-  content: ""; position: absolute; top: -1.6rem; right: 1.25rem;
-  width: 150px; height: 150px;
-  background-image: radial-gradient(var(--accent) 1.6px, transparent 1.8px);
-  background-size: 15px 15px;
-  opacity: 0.3;
-}
 .ph-media figure { margin: 0; overflow: hidden; }
 .ph-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .ph-photo-main {
@@ -1211,47 +1202,38 @@ body { overflow-x: clip; }
   border-radius: 22px;
   box-shadow: 0 30px 50px -24px rgba(12, 26, 43, 0.55);
 }
-.ph-badge {
-  position: absolute; left: -1.5rem; top: 2.25rem;
-  display: flex; align-items: center; gap: 0.75rem;
-  padding: 0.75rem 1.15rem 0.75rem 0.75rem;
-  border-radius: 16px;
-  background: #fff;
-  box-shadow: 0 24px 44px -20px rgba(12, 26, 43, 0.45), 0 0 0 1px rgba(12, 26, 43, 0.04);
-}
-.ph-badge-icon {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 40px; height: 40px; flex-shrink: 0;
-  border-radius: 12px; background: var(--accent);
-}
-.ph-badge-icon svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.ph-badge strong { display: block; font-size: 0.92rem; font-weight: 700; color: var(--ink); line-height: 1.25; }
-.ph-badge div > span { display: block; font-size: 0.76rem; color: var(--muted); }
 
-/* The kicker sat as bare green type on the bare page. It now reads as a
-   tinted pill so the section has an anchor before the headline. */
-.ph-kicker {
-  display: inline-flex; align-items: center;
-  margin-bottom: 0.9rem; padding: 0.4rem 0.8rem;
-  border: 1px solid rgba(47, 143, 91, 0.22);
-  border-radius: 999px;
-  background: rgba(47, 143, 91, 0.1);
-  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--green-deep);
-}
+.ph-kicker { display: block; margin-bottom: 0.9rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green-deep); }
+/* In the about block the label carries a rule out to the column edge, which
+   sets the top of the list below it. The roads strip below is centred, so it
+   keeps the plain label. */
+.ph-about .ph-kicker { display: flex; align-items: center; gap: 0.7rem; }
+.ph-about .ph-kicker::after { content: ""; height: 1px; flex: 1; background: currentColor; opacity: 0.3; }
 .ph-about h2 { margin: 0 0 1.15rem; font-size: clamp(2rem, 3.1vw, 2.75rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.08; color: var(--ink); }
 .ph-about h2 em { font-style: normal; color: var(--accent); }
 .ph-about-text p { max-width: 36rem; margin: 0; font-size: 1.02rem; line-height: 1.75; color: var(--ink-soft); }
 .ph-more { display: none; }
-.ph-points { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; gap: 0.6rem; }
-.ph-points li {
-  display: flex; align-items: center; gap: 0.8rem;
-  padding: 0.8rem 1rem;
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 0 0 1px rgba(12, 26, 43, 0.06), 0 10px 24px -18px rgba(12, 26, 43, 0.35);
-  font-size: 0.98rem; font-weight: 600; color: var(--ink);
+/* Field notes: the three things a West Virginia move runs into, each with
+   what we do about it. Hairlines between them rather than cards — they are one
+   list to read down, not three things to compare. */
+.ph-notes { list-style: none; margin: 2rem 0 0; padding: 0; }
+.ph-notes li {
+  display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 1.1rem;
+  padding: 1.15rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
 }
+.ph-notes li:last-child { border-bottom: 1px solid rgba(255, 255, 255, 0.13); }
+.ph-note-icon {
+  grid-row: span 2; align-self: start;
+  display: inline-flex; margin-top: 0.1rem;
+  color: #e8a98c;
+}
+.ph-note-icon svg {
+  width: 26px; height: 26px;
+  fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+}
+.ph-note-title { font-size: 1.02rem; font-weight: 650; letter-spacing: -0.01em; color: var(--paper); }
+.ph-note-body { margin: 0.3rem 0 0; font-size: 0.92rem; line-height: 1.6; color: rgba(246, 241, 233, 0.66); }
 .ph-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; margin-top: 1.9rem; }
 /* Same shape as the on-moving-day button: the arrow rides in its own disc,
    and the disc, not the whole pill, does the moving on hover. */
@@ -1298,34 +1280,17 @@ body { overflow-x: clip; }
 }
 .ph-call-icon svg { width: 17px; height: 17px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .ph-btn:focus-visible, .ph-call:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
-.ph-tick {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 26px; height: 26px; flex-shrink: 0;
-  border-radius: 50%; background: #e9f4ed;
-}
-.ph-tick svg { width: 14px; height: 14px; fill: none; stroke: var(--green); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 
 /* On the navy panel ------------------------------------------------------
    Everything inside the block was drawn for dark type on cream, so the panel
    flips each piece: cream headings and copy, the state name in the lighter
-   terracotta the hero kicker already uses, and the white point cards and call
-   disc redrawn as translucent glass so they read as raised, not pasted on. */
-.ph-about .ph-kicker {
-  border-color: rgba(99, 201, 141, 0.35);
-  background: rgba(47, 143, 91, 0.2);
-  color: #8fdcb0;
-}
+   terracotta the hero kicker already uses, and the call disc redrawn as a
+   hairline ring so it reads as raised, not pasted on. */
+.ph-about .ph-kicker { color: #8fdcb0; }
 .ph-about h2 { color: var(--paper); }
 .ph-about h2 em { color: #e8a98c; }
 .ph-about-text p { color: rgba(246, 241, 233, 0.78); }
 .ph-about .ph-more { color: #e8a98c; }
-.ph-about .ph-points li {
-  background: rgba(255, 255, 255, 0.07);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.11);
-  color: var(--paper);
-}
-.ph-about .ph-tick { background: rgba(99, 201, 141, 0.18); }
-.ph-about .ph-tick svg { stroke: #8fdcb0; }
 .ph-about .ph-call { color: var(--paper); }
 .ph-about .ph-call:hover { color: #e8a98c; }
 .ph-about .ph-call-icon { background: rgba(255, 255, 255, 0.1); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16); }
@@ -1459,7 +1424,6 @@ body { overflow-x: clip; }
   .ph-stat-sub { font-size: 0.75rem; }
   .ph-about { padding: 3rem 2.5rem; gap: 3rem; }
   .ph-media { padding: 0 2.5rem 2.5rem 0; }
-  .ph-badge { left: 1rem; top: 1rem; }
   /* Signs wrap onto two rows here, so the road behind them goes. */
   .ph-road-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem 1rem; }
   .ph-road-list::before, .ph-road-list::after { display: none; }
@@ -1517,11 +1481,6 @@ body { overflow-x: clip; }
   .ph-media::before { display: none; }
   .ph-photo-main { aspect-ratio: 4 / 3; border-radius: 18px; }
   .ph-photo-inset { right: 0.75rem; width: 40%; border-width: 4px; border-radius: 14px; }
-  .ph-badge { left: 0.65rem; top: 0.65rem; gap: 0.55rem; padding: 0.5rem 0.8rem 0.5rem 0.5rem; border-radius: 12px; }
-  .ph-badge-icon { width: 30px; height: 30px; border-radius: 9px; }
-  .ph-badge-icon svg { width: 16px; height: 16px; }
-  .ph-badge strong { font-size: 0.8rem; }
-  .ph-badge div > span { font-size: 0.68rem; }
   .ph-kicker { margin-bottom: 0.65rem; padding: 0.32rem 0.65rem; font-size: 0.66rem; }
   .ph-about h2 { margin-bottom: 0.7rem; font-size: 1.5rem; }
   .ph-about-text p { font-size: 0.92rem; line-height: 1.62; }
@@ -1535,10 +1494,11 @@ body { overflow-x: clip; }
     font: inherit; font-size: 0.85rem; font-weight: 600;
     color: var(--accent); text-decoration: underline; text-underline-offset: 3px;
   }
-  .ph-points { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; padding-top: 0; border-top: 0; }
-  .ph-points li { gap: 0.35rem; padding: 0.3rem 0.7rem 0.3rem 0.35rem; border-radius: 999px; background: #fff; box-shadow: 0 0 0 1px rgba(12, 26, 43, 0.08); font-size: 0.78rem; }
-  .ph-tick { width: 18px; height: 18px; }
-  .ph-tick svg { width: 10px; height: 10px; }
+  .ph-notes { margin-top: 1.25rem; }
+  .ph-notes li { gap: 0.1rem 0.8rem; padding: 0.9rem 0; }
+  .ph-note-icon svg { width: 22px; height: 22px; }
+  .ph-note-title { font-size: 0.93rem; }
+  .ph-note-body { margin-top: 0.2rem; font-size: 0.84rem; line-height: 1.55; }
   /* The sticky call bar already carries the phone number on phones. */
   .ph-cta { margin-top: 1.25rem; }
   .ph-btn { flex: 1 1 100%; justify-content: center; gap: 0.8rem; padding: 0.45rem 0.45rem 0.45rem 1.4rem; font-size: 0.97rem; }
@@ -2119,21 +2079,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <figure class="ph-photo-inset">
         <img src="/assets/images/gallery/road-inset.jpg" alt="Moving truck on an open highway at sunrise" width="900" height="672" loading="lazy" decoding="async" />
       </figure>
-      <div class="ph-badge">
-        <span class="ph-badge-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></span>
-        <div><strong>Every town in West Virginia</strong><span>Cities, villages &amp; back roads</span></div>
-      </div>
     </div>
 
     <div class="ph-about-text">
       <span class="ph-kicker">Moving from West Virginia</span>
       <h2>Moving out of <em>West Virginia</em>, planned to the last mile</h2>
-      <p>West Virginia is the most topographically difficult state in the East to move in. Mountain roads with hairpin turns, one-lane bridges, hollows where a tractor-trailer physically cannot turn around, and steep driveways make access the central planning question on nearly every job. In West Virginia we treat shuttle service as routine. The Eastern Panhandle around Martinsburg is the exception — it functions as a DC exurb and moves like one.</p>
+      <p>West Virginia is the hardest state in the East to move out of, and the reason is the ground itself. Hairpin mountain roads, posted one-lane bridges and hollows where a tractor-trailer physically cannot turn around make access — not mileage — the question that decides your price.</p>
       <button type="button" class="ph-more" aria-expanded="false">Read more</button>
-      <ul class="ph-points">
-        <li><span class="ph-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Hollow road access</li>
-        <li><span class="ph-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Posted one-lane bridges</li>
-        <li><span class="ph-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Eastern Panhandle is different</li>
+      <!-- Three things a West Virginia move actually runs into, and what we do
+           about each. This replaced a green-tick feature list that put a
+           checkmark beside hazards. -->
+      <ul class="ph-notes">
+        <li>
+          <span class="ph-note-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="1.5" y="7" width="9" height="7" rx="1"/><path d="M13.5 9h5l3 3v4h-8z"/><circle cx="5" cy="17" r="1.8"/><circle cx="17.5" cy="17" r="1.8"/><path d="M8 20.5h6"/><polyline points="12 20.5 10.5 19 10.5 22 12 20.5"/></svg></span>
+          <strong class="ph-note-title">Shuttle service is routine here</strong>
+          <p class="ph-note-body">Where a 53-foot trailer can&rsquo;t reach the door, a smaller truck runs your goods out to it. We price that shuttle into the quote up front — it is not a surcharge you meet on loading day.</p>
+        </li>
+        <li>
+          <span class="ph-note-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 8v8"/><path d="M22 8v8"/><path d="M2 12h20"/><path d="M6 12v4"/><path d="M12 12v4"/><path d="M18 12v4"/><path d="M12 3v5"/><path d="M9.5 5.5h5"/></svg></span>
+          <strong class="ph-note-title">We check the bridges before we load</strong>
+          <p class="ph-note-body">Posted weight limits close routes to a loaded van. Your road is walked on the survey, so the truck that shows up is one that can legally get to you.</p>
+        </li>
+        <li>
+          <span class="ph-note-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 20h20"/><path d="M4 20 9 9l3 5 2.5-4L20 20"/><path d="M12 20c0-3 4-3 4-6"/></svg></span>
+          <strong class="ph-note-title">The Eastern Panhandle is another state</strong>
+          <p class="ph-note-body">Martinsburg and Charles Town run as DC exurbs: full-size truck access, metro traffic windows and building rules. We quote that corner the way we quote Virginia, not the way we quote a hollow.</p>
+        </li>
       </ul>
       <div class="ph-cta">
         <a href="#get-quote" class="ph-btn"><span>Get my fixed price</span><span class="ph-btn-chip" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
