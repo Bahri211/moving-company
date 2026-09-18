@@ -6,21 +6,47 @@
   var toggle = document.querySelector('.nav-toggle');
   var mobileMenu = document.querySelector('.mobile-menu');
 
+  /* The drawer closes on a tap outside it, on Escape, on any link inside it,
+     and if the viewport grows past the breakpoint while it is open. Focus
+     moves into the panel on open and back to the button on close, and the
+     panel is inert while closed so its links stay out of the tab order.
+     Mirrors the block in index.html. */
   if (toggle && mobileMenu) {
+    var mmPanel = mobileMenu.querySelector('.mm-panel');
+    var scrim = mobileMenu.querySelector('[data-mm-close]');
+
+    var setMenu = function (open) {
+      body.classList.toggle('menu-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      mobileMenu.setAttribute('aria-hidden', String(!open));
+      if (mmPanel) {
+        if (open) { mmPanel.removeAttribute('inert'); } else { mmPanel.setAttribute('inert', ''); }
+      }
+      body.style.overflow = open ? 'hidden' : '';
+      if (open) {
+        if (mmPanel) mmPanel.focus({ preventScroll: true });
+      } else if (document.activeElement && mobileMenu.contains(document.activeElement)) {
+        toggle.focus({ preventScroll: true });
+      }
+    };
+
+    if (mmPanel) mmPanel.setAttribute('inert', '');
     toggle.addEventListener('click', function () {
-      var isOpen = body.classList.toggle('menu-open');
-      toggle.setAttribute('aria-expanded', isOpen);
-      mobileMenu.setAttribute('aria-hidden', !isOpen);
-      body.style.overflow = isOpen ? 'hidden' : '';
+      setMenu(!body.classList.contains('menu-open'));
     });
     mobileMenu.querySelectorAll('a').forEach(function (link) {
-      link.addEventListener('click', function () {
-        body.classList.remove('menu-open');
-        toggle.setAttribute('aria-expanded', 'false');
-        mobileMenu.setAttribute('aria-hidden', 'true');
-        body.style.overflow = '';
-      });
+      link.addEventListener('click', function () { setMenu(false); });
     });
+    if (scrim) scrim.addEventListener('click', function () { setMenu(false); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && body.classList.contains('menu-open')) setMenu(false);
+    });
+    var wideMq = window.matchMedia('(min-width: 769px)');
+    var closeIfWide = function (e) {
+      if (e.matches && body.classList.contains('menu-open')) setMenu(false);
+    };
+    if (wideMq.addEventListener) wideMq.addEventListener('change', closeIfWide);
+    else wideMq.addListener(closeIfWide);
   }
 
   // Hero video: a looping background clip is motion, so honour the OS setting
@@ -365,8 +391,10 @@
  * point just below the nav, rather than by "most visible" — that flickers when
  * a short section sits between two tall ones. */
 (function () {
+  // The drawer's rows are marked too, so opening it mid-page shows where you
+  // are rather than six identical rows.
   var links = Array.prototype.slice.call(
-    document.querySelectorAll('.nav-links a[href^="#"]')
+    document.querySelectorAll('.nav-links a[href^="#"], .mm-nav a[href^="#"]')
   );
   if (!links.length) return;
 
@@ -395,9 +423,15 @@
       if (pairs[i].section.getBoundingClientRect().top <= line) found = pairs[i].link;
     }
 
+
     if (found === current) return;
-    if (current) current.classList.remove('is-current');
-    if (found) found.classList.add('is-current');
+    links.forEach(function (l) { l.classList.remove('is-current'); });
+    if (found) {
+      // Mark every link pointing at that section — the bar's and the drawer's.
+      links.forEach(function (l) {
+        if (l.hash === found.hash) l.classList.add('is-current');
+      });
+    }
     current = found;
   }
 

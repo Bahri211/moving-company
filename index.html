@@ -837,18 +837,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </nav>
 
-<div class="mobile-menu" aria-hidden="true">
-  <ul>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#coverage">Coverage</a></li>
-    <li><a href="#process">Process</a></li>
-    <li><a href="#gallery">Gallery</a></li>
-    <li><a href="#faq">FAQ</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <div class="mobile-menu-ctas">
-    <a href="tel:+18885051086" class="call">Call +1 (888) 505-1086</a>
-    <a href="#get-quote" class="quote">Get a free quote</a>
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <div class="mm-scrim" data-mm-close></div>
+  <div class="mm-panel" role="dialog" aria-modal="true" aria-label="Menu" tabindex="-1">
+    <a class="mm-call" href="tel:+18885051086">
+      <span class="mm-call-chip" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+      <span class="mm-call-text">
+        <span class="mm-call-label">Talk to us — any hour</span>
+        <span class="mm-call-num">+1 (888) 505-1086</span>
+      </span>
+    </a>
+    <nav class="mm-nav" aria-label="Sections">
+      <ul>
+        <li><a href="#services"><span class="mm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V21H3V9.5Z"/><path d="M9 21v-8h6v8"/></svg></span>Services<svg class="mm-go" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg></a></li>
+        <li><a href="#coverage"><span class="mm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>Coverage<svg class="mm-go" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg></a></li>
+        <li><a href="#process"><span class="mm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1.2"/><circle cx="3.5" cy="12" r="1.2"/><circle cx="3.5" cy="18" r="1.2"/></svg></span>Process<svg class="mm-go" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg></a></li>
+        <li><a href="#gallery"><span class="mm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m21 16-5-5-6 6-2-2-5 5"/></svg></span>Gallery<svg class="mm-go" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg></a></li>
+        <li><a href="#faq"><span class="mm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.8c0 1.7-2.4 2.2-2.4 3.9"/><path d="M12 17.2h.01"/></svg></span>FAQ<svg class="mm-go" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg></a></li>
+        <li><a href="#contact"><span class="mm-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="m21 6.5-9 6-9-6"/></svg></span>Contact<svg class="mm-go" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg></a></li>
+      </ul>
+    </nav>
+    <div class="mm-foot">
+      <a href="#get-quote" class="mm-quote">Get a free quote<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <p class="mm-trust"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 20 6v6c0 4.6-3.3 8.6-8 9.5-4.7-.9-8-4.9-8-9.5V6l8-3.5Z"/><polyline points="9 12 11.2 14.2 15 10.2"/></svg>Licensed &amp; insured · MC-1820728 · USDOT #4575745</p>
+    </div>
   </div>
 </div>
 
@@ -1576,26 +1588,42 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 <script>
-  // Mobile menu
+  /* Mobile menu. The drawer closes on a tap outside it, on Escape, on any link
+     inside it, and if the viewport grows past the breakpoint while it is open.
+     Focus moves into the panel on open and back to the button on close, and
+     the panel is inert while closed so its links stay out of the tab order. */
   const toggle = document.querySelector('.nav-toggle');
   const body = document.body;
   const mobileMenu = document.querySelector('.mobile-menu');
+  const mmPanel = mobileMenu && mobileMenu.querySelector('.mm-panel');
 
-  toggle.addEventListener('click', () => {
-    const isOpen = body.classList.toggle('menu-open');
-    toggle.setAttribute('aria-expanded', isOpen);
-    mobileMenu.setAttribute('aria-hidden', !isOpen);
-    body.style.overflow = isOpen ? 'hidden' : '';
-  });
+  function setMenu(open) {
+    body.classList.toggle('menu-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    mobileMenu.setAttribute('aria-hidden', String(!open));
+    if (open) mmPanel.removeAttribute('inert'); else mmPanel.setAttribute('inert', '');
+    body.style.overflow = open ? 'hidden' : '';
+    if (open) {
+      mmPanel.focus({ preventScroll: true });
+    } else if (document.activeElement && mobileMenu.contains(document.activeElement)) {
+      toggle.focus({ preventScroll: true });
+    }
+  }
 
-  document.querySelectorAll('.mobile-menu a').forEach(link => {
-    link.addEventListener('click', () => {
-      body.classList.remove('menu-open');
-      toggle.setAttribute('aria-expanded', 'false');
-      mobileMenu.setAttribute('aria-hidden', 'true');
-      body.style.overflow = '';
+  if (toggle && mobileMenu) {
+    mmPanel.setAttribute('inert', '');
+    toggle.addEventListener('click', () => setMenu(!body.classList.contains('menu-open')));
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => setMenu(false));
     });
-  });
+    mobileMenu.querySelector('[data-mm-close]').addEventListener('click', () => setMenu(false));
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && body.classList.contains('menu-open')) setMenu(false);
+    });
+    window.matchMedia('(min-width: 769px)').addEventListener('change', e => {
+      if (e.matches && body.classList.contains('menu-open')) setMenu(false);
+    });
+  }
 
   // Hero video: a looping background clip is motion, so honour the OS setting
   const heroVideo = document.getElementById('hero-video');
