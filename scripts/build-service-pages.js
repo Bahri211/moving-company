@@ -134,6 +134,60 @@ const PAGES = [
        '<p>4–6 weeks is comfortable, 6–8 weeks in peak season (May through August). Call us whatever your dates are, though — we handle last-minute interstate moves regularly, and we will tell you straight away what we can do rather than leaving you guessing.</p>'],
     ],
   },
+  {
+    slug: 'state-to-state-movers',
+    title: 'State to State Movers | Moving Between States — 50STATEMOVERS INC',
+    description:
+      'State to state movers covering 48 states and D.C. One crew from your old door to your new one, a binding fixed price, and people who know the rules at both ends.',
+    ogTitle: '50STATEMOVERS INC — State to State Movers',
+    ogDescription:
+      'Moving from one state to another, door to door. Fixed prices, our own crews, and a moving guide for every state we serve.',
+    schemaDescription:
+      'State to state moving company relocating households and offices between any two of the 48 continental states and Washington D.C.',
+    h1: 'State to State <em>Movers</em>',
+    coverageH2: 'Any two states, <em>one crew.</em>',
+    coverageP:
+      'Pick your old state and your new one: we run between all 48 and D.C., and we have a guide for each of them — what a move out of there costs you in time, season and paperwork.',
+    servicesH2: 'Moving between states, <em>at your pace.</em>',
+    servicesP:
+      'A move between states is really two local moves with a long drive in the middle. Choose how much of it you want to hand over, and the same company handles both ends.',
+    processH2: 'What moving between states <em>looks like.</em>',
+    processP:
+      'One survey, one price, one crew, both addresses. Nothing is handed to a partner company the moment you cross the line.',
+    processSteps: [
+      ['Survey', 'A video or in-home walkthrough of the house you are leaving, so the plan fits what is actually going on the truck.'],
+      ['Fixed Quote', 'One written price covering both states — origin labour, the drive, and delivery — with every line itemized.'],
+      ['Move Out', 'Your crew packs, protects and loads, and handles the permits or building rules where you are leaving from.'],
+      ['Move In', 'The same shipment, delivered to your new state and carried into the rooms you point to. No second company, no handover.'],
+    ],
+    jobH2: 'Two states, <em>one day at a time.</em>',
+    jobLede: 'Photographs from our own crews — this is what moving between two states looks like from the inside.',
+    jobSteps: [
+      ['Floors protected', 'Runners down and jambs padded in the house you are leaving and the one you are arriving at.'],
+      ['Everything wrapped', 'Blankets, shrink and tape on every piece before it goes anywhere near the truck.'],
+      ['Loaded for the drive', 'Stacked in tiers and strapped row by row for the miles between the two states.'],
+      ['Into the new place', 'Unloaded room by room at the far address, on the date we agreed before you booked.'],
+    ],
+    galleryH2: 'State to state, <em>up close.</em>',
+    galleryP: 'Moves between states we have run this year — packed, loaded and delivered by the crews in these photographs.',
+    reviewsH2: 'What people moving states <em>say.</em>',
+    faqH2: 'Moving between states, <em>answered.</em>',
+    faqP: 'What people ask when they are leaving one state for another. If yours is not here, call — we are around.',
+    faq: [
+      ['Which states do you move between?',
+       '<p>All 48 continental states and Washington D.C., in either direction. There is a moving guide for each one on this site — the routes we run most from there, the cities we cover, and what is worth knowing before you book.</p>'],
+      ['Is the same crew with me at both ends?',
+       '<p>It is our company at both addresses: our crew loads you and our truck delivers you. Plenty of movers hand your shipment to a partner firm at the state line — that is where a move stops being anybody\'s responsibility, and it is not how we work.</p>'],
+      ['Do you know the rules where I am going?',
+       '<p>Yes, and they matter more than people expect. Parking permits, elevator reservations, certificates of insurance for the building, HOA move-in windows — we sort those at both ends, because a truck that cannot park is a day you pay for twice.</p>'],
+      ['What if my new place is not ready yet?',
+       '<p>Very common when two closings do not line up. We hold your shipment in climate-controlled, monitored storage and deliver when you are ready — inventoried in, inventoried out, insured the whole time.</p>'],
+      ['Do you take small moves between states, or only whole houses?',
+       '<p>Both. A studio going three states over is as welcome as a five-bedroom house going across the country. The survey sets the price either way, so a small shipment is priced like a small shipment.</p>'],
+      ['When is the best time to move between states?',
+       '<p>Mid-month and midweek, outside May through August, is the quietest and the easiest to schedule. Peak season books out fastest, so if your dates fall there, get on the calendar early — and call us whatever they are, because we run last-minute moves regularly.</p>'],
+    ],
+  },
 ];
 
 /* -------------------------------------------------------------- the machine */
