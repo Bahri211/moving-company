@@ -5,7 +5,7 @@
     "resend": "^6.14.0"
   },
   "scripts": {
-    "build:seo": "node scripts/build-state-pages.js && node scripts/verify-seo.js",
+    "build:seo": "node scripts/build-state-pages.js && node scripts/build-service-pages.js && node scripts/verify-seo.js",
     "verify:seo": "node scripts/verify-seo.js"
   }
 }

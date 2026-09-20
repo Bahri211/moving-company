@@ -22,10 +22,14 @@ const ALLOWED_MONEY = /^\$1M$/;
 // No FAQ may ask about price. Matches the text inside a .faq-q button.
 const PRICE_QUESTION = /how much (does|do|would|will) .{0,80}\bcost\b|cheapest time|is it cheaper|what (does|do) .{0,60}\bcost\b|price list|how much .{0,40}\bto move\b/i;
 
+// The state pages and hub are moving-*; the service landing pages are named
+// for what people search, so they are listed rather than matched.
+const SERVICE_PAGES = ['long-distance-movers', 'interstate-movers'];
 const pages = [];
 for (const entry of fs.readdirSync(ROOT)) {
   const idx = path.join(ROOT, entry, 'index.html');
-  if (entry.startsWith('moving-') && fs.existsSync(idx)) pages.push(['/' + entry + '/', idx]);
+  if (!fs.existsSync(idx)) continue;
+  if (entry.startsWith('moving-') || SERVICE_PAGES.includes(entry)) pages.push(['/' + entry + '/', idx]);
 }
 pages.push(['/', path.join(ROOT, 'index.html')]);
 

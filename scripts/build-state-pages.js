@@ -1451,7 +1451,8 @@ const FOOTER = `<section id="contact" class="contact-strip">
         <li><a href="#services">Commercial</a></li>
         <li><a href="#services">Packing</a></li>
         <li><a href="#services">Storage</a></li>
-        <li><a href="#services">Long Distance</a></li>
+        <li><a href="/long-distance-movers/">Long Distance</a></li>
+        <li><a href="/interstate-movers/">Interstate Movers</a></li>
         <li><a href="#services">White Glove</a></li>
       </ul>
     </div>
@@ -3184,6 +3185,9 @@ function write(relPath, contents) {
 const staticPages = [
   { loc: '/', priority: '1.0', changefreq: 'weekly' },
   { loc: HUB_URL, priority: '0.9', changefreq: 'monthly' },
+  // Service landing pages, built by scripts/build-service-pages.js.
+  { loc: '/long-distance-movers/', priority: '0.9', changefreq: 'monthly' },
+  { loc: '/interstate-movers/', priority: '0.9', changefreq: 'monthly' },
   { loc: '/privacy-policy', priority: '0.3', changefreq: 'yearly' },
   { loc: '/terms-of-service', priority: '0.3', changefreq: 'yearly' },
 ];
