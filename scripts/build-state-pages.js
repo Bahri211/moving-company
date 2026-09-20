@@ -2618,7 +2618,10 @@ src="https://www.facebook.com/tr?id=1413801450690954&ev=PageView&noscript=1"
 <meta property="og:description" content="${esc(description)}" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="${canonical}" />
-<meta property="og:image" content="${SITE}/assets/images/trucks/truck-1.jpg" />
+<meta property="og:image" content="${SITE}/assets/images/og-cover.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="628" />
+<meta name="twitter:image" content="${SITE}/assets/images/og-cover.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 <title>${esc(title)}</title>
 <link rel="icon" type="image/png" href="/assets/images/48-state-movers-logo.png" />
