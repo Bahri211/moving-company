@@ -3109,8 +3109,8 @@ ${STATS_BAND}
 <!-- COVERAGE -->
 <section id="coverage" class="coverage-section">
   <div class="section-header">
-    <h2>All <em>${states.length}</em> state moving guides.</h2>
-    <p>Every continental state plus Washington DC. Each page covers that state's real routes, timing, access constraints, and licensing — pick yours to see what your move actually involves.</p>
+    <h2>Movers by state: all <em>${states.length} guides.</em></h2>
+    <p>Long distance movers for every continental state plus Washington DC. Each page covers that state's real routes, timing, access constraints and licensing — pick yours to see what your move actually involves.</p>
   </div>
   <div class="states-grid" id="states-grid">
 ${allStates}
@@ -3122,7 +3122,7 @@ ${allStates}
 <section id="routes">
   <div class="section-header">
     <h2>Most-requested <em>destinations.</em></h2>
-    <p>Where the country is moving right now. Each guide covers arrival logistics, building and HOA rules, and how long the lane takes.</p>
+    <p>Where the country is moving right now. Each guide names the interstate movers' side of it: arrival logistics, building and HOA rules, and how long the lane takes.</p>
   </div>
   <div class="services">
 ${featured}

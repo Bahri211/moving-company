@@ -87,17 +87,17 @@ module.exports = {
   ],
 
   faqLede: [
-    `The things people actually ask us before booking a move out of {{state}}.`,
-    `Questions we field most often from households leaving {{state}}.`,
-    `What {{state}} customers want settled before they put a date in the diary.`,
-    `The answers people ask for before committing to {{a}} {{state}} move.`,
+    `The things people actually ask before booking {{state}} movers for a move out of state.`,
+    `Questions we field most often from households hiring movers from {{state}}.`,
+    `What customers want settled before they choose between {{state}} movers and the national vans.`,
+    `The answers people ask for before committing to {{a}} {{state}} move with any interstate movers.`,
   ],
 
   nearbyLede: [
-    `We run the full continental map. These are the states most often paired with {{a}} {{state}} move — each has its own guide covering arrival logistics, building rules, and seasonal timing.`,
-    `Our lanes cover the continental US. The destinations below are the ones {{state}} households pick most; each links to a guide on arriving there — access, building rules, and the right time of year.`,
-    `Anywhere in the lower 48 is a lane we run. These are simply the common pairings out of {{state}}, and each state has a guide of its own on what delivery there involves.`,
-    `The whole continental map is in range. Listed here are the states we most often deliver {{state}} loads to, with a dedicated guide behind each on logistics, building access, and timing.`,
+    `As {{state}} movers we run the full continental map. These are the states most often paired with {{a}} {{state}} move — each has its own guide covering arrival logistics, building rules, and seasonal timing.`,
+    `Our {{state}} movers cover the continental US. The destinations below are the ones local households pick most; each links to a guide on arriving there — access, building rules, and the right time of year.`,
+    `Anywhere in the lower 48 is a lane for our movers from {{state}}. These are simply the common pairings, and each state has a guide of its own on what delivery there involves.`,
+    `The whole continental map is in range. Listed here are the states our {{state}} movers most often deliver to, with a dedicated guide behind each on logistics, building access, and timing.`,
   ],
 
   /* ----------------------------------------------------------- licensing FAQ */
@@ -215,10 +215,10 @@ module.exports = {
   ],
 
   galleryLede: [
-    `A look at the homes, offices, and cross-country relocations we've handled across the country.`,
-    `Recent jobs — houses, offices, and long-haul lanes run coast to coast.`,
-    `Crews at work: family homes, business relocations, and cross-country hauls.`,
-    `A sample of the moves behind the quotes — residential, commercial, and long distance.`,
+    `A look at the homes, offices and cross-country relocations our {{state}} movers have handled.`,
+    `Recent jobs — houses, offices and long-haul lanes, run by the {{state}} movers you would be booking.`,
+    `Crews at work: the {{state}} movers who handle family homes, business relocations and cross-country hauls.`,
+    `A sample of the moves behind the quotes, all of them run by our own movers from {{state}}.`,
   ],
 
   /* --------------------------------------------------------- illustrated band */
@@ -304,11 +304,11 @@ module.exports = {
   ],
 
   jobLede: [
-    `One job, four stages — photographed on our own {{state}} work, not bought in.`,
-    `Photographs from our own crews — this is what the four parts of your day look like.`,
-    `Our own crews, our own photographs: the four things that happen between your two doors.`,
-    `No stock photography. These are our crews, in the order the day actually runs.`,
-    `Four stages on every {{state}} job — this is what each of them looks like.`,
+    `One job, four stages — photographed on our own {{state}} movers at work, not bought in.`,
+    `Photographs of our {{state}} movers at work: the four parts of your day, in order.`,
+    `Our own movers, our own photographs: the four things that happen between your two doors.`,
+    `No stock photography. These are the movers from {{state}} who would be on your job.`,
+    `Four stages on every job our movers from {{state}} run — this is what each of them looks like.`,
   ],
 
   jobStep1Title: [
