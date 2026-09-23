@@ -376,6 +376,20 @@ html.drawer-open { overflow: hidden; }
   font: 600 1.2rem Inter, sans-serif; margin-bottom: 1.6rem;
 }
 .step h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+/* Illustrations: white line art used as a mask, so it takes the palette's
+   accent on a dark tile. */
+.step-illo {
+  position: relative; aspect-ratio: 4 / 3; margin-bottom: 1.3rem; border-radius: 18px;
+  background: var(--dark); overflow: hidden;
+}
+.step-illo::after {
+  content: ""; position: absolute; inset: 20% 18%;
+  background: var(--accent);
+  -webkit-mask: var(--illo) center / contain no-repeat; mask: var(--illo) center / contain no-repeat;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.step:hover .step-illo::after { transform: scale(1.06); }
+.rail-track { display: none; }
 .step p { color: var(--muted); font-size: 0.96rem; }
 
 /* Coverage ----------------------------------------------------------------- */
@@ -622,19 +636,33 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   .t-6 > div { max-width: none; }
   .t-6 img { width: 100%; height: 55%; -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent); mask-image: linear-gradient(180deg, #000 55%, transparent); }
   .rail { grid-auto-columns: 78%; margin-right: -1rem; padding-right: 1rem; }
-  .road { grid-template-columns: 1fr; gap: 1.6rem; }
-  .road::before { top: 28px; left: 27px; width: 0; height: var(--len, calc(100% - 56px)); border-top: 0; border-left: 2px dashed var(--line); }
-  .road-fill { top: 28px; left: 26px; width: 4px; height: calc(var(--len, calc(100% - 56px)) * var(--p)); }
-  /* On a white disc, so it still reads as it rolls over the orange dots. */
-  .road-truck {
-    top: calc(28px + var(--len, calc(100% - 56px)) * var(--p)); left: 28px; width: 44px; height: 44px; padding: 9px 7px;
-    translate: -50% -50%; border-radius: 50%; background: var(--surface);
-    box-shadow: 0 0 0 2px var(--accent), 0 8px 18px -8px rgba(0, 0, 0, 0.4); filter: none;
+  /* Phones: the steps sit side by side as cards you swipe, and a small truck
+     under them drives along with the swipe. */
+  .road {
+    grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 80%; gap: 0.75rem;
+    overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+    margin-right: -1rem; padding: 0 1rem 0.3rem 0; scrollbar-width: none;
   }
-  .road-truck svg { rotate: 90deg; }
-  .step { display: grid; grid-template-columns: 56px 1fr; column-gap: 1.1rem; }
-  .step-dot { margin: 0; grid-row: span 2; position: relative; }
-  .step h3 { font-size: 1.3rem; margin: 0.6rem 0 0.3rem; }
+  .road::-webkit-scrollbar { display: none; }
+  .road::before, .road-fill, .road-truck { display: none; }
+  .step {
+    position: relative; scroll-snap-align: start; padding: 0.6rem 0.6rem 1.25rem; border-radius: 20px;
+    background: var(--surface); box-shadow: 0 1px 0 var(--line), 0 18px 36px -28px rgba(0, 0, 0, 0.4);
+  }
+  .step-dot, .step.is-passed .step-dot {
+    position: absolute; top: 1.1rem; left: 1.1rem; z-index: 1; width: 36px; height: 36px; margin: 0;
+    font-size: 0.95rem; background: var(--accent); color: var(--on-accent); box-shadow: none; transform: none;
+  }
+  .step-illo { margin-bottom: 1rem; border-radius: 14px; }
+  .step h3 { font-size: 1.3rem; margin: 0 0 0.3rem; padding: 0 0.55rem; }
+  .step p { padding: 0 0.55rem; font-size: 0.93rem; }
+  .rail-track { --rp: 0; display: block; position: relative; height: 30px; margin: 1.1rem 3.2rem 0 0.2rem; }
+  .rail-track::before { content: ""; position: absolute; left: 0; right: 0; bottom: 6px; border-top: 2px dashed var(--line); }
+  .rail-fill { position: absolute; left: 0; bottom: 5px; height: 4px; border-radius: 4px; background: var(--accent); width: calc((100% - 44px) * var(--rp) + 22px); }
+  .rail-truck { position: absolute; bottom: 6px; left: calc((100% - 44px) * var(--rp)); width: 44px; height: 25px; color: var(--accent); }
+  .rail-truck svg { display: block; width: 100%; height: 100%; }
+  .rail-hint { position: absolute; right: -3.2rem; bottom: 0; font-size: 0.75rem; font-weight: 700; color: var(--muted); transition: opacity 0.3s; }
+  .rail-track.is-swiped .rail-hint { opacity: 0; }
   .cov-grid, .faq-grid { grid-template-columns: 1fr; gap: 2rem; }
   .cov-photo { min-height: 320px; order: 2; }
   .faq-aside { position: static; }
@@ -886,10 +914,15 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
       <span class="road-truck" aria-hidden="true">
         <svg viewBox="0 0 64 36"><rect x="1" y="3" width="39" height="23" rx="3" fill="currentColor"/><path d="M42 10h10.5a3 3 0 0 1 2.2 1l6.3 7.2V26H42z" fill="currentColor"/><path d="M45 13.5h7l4.4 5H45z" fill="#fff" opacity=".9"/><rect x="6" y="9" width="28" height="3" rx="1.5" fill="#fff" opacity=".35"/><circle cx="13" cy="28" r="5.5" fill="var(--ink)" stroke="var(--bg)" stroke-width="2.5"/><circle cx="51" cy="28" r="5.5" fill="var(--ink)" stroke="var(--bg)" stroke-width="2.5"/></svg>
       </span>
-      <div class="step reveal"><span class="step-dot">1</span><h3>Survey</h3><p>A video or in-home walkthrough so we know the full scope before quoting.</p></div>
-      <div class="step reveal"><span class="step-dot">2</span><h3>Fixed quote</h3><p>A written estimate with every line itemized. What you see is what you pay.</p></div>
-      <div class="step reveal"><span class="step-dot">3</span><h3>Move day</h3><p>The crew arrives on schedule, in uniform, with materials, mats and a plan.</p></div>
-      <div class="step reveal"><span class="step-dot">4</span><h3>Settle in</h3><p>We don't leave until furniture is placed, beds are built, and you've signed off.</p></div>
+      <div class="step"><span class="step-dot">1</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-survey.png')" aria-hidden="true"></div><h3>Survey</h3><p>A video or in-home walkthrough so we know the full scope before quoting.</p></div></div>
+      <div class="step"><span class="step-dot">2</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-quote.png')" aria-hidden="true"></div><h3>Fixed quote</h3><p>A written estimate with every line itemized. What you see is what you pay.</p></div></div>
+      <div class="step"><span class="step-dot">3</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-moveday.png')" aria-hidden="true"></div><h3>Move day</h3><p>The crew arrives on schedule, in uniform, with materials, mats and a plan.</p></div></div>
+      <div class="step"><span class="step-dot">4</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-settle.png')" aria-hidden="true"></div><h3>Settle in</h3><p>We don't leave until furniture is placed, beds are built, and you've signed off.</p></div></div>
+    </div>
+    <div class="rail-track" aria-hidden="true">
+      <span class="rail-fill"></span>
+      <span class="rail-truck"><svg viewBox="0 0 64 36"><rect x="1" y="3" width="39" height="23" rx="3" fill="currentColor"/><path d="M42 10h10.5a3 3 0 0 1 2.2 1l6.3 7.2V26H42z" fill="currentColor"/><path d="M45 13.5h7l4.4 5H45z" fill="#fff" opacity=".9"/><circle cx="13" cy="28" r="5.5" fill="var(--ink)" stroke="var(--bg)" stroke-width="2.5"/><circle cx="51" cy="28" r="5.5" fill="var(--ink)" stroke="var(--bg)" stroke-width="2.5"/></svg></span>
+      <span class="rail-hint">Swipe</span>
     </div>
   </div>
 </section>
@@ -1223,15 +1256,17 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
     [quoteCard].concat(endZones).forEach(function (el) { watch.observe(el); });
   } else { callbar.classList.add('is-on'); pill.classList.add('is-on'); }
 
-  // Scroll-driven motion: hero parallax and the process truck. Skipped for
-  // anyone who asks their system for reduced motion.
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  // Scroll-driven: hero parallax and the process truck and steps. Parallax is
+  // skipped under reduced motion; the steps still follow the scroll, since
+  // on phones they are how the process is read.
+  (function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var hero = document.querySelector('.hero'), road = document.getElementById('road');
     var steps = road.querySelectorAll('.step'), ticking = false, stopTimer;
     var update = function () {
       ticking = false;
       var y = window.scrollY, vh = window.innerHeight;
-      if (y < hero.offsetHeight) hero.style.setProperty('--hero-shift', (y * 0.32).toFixed(1) + 'px');
+      if (!reduce && y < hero.offsetHeight) hero.style.setProperty('--hero-shift', (y * 0.32).toFixed(1) + 'px');
       // 0 when the road enters the lower part of the screen, 1 once it reaches the upper third.
       var a = steps[0].querySelector('.step-dot').getBoundingClientRect();
       var b = steps[steps.length - 1].querySelector('.step-dot').getBoundingClientRect();
@@ -1247,7 +1282,15 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
     window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
     window.addEventListener('resize', update);
     update();
-  }
+
+    // Phones: the little truck under the step cards follows the swipe.
+    var track = document.querySelector('.rail-track');
+    road.addEventListener('scroll', function () {
+      var max = road.scrollWidth - road.clientWidth;
+      track.style.setProperty('--rp', max > 0 ? (road.scrollLeft / max).toFixed(4) : 0);
+      if (road.scrollLeft > 8) track.classList.add('is-swiped');
+    }, { passive: true });
+  })();
 
   // Stat figures count to their value the first time the row shows. The
   // real number is in the markup, so nothing is lost without JS or motion.
