@@ -184,9 +184,11 @@ html.drawer-open { overflow: hidden; }
 .drawer-foot small i { width: 8px; height: 8px; border-radius: 50%; background: #3fcf7a; box-shadow: 0 0 0 4px rgba(63, 207, 122, 0.2); }
 
 /* Hero --------------------------------------------------------------------- */
-.hero { position: relative; margin-top: -76px; padding: calc(76px + 4.5rem) 0 2.5rem; min-height: min(880px, calc(100svh - 38px)); display: flex; flex-direction: column; color: #fff; isolation: isolate; }
+.hero { position: relative; overflow: clip; margin-top: -76px; padding: calc(76px + 4.5rem) 0 2.5rem; min-height: min(880px, calc(100svh - 38px)); display: flex; flex-direction: column; color: #fff; isolation: isolate; }
 .hero::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
+  /* Parallax: the script sinks the photo at a fraction of the scroll. */
+  transform: translate3d(0, var(--hero-shift, 0px), 0); will-change: transform;
   background:
     linear-gradient(90deg, rgba(var(--wash), 0.82) 0%, rgba(var(--wash), 0.45) 45%, rgba(var(--wash), 0) 75%),
     linear-gradient(180deg, rgba(var(--wash), 0.4) 0%, rgba(var(--wash), 0) 30%, rgba(var(--wash), 0) 60%, rgba(var(--wash), 0.7) 100%),
@@ -332,16 +334,27 @@ html.drawer-open { overflow: hidden; }
 
 /* Process: four steps on a dashed road -------------------------------------- */
 .road { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
-.road::before { content: ""; position: absolute; top: 27px; left: 28px; right: 28px; border-top: 2px dashed var(--line); }
-.road-fill { position: absolute; top: 26px; left: 28px; height: 4px; width: 0; border-radius: 4px; background: var(--accent); transition: width 1.6s cubic-bezier(0.22, 1, 0.36, 1); }
-.road.is-in .road-fill { width: calc(100% - 56px); }
+.road::before { content: ""; position: absolute; top: 27px; left: 28px; width: var(--len, calc(100% - 56px)); border-top: 2px dashed var(--line); }
+/* --p (0–1) is set by the script from how far the section has scrolled, and
+   --len is the distance from the first step's dot to the last one's. */
+.road { --p: 0; }
+.road-fill { position: absolute; top: 26px; left: 28px; height: 4px; width: calc(var(--len, calc(100% - 56px)) * var(--p)); border-radius: 4px; background: var(--accent); }
+.road-truck {
+  position: absolute; z-index: 2; top: -36px; left: calc(28px + var(--len, calc(100% - 56px)) * var(--p));
+  width: 58px; height: 32px; translate: -50% 0; color: var(--accent); pointer-events: none;
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.18));
+}
+.road-truck svg { width: 100%; height: 100%; display: block; }
+.road.is-moving .road-truck svg { animation: rumble 0.28s linear infinite; }
+@keyframes rumble { 50% { transform: translateY(-1px); } }
+.step-dot { transition: background 0.35s, color 0.35s, box-shadow 0.35s, transform 0.35s; }
+.step.is-passed .step-dot { background: var(--accent); color: var(--on-accent); box-shadow: none; transform: scale(1.06); }
 .step { position: relative; }
 .step-dot {
   width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
   background: var(--surface); box-shadow: 0 0 0 1px var(--line), 0 10px 24px -12px rgba(0, 0, 0, 0.3);
   font: 600 1.2rem Inter, sans-serif; margin-bottom: 1.6rem;
 }
-.step:last-child .step-dot { background: var(--accent); color: var(--on-accent); box-shadow: none; }
 .step h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
 .step p { color: var(--muted); font-size: 0.96rem; }
 
@@ -561,8 +574,15 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   .t-6 img { width: 100%; height: 55%; -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent); mask-image: linear-gradient(180deg, #000 55%, transparent); }
   .rail { grid-auto-columns: 78%; margin-right: -1rem; padding-right: 1rem; }
   .road { grid-template-columns: 1fr; gap: 1.6rem; }
-  .road::before { top: 28px; bottom: 28px; left: 27px; right: auto; border-top: 0; border-left: 2px dashed var(--line); }
-  .road-fill { display: none; }
+  .road::before { top: 28px; left: 27px; width: 0; height: var(--len, calc(100% - 56px)); border-top: 0; border-left: 2px dashed var(--line); }
+  .road-fill { top: 28px; left: 26px; width: 4px; height: calc(var(--len, calc(100% - 56px)) * var(--p)); }
+  /* On a white disc, so it still reads as it rolls over the orange dots. */
+  .road-truck {
+    top: calc(28px + var(--len, calc(100% - 56px)) * var(--p)); left: 28px; width: 44px; height: 44px; padding: 9px 7px;
+    translate: -50% -50%; border-radius: 50%; background: var(--surface);
+    box-shadow: 0 0 0 2px var(--accent), 0 8px 18px -8px rgba(0, 0, 0, 0.4); filter: none;
+  }
+  .road-truck svg { rotate: 90deg; }
   .step { display: grid; grid-template-columns: 56px 1fr; column-gap: 1.1rem; }
   .step-dot { margin: 0; grid-row: span 2; position: relative; }
   .step h3 { font-size: 1.3rem; margin: 0.6rem 0 0.3rem; }
@@ -789,6 +809,9 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
     </div>
     <div class="road" id="road">
       <span class="road-fill"></span>
+      <span class="road-truck" aria-hidden="true">
+        <svg viewBox="0 0 64 36"><rect x="1" y="3" width="39" height="23" rx="3" fill="currentColor"/><path d="M42 10h10.5a3 3 0 0 1 2.2 1l6.3 7.2V26H42z" fill="currentColor"/><path d="M45 13.5h7l4.4 5H45z" fill="#fff" opacity=".9"/><rect x="6" y="9" width="28" height="3" rx="1.5" fill="#fff" opacity=".35"/><circle cx="13" cy="28" r="5.5" fill="var(--ink)" stroke="var(--bg)" stroke-width="2.5"/><circle cx="51" cy="28" r="5.5" fill="var(--ink)" stroke="var(--bg)" stroke-width="2.5"/></svg>
+      </span>
       <div class="step reveal"><span class="step-dot">1</span><h3>Survey</h3><p>A video or in-home walkthrough so we know the full scope before quoting.</p></div>
       <div class="step reveal"><span class="step-dot">2</span><h3>Fixed quote</h3><p>A written estimate with every line itemized. What you see is what you pay.</p></div>
       <div class="step reveal"><span class="step-dot">3</span><h3>Move day</h3><p>The crew arrives on schedule, in uniform, with materials, mats and a plan.</p></div>
@@ -1105,14 +1128,40 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
       .observe(document.querySelector('.quote-card'));
   } else { callbar.classList.add('is-on'); }
 
+  // Scroll-driven motion: hero parallax and the process truck. Skipped for
+  // anyone who asks their system for reduced motion.
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var hero = document.querySelector('.hero'), road = document.getElementById('road');
+    var steps = road.querySelectorAll('.step'), ticking = false, stopTimer;
+    var update = function () {
+      ticking = false;
+      var y = window.scrollY, vh = window.innerHeight;
+      if (y < hero.offsetHeight) hero.style.setProperty('--hero-shift', (y * 0.32).toFixed(1) + 'px');
+      // 0 when the road enters the lower part of the screen, 1 once it reaches the upper third.
+      var a = steps[0].querySelector('.step-dot').getBoundingClientRect();
+      var b = steps[steps.length - 1].querySelector('.step-dot').getBoundingClientRect();
+      road.style.setProperty('--len', Math.max(b.left - a.left, b.top - a.top) + 'px');
+      var r = road.getBoundingClientRect();
+      var p = Math.min(1, Math.max(0, (vh * 0.85 - r.top) / (vh * 0.85 - vh * 0.3 + r.height * 0.35)));
+      road.style.setProperty('--p', p.toFixed(4));
+      steps.forEach(function (st, i) { st.classList.toggle('is-passed', p >= i / (steps.length - 1) - 0.02 && p > 0); });
+      road.classList.add('is-moving');
+      clearTimeout(stopTimer);
+      stopTimer = setTimeout(function () { road.classList.remove('is-moving'); }, 160);
+    };
+    window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
+
   // Reveal on scroll; the process road draws itself in.
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } });
     }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-    document.querySelectorAll('.reveal, #road').forEach(function (el) { io.observe(el); });
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
   } else {
-    document.querySelectorAll('.reveal, #road').forEach(function (el) { el.classList.add('is-in'); });
+    document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('is-in'); });
   }
 })();
 </script>
