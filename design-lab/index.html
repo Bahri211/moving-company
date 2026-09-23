@@ -604,19 +604,44 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   .foot { padding-bottom: 7rem; }
   .lab { bottom: 1rem; left: 50%; translate: -50% 0; padding: 0.4rem 0.45rem 0.4rem 0.8rem; transition: bottom 0.3s ease; }
   .lab { opacity: 0; pointer-events: none; }
-  .callbar.is-on ~ .lab { bottom: 5.2rem; opacity: 1; pointer-events: auto; }
+  .callbar.is-on ~ .lab { bottom: 5.8rem; opacity: 1; pointer-events: auto; }
   .lab button { width: 26px; height: 26px; }
   .lab-name { display: none; }
+  /* A floating dock: the number itself is the call button, beside the quote
+     button. It slides up once the hero form has scrolled away. */
   .callbar {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 80;
-    padding: 0.6rem 0.75rem calc(0.6rem + env(safe-area-inset-bottom));
-    background: var(--surface); box-shadow: 0 -1px 0 var(--line), 0 -12px 30px -20px rgba(0, 0, 0, 0.4);
-    transform: translateY(110%); transition: transform 0.3s ease;
+    display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 0.4rem;
+    position: fixed; left: 0.6rem; right: 0.6rem; bottom: calc(0.6rem + env(safe-area-inset-bottom)); z-index: 80;
+    padding: 0.4rem; border-radius: 22px;
+    background: var(--dark); color: var(--on-dark);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset, 0 20px 40px -14px rgba(0, 0, 0, 0.6);
+    transform: translateY(calc(100% + 1.5rem)); transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .callbar.is-on { transform: none; }
-  .callbar .btn { min-height: 48px; font-size: 0.95rem; }
-  .callbar .btn-ghost { color: var(--ink); }
+  .call-pill {
+    display: flex; align-items: center; gap: 0.7rem; min-width: 0; min-height: 52px;
+    padding: 0.25rem 0.5rem 0.25rem 0.3rem; border-radius: 16px;
+    color: inherit; text-decoration: none; transition: background 0.2s;
+  }
+  .call-pill:active { background: rgba(255, 255, 255, 0.07); }
+  .call-ico {
+    position: relative; flex: none; width: 42px; height: 42px; border-radius: 50%;
+    display: grid; place-items: center; background: #2fb36a; color: #fff;
+  }
+  .call-ico::before, .call-ico::after {
+    content: ""; position: absolute; inset: 0; border-radius: 50%;
+    border: 2px solid #2fb36a; animation: ring 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
+  .call-ico::after { animation-delay: 1.2s; }
+  @keyframes ring { from { opacity: 0.7; transform: scale(1); } to { opacity: 0; transform: scale(1.65); } }
+  .call-ico svg { width: 19px; height: 19px; animation: wiggle 2.4s ease-in-out infinite; }
+  @keyframes wiggle { 0%, 70%, 100% { rotate: 0deg; } 76% { rotate: -14deg; } 82% { rotate: 12deg; } 88% { rotate: -8deg; } 94% { rotate: 4deg; } }
+  .call-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.15; }
+  .call-txt small { display: flex; align-items: center; gap: 0.35rem; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--on-dark-muted); }
+  .call-txt small i { width: 6px; height: 6px; border-radius: 50%; background: #2fb36a; }
+  .call-txt b { margin-top: 0.18rem; font-size: clamp(0.95rem, 4.3vw, 1.12rem); font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .callbar .btn { min-height: 52px; padding: 0 1.05rem; border-radius: 16px; font-size: 0.95rem; white-space: nowrap; }
+  .callbar .btn svg { width: 16px; height: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -921,8 +946,11 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
 </footer>
 
 <div class="callbar">
-  <a href="tel:+18885051086" class="btn btn-ghost">Call us</a>
-  <a href="#quote" class="btn">Free quote</a>
+  <a href="tel:+18885051086" class="call-pill" aria-label="Call us 24/7 at (888) 505-1086">
+    <span class="call-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg></span>
+    <span class="call-txt"><small><i></i>Call us · 24/7</small><b>(888) 505-1086</b></span>
+  </a>
+  <a href="#quote" class="btn">Free quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
 </div>
 
 <div class="lab" role="group" aria-label="Design lab palette">
