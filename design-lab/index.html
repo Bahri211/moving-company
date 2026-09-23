@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en" data-palette="ember">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<!-- Design lab: a test bed for the next layout. Not linked, not in the sitemap,
+     and kept out of search until it is promoted. -->
+<meta name="robots" content="noindex, nofollow" />
+<title>Design Lab — 50STATEMOVERS INC</title>
+<link rel="icon" type="image/png" href="/assets/images/48-state-movers-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="/assets/images/lab/hero-mountain.jpg" media="(min-width: 769px)">
+<link rel="preload" as="image" href="/assets/images/lab/hero-mountain-mobile.jpg" media="(max-width: 768px)">
+<style>
+/* Palettes -----------------------------------------------------------------
+   Every colour on the page comes from these tokens, so the switcher in the
+   corner restyles the whole layout. "Ember" is the current brand. */
+:root, [data-palette="ember"] {
+  --bg: #f6f1e9;        /* page ground */
+  --surface: #ffffff;   /* cards */
+  --tint: #ede5d8;      /* quiet panels */
+  --ink: #111a2b;
+  --muted: #5d6474;
+  --line: rgba(17, 26, 43, 0.12);
+  --dark: #0c1628;      /* dark bands */
+  --dark-2: #15233b;
+  --on-dark: #f6f1e9;
+  --on-dark-muted: rgba(246, 241, 233, 0.66);
+  --accent: #e9541f;
+  --accent-hover: #cf4513;
+  --on-accent: #ffffff;
+  --accent-2: #36bacb;
+  --on-accent-2: #0c1628;
+  --wash: 12, 22, 40;   /* rgb for photo overlays */
+}
+[data-palette="harbor"] {
+  --bg: #f3efe7; --surface: #fffdf9; --tint: #e4ece9;
+  --ink: #0f2a2e; --muted: #53676a; --line: rgba(15, 42, 46, 0.13);
+  --dark: #0d2b30; --dark-2: #143a40; --on-dark: #f3efe7; --on-dark-muted: rgba(243, 239, 231, 0.66);
+  --accent: #ff6b4a; --accent-hover: #ec5433; --on-accent: #1a0d08;
+  --accent-2: #f2c14e; --on-accent-2: #0d2b30; --wash: 9, 34, 38;
+}
+[data-palette="sunrise"] {
+  --bg: #fbf7ef; --surface: #ffffff; --tint: #f5ead3;
+  --ink: #1d1b19; --muted: #6a645b; --line: rgba(29, 27, 25, 0.12);
+  --dark: #1f2a44; --dark-2: #2a3757; --on-dark: #fbf7ef; --on-dark-muted: rgba(251, 247, 239, 0.68);
+  --accent: #f2a900; --accent-hover: #dc9900; --on-accent: #1d1b19;
+  --accent-2: #e2553d; --on-accent-2: #ffffff; --wash: 24, 30, 50;
+}
+[data-palette="evergreen"] {
+  --bg: #f2f0e8; --surface: #fcfbf6; --tint: #e3e8dc;
+  --ink: #13251d; --muted: #56655c; --line: rgba(19, 37, 29, 0.13);
+  --dark: #13251d; --dark-2: #1c3429; --on-dark: #f2f0e8; --on-dark-muted: rgba(242, 240, 232, 0.66);
+  --accent: #c6f36b; --accent-hover: #b5e655; --on-accent: #13251d;
+  --accent-2: #e9541f; --on-accent-2: #ffffff; --wash: 12, 28, 20;
+}
+
+/* Base --------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 1rem/1.6 Inter, system-ui, sans-serif;
+  overflow-x: clip;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3 { font-family: Fraunces, Georgia, serif; font-weight: 600; letter-spacing: -0.02em; line-height: 1.05; margin: 0; }
+h1 em, h2 em { font-style: italic; font-weight: 400; color: var(--accent); }
+p { margin: 0; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.wrap { width: min(1240px, 100% - 3rem); margin-inline: auto; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+}
+.eyebrow::before { content: ""; width: 22px; height: 2px; background: var(--accent); border-radius: 2px; }
+.section { padding: 7rem 0; }
+.section-head { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: end; margin-bottom: 3.5rem; }
+.section-head h2 { font-size: clamp(2.3rem, 4.6vw, 3.9rem); margin-top: 1rem; }
+.section-head p { color: var(--muted); font-size: 1.08rem; max-width: 34rem; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+  min-height: 52px; padding: 0 1.6rem; border: 0; border-radius: 999px;
+  background: var(--accent); color: var(--on-accent);
+  font: 600 1rem Inter, sans-serif; text-decoration: none; cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.btn svg { width: 18px; height: 18px; transition: transform 0.2s; }
+.btn:hover svg { transform: translateX(3px); }
+.btn-ghost { background: transparent; color: currentColor; box-shadow: inset 0 0 0 1.5px currentColor; }
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.1); }
+
+/* Ticker ------------------------------------------------------------------- */
+.ticker { background: var(--dark); color: var(--on-dark); overflow: hidden; font-size: 0.8rem; font-weight: 500; }
+.ticker-track { display: flex; width: max-content; animation: tick 40s linear infinite; }
+.ticker-track span { display: inline-flex; align-items: center; gap: 2.2rem; padding: 0.6rem 1.1rem; white-space: nowrap; }
+.ticker-track span::after { content: "✦"; color: var(--accent); }
+@keyframes tick { to { transform: translateX(-50%); } }
+
+/* Nav ---------------------------------------------------------------------- */
+.nav { position: sticky; top: 0; z-index: 50; transition: background 0.3s, box-shadow 0.3s; }
+.nav.is-solid { background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--line); }
+.nav-inner { display: flex; align-items: center; gap: 2rem; height: 76px; }
+.logo { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; font-weight: 800; letter-spacing: -0.02em; font-size: 1.02rem; }
+.logo img { width: 44px; height: 44px; object-fit: contain; padding: 4px; border-radius: 50%; background: #fff; }
+.nav-links { display: flex; gap: 1.8rem; margin-left: auto; }
+.nav-links a { text-decoration: none; font-size: 0.93rem; font-weight: 500; color: var(--muted); transition: color 0.2s; }
+.nav-links a:hover { color: var(--ink); }
+.nav-phone { font-weight: 700; text-decoration: none; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
+.nav .btn { min-height: 44px; padding: 0 1.2rem; font-size: 0.92rem; }
+
+/* Hero --------------------------------------------------------------------- */
+.hero { position: relative; margin-top: -76px; padding: calc(76px + 6rem) 0 0; min-height: min(900px, 100svh); display: flex; flex-direction: column; color: #fff; isolation: isolate; }
+.hero::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(var(--wash), 0.82) 0%, rgba(var(--wash), 0.45) 45%, rgba(var(--wash), 0) 75%),
+    linear-gradient(180deg, rgba(var(--wash), 0.4) 0%, rgba(var(--wash), 0) 30%, rgba(var(--wash), 0) 60%, rgba(var(--wash), 0.7) 100%),
+    var(--dark) url('/assets/images/lab/hero-mountain.jpg') 0% 62% / max(135%, 1720px) auto no-repeat;
+}
+/* The nav sits on the photo until it scrolls, so its type turns light there. */
+.nav:not(.is-solid) .logo, .nav:not(.is-solid) .nav-phone { color: #fff; }
+.nav:not(.is-solid) .nav-links a { color: rgba(255, 255, 255, 0.78); }
+.nav:not(.is-solid) .nav-links a:hover { color: #fff; }
+.hero-copy > * { max-width: 42rem; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.4rem 0.9rem 0.4rem 0.45rem; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(8px);
+  font-size: 0.85rem; font-weight: 500;
+}
+.hero-badge b { background: var(--accent); color: var(--on-accent); padding: 0.15rem 0.55rem; border-radius: 999px; font-weight: 700; }
+.hero h1 { font-size: clamp(3rem, 7.2vw, 6.4rem); margin: 1.4rem 0 1.4rem; text-shadow: 0 2px 30px rgba(0, 0, 0, 0.25); }
+.hero h1 em { color: var(--accent); }
+.hero-lede { font-size: 1.18rem; max-width: 33rem; color: rgba(255, 255, 255, 0.86); }
+.hero-points { display: flex; flex-wrap: wrap; gap: 0.6rem 1.6rem; margin-top: 1.8rem; font-size: 0.93rem; font-weight: 500; }
+.hero-points span { display: inline-flex; align-items: center; gap: 0.45rem; }
+.hero-points svg { width: 18px; height: 18px; color: var(--accent); }
+
+/* Quote bar: one row like a booking engine, sitting on the bottom of the photo. */
+.quote { margin-top: auto; padding: 4rem 0 0; }
+.quote-card {
+  position: relative; top: 3.5rem;
+  background: var(--surface); color: var(--ink);
+  border-radius: 22px; padding: 1.1rem;
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.45);
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto; gap: 0.6rem; align-items: stretch;
+}
+.field { position: relative; display: flex; flex-direction: column; justify-content: center; padding: 0.7rem 1rem; border-radius: 14px; background: var(--tint); transition: box-shadow 0.2s; }
+.field:focus-within { box-shadow: inset 0 0 0 2px var(--accent); }
+.field label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.field select, .field input {
+  appearance: none; border: 0; background: transparent; padding: 0.15rem 0 0; width: 100%;
+  font: 600 1.02rem Inter, sans-serif; color: var(--ink); outline: none; cursor: pointer;
+}
+.quote-card .btn { min-height: 64px; border-radius: 14px; padding: 0 1.8rem; font-size: 1.02rem; }
+.quote-note { position: relative; top: 3.5rem; display: flex; justify-content: center; gap: 0.5rem; margin-top: 0.9rem; font-size: 0.82rem; color: var(--muted); }
+
+/* Stats -------------------------------------------------------------------- */
+.stats { padding: 8.5rem 0 5rem; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
+.stat { padding: 2rem 1.5rem 0 0; }
+.stat + .stat { padding-left: 1.5rem; border-left: 1px solid var(--line); }
+.stat strong { display: block; font-family: Fraunces, serif; font-size: clamp(2.6rem, 4.5vw, 3.8rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+.stat strong sup { font-size: 0.45em; color: var(--accent); margin-left: 0.1em; }
+.stat span { display: block; margin-top: 0.7rem; font-weight: 600; }
+.stat small { display: block; color: var(--muted); font-size: 0.88rem; }
+
+/* Services bento ------------------------------------------------------------ */
+.bento { display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: 250px; gap: 1rem; }
+.tile {
+  position: relative; overflow: hidden; border-radius: 22px; padding: 1.7rem;
+  display: flex; flex-direction: column; justify-content: flex-end; gap: 0.5rem;
+  background: var(--surface); text-decoration: none; isolation: isolate;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.tile:hover { transform: translateY(-4px); }
+.tile h3 { font-size: 1.7rem; }
+.tile p { font-size: 0.95rem; color: var(--muted); max-width: 30rem; }
+.tile-photo { color: #fff; }
+.tile-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.tile-photo:hover img { transform: scale(1.05); }
+.tile-photo::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(var(--wash), 0) 30%, rgba(var(--wash), 0.88) 100%); }
+.tile-photo p { color: rgba(255, 255, 255, 0.85); }
+.tile-tag { position: absolute; top: 1.3rem; left: 1.3rem; padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; background: var(--accent); color: var(--on-accent); }
+.tile-arrow {
+  position: absolute; top: 1.3rem; right: 1.3rem; width: 44px; height: 44px; border-radius: 50%;
+  display: grid; place-items: center; background: rgba(255, 255, 255, 0.16); backdrop-filter: blur(6px);
+  transition: background 0.25s, transform 0.25s;
+}
+.tile:hover .tile-arrow { background: var(--accent); color: var(--on-accent); transform: rotate(-45deg); }
+.tile-arrow svg { width: 18px; height: 18px; }
+.tile-dark { background: var(--dark); color: var(--on-dark); }
+.tile-dark p { color: var(--on-dark-muted); }
+.tile-dark .tile-arrow, .tile-plain .tile-arrow { background: var(--line); }
+.tile-accent { background: var(--accent-2); color: var(--on-accent-2); }
+.tile-accent p { color: inherit; opacity: 0.8; }
+.tile-accent .tile-arrow { background: rgba(0, 0, 0, 0.1); }
+.t-1 { grid-column: span 7; grid-row: span 2; }
+.t-2 { grid-column: span 5; grid-row: span 2; }
+.t-3 { grid-column: span 4; }
+.t-4 { grid-column: span 4; }
+.t-5 { grid-column: span 4; }
+.t-6 { grid-column: span 12; grid-row: span 1; flex-direction: row; align-items: flex-end; justify-content: space-between; }
+.t-6 h3 { font-size: 2rem; }
+.t-6 > div { max-width: 46%; }
+.t-6 img { position: absolute; top: 0; right: 0; bottom: 0; width: 50%; height: 100%; object-fit: cover; z-index: -1;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 35%); mask-image: linear-gradient(90deg, transparent, #000 35%); }
+.t-6 .tile-arrow { background: rgba(255, 255, 255, 0.7); }
+.big-num { font-family: Fraunces, serif; font-size: 4.2rem; line-height: 1; margin-bottom: auto; font-weight: 600; }
+
+/* Moving day story: pinned heading, cards scroll sideways ------------------- */
+.story { background: var(--dark); color: var(--on-dark); }
+.story .eyebrow { color: var(--on-dark-muted); }
+.story .section-head p { color: var(--on-dark-muted); }
+.rail { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(280px, 1fr); gap: 1.1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 1.2rem; scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+.frame { scroll-snap-align: start; }
+.frame-img { position: relative; aspect-ratio: 3 / 4; border-radius: 20px; overflow: hidden; }
+.frame-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.frame:hover .frame-img img { transform: scale(1.05); }
+.frame-num {
+  position: absolute; top: 1rem; left: 1rem; width: 46px; height: 46px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--accent); color: var(--on-accent);
+  font: 600 1.15rem Fraunces, serif;
+}
+.frame h3 { font-size: 1.45rem; margin: 1.2rem 0 0.4rem; }
+.frame p { color: var(--on-dark-muted); font-size: 0.95rem; }
+
+/* Process: four steps on a dashed road -------------------------------------- */
+.road { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+.road::before { content: ""; position: absolute; top: 27px; left: 28px; right: 28px; border-top: 2px dashed var(--line); }
+.road-fill { position: absolute; top: 26px; left: 28px; height: 4px; width: 0; border-radius: 4px; background: var(--accent); transition: width 1.6s cubic-bezier(0.22, 1, 0.36, 1); }
+.road.is-in .road-fill { width: calc(100% - 56px); }
+.step { position: relative; }
+.step-dot {
+  width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--surface); box-shadow: 0 0 0 1px var(--line), 0 10px 24px -12px rgba(0, 0, 0, 0.3);
+  font: 600 1.2rem Fraunces, serif; margin-bottom: 1.6rem;
+}
+.step:last-child .step-dot { background: var(--accent); color: var(--on-accent); box-shadow: none; }
+.step h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.step p { color: var(--muted); font-size: 0.96rem; }
+
+/* Coverage ----------------------------------------------------------------- */
+.coverage { background: var(--tint); }
+.cov-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 3rem; align-items: stretch; }
+.cov-photo { position: relative; border-radius: 24px; overflow: hidden; min-height: 460px; }
+.cov-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cov-card {
+  position: absolute; left: 1.2rem; right: 1.2rem; bottom: 1.2rem;
+  padding: 1.2rem 1.4rem; border-radius: 16px; background: var(--surface);
+  display: flex; align-items: center; gap: 1rem;
+}
+.cov-card strong { font: 600 2.4rem/1 Fraunces, serif; color: var(--accent); }
+.cov-card span { font-size: 0.92rem; color: var(--muted); }
+.cov-search { position: relative; margin: 1.6rem 0 1.2rem; }
+.cov-search input {
+  width: 100%; min-height: 56px; padding: 0 1.2rem 0 3rem; border-radius: 14px; border: 1px solid var(--line);
+  background: var(--surface); font: 500 1rem Inter, sans-serif; color: var(--ink);
+}
+.cov-search input:focus { outline: none; border-color: var(--accent); }
+.cov-search svg { position: absolute; left: 1.1rem; top: 50%; translate: 0 -50%; width: 18px; height: 18px; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.chip {
+  padding: 0.45rem 0.85rem; border-radius: 999px; background: var(--surface); border: 1px solid var(--line);
+  font-size: 0.87rem; font-weight: 500; text-decoration: none; transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.chip:hover { background: var(--dark); color: var(--on-dark); border-color: var(--dark); }
+.chip[hidden] { display: none; }
+
+/* Reviews ------------------------------------------------------------------ */
+.rev-grid { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 1rem; }
+.rev { background: var(--surface); border-radius: 22px; padding: 1.8rem; display: flex; flex-direction: column; gap: 1.2rem; }
+.rev blockquote { margin: 0; font-size: 1rem; }
+.rev-feature { grid-row: span 2; background: var(--accent); color: var(--on-accent); justify-content: space-between; }
+.rev-feature blockquote { font: italic 400 clamp(1.5rem, 2.3vw, 2rem)/1.3 Fraunces, serif; letter-spacing: -0.01em; }
+.stars { color: var(--accent); letter-spacing: 0.15em; font-size: 0.95rem; }
+.rev-feature .stars { color: inherit; }
+.who { display: flex; align-items: center; gap: 0.8rem; margin-top: auto; }
+.who i { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font: normal 600 1rem Fraunces, serif; background: var(--tint); color: var(--ink); }
+.rev-feature .who i { background: rgba(255, 255, 255, 0.22); color: inherit; }
+.who b { display: block; font-size: 0.95rem; }
+.who small { display: block; font-size: 0.8rem; opacity: 0.7; }
+.rev-score { display: flex; align-items: center; gap: 1.4rem; }
+.rev-score strong { font: 600 4.5rem/1 Fraunces, serif; letter-spacing: -0.04em; }
+
+/* FAQ ---------------------------------------------------------------------- */
+.faq-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 4rem; }
+.faq-aside { position: sticky; top: 110px; align-self: start; }
+.faq-aside h2 { font-size: clamp(2.3rem, 4.6vw, 3.6rem); margin: 1rem 0 1.2rem; }
+.faq-aside p { color: var(--muted); margin-bottom: 1.8rem; }
+details { border-bottom: 1px solid var(--line); }
+summary {
+  list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem;
+  padding: 1.5rem 0; font: 600 1.25rem/1.3 Fraunces, serif;
+}
+summary::-webkit-details-marker { display: none; }
+summary::after {
+  content: "+"; flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--tint); font: 400 1.4rem Inter, sans-serif; transition: transform 0.3s, background 0.3s;
+}
+details[open] summary::after { transform: rotate(45deg); background: var(--accent); color: var(--on-accent); }
+details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
+
+/* CTA band ------------------------------------------------------------------ */
+.cta { padding: 0 0 7rem; }
+.cta-box {
+  position: relative; overflow: hidden; border-radius: 28px; padding: clamp(3rem, 7vw, 6rem);
+  color: #fff; isolation: isolate;
+  display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 2rem; align-items: end;
+}
+.cta-box::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(100deg, rgba(var(--wash), 0.92) 20%, rgba(var(--wash), 0.35) 100%), url('/assets/images/lab/road-wide.jpg') center 60% / cover;
+}
+.cta-box h2 { font-size: clamp(2.4rem, 5.4vw, 4.6rem); }
+.cta-box p { margin-top: 1rem; color: rgba(255, 255, 255, 0.82); font-size: 1.1rem; max-width: 30rem; }
+.cta-actions { display: flex; flex-direction: column; gap: 0.7rem; }
+
+/* Footer ------------------------------------------------------------------- */
+.foot { background: var(--dark); color: var(--on-dark); padding: 5rem 0 2.5rem; }
+.foot-top { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 2.5rem; }
+.foot .logo { color: var(--on-dark); }
+.foot-top p { color: var(--on-dark-muted); font-size: 0.93rem; margin-top: 1rem; max-width: 22rem; }
+.foot h4 { margin: 0 0 1rem; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--on-dark-muted); }
+.foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.55rem; }
+.foot li a { text-decoration: none; font-size: 0.95rem; }
+.foot li a:hover { color: var(--accent); }
+.foot-mark { margin: 4rem 0 1.5rem; font: 700 clamp(2.4rem, 9.6vw, 8.6rem)/0.85 Fraunces, serif; letter-spacing: -0.05em; color: var(--dark-2); white-space: nowrap; overflow: hidden; }
+.foot-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.82rem; color: var(--on-dark-muted); }
+
+/* Design lab palette switcher --------------------------------------------- */
+.lab {
+  position: fixed; left: 1rem; bottom: 1rem; z-index: 90;
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.55rem 0.6rem 0.55rem 1rem; border-radius: 999px;
+  background: #111; color: #fff; font-size: 0.78rem; font-weight: 600;
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.5);
+}
+.lab span { opacity: 0.7; }
+.lab button {
+  width: 30px; height: 30px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; padding: 0;
+  background: linear-gradient(135deg, var(--sw-a) 50%, var(--sw-b) 50%);
+  transition: transform 0.2s;
+}
+.lab button:hover { transform: scale(1.12); }
+.lab button[aria-pressed="true"] { border-color: #fff; }
+.lab-name { min-width: 4.8rem; opacity: 1 !important; }
+
+/* Mobile call bar ---------------------------------------------------------- */
+.callbar { display: none; }
+
+/* Scroll reveal ------------------------------------------------------------ */
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.reveal.is-in { opacity: 1; transform: none; }
+
+/* Responsive --------------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .nav-links { display: none; }
+  .nav-phone { margin-left: auto; }
+  .quote-card { grid-template-columns: 1fr 1fr; }
+  .quote-card .btn { grid-column: 1 / -1; }
+  .bento { grid-auto-rows: 220px; }
+  .t-3, .t-4, .t-5 { grid-column: span 6; }
+  .t-5 { grid-column: span 12; }
+  .rev-grid { grid-template-columns: 1fr 1fr; }
+  .rev-feature { grid-row: auto; grid-column: 1 / -1; }
+}
+@media (max-width: 768px) {
+  .wrap { width: calc(100% - 2rem); }
+  .section { padding: 4.5rem 0; }
+  .section-head { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2.2rem; }
+  .nav-inner { height: 64px; gap: 1rem; }
+  .nav .btn, .nav-phone { display: none; }
+  .logo img { width: 38px; height: 38px; }
+  .hero { margin-top: -64px; padding-top: calc(64px + 2.5rem); min-height: 0; }
+  .hero::before {
+    background:
+      linear-gradient(180deg, rgba(var(--wash), 0.78) 0%, rgba(var(--wash), 0.35) 38%, rgba(var(--wash), 0.1) 58%, rgba(var(--wash), 0.9) 100%),
+      url('/assets/images/lab/hero-mountain-mobile.jpg') center 70% / cover no-repeat;
+  }
+  .hero h1 { font-size: clamp(2.6rem, 12vw, 3.6rem); margin: 1.1rem 0 1rem; }
+  .hero-lede { font-size: 1.02rem; }
+  .hero-points { gap: 0.5rem 1.2rem; font-size: 0.86rem; }
+  .quote { padding-top: 11rem; }
+  .quote-card { grid-template-columns: 1fr 1fr; top: 2.5rem; padding: 0.7rem; gap: 0.45rem; border-radius: 18px; }
+  .field { padding: 0.6rem 0.8rem; }
+  .field select, .field input { font-size: 0.95rem; }
+  .quote-card .btn { min-height: 56px; }
+  .quote-note { top: 2.5rem; font-size: 0.76rem; }
+  .stats { padding: 5.5rem 0 1rem; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .stat { padding: 1.4rem 0.8rem 1.4rem 0; }
+  .stat + .stat { padding-left: 0; border-left: 0; }
+  .stat:nth-child(even) { padding-left: 1rem; border-left: 1px solid var(--line); }
+  .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
+  .tile { grid-column: auto !important; grid-row: auto !important; min-height: 230px; }
+  .t-1, .t-2 { min-height: 340px; }
+  .t-6 { flex-direction: column; align-items: flex-start; gap: 1.2rem; padding-top: 11rem; }
+  .t-6 > div { max-width: none; }
+  .t-6 img { width: 100%; height: 55%; -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent); mask-image: linear-gradient(180deg, #000 55%, transparent); }
+  .rail { grid-auto-columns: 78%; margin-right: -1rem; padding-right: 1rem; }
+  .road { grid-template-columns: 1fr; gap: 1.6rem; }
+  .road::before { top: 28px; bottom: 28px; left: 27px; right: auto; border-top: 0; border-left: 2px dashed var(--line); }
+  .road-fill { display: none; }
+  .step { display: grid; grid-template-columns: 56px 1fr; column-gap: 1.1rem; }
+  .step-dot { margin: 0; grid-row: span 2; position: relative; }
+  .step h3 { font-size: 1.3rem; margin: 0.6rem 0 0.3rem; }
+  .cov-grid, .faq-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .cov-photo { min-height: 320px; order: 2; }
+  .faq-aside { position: static; }
+  summary { font-size: 1.1rem; padding: 1.2rem 0; }
+  details p { padding-right: 0; }
+  .rev-grid { grid-template-columns: 1fr; }
+  .rev-score strong { font-size: 3.4rem; }
+  .cta { padding-bottom: 4.5rem; }
+  .cta-box { grid-template-columns: 1fr; border-radius: 22px; padding: 2.4rem 1.5rem; }
+  .foot-top { grid-template-columns: 1fr 1fr; }
+  .foot-top > div:first-child { grid-column: 1 / -1; }
+  .foot { padding-bottom: 7rem; }
+  .lab { bottom: 5.2rem; left: 50%; translate: -50% 0; }
+  .lab-name { display: none; }
+  .callbar {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 80;
+    padding: 0.6rem 0.75rem calc(0.6rem + env(safe-area-inset-bottom));
+    background: var(--surface); box-shadow: 0 -1px 0 var(--line), 0 -12px 30px -20px rgba(0, 0, 0, 0.4);
+  }
+  .callbar .btn { min-height: 48px; font-size: 0.95rem; }
+  .callbar .btn-ghost { color: var(--ink); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>Binding fixed prices</span><span>Our own trucks &amp; crews — no brokers</span><span>$1M liability coverage</span><span>USDOT #4575745 · MC-1820728</span><span>4.96★ from 2,400+ reviews</span><span>Real people, 24/7</span>
+    <span>Binding fixed prices</span><span>Our own trucks &amp; crews — no brokers</span><span>$1M liability coverage</span><span>USDOT #4575745 · MC-1820728</span><span>4.96★ from 2,400+ reviews</span><span>Real people, 24/7</span>
+  </div>
+</div>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="logo"><img src="/assets/images/48-state-movers-logo-removebg-preview.png" alt="" />50STATEMOVERS</a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#services">Services</a><a href="#moving-day">Moving day</a><a href="#coverage">Coverage</a><a href="#reviews">Reviews</a><a href="#faq">FAQ</a>
+    </nav>
+    <a href="tel:+18885051086" class="nav-phone">(888) 505-1086</a>
+    <a href="#quote" class="btn">Free quote</a>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap hero-copy">
+    <span class="hero-badge"><b>4.96★</b> Trusted by 2,400+ families</span>
+    <h1>Your whole home,<br><em>state to state.</em></h1>
+    <p class="hero-lede">Full-house moves across the continental US on one binding price — with our own trucks, our own crews, and nobody else's hands on your things.</p>
+    <div class="hero-points">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Price locked at booking</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>$1M coverage</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>No brokers</span>
+    </div>
+  </div>
+
+  <div class="wrap quote" id="quote">
+    <form class="quote-card" onsubmit="event.preventDefault(); this.querySelector('.btn').textContent = 'Demo only ✓';">
+      <div class="field"><label for="q-from">Moving from</label><select id="q-from" class="state-select"><option>Choose state</option></select></div>
+      <div class="field"><label for="q-to">Moving to</label><select id="q-to" class="state-select"><option>Choose state</option></select></div>
+      <div class="field"><label for="q-size">Home size</label>
+        <select id="q-size"><option>Choose size</option><option>Studio</option><option>1 Bedroom</option><option>2 Bedrooms</option><option>3 Bedrooms</option><option>4 Bedrooms</option><option>5+ Bedrooms</option><option>Office</option></select></div>
+      <div class="field"><label for="q-date">Move date</label><input id="q-date" type="date" /></div>
+      <button class="btn" type="submit">Get my price <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </form>
+    <p class="quote-note">🔒 Secure · never sold to brokers · reply within the hour</p>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="wrap stats-grid reveal">
+    <div class="stat"><strong>100<sup>%</sup></strong><span>Fixed-price moves</span><small>Price locked at booking</small></div>
+    <div class="stat"><strong>24<sup>/7</sup></strong><span>Customer support</span><small>Real people, any hour</small></div>
+    <div class="stat"><strong>$1<sup>M</sup></strong><span>Liability coverage</span><small>Bonded &amp; insured</small></div>
+    <div class="stat"><strong>&lt;0.3<sup>%</sup></strong><span>Claims filed</span><small>Across every move we run</small></div>
+  </div>
+</section>
+
+<section class="section" id="services" style="padding-top: 3rem;">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">What we do</span><h2>Services built around <em>your</em> move.</h2></div>
+      <p>An apartment or a full office, one room or five bedrooms — we plan the crew, the truck and the packing around what you're actually moving, and where it needs to go.</p>
+    </div>
+    <div class="bento">
+      <a href="/long-distance-movers/" class="tile tile-photo t-1 reveal">
+        <img src="/assets/images/lab/street-loading.jpg" alt="Two movers carrying wrapped furniture to a box truck" loading="lazy" />
+        <span class="tile-tag">Most booked</span>
+        <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <h3>Long distance</h3>
+        <p>Cross-country and interstate relocations, door to door, on one truck from pickup to delivery.</p>
+      </a>
+      <a href="#" class="tile tile-photo t-2 reveal">
+        <img src="/assets/images/lab/wrapped-sunroom.jpg" alt="Furniture wrapped in blue blankets in a sunroom" loading="lazy" />
+        <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <h3>White glove</h3>
+        <p>We pack, move, unpack, arrange — and hang the art before we leave.</p>
+      </a>
+      <a href="#" class="tile tile-dark t-3 reveal">
+        <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <span class="big-num">01</span>
+        <h3>Residential</h3>
+        <p>Studios to five-bedroom homes. Taken apart, moved, rebuilt.</p>
+      </a>
+      <a href="#" class="tile tile-accent t-4 reveal">
+        <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <span class="big-num">02</span>
+        <h3>Commercial</h3>
+        <p>Offices moved over a weekend — working by Monday.</p>
+      </a>
+      <a href="#" class="tile tile-photo t-5 reveal">
+        <img src="/assets/images/lab/crew-packing.jpg" alt="Crew taping boxes and wrapping chairs in a living room" loading="lazy" />
+        <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <h3>Packing &amp; crating</h3>
+        <p>Museum-grade packing and custom crates built on site.</p>
+      </a>
+      <a href="#" class="tile tile-plain t-6 reveal">
+        <img src="/assets/images/lab/loading-ramp.jpg" alt="Mover loading a wrapped piece into the truck" loading="lazy" />
+        <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <div><h3>Storage between homes</h3><p>Climate-controlled, monitored around the clock, inventoried and insured — for a week or a year.</p></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section story" id="moving-day">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">On moving day</span><h2>One move, <em>start to finish.</em></h2></div>
+      <p>Photographs from our own crews. This is what the four parts of your day look like — swipe through.</p>
+    </div>
+    <div class="rail reveal">
+      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/runner-hall.jpg" alt="Blue floor runner laid down a hallway" loading="lazy" /><span class="frame-num">1</span></div>
+        <h3>Floors protected</h3><p>Runners down and door jambs padded before a single box is carried.</p></article>
+      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/wrapped-furniture.jpg" alt="Furniture wrapped in moving blankets" loading="lazy" /><span class="frame-num">2</span></div>
+        <h3>Everything wrapped</h3><p>Blankets, shrink and tape on every piece — not only the fragile ones.</p></article>
+      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/truck-loaded.jpg" alt="Truck interior stacked and strapped with wrapped items" loading="lazy" /><span class="frame-num">3</span></div>
+        <h3>Loaded &amp; strapped</h3><p>Stacked in tiers and strapped row by row, so nothing shifts over the miles.</p></article>
+      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/truck-branded.jpg" alt="50STATEMOVERS truck parked outside a house" loading="lazy" /><span class="frame-num">4</span></div>
+        <h3>At your new door</h3><p>Unloaded into the rooms you point to, on the date in your contract.</p></article>
+      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/kitchen.jpg" alt="Mover helping a customer unpack in her kitchen" loading="lazy" /><span class="frame-num">✓</span></div>
+        <h3>Settled in</h3><p>Beds built, furniture placed, and we don't leave until you've signed off.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="process">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">The process</span><h2>No surprises. <em>Four steps.</em></h2></div>
+      <p>No vague quotes that balloon on moving day. Here's the whole shape of working with us.</p>
+    </div>
+    <div class="road" id="road">
+      <span class="road-fill"></span>
+      <div class="step reveal"><span class="step-dot">1</span><h3>Survey</h3><p>A video or in-home walkthrough so we know the full scope before quoting.</p></div>
+      <div class="step reveal"><span class="step-dot">2</span><h3>Fixed quote</h3><p>A written estimate with every line itemized. What you see is what you pay.</p></div>
+      <div class="step reveal"><span class="step-dot">3</span><h3>Move day</h3><p>The crew arrives on schedule, in uniform, with materials, mats and a plan.</p></div>
+      <div class="step reveal"><span class="step-dot">4</span><h3>Settle in</h3><p>We don't leave until furniture is placed, beds are built, and you've signed off.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section coverage" id="coverage">
+  <div class="wrap cov-grid">
+    <div class="cov-photo reveal">
+      <img src="/assets/images/lab/highway.jpg" alt="50STATEMOVERS truck on a city highway interchange" loading="lazy" />
+      <div class="cov-card"><strong>48+DC</strong><span>Every continental state and Washington D.C., with a crew ready at both ends.</span></div>
+    </div>
+    <div class="reveal">
+      <span class="eyebrow">Coverage</span>
+      <h2 style="font-size: clamp(2.3rem, 4.6vw, 3.6rem); margin-top: 1rem;">From Maine to California, <em>we're already there.</em></h2>
+      <div class="cov-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="state-filter" type="search" placeholder="Find your state…" aria-label="Find your state" />
+      </div>
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="reviews">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">Reviews</span><h2>On schedule. <em>Nothing broken.</em></h2></div>
+      <div class="rev-score"><strong>4.96</strong><div><div class="stars">★★★★★</div><p style="color: var(--muted); font-size: 0.92rem;">2,400+ reviews · 98% would recommend us</p></div></div>
+    </div>
+    <div class="rev-grid">
+      <figure class="rev rev-feature reveal" style="margin: 0;">
+        <div class="stars">★★★★★</div>
+        <blockquote>"I have a baby grand piano that three other companies refused to move. They sent a specialist, built a custom crate, and delivered it across the country without a scratch."</blockquote>
+        <figcaption class="who"><i>D</i><div><b>Daniel Kim</b><small>Seattle, WA → Boston, MA · Trustpilot</small></div></figcaption>
+      </figure>
+      <figure class="rev reveal" style="margin: 0;">
+        <div class="stars">★★★★★</div>
+        <blockquote>"The quote was fixed and exactly what we paid. No fuel surcharge, no stair fee surprise. Every company should operate this way."</blockquote>
+        <figcaption class="who"><i>P</i><div><b>Priya Mehta</b><small>Miami, FL → Denver, CO · Google</small></div></figcaption>
+      </figure>
+      <figure class="rev reveal" style="margin: 0;">
+        <div class="stars">★★★★★</div>
+        <blockquote>"A 3-bedroom from Chicago to Phoenix. Packed Wednesday, truck left Thursday, unpacked by Saturday."</blockquote>
+        <figcaption class="who"><i>M</i><div><b>Michael &amp; Lisa Torres</b><small>Chicago, IL → Phoenix, AZ · Yelp</small></div></figcaption>
+      </figure>
+      <figure class="rev reveal" style="margin: 0;">
+        <div class="stars">★★★★★</div>
+        <blockquote>"The first move where I didn't end the day exhausted and missing something. Careful, punctual, quietly professional."</blockquote>
+        <figcaption class="who"><i>E</i><div><b>Eleanor Hartley</b><small>Brooklyn, NY → Austin, TX · Google</small></div></figcaption>
+      </figure>
+      <figure class="rev reveal" style="margin: 0;">
+        <div class="stars">★★★★★</div>
+        <blockquote>"40 desks and a server room over a long weekend. They finished four hours ahead of schedule."</blockquote>
+        <figcaption class="who"><i>R</i><div><b>Robert Washington</b><small>Atlanta, GA → Nashville, TN · Yelp</small></div></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq" style="padding-top: 2rem;">
+  <div class="wrap faq-grid">
+    <div class="faq-aside reveal">
+      <span class="eyebrow">FAQ</span>
+      <h2>Questions, <em>answered.</em></h2>
+      <p>The things we get asked most. If yours isn't here, call — a real person picks up, any hour.</p>
+      <a href="tel:+18885051086" class="btn">Call (888) 505-1086</a>
+    </div>
+    <div class="reveal">
+      <details open><summary>How far in advance should I book?</summary><p>Call us whatever your dates are — we handle last-minute interstate moves regularly. If you're planning ahead, 4–6 weeks is comfortable, and 6–8 weeks in peak season (May through August).</p></details>
+      <details><summary>How is the quote calculated?</summary><p>It's a fixed price, based on the weight of your shipment, the miles between origin and destination, and the services you choose. We survey by video or in person first, then put the number in writing.</p></details>
+      <details><summary>Are you licensed and insured?</summary><p>Yes. Fully licensed, bonded, and insured with $1,000,000 in general liability coverage, and FMCSA-registered for interstate moves across all continental states. USDOT #4575745 · MC-1820728.</p></details>
+      <details><summary>What happens if something breaks?</summary><p>Damage happens in less than 0.3% of our moves — and when it does, we take full responsibility, file promptly, and follow through until it's resolved.</p></details>
+      <details><summary>Do you move pianos, safes, and unusual items?</summary><p>Yes — pianos, gun safes, hot tubs, pool tables, art and antiques. Mention it when you book so we can plan the crew and gear.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <div class="cta-box reveal">
+      <div><h2>Ready when <em>you</em> are.</h2><p>Tell us where you're going. You'll have a fixed, written price — usually within the hour.</p></div>
+      <div class="cta-actions">
+        <a href="#quote" class="btn">Get my fixed price <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a href="tel:+18885051086" class="btn btn-ghost">+1 (888) 505-1086</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div><a href="/" class="logo"><img src="/assets/images/48-state-movers-logo-removebg-preview.png" alt="" />50STATEMOVERS INC</a>
+        <p>Honest, fixed-price quotes with no hidden fees — and a crew that treats your home like their own.</p></div>
+      <div><h4>Services</h4><ul><li><a href="/long-distance-movers/">Long distance</a></li><li><a href="/interstate-movers/">Interstate</a></li><li><a href="/state-to-state-movers/">State to state</a></li><li><a href="#services">White glove</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="/moving-companies-by-state/">Movers by state</a></li><li><a href="#reviews">Reviews</a></li><li><a href="#faq">FAQ</a></li><li><a href="/privacy-policy">Privacy</a></li></ul></div>
+      <div><h4>Contact</h4><ul><li><a href="tel:+18885051086">+1 (888) 505-1086</a></li><li><a href="mailto:contact@50statemovers.com">contact@50statemovers.com</a></li><li><a href="#">Nationwide, USA</a></li></ul></div>
+    </div>
+    <div class="foot-mark" aria-hidden="true">50STATEMOVERS</div>
+    <div class="foot-bottom"><span>© 2026 50STATEMOVERS INC · All rights reserved</span><span>USDOT #4575745 · MC-1820728 · Licensed &amp; insured</span></div>
+  </div>
+</footer>
+
+<div class="callbar">
+  <a href="tel:+18885051086" class="btn btn-ghost">Call us</a>
+  <a href="#quote" class="btn">Free quote</a>
+</div>
+
+<div class="lab" role="group" aria-label="Design lab palette">
+  <span>Palette</span>
+  <button type="button" data-p="ember" aria-label="Ember" style="--sw-a:#0c1628;--sw-b:#e9541f"></button>
+  <button type="button" data-p="harbor" aria-label="Harbor" style="--sw-a:#0d2b30;--sw-b:#ff6b4a"></button>
+  <button type="button" data-p="sunrise" aria-label="Sunrise" style="--sw-a:#1f2a44;--sw-b:#f2a900"></button>
+  <button type="button" data-p="evergreen" aria-label="Evergreen" style="--sw-a:#13251d;--sw-b:#c6f36b"></button>
+  <span class="lab-name" id="lab-name">Ember</span>
+</div>
+
+<script>
+(function () {
+  var STATES = ['Alabama','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','Washington D.C.','West Virginia','Wisconsin','Wyoming'];
+  var slug = function (s) { return s === 'Washington D.C.' ? 'washington-dc' : s.toLowerCase().replace(/ /g, '-'); };
+
+  // Quote selects and coverage chips come from the one list.
+  document.querySelectorAll('.state-select').forEach(function (sel) {
+    STATES.forEach(function (s) { sel.add(new Option(s, s)); });
+  });
+  var chips = document.getElementById('chips');
+  STATES.forEach(function (s) {
+    var a = document.createElement('a');
+    a.className = 'chip'; a.href = '/moving-from-' + slug(s) + '/'; a.textContent = s;
+    chips.appendChild(a);
+  });
+  document.getElementById('state-filter').addEventListener('input', function (e) {
+    var q = e.target.value.trim().toLowerCase();
+    chips.querySelectorAll('.chip').forEach(function (c) { c.hidden = q && c.textContent.toLowerCase().indexOf(q) === -1; });
+  });
+
+  // Palette switcher, remembered per browser.
+  var root = document.documentElement, label = document.getElementById('lab-name');
+  var buttons = document.querySelectorAll('.lab button');
+  function setPalette(p) {
+    root.setAttribute('data-palette', p);
+    buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.p === p)); });
+    label.textContent = p.charAt(0).toUpperCase() + p.slice(1);
+    try { localStorage.setItem('lab-palette', p); } catch (e) {}
+  }
+  var saved = null;
+  try { saved = localStorage.getItem('lab-palette'); } catch (e) {}
+  var fromUrl = new URLSearchParams(location.search).get('palette');
+  setPalette(fromUrl || saved || 'ember');
+  buttons.forEach(function (b) { b.addEventListener('click', function () { setPalette(b.dataset.p); }); });
+
+  // Nav turns solid once it leaves the hero.
+  var nav = document.getElementById('nav');
+  var onScroll = function () { nav.classList.toggle('is-solid', window.scrollY > 60); };
+  onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Reveal on scroll; the process road draws itself in.
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal, #road').forEach(function (el) { io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal, #road').forEach(function (el) { el.classList.add('is-in'); });
+  }
+})();
+</script>
+</body>
+</html>
