@@ -219,8 +219,36 @@ html.drawer-open { overflow: hidden; }
   background: var(--surface); color: var(--ink);
   border-radius: 22px; padding: 1.1rem;
   box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.45);
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto; gap: 0.6rem; align-items: stretch;
 }
+.qstep { display: grid; gap: 0.6rem; align-items: stretch; }
+.qstep[hidden] { display: none; }
+.qstep-1 { grid-template-columns: repeat(4, minmax(0, 1fr)) auto; }
+.qstep-2 { grid-template-columns: 1fr 1fr auto; animation: stepIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes stepIn { from { opacity: 0; transform: translateX(16px); } }
+.field input::placeholder { color: var(--muted); opacity: 0.75; font-weight: 500; }
+.field.is-error { box-shadow: inset 0 0 0 2px #d93025; animation: nudge 0.35s ease; }
+@keyframes nudge { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+.qs2-head { grid-column: 1 / -1; display: flex; align-items: center; gap: 0.8rem; padding: 0.15rem 0.2rem 0.2rem; }
+.qs2-head b { display: block; font-size: 1.05rem; letter-spacing: -0.02em; }
+.qs2-head span { display: block; font-size: 0.85rem; color: var(--muted); }
+.qs2-back {
+  flex: none; width: 40px; height: 40px; border-radius: 50%; border: 0; padding: 0; cursor: pointer;
+  display: grid; place-items: center; background: var(--tint); color: var(--ink);
+}
+.qs2-back svg { width: 18px; height: 18px; }
+.consent { grid-column: 1 / -1; display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.2rem 0.3rem 0.1rem; font-size: 0.8rem; line-height: 1.45; color: var(--muted); cursor: pointer; }
+.consent input { flex: none; width: 20px; height: 20px; margin: 0; accent-color: var(--accent); cursor: pointer; }
+.consent.is-error { color: #d93025; }
+.consent a { color: inherit; }
+.consent-toggle { display: none; padding: 0; border: 0; background: none; font: 600 0.8rem Inter, sans-serif; color: var(--ink); text-decoration: underline; cursor: pointer; }
+.q-error { margin: 0; font-size: 0.85rem; font-weight: 600; color: #d93025; text-align: center; }
+.q-error:not(:empty) { padding: 0.7rem 0.5rem 0.1rem; }
+.q-done { display: flex; align-items: center; gap: 1.1rem; padding: 0.9rem 1rem; animation: stepIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.q-done-icon { flex: none; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: #2f9e5b; color: #fff; }
+.q-done-icon svg { width: 26px; height: 26px; }
+.q-done h3 { font-size: 1.3rem; }
+.q-done p { margin-top: 0.2rem; font-size: 0.95rem; color: var(--muted); }
+.q-done a { color: var(--ink); font-weight: 700; }
 .field { position: relative; display: flex; flex-direction: column; justify-content: center; padding: 0.7rem 1rem; border-radius: 14px; background: var(--tint); transition: box-shadow 0.2s; }
 .field:focus-within { box-shadow: inset 0 0 0 2px var(--accent); }
 .field label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
@@ -423,6 +451,13 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
 .lab button:hover { transform: scale(1.12); }
 .lab button[aria-pressed="true"] { border-color: #fff; }
 .lab-name { min-width: 4.8rem; opacity: 1 !important; }
+/* Desktop: a vertical strip on the right edge, clear of the hero copy and the
+   form, so a client can flip colours from anywhere on the page. */
+@media (min-width: 769px) {
+  .lab { left: auto; right: 1rem; bottom: auto; top: 50%; translate: 0 -50%; flex-direction: column; gap: 0.6rem; padding: 0.8rem 0.5rem; border-radius: 999px; }
+  .lab span { font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  .lab-name { min-width: 0; font-size: 0.62rem !important; writing-mode: vertical-rl; transform: rotate(180deg); }
+}
 
 /* Mobile call bar ---------------------------------------------------------- */
 .callbar { display: none; }
@@ -442,8 +477,8 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   .nav-links { display: none; }
   .nav-phone { margin-left: auto; }
   .menu-btn { display: grid; }
-  .quote-card { grid-template-columns: 1fr 1fr; }
-  .quote-card .btn { grid-column: 1 / -1; }
+  .qstep-1 { grid-template-columns: 1fr 1fr; }
+  .qstep-1 .btn { grid-column: 1 / -1; }
   .bento { grid-auto-rows: 220px; }
   .t-3, .t-4, .t-5 { grid-column: span 6; }
   .t-5 { grid-column: span 12; }
@@ -484,7 +519,20 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   .hero h1 { font-size: clamp(2rem, 9.2vw, 2.6rem); margin: 0; text-shadow: none; }
   .hero-lede, .hero-points { display: none; }
   .quote { padding-top: 1.1rem; }
-  .quote-card { grid-template-columns: 1fr 1fr; padding: 0.6rem; gap: 0.45rem; border-radius: 18px; }
+  .quote-card { padding: 0.6rem; border-radius: 18px; }
+  .qstep { gap: 0.45rem; }
+  .qstep-2 { grid-template-columns: 1fr; }
+  .qs2-head b { font-size: 0.98rem; }
+  .qs2-head span { font-size: 0.8rem; }
+  .qs2-back { width: 36px; height: 36px; }
+  /* The disclosure's first sentence stays; the rest opens on "Read more". */
+  .consent { font-size: 0.76rem; }
+  .consent-more:not(.is-open) { display: none; }
+  .consent-toggle { display: inline; font-size: 0.76rem; }
+  .q-done { padding: 0.8rem 0.6rem; gap: 0.9rem; }
+  .q-done-icon { width: 44px; height: 44px; }
+  .q-done h3 { font-size: 1.12rem; }
+  .q-done p { font-size: 0.88rem; }
   .field { min-height: 56px; padding: 0.45rem 0.8rem; border-radius: 12px; }
   .field label { font-size: 0.66rem; }
   /* 16px or iOS zooms the page when a field is tapped. */
@@ -626,13 +674,31 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   </div>
 
   <div class="wrap quote" id="quote">
-    <form class="quote-card" onsubmit="event.preventDefault(); this.querySelector('.btn').textContent = 'Demo only ✓';">
-      <div class="field"><label for="q-from">Moving from</label><select id="q-from" class="state-select"><option>Choose state</option></select></div>
-      <div class="field"><label for="q-to">Moving to</label><select id="q-to" class="state-select"><option>Choose state</option></select></div>
-      <div class="field"><label for="q-size">Home size</label>
-        <select id="q-size"><option>Choose size</option><option>Studio</option><option>1 Bedroom</option><option>2 Bedrooms</option><option>3 Bedrooms</option><option>4 Bedrooms</option><option>5+ Bedrooms</option><option>Office</option></select></div>
-      <div class="field"><label for="q-date">Move date</label><input id="q-date" type="date" /></div>
-      <button class="btn" type="submit">Get my price <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    <form class="quote-card" id="lab-form" novalidate>
+      <div class="qstep qstep-1">
+        <div class="field"><label for="q-from">Moving from</label><select id="q-from" class="state-select"><option value="">Choose state</option></select></div>
+        <div class="field"><label for="q-to">Moving to</label><select id="q-to" class="state-select"><option value="">Choose state</option></select></div>
+        <div class="field"><label for="q-size">Home size</label>
+          <select id="q-size"><option value="">Choose size</option><option>Studio</option><option>1 Bedroom</option><option>2 Bedrooms</option><option>3 Bedrooms</option><option>4 Bedrooms</option><option>5+ Bedrooms</option><option>Office / Commercial</option></select></div>
+        <div class="field"><label for="q-date">Move date</label><input id="q-date" type="text" inputmode="none" placeholder="MM/DD/YYYY" autocomplete="off" /></div>
+        <button class="btn" type="submit">Get my price <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
+      <div class="qstep qstep-2" hidden>
+        <div class="qs2-head">
+          <button type="button" class="qs2-back" id="q-back" aria-label="Back to route">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+          </button>
+          <div><b>Where should we send your price?</b><span id="q-route"></span></div>
+        </div>
+        <div class="field"><label for="q-phone">Phone</label><input id="q-phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(555) 123-4567" /></div>
+        <div class="field"><label for="q-email">Email</label><input id="q-email" type="email" autocomplete="email" inputmode="email" placeholder="you@email.com" /></div>
+        <button class="btn" type="submit" id="q-send">Send my quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <label class="consent" for="q-sms">
+          <input type="checkbox" id="q-sms" />
+          <span>I agree to receive SMS messages from 50STATEMOVERS INC about my quote.<span class="consent-more" id="q-sms-more"> Msg &amp; data rates may apply. Message frequency varies. Reply STOP to opt out at any time. See our <a href="/privacy-policy" target="_blank">Privacy Policy</a>.</span> <button type="button" class="consent-toggle" id="q-sms-toggle" aria-expanded="false" aria-controls="q-sms-more">Read more</button></span>
+        </label>
+      </div>
+      <p class="q-error" id="q-error" role="alert"></p>
     </form>
     <p class="quote-note"><span class="qn-rating">★ 4.96 from 2,400+ reviews · </span>🔒 Price locked at booking · $1M coverage<span class="qn-desk"> · never sold to brokers</span></p>
   </div>
@@ -888,6 +954,110 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   var nav = document.getElementById('nav');
   var onScroll = function () { nav.classList.toggle('is-solid', window.scrollY > 60); };
   onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Quote form: route and details, then phone, email and SMS consent, sent to
+  // the same /api/contact endpoint and in the same shape as the live form.
+  (function () {
+    var form = document.getElementById('lab-form');
+    var $ = function (id) { return document.getElementById(id); };
+    var step1 = form.querySelector('.qstep-1'), step2 = form.querySelector('.qstep-2');
+    var errorEl = $('q-error');
+    var fine = window.matchMedia('(pointer: fine)').matches;
+
+    function fieldOf(el) { return el.closest('.field') || el.closest('.consent'); }
+    function flag(el) { var f = fieldOf(el); f.classList.remove('is-error'); void f.offsetWidth; f.classList.add('is-error'); }
+    function clearFlags() { form.querySelectorAll('.is-error').forEach(function (f) { f.classList.remove('is-error'); }); errorEl.textContent = ''; }
+    form.addEventListener('input', function (e) { var f = fieldOf(e.target); if (f) f.classList.remove('is-error'); errorEl.textContent = ''; });
+    form.addEventListener('change', function (e) { var f = e.target.closest && fieldOf(e.target); if (f) f.classList.remove('is-error'); });
+
+    // Move date: a native date field draws itself in the visitor's OS language,
+    // so it rests as text with an English hint and turns into a date field only
+    // while in use — phones still get their picker. Same as the live form.
+    var date = $('q-date'), lastPointer = '';
+    function toDate() {
+      if (date.type === 'date') return;
+      var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(date.value);
+      date.type = 'date'; date.value = m ? m[3] + '-' + m[1] + '-' + m[2] : '';
+    }
+    function toText() {
+      if (date.type !== 'date') return;
+      var v = date.value;
+      date.type = 'text';
+      date.value = /^\d{4}-\d{2}-\d{2}$/.test(v) ? v.slice(5, 7) + '/' + v.slice(8, 10) + '/' + v.slice(0, 4) : '';
+    }
+    date.addEventListener('pointerdown', function (e) { lastPointer = e.pointerType; toDate(); });
+    date.addEventListener('focus', toDate);
+    date.addEventListener('blur', toText);
+    date.addEventListener('click', function () { if (lastPointer === 'mouse' && date.showPicker) { try { date.showPicker(); } catch (err) {} } });
+
+    $('q-sms-toggle').addEventListener('click', function (e) {
+      e.preventDefault();
+      var open = $('q-sms-more').classList.toggle('is-open');
+      this.setAttribute('aria-expanded', String(open));
+      this.textContent = open ? 'Show less' : 'Read more';
+    });
+
+    function showStep(n) {
+      step1.hidden = n !== 1; step2.hidden = n !== 2;
+      clearFlags();
+      if (n === 2) {
+        $('q-route').textContent = $('q-from').value + ' → ' + $('q-to').value + ($('q-size').value ? ' · ' + $('q-size').value : '');
+        if (fine) $('q-phone').focus({ preventScroll: true });
+      }
+      form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    $('q-back').addEventListener('click', function () { showStep(1); });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      toText();
+      clearFlags();
+
+      if (!step1.hidden) {
+        var ok = true;
+        if (!$('q-from').value) { flag($('q-from')); ok = false; }
+        if (!$('q-to').value) { flag($('q-to')); ok = false; }
+        if (!ok) { errorEl.textContent = 'Choose where you’re moving from and to.'; return; }
+        showStep(2);
+        return;
+      }
+
+      var phone = $('q-phone').value.trim(), email = $('q-email').value.trim(), sms = $('q-sms');
+      var msgs = [];
+      if (phone.replace(/\D/g, '').length < 10) { flag($('q-phone')); msgs.push('a phone number'); }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { flag($('q-email')); msgs.push('a valid email'); }
+      if (!sms.checked) { flag(sms); msgs.push('SMS consent'); }
+      if (msgs.length) { errorEl.textContent = 'Please add ' + msgs.join(', ').replace(/, ([^,]*)$/, ' and $1') + '.'; return; }
+
+      var btn = $('q-send'), label = btn.innerHTML;
+      btn.disabled = true; btn.textContent = 'Sending…';
+      var message = [
+        'Moving from: ' + $('q-from').value,
+        'Moving to: ' + $('q-to').value,
+        $('q-size').value ? 'Home size: ' + $('q-size').value : null,
+        date.value ? 'Planned move date: ' + date.value : null,
+        'SMS opt-in: Yes',
+        'Form: design lab (2-step bar)',
+        'Landing page: ' + window.location.pathname + (document.documentElement.dataset.palette ? ' · palette ' + document.documentElement.dataset.palette : ''),
+      ].filter(Boolean).join('\n');
+
+      function fail(msg) { errorEl.textContent = msg; btn.disabled = false; btn.innerHTML = label; }
+      fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: '', email: email, phone: phone, message: message }),
+      }).then(function (res) {
+        if (res.ok) {
+          form.innerHTML =
+            '<div class="q-done" role="status">' +
+            '<span class="q-done-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>' +
+            '<div><h3>Quote request received!</h3><p>We’ll send your fixed price today. Can’t wait? Call <a href="tel:+18885051086">(888) 505-1086</a>.</p></div></div>';
+          return;
+        }
+        return res.json().catch(function () { return {}; }).then(function (d) { fail(d.error || 'Something went wrong. Please try again or call us.'); });
+      }).catch(function () { fail('Could not connect. Please call us at (888) 505-1086.'); });
+    });
+  })();
 
   // Menu drawer.
   var drawer = document.getElementById('drawer'), menuBtn = document.getElementById('menu-btn');
