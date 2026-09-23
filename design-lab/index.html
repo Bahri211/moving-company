@@ -162,7 +162,8 @@ p { margin: 0; }
   font: 600 1.02rem Inter, sans-serif; color: var(--ink); outline: none; cursor: pointer;
 }
 .quote-card .btn { min-height: 64px; border-radius: 14px; padding: 0 1.8rem; font-size: 1.02rem; }
-.quote-note { display: flex; justify-content: center; gap: 0.5rem; margin-top: 0.9rem; font-size: 0.84rem; font-weight: 500; color: rgba(255, 255, 255, 0.82); }
+.qn-rating { display: none; }
+.quote-note { display: block; text-align: center; margin-top: 0.9rem; font-size: 0.84rem; font-weight: 500; color: rgba(255, 255, 255, 0.82); }
 
 /* Stats -------------------------------------------------------------------- */
 .stats { padding: 5rem 0 5rem; }
@@ -390,28 +391,38 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   .nav-inner { height: 64px; gap: 1rem; }
   .nav .btn, .nav-phone { display: none; }
   .logo img { width: 38px; height: 38px; }
-  /* Phones: headline, then the form, all on the first screen — even an
-     iPhone SE with the browser bars showing. The lede and the tick list give
-     way; their promises move into the line under the form. */
+  /* Phones: the truck, the headline, then the form, all on the first screen —
+     even an iPhone SE with the browser bars showing. The photo is drawn at
+     full width and pulled up so the truck sits in a clear band under the nav
+     (it runs ~18vw–56vw down); the wash turns solid just below it, where the
+     headline and form begin. The badge, lede and tick list give way; the
+     rating and promises move into the line under the form. */
   .ticker { font-size: 0.72rem; }
   .ticker-track span { padding: 0.45rem 0.9rem; gap: 1.8rem; }
-  .hero { margin-top: -64px; padding: calc(64px + 1rem) 0 1.6rem; min-height: 0; }
+  .hero { margin-top: -64px; padding: 55vw 0 1.6rem; min-height: 0; }
   .hero::before {
     background:
-      linear-gradient(180deg, rgba(var(--wash), 0.86) 0%, rgba(var(--wash), 0.55) 34%, rgba(var(--wash), 0.35) 60%, rgba(var(--wash), 0.9) 100%),
-      var(--dark) url('/assets/images/lab/hero-mountain-mobile.jpg') center 40% / cover no-repeat;
+      linear-gradient(180deg,
+        rgba(var(--wash), 0.6) 0,
+        rgba(var(--wash), 0.05) 17vw,
+        rgba(var(--wash), 0) 44vw,
+        rgba(var(--wash), 0.88) 58vw,
+        var(--dark) 72vw),
+      var(--dark) url('/assets/images/lab/hero-mountain-mobile.jpg') center -59vw / 100% auto no-repeat;
   }
-  .hero-badge { font-size: 0.78rem; }
-  .hero h1 { font-size: clamp(2rem, 9.2vw, 2.6rem); margin: 0.85rem 0 0; }
+  .hero-badge { display: none; }
+  .hero h1 { font-size: clamp(2rem, 9.2vw, 2.6rem); margin: 0; text-shadow: none; }
   .hero-lede, .hero-points { display: none; }
   .quote { padding-top: 1.1rem; }
   .quote-card { grid-template-columns: 1fr 1fr; padding: 0.6rem; gap: 0.45rem; border-radius: 18px; }
-  .field { min-height: 60px; padding: 0.5rem 0.8rem; border-radius: 12px; }
+  .field { min-height: 56px; padding: 0.45rem 0.8rem; border-radius: 12px; }
   .field label { font-size: 0.66rem; }
   /* 16px or iOS zooms the page when a field is tapped. */
   .field select, .field input { font-size: 16px; min-height: 26px; }
   .quote-card .btn { min-height: 56px; border-radius: 12px; }
-  .quote-note { margin-top: 0.75rem; font-size: 0.74rem; text-align: center; }
+  .quote-note { margin-top: 0.75rem; font-size: 0.74rem; }
+  .qn-rating { display: inline; color: #fff; font-weight: 700; }
+  .qn-desk { display: none; }
   .stats { padding: 2rem 0 0.5rem; }
   .stats-grid { grid-template-columns: 1fr 1fr; }
   .stat { padding: 1.4rem 0.8rem 1.4rem 0; }
@@ -454,7 +465,8 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   .foot-top > div:first-child { grid-column: 1 / -1; }
   .foot { padding-bottom: 7rem; }
   .lab { bottom: 1rem; left: 50%; translate: -50% 0; padding: 0.4rem 0.45rem 0.4rem 0.8rem; transition: bottom 0.3s ease; }
-  .callbar.is-on ~ .lab { bottom: 5.2rem; }
+  .lab { opacity: 0; pointer-events: none; }
+  .callbar.is-on ~ .lab { bottom: 5.2rem; opacity: 1; pointer-events: auto; }
   .lab button { width: 26px; height: 26px; }
   .lab-name { display: none; }
   .callbar {
@@ -517,7 +529,7 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
       <div class="field"><label for="q-date">Move date</label><input id="q-date" type="date" /></div>
       <button class="btn" type="submit">Get my price <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     </form>
-    <p class="quote-note">🔒 Price locked at booking · $1M coverage · never sold to brokers</p>
+    <p class="quote-note"><span class="qn-rating">★ 4.96 from 2,400+ reviews · </span>🔒 Price locked at booking · $1M coverage<span class="qn-desk"> · never sold to brokers</span></p>
   </div>
 </section>
 
