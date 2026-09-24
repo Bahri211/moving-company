@@ -24,7 +24,12 @@ const PRICE_QUESTION = /how much (does|do|would|will) .{0,80}\bcost\b|cheapest t
 
 // The state pages and hub are moving-*; the service landing pages are named
 // for what people search, so they are listed rather than matched.
-const SERVICE_PAGES = ['long-distance-movers', 'interstate-movers', 'state-to-state-movers'];
+const SERVICE_PAGES = [
+  'long-distance-movers', 'interstate-movers', 'state-to-state-movers',
+  // NYC pages, built by scripts/build-nyc-pages.js.
+  'nyc-long-distance-movers', 'nyc-to-florida-long-distance-movers',
+  'nyc-to-north-carolina-and-georgia-movers', 'nyc-long-distance-movers-to-texas-california-chicago-and-boston',
+];
 const pages = [];
 for (const entry of fs.readdirSync(ROOT)) {
   const idx = path.join(ROOT, entry, 'index.html');

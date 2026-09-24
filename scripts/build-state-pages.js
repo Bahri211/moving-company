@@ -3193,6 +3193,11 @@ const staticPages = [
   { loc: '/long-distance-movers/', priority: '0.9', changefreq: 'monthly' },
   { loc: '/interstate-movers/', priority: '0.9', changefreq: 'monthly' },
   { loc: '/state-to-state-movers/', priority: '0.9', changefreq: 'monthly' },
+  // NYC pages, built by scripts/build-nyc-pages.js.
+  { loc: '/nyc-long-distance-movers/', priority: '0.9', changefreq: 'monthly' },
+  { loc: '/nyc-to-florida-long-distance-movers/', priority: '0.8', changefreq: 'monthly' },
+  { loc: '/nyc-to-north-carolina-and-georgia-movers/', priority: '0.8', changefreq: 'monthly' },
+  { loc: '/nyc-long-distance-movers-to-texas-california-chicago-and-boston/', priority: '0.8', changefreq: 'monthly' },
   { loc: '/privacy-policy', priority: '0.3', changefreq: 'yearly' },
   { loc: '/terms-of-service', priority: '0.3', changefreq: 'yearly' },
 ];
