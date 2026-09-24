@@ -57,19 +57,6 @@
   --accent-2: #e9541f; --on-accent-2: #ffffff; --wash: 12, 28, 20;
 }
 
-/* Sky: navy, blue and sky blue, for the client to try. */
-[data-palette="sky"] {
-  --bg: #f3f8fc; --surface: #ffffff; --tint: #e2effa;
-  --ink: #0b1f3a; --muted: #52657c; --line: rgba(11, 31, 58, 0.12);
-  --dark: #0b1f3a; --dark-2: #14305a; --on-dark: #f3f8fc; --on-dark-muted: rgba(243, 248, 252, 0.68);
-  --accent: #1f6fe5; --accent-hover: #185bc2; --on-accent: #ffffff;
-  --accent-2: #6ccff6; --on-accent-2: #0b1f3a; --wash: 8, 24, 48;
-}
-/* On dark grounds the blue sinks; sky blue carries the headlines there. */
-[data-palette="sky"] .hero h1 em,
-[data-palette="sky"] .story h2 em,
-[data-palette="sky"] .cta-box h2 em { color: #6ccff6; }
-
 /* Sky blue: sky blue leads, with navy ink on it. On light grounds a deeper
    sky carries headline highlights, where the pale one would wash out. */
 [data-palette="skyblue"] {
@@ -183,6 +170,15 @@ p { margin: 0; }
 }
 .nav-icon svg { width: 20px; height: 20px; }
 .nav:not(.is-solid) .nav-icon { background: rgba(255, 255, 255, 0.16); color: #fff; backdrop-filter: blur(8px); }
+/* Phone header: the call button carries the number itself. */
+.nav-call {
+  display: none; align-items: center; gap: 0.5rem; height: 44px; padding: 0 0.95rem 0 0.3rem; border-radius: 999px;
+  background: var(--tint); color: var(--ink); text-decoration: none; white-space: nowrap;
+  font-size: 0.92rem; font-weight: 800; letter-spacing: -0.015em; font-variant-numeric: tabular-nums;
+}
+.nav:not(.is-solid) .nav-call { background: rgba(255, 255, 255, 0.16); color: #fff; backdrop-filter: blur(8px); }
+.nav-call-ico { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: #2fb36a; color: #fff; }
+.nav-call-ico svg { width: 16px; height: 16px; }
 section[id] { scroll-margin-top: 72px; }
 html.drawer-open { overflow: hidden; }
 
@@ -637,7 +633,8 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   .section-head p { font-size: 1rem; }
   .nav-inner { height: 64px; gap: 1rem; }
   .nav .btn, .nav-phone { display: none; }
-  .nav-call { display: grid; margin-left: auto; }
+  .nav-call { display: inline-flex; margin-left: auto; }
+  .nav .logo-name { display: none; }
   .nav-inner { gap: 0.5rem; }
   .logo img { width: 38px; height: 38px; }
   /* Phones: the truck, the headline, then the form, all on the first screen —
@@ -651,6 +648,7 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   .fmcsa-badge { height: 21px; font-size: 0.62rem; }
   .fmcsa-badge .fb-seal { width: 16px; height: 16px; }
   .hero { margin-top: -64px; padding: 55vw 0 1.6rem; min-height: 0; }
+  .foot { padding-bottom: 7rem; }
   .hero::before {
     background:
       linear-gradient(180deg,
@@ -739,21 +737,19 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   .foot-top > div:first-child { grid-column: 1 / -1; }
   .foot { padding-bottom: 7rem; }
   .lab { bottom: 1rem; left: 50%; translate: -50% 0; padding: 0.4rem 0.45rem 0.4rem 0.8rem; transition: bottom 0.3s ease; }
-  .lab { opacity: 0; pointer-events: none; }
-  .callbar.is-on ~ .lab { bottom: 5.8rem; opacity: 1; pointer-events: auto; }
+  .lab { bottom: 5.8rem; opacity: 0; pointer-events: none; }
+  .lab.is-on { opacity: 1; pointer-events: auto; }
   .lab button { width: 26px; height: 26px; }
   .lab-name { display: none; }
-  /* A floating dock: the number itself is the call button, beside the quote
-     button. It slides up once the hero form has scrolled away. */
+  /* A floating dock, always on: the number itself is the call button,
+     beside the quote button. */
   .callbar {
     display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 0.4rem;
     position: fixed; left: 0.6rem; right: 0.6rem; bottom: calc(0.6rem + env(safe-area-inset-bottom)); z-index: 80;
     padding: 0.4rem; border-radius: 22px;
     background: var(--dark); color: var(--on-dark);
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset, 0 20px 40px -14px rgba(0, 0, 0, 0.6);
-    transform: translateY(calc(100% + 1.5rem)); transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .callbar.is-on { transform: none; }
   .call-pill {
     display: flex; align-items: center; gap: 0.7rem; min-width: 0; min-height: 52px;
     padding: 0.25rem 0.5rem 0.25rem 0.3rem; border-radius: 16px;
@@ -779,6 +775,30 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   .callbar .btn { min-height: 52px; padding: 0 1.05rem; border-radius: 16px; font-size: 0.95rem; white-space: nowrap; }
   .callbar .btn svg { width: 16px; height: 16px; }
 }
+/* Short phones (iPhone SE, small Androids): the always-on call dock takes the
+   bottom 60px, so the hero tightens — truck band a little higher, slimmer
+   fields, slimmer dock — to keep Get my price clear of it. */
+@media (max-width: 768px) and (max-height: 640px) {
+  .hero { padding-top: 49vw; }
+  .hero::before {
+    background:
+      linear-gradient(180deg,
+        rgba(var(--wash), 0.6) 0,
+        rgba(var(--wash), 0.05) 12vw,
+        rgba(var(--wash), 0) 38vw,
+        rgba(var(--wash), 0.88) 52vw,
+        var(--dark) 66vw),
+      var(--dark) url('/assets/images/lab/hero-mountain-mobile.jpg') center -65vw / 100% auto no-repeat;
+  }
+  .hero h1 { font-size: clamp(1.8rem, 8.4vw, 2.2rem); }
+  .quote { padding-top: 0.8rem; }
+  .field { min-height: 50px; padding: 0.35rem 0.75rem; }
+  .quote-card .btn { min-height: 50px; }
+  .call-pill { min-height: 44px; gap: 0.55rem; }
+  .call-ico { width: 36px; height: 36px; }
+  .call-txt small { font-size: 0.6rem; }
+  .callbar .btn { min-height: 44px; }
+}
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .reveal { opacity: 1; transform: none; }
@@ -797,14 +817,14 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
 
 <header class="nav" id="nav">
   <div class="wrap nav-inner">
-    <a href="/" class="logo"><img src="/assets/images/48-state-movers-logo-removebg-preview.png" alt="" />50STATEMOVERS</a>
+    <a href="/" class="logo" aria-label="50STATEMOVERS home"><img src="/assets/images/48-state-movers-logo-removebg-preview.png" alt="" /><span class="logo-name">50STATEMOVERS</span></a>
     <nav class="nav-links" aria-label="Main">
       <a href="#services">Services</a><a href="#moving-day">Moving day</a><a href="#coverage">Coverage</a><a href="#reviews">Reviews</a><a href="#faq">FAQ</a>
     </nav>
     <a href="tel:+18885051086" class="nav-phone">(888) 505-1086</a>
     <a href="#quote" class="btn">Free quote</a>
-    <a href="tel:+18885051086" class="nav-icon nav-call" aria-label="Call (888) 505-1086">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+    <a href="tel:+18885051086" class="nav-call" aria-label="Call (888) 505-1086">
+      <span class="nav-call-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span><span class="nav-call-num">(888) 505-1086</span>
     </a>
     <button type="button" class="nav-icon menu-btn" id="menu-btn" aria-label="Open menu" aria-controls="drawer" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
@@ -1100,7 +1120,6 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   <button type="button" data-p="sunrise" aria-label="Sunrise" style="--sw-a:#1f2a44;--sw-b:#f2a900"></button>
   <button type="button" data-p="evergreen" aria-label="Evergreen" style="--sw-a:#13251d;--sw-b:#c6f36b"></button>
   <button type="button" data-p="skyblue" aria-label="Sky blue" style="background: linear-gradient(135deg, #0f2b44 50%, #45bdf2 50%)"></button>
-  <button type="button" data-p="sky" aria-label="Sky" style="background: linear-gradient(135deg, #0b1f3a 34%, #1f6fe5 34% 66%, #6ccff6 66%)"></button>
   <span class="lab-name" id="lab-name">Ember</span>
 </div>
 
@@ -1141,7 +1160,9 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   var saved = null;
   try { saved = localStorage.getItem('lab-palette'); } catch (e) {}
   var fromUrl = new URLSearchParams(location.search).get('palette');
-  setPalette(fromUrl || saved || 'ember');
+  var known = function (p) { return p && document.querySelector('.lab button[data-p="' + p + '"]') ? p : null; };
+  if (fromUrl === 'sky') fromUrl = 'skyblue';
+  setPalette(known(fromUrl) || known(saved) || 'ember');
   buttons.forEach(function (b) { b.addEventListener('click', function () { setPalette(b.dataset.p); }); });
 
   // Nav turns solid once it leaves the hero.
@@ -1292,16 +1313,16 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
     });
   });
 
-  // Phone call bar shows once the hero form is off screen.
+  // Palette switcher (phones) and desktop quote pill show once the hero form is off screen.
   // Desktop quote pill: same, but it also steps aside for the closing CTA band
   // and the footer, which carry their own quote buttons.
-  var callbar = document.querySelector('.callbar'), pill = document.querySelector('.float-cta');
+  var lab = document.querySelector('.lab'), pill = document.querySelector('.float-cta');
   var quoteCard = document.querySelector('.quote-card'), endZones = [document.querySelector('.cta-box'), document.querySelector('.foot')];
   if ('IntersectionObserver' in window) {
     var seen = new Map();
     var sync = function () {
       var formOn = seen.get(quoteCard), endOn = endZones.some(function (el) { return seen.get(el); });
-      callbar.classList.toggle('is-on', !formOn);
+      lab.classList.toggle('is-on', !formOn);
       pill.classList.toggle('is-on', !formOn && !endOn);
     };
     var watch = new IntersectionObserver(function (entries) {
@@ -1309,7 +1330,7 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
       sync();
     });
     [quoteCard].concat(endZones).forEach(function (el) { watch.observe(el); });
-  } else { callbar.classList.add('is-on'); pill.classList.add('is-on'); }
+  } else { lab.classList.add('is-on'); pill.classList.add('is-on'); }
 
   // Scroll-driven: hero parallax, and the truck on the process road. Parallax
   // is skipped under reduced motion; the truck is tied to the scroll like a
