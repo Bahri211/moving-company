@@ -352,45 +352,52 @@ html.drawer-open { overflow: hidden; }
 .frame h3 { font-size: 1.45rem; margin: 1.2rem 0 0.4rem; }
 .frame p { color: var(--on-dark-muted); font-size: 0.95rem; }
 
-/* Process: four steps on a dashed road -------------------------------------- */
-.road { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
-.road::before { content: ""; position: absolute; top: 27px; left: 28px; width: var(--len, calc(100% - 56px)); border-top: 2px dashed var(--line); }
-/* --p (0–1) is set by the script from how far the section has scrolled, and
-   --len is the distance from the first step's dot to the last one's. */
-.road { --p: 0; }
-.road-fill { position: absolute; top: 26px; left: 28px; height: 4px; width: calc(var(--len, calc(100% - 56px)) * var(--p)); border-radius: 4px; background: var(--accent); }
+/* Process: a winding road ---------------------------------------------------
+   The script draws the road through the four dots (a wave across on desktop,
+   a wiggle down the side on phones) and drives the truck along it with the
+   scroll; the centre line turns solid behind it and each dot lights up as it
+   is reached. Steps sit open on the page — no cards: 1 and 3 above the road,
+   2 and 4 below it. */
+.route { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: auto 190px auto; column-gap: 2rem; margin-top: 1rem; }
+.route-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.route-svg path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.route-base { stroke: var(--dark); stroke-width: 26; }
+.route-line { stroke: var(--bg); stroke-width: 2; stroke-dasharray: 10 12; opacity: 0.55; }
+.route-done { stroke: var(--accent); stroke-width: 4; }
 .road-truck {
-  position: absolute; z-index: 2; top: -36px; left: calc(28px + var(--len, calc(100% - 56px)) * var(--p));
-  width: 58px; height: 32px; translate: -50% 0; color: var(--accent); pointer-events: none;
-  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.18));
+  position: absolute; left: 0; top: 0; z-index: 2; width: 60px; height: 34px;
+  transform-origin: 0 0; color: var(--accent); pointer-events: none; will-change: transform;
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.3));
 }
-.road-truck svg { width: 100%; height: 100%; display: block; }
-.road.is-moving .road-truck svg { animation: rumble 0.28s linear infinite; }
+.road-truck svg { display: block; width: 100%; height: 100%; }
+.route.is-moving .road-truck svg { animation: rumble 0.28s linear infinite; }
 @keyframes rumble { 50% { transform: translateY(-1px); } }
-.step-dot { transition: background 0.35s, color 0.35s, box-shadow 0.35s, transform 0.35s; }
-.step.is-passed .step-dot { background: var(--accent); color: var(--on-accent); box-shadow: none; transform: scale(1.06); }
-.step { position: relative; }
+.step { display: contents; }
 .step-dot {
-  width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
-  background: var(--surface); box-shadow: 0 0 0 1px var(--line), 0 10px 24px -12px rgba(0, 0, 0, 0.3);
-  font: 600 1.2rem Inter, sans-serif; margin-bottom: 1.6rem;
+  position: relative; z-index: 1; grid-row: 2; justify-self: center;
+  width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--surface); color: var(--ink); font: 800 1.1rem Inter, sans-serif;
+  box-shadow: 0 0 0 5px var(--dark), 0 12px 24px -10px rgba(0, 0, 0, 0.45);
+  transition: background 0.35s, color 0.35s, transform 0.35s;
 }
-.step h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
-/* Illustrations: white line art used as a mask, so it takes the palette's
-   accent on a dark tile. */
+.step.is-passed .step-dot { background: var(--accent); color: var(--on-accent); transform: scale(1.08); }
+.step-body { justify-self: center; max-width: 17rem; text-align: center; }
+.s1 .step-body, .s1 .step-dot { grid-column: 1; }
+.s2 .step-body, .s2 .step-dot { grid-column: 2; }
+.s3 .step-body, .s3 .step-dot { grid-column: 3; }
+.s4 .step-body, .s4 .step-dot { grid-column: 4; }
+.s1 .step-body, .s3 .step-body { grid-row: 1; align-self: end; padding-bottom: 2rem; }
+.s2 .step-body, .s4 .step-body { grid-row: 3; align-self: start; padding-top: 2rem; }
+.s1 .step-dot, .s3 .step-dot { align-self: start; }
+.s2 .step-dot, .s4 .step-dot { align-self: end; }
+/* Line art used as a mask, so it is drawn in the page's ink. */
 .step-illo {
-  position: relative; aspect-ratio: 4 / 3; margin-bottom: 1.3rem; border-radius: 18px;
-  background: var(--dark); overflow: hidden;
-}
-.step-illo::after {
-  content: ""; position: absolute; inset: 20% 18%;
-  background: var(--accent);
+  height: 120px; margin-bottom: 1.1rem; background: var(--ink);
   -webkit-mask: var(--illo) center / contain no-repeat; mask: var(--illo) center / contain no-repeat;
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.step:hover .step-illo::after { transform: scale(1.06); }
-.rail-track { display: none; }
-.step p { color: var(--muted); font-size: 0.96rem; }
+.step-num { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.step h3 { font-size: 1.45rem; margin: 0.3rem 0 0.4rem; }
+.step p { color: var(--muted); font-size: 0.95rem; }
 
 /* Coverage ----------------------------------------------------------------- */
 .coverage { background: var(--tint); }
@@ -636,33 +643,19 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   .t-6 > div { max-width: none; }
   .t-6 img { width: 100%; height: 55%; -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent); mask-image: linear-gradient(180deg, #000 55%, transparent); }
   .rail { grid-auto-columns: 78%; margin-right: -1rem; padding-right: 1rem; }
-  /* Phones: the steps sit side by side as cards you swipe, and a small truck
-     under them drives along with the swipe. */
-  .road {
-    grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 80%; gap: 0.75rem;
-    overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
-    margin-right: -1rem; padding: 0 1rem 0.3rem 0; scrollbar-width: none;
-  }
-  .road::-webkit-scrollbar { display: none; }
-  .road::before, .road-fill, .road-truck { display: none; }
-  .step {
-    position: relative; scroll-snap-align: start; padding: 0.6rem 0.6rem 1.25rem; border-radius: 20px;
-    background: var(--surface); box-shadow: 0 1px 0 var(--line), 0 18px 36px -28px rgba(0, 0, 0, 0.4);
-  }
-  .step-dot, .step.is-passed .step-dot {
-    position: absolute; top: 1.1rem; left: 1.1rem; z-index: 1; width: 36px; height: 36px; margin: 0;
-    font-size: 0.95rem; background: var(--accent); color: var(--on-accent); box-shadow: none; transform: none;
-  }
-  .step-illo { margin-bottom: 1rem; border-radius: 14px; }
-  .step h3 { font-size: 1.3rem; margin: 0 0 0.3rem; padding: 0 0.55rem; }
-  .step p { padding: 0 0.55rem; font-size: 0.93rem; }
-  .rail-track { --rp: 0; display: block; position: relative; height: 30px; margin: 1.1rem 3.2rem 0 0.2rem; }
-  .rail-track::before { content: ""; position: absolute; left: 0; right: 0; bottom: 6px; border-top: 2px dashed var(--line); }
-  .rail-fill { position: absolute; left: 0; bottom: 5px; height: 4px; border-radius: 4px; background: var(--accent); width: calc((100% - 44px) * var(--rp) + 22px); }
-  .rail-truck { position: absolute; bottom: 6px; left: calc((100% - 44px) * var(--rp)); width: 44px; height: 25px; color: var(--accent); }
-  .rail-truck svg { display: block; width: 100%; height: 100%; }
-  .rail-hint { position: absolute; right: -3.2rem; bottom: 0; font-size: 0.75rem; font-weight: 700; color: var(--muted); transition: opacity 0.3s; }
-  .rail-track.is-swiped .rail-hint { opacity: 0; }
+  /* Phones: the road wiggles down the left edge, bending from one dot to the
+     next, with each step open beside its bend. */
+  .route { display: block; margin-top: 0.5rem; }
+  .route-base { stroke-width: 18; }
+  .road-truck { width: 46px; height: 26px; }
+  .step { display: grid; grid-template-columns: 74px 1fr; column-gap: 1.4rem; padding-bottom: 2.6rem; }
+  .step:last-child { padding-bottom: 1.5rem; }
+  .route .step-dot { grid-column: 1; grid-row: 1; align-self: start; justify-self: start; margin-top: 2.3rem; width: 44px; height: 44px; font-size: 1rem; box-shadow: 0 0 0 4px var(--dark), 0 10px 20px -10px rgba(0, 0, 0, 0.45); }
+  .route .s2 .step-dot, .route .s4 .step-dot { justify-self: end; }
+  .route .step-body { grid-column: 2; grid-row: 1; align-self: start; justify-self: stretch; max-width: none; padding: 0; text-align: left; }
+  .step-illo { width: 130px; height: 96px; margin-bottom: 0.7rem; -webkit-mask-position: left center; mask-position: left center; }
+  .step h3 { font-size: 1.3rem; }
+  .step p { font-size: 0.93rem; }
   .cov-grid, .faq-grid { grid-template-columns: 1fr; gap: 2rem; }
   .cov-photo { min-height: 320px; order: 2; }
   .faq-aside { position: static; }
@@ -909,20 +902,13 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
       <div><span class="eyebrow">The process</span><h2>No surprises. <em>Four steps.</em></h2></div>
       <p>No vague quotes that balloon on moving day. Here's the whole shape of working with us.</p>
     </div>
-    <div class="road" id="road">
-      <span class="road-fill"></span>
-      <span class="road-truck" aria-hidden="true">
-        <svg viewBox="0 0 64 36"><rect x="1" y="3" width="39" height="23" rx="3" fill="currentColor"/><path d="M42 10h10.5a3 3 0 0 1 2.2 1l6.3 7.2V26H42z" fill="currentColor"/><path d="M45 13.5h7l4.4 5H45z" fill="#fff" opacity=".9"/><rect x="6" y="9" width="28" height="3" rx="1.5" fill="#fff" opacity=".35"/><circle cx="13" cy="28" r="5.5" fill="var(--ink)" stroke="var(--bg)" stroke-width="2.5"/><circle cx="51" cy="28" r="5.5" fill="var(--ink)" stroke="var(--bg)" stroke-width="2.5"/></svg>
-      </span>
-      <div class="step"><span class="step-dot">1</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-survey.png')" aria-hidden="true"></div><h3>Survey</h3><p>A video or in-home walkthrough so we know the full scope before quoting.</p></div></div>
-      <div class="step"><span class="step-dot">2</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-quote.png')" aria-hidden="true"></div><h3>Fixed quote</h3><p>A written estimate with every line itemized. What you see is what you pay.</p></div></div>
-      <div class="step"><span class="step-dot">3</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-moveday.png')" aria-hidden="true"></div><h3>Move day</h3><p>The crew arrives on schedule, in uniform, with materials, mats and a plan.</p></div></div>
-      <div class="step"><span class="step-dot">4</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-settle.png')" aria-hidden="true"></div><h3>Settle in</h3><p>We don't leave until furniture is placed, beds are built, and you've signed off.</p></div></div>
-    </div>
-    <div class="rail-track" aria-hidden="true">
-      <span class="rail-fill"></span>
-      <span class="rail-truck"><svg viewBox="0 0 64 36"><rect x="1" y="3" width="39" height="23" rx="3" fill="currentColor"/><path d="M42 10h10.5a3 3 0 0 1 2.2 1l6.3 7.2V26H42z" fill="currentColor"/><path d="M45 13.5h7l4.4 5H45z" fill="#fff" opacity=".9"/><circle cx="13" cy="28" r="5.5" fill="var(--ink)" stroke="var(--bg)" stroke-width="2.5"/><circle cx="51" cy="28" r="5.5" fill="var(--ink)" stroke="var(--bg)" stroke-width="2.5"/></svg></span>
-      <span class="rail-hint">Swipe</span>
+    <div class="route" id="road">
+      <svg class="route-svg" aria-hidden="true"><path class="route-base"/><path class="route-line"/><path class="route-done"/></svg>
+      <span class="road-truck" aria-hidden="true"><svg viewBox="0 0 64 36"><rect x="1" y="3" width="39" height="23" rx="3" fill="currentColor"/><path d="M42 10h10.5a3 3 0 0 1 2.2 1l6.3 7.2V26H42z" fill="currentColor"/><path d="M45 13.5h7l4.4 5H45z" fill="#fff" opacity=".9"/><rect x="6" y="9" width="28" height="3" rx="1.5" fill="#fff" opacity=".35"/><circle cx="13" cy="28" r="5.5" fill="#111" stroke="var(--bg)" stroke-width="2.5"/><circle cx="51" cy="28" r="5.5" fill="#111" stroke="var(--bg)" stroke-width="2.5"/></svg></span>
+      <div class="step s1"><span class="step-dot">1</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-survey.png')" aria-hidden="true"></div><span class="step-num">Step 01</span><h3>Survey</h3><p>A video or in-home walkthrough so we know the full scope before quoting.</p></div></div>
+      <div class="step s2"><span class="step-dot">2</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-quote.png')" aria-hidden="true"></div><span class="step-num">Step 02</span><h3>Fixed quote</h3><p>A written estimate with every line itemized. What you see is what you pay.</p></div></div>
+      <div class="step s3"><span class="step-dot">3</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-moveday.png')" aria-hidden="true"></div><span class="step-num">Step 03</span><h3>Move day</h3><p>The crew arrives on schedule, in uniform, with materials, mats and a plan.</p></div></div>
+      <div class="step s4"><span class="step-dot">4</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-settle.png')" aria-hidden="true"></div><span class="step-num">Step 04</span><h3>Settle in</h3><p>We don't leave until furniture is placed, beds are built, and you've signed off.</p></div></div>
     </div>
   </div>
 </section>
@@ -1256,40 +1242,70 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
     [quoteCard].concat(endZones).forEach(function (el) { watch.observe(el); });
   } else { callbar.classList.add('is-on'); pill.classList.add('is-on'); }
 
-  // Scroll-driven: hero parallax and the process truck and steps. Parallax is
-  // skipped under reduced motion; the steps still follow the scroll, since
-  // on phones they are how the process is read.
+  // Scroll-driven: hero parallax, and the truck on the process road. Parallax
+  // is skipped under reduced motion; the truck is tied to the scroll like a
+  // progress bar, so it stays.
   (function () {
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var hero = document.querySelector('.hero'), road = document.getElementById('road');
-    var steps = road.querySelectorAll('.step'), ticking = false, stopTimer;
-    var update = function () {
+    var phone = window.matchMedia('(max-width: 768px)');
+    var hero = document.querySelector('.hero'), route = document.getElementById('road');
+    var steps = route.querySelectorAll('.step'), dots = route.querySelectorAll('.step-dot');
+    var svg = route.querySelector('.route-svg'), paths = svg.querySelectorAll('path');
+    var done = svg.querySelector('.route-done'), truck = route.querySelector('.road-truck');
+    var total = 0, dotLen = [], ticking = false, stopTimer;
+
+    // Road through the dot centres: horizontal tangents across (an S between
+    // each pair), vertical ones down on phones. Lengths at each dot are kept
+    // so a dot lights the moment the truck reaches it.
+    function build() {
+      var box = route.getBoundingClientRect();
+      var pts = [].map.call(dots, function (d) {
+        var r = d.getBoundingClientRect();
+        return { x: r.left + r.width / 2 - box.left, y: r.top + r.height / 2 - box.top };
+      });
+      var down = phone.matches, last = pts[pts.length - 1];
+      svg.setAttribute('viewBox', '0 0 ' + box.width + ' ' + box.height);
+      var d = down ? 'M' + pts[0].x + ' 0' : 'M0 ' + pts[0].y;
+      d += ' L' + pts[0].x + ' ' + pts[0].y;
+      done.setAttribute('d', d);
+      dotLen = [done.getTotalLength()];
+      for (var i = 1; i < pts.length; i++) {
+        var a = pts[i - 1], b = pts[i];
+        if (down) { var my = (b.y - a.y) / 2; d += ' C' + a.x + ' ' + (a.y + my) + ' ' + b.x + ' ' + (b.y - my) + ' ' + b.x + ' ' + b.y; }
+        else { var mx = (b.x - a.x) / 2; d += ' C' + (a.x + mx) + ' ' + a.y + ' ' + (b.x - mx) + ' ' + b.y + ' ' + b.x + ' ' + b.y; }
+        done.setAttribute('d', d);
+        dotLen.push(done.getTotalLength());
+      }
+      d += down ? ' L' + last.x + ' ' + box.height : ' L' + box.width + ' ' + last.y;
+      paths.forEach(function (p) { p.setAttribute('d', d); });
+      total = done.getTotalLength();
+      done.style.strokeDasharray = total + ' ' + total;
+    }
+
+    function update() {
       ticking = false;
       var y = window.scrollY, vh = window.innerHeight;
       if (!reduce && y < hero.offsetHeight) hero.style.setProperty('--hero-shift', (y * 0.32).toFixed(1) + 'px');
-      // 0 when the road enters the lower part of the screen, 1 once it reaches the upper third.
-      var a = steps[0].querySelector('.step-dot').getBoundingClientRect();
-      var b = steps[steps.length - 1].querySelector('.step-dot').getBoundingClientRect();
-      road.style.setProperty('--len', Math.max(b.left - a.left, b.top - a.top) + 'px');
-      var r = road.getBoundingClientRect();
-      var p = Math.min(1, Math.max(0, (vh * 0.85 - r.top) / (vh * 0.85 - vh * 0.3 + r.height * 0.35)));
-      road.style.setProperty('--p', p.toFixed(4));
-      steps.forEach(function (st, i) { st.classList.toggle('is-passed', p >= i / (steps.length - 1) - 0.02 && p > 0); });
-      road.classList.add('is-moving');
+      // The truck keeps pace with the reader: start of the road when its top
+      // reaches two thirds down the screen, end when its bottom does.
+      var r = route.getBoundingClientRect();
+      var p = Math.min(1, Math.max(0, (vh * 0.66 - r.top) / r.height));
+      var len = p * total;
+      done.style.strokeDashoffset = total - len;
+      var a = done.getPointAtLength(Math.max(0, len - 2)), b = done.getPointAtLength(Math.min(total, len + 2));
+      var at = done.getPointAtLength(len);
+      truck.style.transform = 'translate(' + at.x + 'px,' + at.y + 'px) rotate(' + Math.atan2(b.y - a.y, b.x - a.x) + 'rad) translate(-50%,-50%)';
+      steps.forEach(function (st, i) { st.classList.toggle('is-passed', len >= dotLen[i] - 1 && len > 0); });
+      route.classList.add('is-moving');
       clearTimeout(stopTimer);
-      stopTimer = setTimeout(function () { road.classList.remove('is-moving'); }, 160);
-    };
-    window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
-    window.addEventListener('resize', update);
-    update();
+      stopTimer = setTimeout(function () { route.classList.remove('is-moving'); }, 160);
+    }
 
-    // Phones: the little truck under the step cards follows the swipe.
-    var track = document.querySelector('.rail-track');
-    road.addEventListener('scroll', function () {
-      var max = road.scrollWidth - road.clientWidth;
-      track.style.setProperty('--rp', max > 0 ? (road.scrollLeft / max).toFixed(4) : 0);
-      if (road.scrollLeft > 8) track.classList.add('is-swiped');
-    }, { passive: true });
+    function relayout() { build(); update(); }
+    window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    window.addEventListener('resize', relayout);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
+    relayout();
   })();
 
   // Stat figures count to their value the first time the row shows. The
