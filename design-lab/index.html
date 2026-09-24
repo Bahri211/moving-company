@@ -11,8 +11,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="/assets/images/lab/hero-mountain.jpg" media="(min-width: 769px)">
-<link rel="preload" as="image" href="/assets/images/lab/hero-mountain-mobile.jpg" media="(max-width: 768px)">
+<link rel="preload" as="image" href="/assets/images/lab/hero-mountain.webp" media="(min-width: 769px)">
+<link rel="preload" as="image" href="/assets/images/lab/hero-mountain-mobile.webp" media="(max-width: 768px)">
 <style>
 /* Palettes -----------------------------------------------------------------
    Every colour on the page comes from these tokens, so the switcher in the
@@ -239,6 +239,34 @@ html.drawer-open { overflow: hidden; }
 .drawer-foot small { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 0.2rem; font-size: 0.8rem; color: var(--on-dark-muted); }
 .drawer-foot small i { width: 8px; height: 8px; border-radius: 50%; background: #3fcf7a; box-shadow: 0 0 0 4px rgba(63, 207, 122, 0.2); }
 
+/* Service sheet: a centred card on desktop, a bottom sheet on phones. */
+.svc-sheet {
+  width: min(460px, calc(100% - 2rem)); max-height: calc(100dvh - 2rem); overflow-y: auto;
+  padding: 1.8rem 1.8rem 1.6rem; border: 0; border-radius: 24px;
+  background: var(--bg); color: var(--ink);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.55);
+}
+.svc-sheet[open] { animation: svcIn 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+.svc-sheet::backdrop { background: rgba(8, 12, 20, 0.55); backdrop-filter: blur(3px); animation: fadeIn 0.3s ease; }
+@keyframes svcIn { from { opacity: 0; transform: translateY(16px) scale(0.98); } }
+.svc-close { display: grid; position: absolute; top: 1rem; right: 1rem; }
+.svc-sheet h3 { font-size: 1.8rem; margin: 0.7rem 2.5rem 0.6rem 0; }
+.svc-sheet > p { color: var(--muted); }
+.svc-sheet ul { list-style: none; margin: 1.2rem 0 1.5rem; padding: 0; display: grid; gap: 0.6rem; }
+.svc-sheet li { display: flex; gap: 0.65rem; align-items: flex-start; font-size: 0.95rem; font-weight: 500; }
+.svc-sheet li::before {
+  content: ""; flex: none; width: 20px; height: 20px; margin-top: 0.1rem; border-radius: 50%;
+  background: var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12l4 4 8-8'/%3E%3C/svg%3E") center / 12px no-repeat;
+}
+.svc-actions { display: grid; gap: 0.55rem; }
+.svc-actions .btn-ghost { color: var(--ink); }
+@media (max-width: 768px) {
+  .svc-sheet { width: 100%; max-width: none; margin: auto 0 0; padding: 1.5rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom)); border-radius: 24px 24px 0 0; }
+  .svc-sheet[open] { animation: sheetUp 0.38s cubic-bezier(0.22, 1, 0.36, 1); }
+  @keyframes sheetUp { from { transform: translateY(100%); } }
+  .svc-sheet h3 { font-size: 1.5rem; }
+}
+
 /* Hero --------------------------------------------------------------------- */
 .hero { position: relative; overflow: clip; margin-top: -76px; padding: calc(76px + 4.5rem) 0 2.5rem; min-height: min(880px, calc(100svh - 38px)); display: flex; flex-direction: column; color: #fff; isolation: isolate; }
 .hero::before {
@@ -248,7 +276,7 @@ html.drawer-open { overflow: hidden; }
   background:
     linear-gradient(90deg, rgba(var(--wash), 0.82) 0%, rgba(var(--wash), 0.45) 45%, rgba(var(--wash), 0) 75%),
     linear-gradient(180deg, rgba(var(--wash), 0.4) 0%, rgba(var(--wash), 0) 30%, rgba(var(--wash), 0) 60%, rgba(var(--wash), 0.7) 100%),
-    var(--dark) url('/assets/images/lab/hero-mountain.jpg') 0% 62% / max(135%, 1720px) auto no-repeat;
+    var(--dark) url('/assets/images/lab/hero-mountain.webp') 0% 62% / max(135%, 1720px) auto no-repeat;
 }
 /* Parallax on the compositor: where the browser can tie an animation to the
    scroll, the photo sinks in lockstep with it — no script, no lag. Driving it
@@ -569,7 +597,7 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
 }
 .cta-box::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
-  background: linear-gradient(100deg, rgba(var(--wash), 0.92) 20%, rgba(var(--wash), 0.35) 100%), url('/assets/images/lab/road-wide.jpg') center 60% / cover;
+  background: linear-gradient(100deg, rgba(var(--wash), 0.92) 20%, rgba(var(--wash), 0.35) 100%), url('/assets/images/lab/road-wide.webp') center 60% / cover;
 }
 .cta-box h2 { font-size: clamp(2.4rem, 5.4vw, 4.6rem); }
 .cta-box p { margin-top: 1rem; color: rgba(255, 255, 255, 0.82); font-size: 1.1rem; max-width: 30rem; }
@@ -699,7 +727,7 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
         rgba(var(--wash), 0) 44vw,
         rgba(var(--wash), 0.88) 58vw,
         var(--dark) 72vw),
-      var(--dark) url('/assets/images/lab/hero-mountain-mobile.jpg') center -59vw / 100% auto no-repeat;
+      var(--dark) url('/assets/images/lab/hero-mountain-mobile.webp') center -59vw / 100% auto no-repeat;
   }
   .hero-badge { display: none; }
   .hero h1 { font-size: clamp(2rem, 9.2vw, 2.6rem); margin: 0; text-shadow: none; }
@@ -845,7 +873,7 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
         rgba(var(--wash), 0) 38vw,
         rgba(var(--wash), 0.88) 52vw,
         var(--dark) 66vw),
-      var(--dark) url('/assets/images/lab/hero-mountain-mobile.jpg') center -65vw / 100% auto no-repeat;
+      var(--dark) url('/assets/images/lab/hero-mountain-mobile.webp') center -65vw / 100% auto no-repeat;
   }
   .hero h1 { font-size: clamp(1.8rem, 8.4vw, 2.2rem); }
   .quote { padding-top: 0.8rem; }
@@ -993,38 +1021,37 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
     </div>
     <div class="bento">
       <a href="/long-distance-movers/" class="tile tile-photo t-1 reveal">
-        <img src="/assets/images/lab/street-loading.jpg" alt="Two movers carrying wrapped furniture to a box truck" loading="lazy" />
-        <span class="tile-tag">Most booked</span>
+        <img src="/assets/images/lab/street-loading.webp" alt="Two movers carrying wrapped furniture to a box truck" loading="lazy" />
         <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         <h3>Long distance</h3>
         <p>Cross-country and interstate relocations, door to door, on one truck from pickup to delivery.</p>
       </a>
-      <a href="#" class="tile tile-photo t-2 reveal">
-        <img src="/assets/images/lab/wrapped-sunroom.jpg" alt="Furniture wrapped in blue blankets in a sunroom" loading="lazy" />
+      <a href="#quote" class="tile tile-photo t-2 reveal" data-service="white-glove" aria-haspopup="dialog">
+        <img src="/assets/images/lab/wrapped-sunroom.webp" alt="Furniture wrapped in blue blankets in a sunroom" loading="lazy" />
         <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         <h3>White glove</h3>
         <p>We pack, move, unpack, arrange — and hang the art before we leave.</p>
       </a>
-      <a href="#" class="tile tile-dark t-3 reveal">
+      <a href="#quote" class="tile tile-dark t-3 reveal" data-service="residential" aria-haspopup="dialog">
         <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         <span class="big-num">01</span>
         <h3>Residential</h3>
         <p>Studios to five-bedroom homes. Taken apart, moved, rebuilt.</p>
       </a>
-      <a href="#" class="tile tile-accent t-4 reveal">
+      <a href="#quote" class="tile tile-accent t-4 reveal" data-service="commercial" aria-haspopup="dialog">
         <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         <span class="big-num">02</span>
         <h3>Commercial</h3>
         <p>Offices moved over a weekend — working by Monday.</p>
       </a>
-      <a href="#" class="tile tile-photo t-5 reveal">
-        <img src="/assets/images/lab/crew-packing.jpg" alt="Crew taping boxes and wrapping chairs in a living room" loading="lazy" />
+      <a href="#quote" class="tile tile-photo t-5 reveal" data-service="packing" aria-haspopup="dialog">
+        <img src="/assets/images/lab/crew-packing.webp" alt="Crew taping boxes and wrapping chairs in a living room" loading="lazy" />
         <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         <h3>Packing &amp; crating</h3>
         <p>Museum-grade packing and custom crates built on site.</p>
       </a>
-      <a href="#" class="tile tile-plain t-6 reveal">
-        <img src="/assets/images/lab/loading-ramp.jpg" alt="Mover loading a wrapped piece into the truck" loading="lazy" />
+      <a href="#quote" class="tile tile-plain t-6 reveal" data-service="storage" aria-haspopup="dialog">
+        <img src="/assets/images/lab/loading-ramp.webp" alt="Mover loading a wrapped piece into the truck" loading="lazy" />
         <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         <div><h3>Storage between homes</h3><p>Climate-controlled, monitored around the clock, inventoried and insured — for a week or a year.</p></div>
       </a>
@@ -1039,15 +1066,15 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
       <p>Photographs from our own crews. This is what the four parts of your day look like — swipe through.</p>
     </div>
     <div class="rail reveal">
-      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/runner-hall.jpg" alt="Blue floor runner laid down a hallway" loading="lazy" /><span class="frame-num">1</span></div>
+      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/runner-hall.webp" alt="Blue floor runner laid down a hallway" loading="lazy" /><span class="frame-num">1</span></div>
         <h3>Floors protected</h3><p>Runners down and door jambs padded before a single box is carried.</p></article>
-      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/wrapped-furniture.jpg" alt="Furniture wrapped in moving blankets" loading="lazy" /><span class="frame-num">2</span></div>
+      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/wrapped-furniture.webp" alt="Furniture wrapped in moving blankets" loading="lazy" /><span class="frame-num">2</span></div>
         <h3>Everything wrapped</h3><p>Blankets, shrink and tape on every piece — not only the fragile ones.</p></article>
-      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/truck-loaded.jpg" alt="Truck interior stacked and strapped with wrapped items" loading="lazy" /><span class="frame-num">3</span></div>
+      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/truck-loaded.webp" alt="Truck interior stacked and strapped with wrapped items" loading="lazy" /><span class="frame-num">3</span></div>
         <h3>Loaded &amp; strapped</h3><p>Stacked in tiers and strapped row by row, so nothing shifts over the miles.</p></article>
-      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/truck-branded.jpg" alt="50STATEMOVERS truck parked outside a house" loading="lazy" /><span class="frame-num">4</span></div>
+      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/truck-branded.webp" alt="50STATEMOVERS truck parked outside a house" loading="lazy" /><span class="frame-num">4</span></div>
         <h3>At your new door</h3><p>Unloaded into the rooms you point to, on the date in your contract.</p></article>
-      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/kitchen.jpg" alt="Mover helping a customer unpack in her kitchen" loading="lazy" /><span class="frame-num">✓</span></div>
+      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/kitchen.webp" alt="Mover helping a customer unpack in her kitchen" loading="lazy" /><span class="frame-num">✓</span></div>
         <h3>Settled in</h3><p>Beds built, furniture placed, and we don't leave until you've signed off.</p></article>
     </div>
   </div>
@@ -1062,10 +1089,10 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
     <div class="route" id="road">
       <svg class="route-svg" aria-hidden="true"><path class="route-base"/><path class="route-line"/><path class="route-done"/></svg>
       <span class="road-truck" aria-hidden="true"><svg viewBox="0 0 64 36"><rect x="1" y="3" width="39" height="23" rx="3" fill="currentColor"/><path d="M42 10h10.5a3 3 0 0 1 2.2 1l6.3 7.2V26H42z" fill="currentColor"/><path d="M45 13.5h7l4.4 5H45z" fill="#fff" opacity=".9"/><rect x="6" y="9" width="28" height="3" rx="1.5" fill="#fff" opacity=".35"/><circle cx="13" cy="28" r="5.5" fill="#111" stroke="var(--bg)" stroke-width="2.5"/><circle cx="51" cy="28" r="5.5" fill="#111" stroke="var(--bg)" stroke-width="2.5"/></svg></span>
-      <div class="step s1"><span class="step-dot">1</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-survey.png')" aria-hidden="true"></div><span class="step-num">Step 01</span><h3>Survey</h3><p>A video or in-home walkthrough so we know the full scope before quoting.</p></div></div>
-      <div class="step s2"><span class="step-dot">2</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-quote.png')" aria-hidden="true"></div><span class="step-num">Step 02</span><h3>Fixed quote</h3><p>A written estimate with every line itemized. What you see is what you pay.</p></div></div>
-      <div class="step s3"><span class="step-dot">3</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-moveday.png')" aria-hidden="true"></div><span class="step-num">Step 03</span><h3>Move day</h3><p>The crew arrives on schedule, in uniform, with materials, mats and a plan.</p></div></div>
-      <div class="step s4"><span class="step-dot">4</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-settle.png')" aria-hidden="true"></div><span class="step-num">Step 04</span><h3>Settle in</h3><p>We don't leave until furniture is placed, beds are built, and you've signed off.</p></div></div>
+      <div class="step s1"><span class="step-dot">1</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-survey.webp')" aria-hidden="true"></div><span class="step-num">Step 01</span><h3>Survey</h3><p>A video or in-home walkthrough so we know the full scope before quoting.</p></div></div>
+      <div class="step s2"><span class="step-dot">2</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-quote.webp')" aria-hidden="true"></div><span class="step-num">Step 02</span><h3>Fixed quote</h3><p>A written estimate with every line itemized. What you see is what you pay.</p></div></div>
+      <div class="step s3"><span class="step-dot">3</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-moveday.webp')" aria-hidden="true"></div><span class="step-num">Step 03</span><h3>Move day</h3><p>The crew arrives on schedule, in uniform, with materials, mats and a plan.</p></div></div>
+      <div class="step s4"><span class="step-dot">4</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-settle.webp')" aria-hidden="true"></div><span class="step-num">Step 04</span><h3>Settle in</h3><p>We don't leave until furniture is placed, beds are built, and you've signed off.</p></div></div>
     </div>
   </div>
 </section>
@@ -1179,12 +1206,26 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
         <p>Honest, fixed-price quotes with no hidden fees — and a crew that treats your home like their own.</p></div>
       <div><h4>Services</h4><ul><li><a href="/long-distance-movers/">Long distance</a></li><li><a href="/interstate-movers/">Interstate</a></li><li><a href="/state-to-state-movers/">State to state</a></li><li><a href="#services">White glove</a></li></ul></div>
       <div><h4>Company</h4><ul><li><a href="/moving-companies-by-state/">Movers by state</a></li><li><a href="#reviews">Reviews</a></li><li><a href="#faq">FAQ</a></li><li><a href="/privacy-policy">Privacy</a></li></ul></div>
-      <div><h4>Contact</h4><ul><li><a href="tel:+18885051086">+1 (888) 505-1086</a></li><li><a href="mailto:contact@50statemovers.com">contact@50statemovers.com</a></li><li><a href="#">Nationwide, USA</a></li></ul></div>
+      <div><h4>Contact</h4><ul><li><a href="tel:+18885051086">+1 (888) 505-1086</a></li><li><a href="mailto:contact@50statemovers.com">contact@50statemovers.com</a></li><li><span>Nationwide, USA</span></li></ul></div>
     </div>
     <div class="foot-mark" aria-hidden="true">50STATEMOVERS</div>
     <div class="foot-bottom"><span>© 2026 50STATEMOVERS INC · All rights reserved</span><span>USDOT #4575745 · MC-1820728 · Licensed &amp; insured</span></div>
   </div>
 </footer>
+
+<dialog class="svc-sheet" id="svc-sheet" aria-labelledby="svc-title">
+  <button type="button" class="nav-icon svc-close" id="svc-close" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <span class="eyebrow">Service</span>
+  <h3 id="svc-title"></h3>
+  <p id="svc-text"></p>
+  <ul id="svc-points"></ul>
+  <div class="svc-actions">
+    <button type="button" class="btn" id="svc-go">Get a quote for this <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    <a href="tel:+18885051086" class="btn btn-ghost">Call (888) 505-1086</a>
+  </div>
+</dialog>
 
 <a href="#quote" class="float-cta" aria-label="Get a free quote">
   <span class="fc-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor"/></svg></span>
@@ -1338,6 +1379,7 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
         'Moving to: ' + $('q-to').value,
         $('q-size').value ? 'Home size: ' + $('q-size').value : null,
         date.value ? 'Planned move date: ' + date.value : null,
+        form.dataset.service ? 'Service: ' + form.dataset.service : null,
         'SMS opt-in: Yes',
         'Form: ' + (form.dataset.name || 'design lab (2-step bar)'),
         'Landing page: ' + window.location.pathname + (document.documentElement.dataset.palette ? ' · palette ' + document.documentElement.dataset.palette : ''),
@@ -1423,8 +1465,47 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
     setTimeout(settle, 1400);
   }
   document.querySelectorAll('a[href="#quote"]').forEach(function (a) {
-    if (drawer.contains(a)) return;
+    if (drawer.contains(a) || a.dataset.service) return;
     a.addEventListener('click', function (e) { e.preventDefault(); goToQuote(); });
+  });
+
+  // Service tiles without a page of their own open a short sheet; its button
+  // goes to the quote form and notes the service on the lead.
+  var SERVICES = {
+    'white-glove': ['White glove', 'The full-service option: we pack, move, unpack and set your home up before we leave.',
+      ['Everything packed and unpacked for you', 'Furniture placed and beds rebuilt', 'Pictures and mirrors hung', 'Packing materials taken away']],
+    'residential': ['Residential', 'Studio apartments to five-bedroom homes, moved by one crew from door to door.',
+      ['Furniture taken apart and rebuilt', 'Floors, stairs and doorways protected', 'Every item on a signed inventory', 'Placed in the rooms you choose']],
+    'commercial': ['Commercial', 'Office moves planned around your business, so your team loses as little time as possible.',
+      ['After-hours and weekend moves', 'Desks, files and equipment labelled by room', 'Building insurance certificates arranged', 'One written price for the whole move']],
+    'packing': ['Packing &amp; crating', 'Careful packing for everything you own, and custom crates for the pieces that need them.',
+      ['Boxes, paper and wardrobe boxes supplied', 'Full or partial packing — you choose', 'Custom crates for art, glass and antiques', 'Fragile items packed and labelled by room']],
+    'storage': ['Storage between homes', 'When your move-out and move-in dates don\u2019t line up, we hold your things until you\u2019re ready.',
+      ['Climate-controlled storage', 'Inventoried going in and coming out', 'Insured the whole time', 'A week or longer — delivered when you say']],
+  };
+  var sheet = document.getElementById('svc-sheet'), chosen = '';
+  function closeSheet() { if (sheet.open) sheet.close(); }
+  document.querySelectorAll('[data-service]').forEach(function (tile) {
+    tile.addEventListener('click', function (e) {
+      var d = SERVICES[tile.dataset.service];
+      if (!d || !sheet.showModal) return;   // no dialog support: the #quote link still works
+      e.preventDefault();
+      chosen = d[0].replace('&amp;', '&');
+      document.getElementById('svc-title').innerHTML = d[0];
+      document.getElementById('svc-text').textContent = d[1];
+      document.getElementById('svc-points').innerHTML = d[2].map(function (t) { return '<li>' + t + '</li>'; }).join('');
+      sheet.showModal();
+    });
+  });
+  document.getElementById('svc-close').addEventListener('click', closeSheet);
+  sheet.addEventListener('click', function (e) {
+    var r = sheet.getBoundingClientRect();
+    if (e.target === sheet && (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom)) closeSheet();
+  });
+  document.getElementById('svc-go').addEventListener('click', function () {
+    document.getElementById('lab-form').dataset.service = chosen;
+    closeSheet();
+    goToQuote();
   });
 
   // In-page links: close first, then scroll, since the page is locked while open.

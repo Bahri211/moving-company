@@ -362,7 +362,7 @@ const EXTRA_CSS = `<style>
     background:
       linear-gradient(270deg, rgba(var(--wash), 0.88) 0%, rgba(var(--wash), 0.62) 36%, rgba(var(--wash), 0) 62%),
       linear-gradient(180deg, rgba(var(--wash), 0.45) 0%, rgba(var(--wash), 0) 28%, rgba(var(--wash), 0) 60%, rgba(var(--wash), 0.8) 100%),
-      var(--dark) url('/assets/images/nyc/hero-desktop.jpg') 28% 62% / cover no-repeat;
+      var(--dark) url('/assets/images/nyc/hero-desktop.webp') 28% 62% / cover no-repeat;
   }
   .hero-copy { padding-left: max(0px, calc(100% - 38rem)); }
 }
@@ -375,7 +375,7 @@ const EXTRA_CSS = `<style>
         rgba(var(--wash), 0) 44vw,
         rgba(var(--wash), 0.88) 58vw,
         var(--dark) 72vw),
-      var(--dark) url('/assets/images/nyc/hero-mobile.jpg') center -80vw / 100% auto no-repeat;
+      var(--dark) url('/assets/images/nyc/hero-mobile.webp') center -80vw / 100% auto no-repeat;
   }
 }
 @media (max-width: 768px) and (max-height: 640px) {
@@ -387,7 +387,7 @@ const EXTRA_CSS = `<style>
         rgba(var(--wash), 0) 38vw,
         rgba(var(--wash), 0.88) 52vw,
         var(--dark) 66vw),
-      var(--dark) url('/assets/images/nyc/hero-mobile.jpg') center -86vw / 100% auto no-repeat;
+      var(--dark) url('/assets/images/nyc/hero-mobile.webp') center -86vw / 100% auto no-repeat;
   }
 }
 .hero-tag { display: inline-flex; align-items: center; gap: 0.55rem; margin: -0.4rem 0 1.1rem; font-size: clamp(1.1rem, 1.7vw, 1.4rem); font-weight: 700; letter-spacing: -0.015em; color: #fff; }
@@ -453,10 +453,10 @@ function nycPage(page) {
   let html = LAB;
 
   // ---- head: the site's real head instead of the lab's
-  html = swapOnce(html, '<link rel="preload" as="image" href="/assets/images/lab/hero-mountain.jpg" media="(min-width: 769px)">',
-    '<link rel="preload" as="image" href="/assets/images/nyc/hero-desktop.jpg" media="(min-width: 769px)">', 'preload desktop');
-  html = swapOnce(html, '<link rel="preload" as="image" href="/assets/images/lab/hero-mountain-mobile.jpg" media="(max-width: 768px)">',
-    '<link rel="preload" as="image" href="/assets/images/nyc/hero-mobile.jpg" media="(max-width: 768px)">', 'preload mobile');
+  html = swapOnce(html, '<link rel="preload" as="image" href="/assets/images/lab/hero-mountain.webp" media="(min-width: 769px)">',
+    '<link rel="preload" as="image" href="/assets/images/nyc/hero-desktop.webp" media="(min-width: 769px)">', 'preload desktop');
+  html = swapOnce(html, '<link rel="preload" as="image" href="/assets/images/lab/hero-mountain-mobile.webp" media="(max-width: 768px)">',
+    '<link rel="preload" as="image" href="/assets/images/nyc/hero-mobile.webp" media="(max-width: 768px)">', 'preload mobile');
   html = swapOnce(html, '<html lang="en" data-palette="ember">', '<html lang="en" data-palette="skyblue">', 'html palette');
   html = swapBlock(html, '<!-- Design lab:', '<title>Design Lab — 50STATEMOVERS INC</title>', `${head}
 <meta name="theme-color" content="#0f2b44" />
@@ -496,8 +496,6 @@ function nycPage(page) {
     `<form class="quote-card" id="lab-form" novalidate data-from="New York"${page.formTo ? ` data-to="${page.formTo}"` : ''} data-name="${esc(page.formName)}">`, 'form');
   html = swapOnce(html, '<span class="qn-rating">★ 4.96 from 2,400+ reviews · </span>', '', 'quote note rating');
 
-  // ---- service tiles without a page open the quote form
-  html = swapAll(html, '<a href="#" class="tile ', '<a href="#quote" class="tile ', 'service tiles');
 
   // ---- the page's own routes section, after the proof strip
   html = swapOnce(html, '<section class="section" id="services"', routesSection(page) + '<section class="section" id="services"', 'services section');
