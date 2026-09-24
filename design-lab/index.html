@@ -1577,7 +1577,8 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
         return '<path data-s="' + n + '" d="' + map.s[n][0] + '"/>';
       }).join('');
       if (!touched) demo();
-      else render(true);
+      else if (onScreen) { pending = false; render(true); }
+      else { pending = true; render(false); }
     }
     new IntersectionObserver(function (en, obs) {
       if (en[0].isIntersecting) { obs.disconnect(); load(); }
@@ -1645,7 +1646,30 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
       else if (f) set(true, '→', 'Now pick where you’re moving to.');
       else set(true, '→', 'Every route between the 48 continental states and D.C.');
     }
-    function changed() { touched = true; status(); render(true); }
+    function changed() { touched = true; status(); render(true); toHero(); }
+
+    // Linked to the hero form both ways. States picked up there arrive here
+    // ready: the route draws at once if the map is on screen, or the moment
+    // it scrolls into view. Values are copied, never re-fired, so the two
+    // can't loop.
+    var qFrom = document.getElementById('q-from'), qTo = document.getElementById('q-to');
+    var onScreen = false, pending = false;
+    new IntersectionObserver(function (en) {
+      onScreen = en[0].isIntersecting;
+      if (onScreen && pending && map) { pending = false; render(true); }
+    }, { threshold: 0.35 }).observe(box);
+    function fromHero() {
+      if (!qFrom || !qTo) return;
+      selFrom.value = qFrom.value; selTo.value = qTo.value;
+      touched = true; status();
+      if (onScreen && map) render(true);
+      else { pending = true; if (map) render(false); }
+    }
+    function toHero() {
+      if (!qFrom || !qTo || !document.body.contains(qFrom)) return;
+      qFrom.value = selFrom.value; qTo.value = selTo.value;
+    }
+    if (qFrom && qTo) { qFrom.addEventListener('change', fromHero); qTo.addEventListener('change', fromHero); }
     selFrom.addEventListener('change', changed);
     selTo.addEventListener('change', changed);
     document.getElementById('r-swap').addEventListener('click', function () {
