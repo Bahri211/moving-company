@@ -340,7 +340,7 @@ html.drawer-open { overflow: hidden; }
 .proof-item { display: flex; align-items: flex-start; gap: 0.9rem; padding: 1.4rem 1.5rem; min-width: 0; }
 .proof-item + .proof-item { border-left: 1px solid var(--line); }
 .proof-ico { flex: none; width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; background: var(--tint); color: var(--accent-ink); }
-.proof-ico svg { width: 22px; height: 22px; }
+.proof-ico svg { width: 23px; height: 23px; }
 .proof-seal { background: rgba(47, 158, 91, 0.12); }
 .proof-seal svg { width: 30px; height: 30px; }
 .proof-seal polygon { fill: #2f9e5b; }
@@ -349,9 +349,6 @@ html.drawer-open { overflow: hidden; }
 .proof-item strong { display: block; font-size: 0.98rem; font-weight: 700; letter-spacing: -0.015em; line-height: 1.3; }
 .proof-item small { display: block; margin-top: 0.2rem; font-size: 0.84rem; line-height: 1.4; color: var(--muted); }
 .proof-item small b { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.proof-link { display: inline-flex; align-items: center; gap: 0.3rem; margin-top: 0.45rem; font-size: 0.82rem; font-weight: 700; color: #237046; text-decoration: none; }
-.proof-link:hover { text-decoration: underline; }
-.proof-link svg { width: 12px; height: 12px; }
 
 /* Services bento ------------------------------------------------------------ */
 .bento { display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: 250px; gap: 1rem; }
@@ -971,19 +968,18 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
     <div class="proof reveal">
       <div class="proof-item">
         <span class="proof-ico proof-seal" aria-hidden="true"><svg viewBox="0 0 36 36"><polygon points="18.00 0.50 20.97 3.09 24.70 1.83 26.44 5.36 30.37 5.63 30.64 9.56 34.17 11.30 32.91 15.03 35.50 18.00 32.91 20.97 34.17 24.70 30.64 26.44 30.37 30.37 26.44 30.64 24.70 34.17 20.97 32.91 18.00 35.50 15.03 32.91 11.30 34.17 9.56 30.64 5.63 30.37 5.36 26.44 1.83 24.70 3.09 20.97 0.50 18.00 3.09 15.03 1.83 11.30 5.36 9.56 5.63 5.63 9.56 5.36 11.30 1.83 15.03 3.09"/><path d="M18 9.5 12 11.9v4.6c0 3.7 2.5 6.9 6 8.1 3.5-1.2 6-4.4 6-8.1v-4.6z"/><polyline points="15.2 17.2 17.3 19.3 21 15.3" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <div><strong>Licensed interstate carrier</strong><small>USDOT <b>4575745</b> · <b>MC-1820728</b></small>
-          <a class="proof-link" href="https://safer.fmcsa.dot.gov/query.asp?searchtype=ANY&amp;query_type=queryCarrierSnapshot&amp;query_param=USDOT&amp;query_string=4575745" target="_blank" rel="noopener">Verify on FMCSA <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        <div><strong>Licensed interstate carrier</strong><small>USDOT <b>4575745</b> · <b>MC-1820728</b></small></div>
       </div>
       <div class="proof-item">
-        <span class="proof-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg></span>
+        <span class="proof-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg></span>
         <div><strong>The carrier, not a broker</strong><small>Your move stays with us from pickup to delivery.</small></div>
       </div>
       <div class="proof-item">
-        <span class="proof-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
+        <span class="proof-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.8V4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2h-3.5"/><path d="M14 2v6h6"/><rect width="9" height="7" x="2" y="14" rx="1.5"/><path d="M4 14v-1.5a2.5 2.5 0 0 1 5 0V14"/></svg></span>
         <div><strong>Binding written estimate</strong><small>The price in writing is the price you pay.</small></div>
       </div>
       <div class="proof-item">
-        <span class="proof-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span>
+        <span class="proof-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span>
         <div><strong>$1M liability coverage</strong><small>Full Value Protection available for your belongings.</small></div>
       </div>
     </div>
