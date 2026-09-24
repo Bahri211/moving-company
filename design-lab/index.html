@@ -288,6 +288,12 @@ html.drawer-open { overflow: hidden; }
 .qstep-2 { grid-template-columns: 1fr 1fr auto; animation: stepIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
 @keyframes stepIn { from { opacity: 0; transform: translateX(16px); } }
 .field input::placeholder { color: var(--muted); opacity: 0.75; font-weight: 500; }
+.quote-card.is-flash { animation: quoteFlash 1.6s ease-out 0.35s; }
+@keyframes quoteFlash {
+  0% { box-shadow: 0 0 0 0 var(--accent), 0 40px 80px -30px rgba(0, 0, 0, 0.45); }
+  35% { box-shadow: 0 0 0 6px var(--accent), 0 40px 80px -30px rgba(0, 0, 0, 0.45); }
+  100% { box-shadow: 0 0 0 14px transparent, 0 40px 80px -30px rgba(0, 0, 0, 0.45); }
+}
 .field.is-error { box-shadow: inset 0 0 0 2px #d93025; animation: nudge 0.35s ease; }
 @keyframes nudge { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 .qs2-head { grid-column: 1 / -1; display: flex; align-items: center; gap: 0.8rem; padding: 0.15rem 0.2rem 0.2rem; }
@@ -1304,12 +1310,50 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
     var r = drawer.getBoundingClientRect();
     if (e.target === drawer && (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom)) closeDrawer();
   });
+  // Quote buttons: bring the whole form into the clear space between the
+  // sticky header and the phone call dock — centred if it fits, just under
+  // the header if not — then glow it once so the eye lands on it.
+  var quoteCard = document.querySelector('.quote-card');
+  function quoteTop() {
+    var navH = document.getElementById('nav').offsetHeight;
+    var dock = document.querySelector('.callbar');
+    var dockH = dock && dock.offsetParent !== null ? window.innerHeight - dock.getBoundingClientRect().top : 0;
+    var r = quoteCard.getBoundingClientRect();
+    var gap = Math.max(12, (window.innerHeight - navH - dockH - r.height) / 2);
+    return Math.max(0, Math.round(window.scrollY + r.top - navH - gap));
+  }
+  function goToQuote() {
+    window.scrollTo({ top: quoteTop(), behavior: 'smooth' });
+    quoteCard.classList.remove('is-flash'); void quoteCard.offsetWidth; quoteCard.classList.add('is-flash');
+    // Once the scroll settles: nudge it home if anything cut it short, and
+    // with a mouse, put the first field in focus (touch skips this so no
+    // picker pops up). Focusing mid-scroll would cancel the scroll.
+    var settled = false;
+    function settle() {
+      if (settled) return; settled = true;
+      window.removeEventListener('scrollend', settle);
+      var t = quoteTop();
+      if (Math.abs(window.scrollY - t) > 4) window.scrollTo({ top: t, behavior: 'smooth' });
+      var first = quoteCard.querySelector('select, input');
+      if (first && window.matchMedia('(pointer: fine)').matches) first.focus({ preventScroll: true });
+    }
+    if ('onscrollend' in window) window.addEventListener('scrollend', settle);
+    setTimeout(settle, 1400);
+  }
+  document.querySelectorAll('a[href="#quote"]').forEach(function (a) {
+    if (drawer.contains(a)) return;
+    a.addEventListener('click', function (e) { e.preventDefault(); goToQuote(); });
+  });
+
   // In-page links: close first, then scroll, since the page is locked while open.
   drawer.querySelectorAll('a[href^="#"]').forEach(function (a) {
     a.addEventListener('click', function (e) {
       e.preventDefault();
-      var target = document.querySelector(a.getAttribute('href'));
-      closeDrawer(function () { if (target) target.scrollIntoView({ behavior: 'smooth' }); });
+      var href = a.getAttribute('href'), target = document.querySelector(href);
+      closeDrawer(function () {
+        if (href === '#quote') goToQuote();
+        else if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
     });
   });
 
