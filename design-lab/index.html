@@ -57,6 +57,19 @@
   --accent-2: #e9541f; --on-accent-2: #ffffff; --wash: 12, 28, 20;
 }
 
+/* Sky: navy, blue and sky blue, for the client to try. */
+[data-palette="sky"] {
+  --bg: #f3f8fc; --surface: #ffffff; --tint: #e2effa;
+  --ink: #0b1f3a; --muted: #52657c; --line: rgba(11, 31, 58, 0.12);
+  --dark: #0b1f3a; --dark-2: #14305a; --on-dark: #f3f8fc; --on-dark-muted: rgba(243, 248, 252, 0.68);
+  --accent: #1f6fe5; --accent-hover: #185bc2; --on-accent: #ffffff;
+  --accent-2: #6ccff6; --on-accent-2: #0b1f3a; --wash: 8, 24, 48;
+}
+/* On dark grounds the blue sinks; sky blue carries the headlines there. */
+[data-palette="sky"] .hero h1 em,
+[data-palette="sky"] .story h2 em,
+[data-palette="sky"] .cta-box h2 em { color: #6ccff6; }
+
 /* Base --------------------------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
@@ -1041,6 +1054,7 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   <button type="button" data-p="harbor" aria-label="Harbor" style="--sw-a:#0d2b30;--sw-b:#ff6b4a"></button>
   <button type="button" data-p="sunrise" aria-label="Sunrise" style="--sw-a:#1f2a44;--sw-b:#f2a900"></button>
   <button type="button" data-p="evergreen" aria-label="Evergreen" style="--sw-a:#13251d;--sw-b:#c6f36b"></button>
+  <button type="button" data-p="sky" aria-label="Sky" style="background: linear-gradient(135deg, #0b1f3a 34%, #1f6fe5 34% 66%, #6ccff6 66%)"></button>
   <span class="lab-name" id="lab-name">Ember</span>
 </div>
 
