@@ -1680,18 +1680,21 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
     group.addEventListener('click', function (e) {
       var n = e.target.getAttribute && e.target.getAttribute('data-s');
       if (!n) return;
+      tip.hidden = true;
       if (!selFrom.value || selTo.value || !touched) { selFrom.value = n; selTo.value = ''; }
       else selTo.value = n;
       changed();
     });
-    group.addEventListener('mousemove', function (e) {
+    // Hover name tag, for a mouse only: a tap on a phone also sends a mouse
+    // move, which put a second name beside the state's own label.
+    group.addEventListener('pointermove', function (e) {
       var n = e.target.getAttribute && e.target.getAttribute('data-s');
-      if (!n) { tip.hidden = true; return; }
+      if (!n || e.pointerType !== 'mouse') { tip.hidden = true; return; }
       var r = box.getBoundingClientRect();
       tip.textContent = n; tip.hidden = false;
       tip.style.left = (e.clientX - r.left) + 'px'; tip.style.top = (e.clientY - r.top) + 'px';
     });
-    group.addEventListener('mouseleave', function () { tip.hidden = true; });
+    group.addEventListener('pointerleave', function () { tip.hidden = true; });
 
     // A sample route plays once when the map first shows, fields untouched.
     function demo() {
