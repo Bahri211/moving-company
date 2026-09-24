@@ -70,6 +70,19 @@
 [data-palette="sky"] .story h2 em,
 [data-palette="sky"] .cta-box h2 em { color: #6ccff6; }
 
+/* Sky blue: sky blue leads, with navy ink on it. On light grounds a deeper
+   sky carries headline highlights, where the pale one would wash out. */
+[data-palette="skyblue"] {
+  --bg: #f2f8fc; --surface: #ffffff; --tint: #def0fb;
+  --ink: #0c2233; --muted: #4f6474; --line: rgba(12, 34, 51, 0.12);
+  --dark: #0f2b44; --dark-2: #183b5c; --on-dark: #f2f8fc; --on-dark-muted: rgba(242, 248, 252, 0.7);
+  --accent: #45bdf2; --accent-hover: #29ade8; --on-accent: #0c2233;
+  --accent-2: #1f6fe5; --on-accent-2: #ffffff; --wash: 10, 30, 50;
+}
+[data-palette="skyblue"] h2 em, [data-palette="skyblue"] .stat strong sup { color: #0b8bcf; }
+[data-palette="skyblue"] .story h2 em, [data-palette="skyblue"] .cta-box h2 em, [data-palette="skyblue"] .stat-lead strong sup { color: inherit; }
+[data-palette="skyblue"] .story h2 em, [data-palette="skyblue"] .cta-box h2 em { color: #45bdf2; }
+
 /* Base --------------------------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
@@ -113,8 +126,38 @@ p { margin: 0; }
 /* Ticker ------------------------------------------------------------------- */
 .ticker { background: var(--dark); color: var(--on-dark); overflow: hidden; font-size: 0.8rem; font-weight: 500; }
 .ticker-track { display: flex; width: max-content; animation: tick 40s linear infinite; }
-.ticker-track span { display: inline-flex; align-items: center; gap: 2.2rem; padding: 0.6rem 1.1rem; white-space: nowrap; }
-.ticker-track span::after { content: "✦"; color: var(--accent); }
+.ticker-track > span { display: inline-flex; align-items: center; gap: 2.2rem; padding: 0.6rem 1.1rem; white-space: nowrap; }
+.ticker-track > span::after { content: "✦"; color: var(--accent); }
+/* The FMCSA pill from the other pages, riding in the strip. Same green, seal
+   and light sweep as styles.css, sized for the strip. */
+.fmcsa-badge {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: inline-flex; align-items: center; gap: 0.35rem; height: 24px; padding: 0 0.62rem 0 0.2rem;
+  border: 1px solid transparent; border-radius: 999px;
+  background:
+    linear-gradient(180deg, #33a063, #2a8a53 55%, #237046) padding-box,
+    linear-gradient(120deg, #86dcaa, #1f6a41 50%, #5cc58a) border-box;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 6px 14px -8px rgba(35, 112, 70, 0.7);
+  color: #fff; text-shadow: 0 1px 1px rgba(10, 55, 30, 0.3);
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.01em; white-space: nowrap;
+}
+.fmcsa-badge::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.22) 50%, transparent 62%);
+  transform: translateX(-110%); animation: fbSweep 6s ease-in-out 1.2s infinite;
+}
+@keyframes fbSweep { 0% { transform: translateX(-110%); } 22%, 100% { transform: translateX(110%); } }
+.fmcsa-badge .fb-seal { width: 19px; height: 19px; flex-shrink: 0; filter: drop-shadow(0 1px 3px rgba(10, 55, 30, 0.35)); }
+.fmcsa-badge .fb-seal polygon { fill: #fff; }
+.fmcsa-badge .fb-seal circle { stroke: #237046; stroke-opacity: 0.5; }
+.fmcsa-badge .fb-seal path { fill: #237046; }
+.fmcsa-badge .fb-seal polyline { stroke: #fff; }
+.fmcsa-badge .fb-sep { color: rgba(255, 255, 255, 0.6); font-size: 0.8em; margin: 0 0.3rem; }
+.fmcsa-badge .fb-dot {
+  display: inline-block; width: 6px; height: 6px; margin-left: 0.35rem; border-radius: 50%; background: #fff; vertical-align: middle;
+  animation: fbPulse 2.4s ease-out infinite;
+}
+@keyframes fbPulse { 0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); } 70%, 100% { box-shadow: 0 0 0 5px rgba(255, 255, 255, 0); } }
 @keyframes tick { to { transform: translateX(-50%); } }
 
 /* Nav ---------------------------------------------------------------------- */
@@ -604,7 +647,9 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
      headline and form begin. The badge, lede and tick list give way; the
      rating and promises move into the line under the form. */
   .ticker { font-size: 0.72rem; }
-  .ticker-track span { padding: 0.45rem 0.9rem; gap: 1.8rem; }
+  .ticker-track > span { padding: 0.45rem 0.9rem; gap: 1.8rem; }
+  .fmcsa-badge { height: 21px; font-size: 0.62rem; }
+  .fmcsa-badge .fb-seal { width: 16px; height: 16px; }
   .hero { margin-top: -64px; padding: 55vw 0 1.6rem; min-height: 0; }
   .hero::before {
     background:
@@ -745,8 +790,8 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
 
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track">
-    <span>Binding fixed prices</span><span>Our own trucks &amp; crews — no brokers</span><span>$1M liability coverage</span><span>USDOT #4575745 · MC-1820728</span><span>4.96★ from 2,400+ reviews</span><span>Real people, 24/7</span>
-    <span>Binding fixed prices</span><span>Our own trucks &amp; crews — no brokers</span><span>$1M liability coverage</span><span>USDOT #4575745 · MC-1820728</span><span>4.96★ from 2,400+ reviews</span><span>Real people, 24/7</span>
+    <span>Binding fixed prices</span><span>Our own trucks &amp; crews — no brokers</span><span>$1M liability coverage</span><span><span class="fmcsa-badge"><svg class="fb-seal" viewBox="0 0 36 36" aria-hidden="true"><polygon points="18.00 0.50 20.97 3.09 24.70 1.83 26.44 5.36 30.37 5.63 30.64 9.56 34.17 11.30 32.91 15.03 35.50 18.00 32.91 20.97 34.17 24.70 30.64 26.44 30.37 30.37 26.44 30.64 24.70 34.17 20.97 32.91 18.00 35.50 15.03 32.91 11.30 34.17 9.56 30.64 5.63 30.37 5.36 26.44 1.83 24.70 3.09 20.97 0.50 18.00 3.09 15.03 1.83 11.30 5.36 9.56 5.63 5.63 9.56 5.36 11.30 1.83 15.03 3.09"/><circle cx="18" cy="18" r="12.2" fill="none" stroke-width="0.8" stroke-dasharray="1.2 1.4"/><path d="M18 9.5 12 11.9v4.6c0 3.7 2.5 6.9 6 8.1 3.5-1.2 6-4.4 6-8.1v-4.6z"/><polyline points="15.2 17.2 17.3 19.3 21 15.3" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>USDOT Verified<span class="fb-sep">•</span>MC Active<i class="fb-dot"></i></span></span><span>USDOT #4575745 · MC-1820728</span><span>4.96★ from 2,400+ reviews</span><span>Real people, 24/7</span>
+    <span>Binding fixed prices</span><span>Our own trucks &amp; crews — no brokers</span><span>$1M liability coverage</span><span><span class="fmcsa-badge"><svg class="fb-seal" viewBox="0 0 36 36" aria-hidden="true"><polygon points="18.00 0.50 20.97 3.09 24.70 1.83 26.44 5.36 30.37 5.63 30.64 9.56 34.17 11.30 32.91 15.03 35.50 18.00 32.91 20.97 34.17 24.70 30.64 26.44 30.37 30.37 26.44 30.64 24.70 34.17 20.97 32.91 18.00 35.50 15.03 32.91 11.30 34.17 9.56 30.64 5.63 30.37 5.36 26.44 1.83 24.70 3.09 20.97 0.50 18.00 3.09 15.03 1.83 11.30 5.36 9.56 5.63 5.63 9.56 5.36 11.30 1.83 15.03 3.09"/><circle cx="18" cy="18" r="12.2" fill="none" stroke-width="0.8" stroke-dasharray="1.2 1.4"/><path d="M18 9.5 12 11.9v4.6c0 3.7 2.5 6.9 6 8.1 3.5-1.2 6-4.4 6-8.1v-4.6z"/><polyline points="15.2 17.2 17.3 19.3 21 15.3" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>USDOT Verified<span class="fb-sep">•</span>MC Active<i class="fb-dot"></i></span></span><span>USDOT #4575745 · MC-1820728</span><span>4.96★ from 2,400+ reviews</span><span>Real people, 24/7</span>
   </div>
 </div>
 
@@ -1054,6 +1099,7 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   <button type="button" data-p="harbor" aria-label="Harbor" style="--sw-a:#0d2b30;--sw-b:#ff6b4a"></button>
   <button type="button" data-p="sunrise" aria-label="Sunrise" style="--sw-a:#1f2a44;--sw-b:#f2a900"></button>
   <button type="button" data-p="evergreen" aria-label="Evergreen" style="--sw-a:#13251d;--sw-b:#c6f36b"></button>
+  <button type="button" data-p="skyblue" aria-label="Sky blue" style="background: linear-gradient(135deg, #0f2b44 50%, #45bdf2 50%)"></button>
   <button type="button" data-p="sky" aria-label="Sky" style="background: linear-gradient(135deg, #0b1f3a 34%, #1f6fe5 34% 66%, #6ccff6 66%)"></button>
   <span class="lab-name" id="lab-name">Ember</span>
 </div>
@@ -1088,7 +1134,8 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   function setPalette(p) {
     root.setAttribute('data-palette', p);
     buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.p === p)); });
-    label.textContent = p.charAt(0).toUpperCase() + p.slice(1);
+    var btn = document.querySelector('.lab button[data-p="' + p + '"]');
+    label.textContent = btn ? btn.getAttribute('aria-label') : p;
     try { localStorage.setItem('lab-palette', p); } catch (e) {}
   }
   var saved = null;
