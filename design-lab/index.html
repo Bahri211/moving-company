@@ -194,6 +194,14 @@ html.drawer-open { overflow: hidden; }
     linear-gradient(180deg, rgba(var(--wash), 0.4) 0%, rgba(var(--wash), 0) 30%, rgba(var(--wash), 0) 60%, rgba(var(--wash), 0.7) 100%),
     var(--dark) url('/assets/images/lab/hero-mountain.jpg') 0% 62% / max(135%, 1720px) auto no-repeat;
 }
+/* Parallax on the compositor: where the browser can tie an animation to the
+   scroll, the photo sinks in lockstep with it — no script, no lag. Driving it
+   from scroll events made it shake on iPhone, since Safari moves the page
+   ahead of the script by a frame. */
+@supports (animation-timeline: scroll()) {
+  .hero::before { animation: hero-sink linear both; animation-timeline: scroll(root block); animation-range: 0 100vh; }
+  @keyframes hero-sink { to { transform: translate3d(0, 32vh, 0); } }
+}
 /* The nav sits on the photo until it scrolls, so its type turns light there. */
 .nav:not(.is-solid) .logo, .nav:not(.is-solid) .nav-phone { color: #fff; }
 .nav:not(.is-solid) .nav-links a { color: rgba(255, 255, 255, 0.78); }
@@ -1247,6 +1255,9 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   // progress bar, so it stays.
   (function () {
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Script parallax only as a fallback, and only with a mouse: on touch
+    // screens it can't keep up with the scroll and the photo shakes.
+    var scriptParallax = !reduce && !(window.CSS && CSS.supports('animation-timeline: scroll()')) && window.matchMedia('(pointer: fine)').matches;
     var phone = window.matchMedia('(max-width: 768px)');
     var hero = document.querySelector('.hero'), route = document.getElementById('road');
     var steps = route.querySelectorAll('.step'), dots = route.querySelectorAll('.step-dot');
@@ -1285,7 +1296,7 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
     function update() {
       ticking = false;
       var y = window.scrollY, vh = window.innerHeight;
-      if (!reduce && y < hero.offsetHeight) hero.style.setProperty('--hero-shift', (y * 0.32).toFixed(1) + 'px');
+      if (scriptParallax && y < hero.offsetHeight) hero.style.setProperty('--hero-shift', (y * 0.32).toFixed(1) + 'px');
       // The truck keeps pace with the reader: start of the road when its top
       // reaches two thirds down the screen, end when its bottom does.
       var r = route.getBoundingClientRect();
