@@ -1422,7 +1422,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="wrap nav-inner">
     <a href="/" class="logo" aria-label="50STATEMOVERS home"><img src="/assets/images/48-state-movers-logo-removebg-preview.png" alt="" /><span class="logo-name">50STATEMOVERS</span></a>
     <nav class="nav-links" aria-label="Main">
-      <a href="#services">Services</a><a href="#moving-day">Moving day</a><a href="#coverage">Coverage</a><a href="#routes">Routes</a><a href="#faq">FAQ</a>
+      <a href="#services">Services</a><a href="#moving-day">Moving day</a><a href="#routes">Routes</a><a href="#faq">FAQ</a>
     </nav>
     <a href="tel:+18885051086" class="nav-phone">+1 (888) 505-1086</a>
     <a href="#quote" class="btn">Free quote</a>
@@ -1446,9 +1446,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <a href="#services"><span>01</span>Services</a>
     <a href="#moving-day"><span>02</span>Moving day</a>
     <a href="#process"><span>03</span>How it works</a>
-    <a href="#coverage"><span>04</span>Coverage</a>
-    <a href="#routes"><span>05</span>Routes</a>
-    <a href="#faq"><span>06</span>FAQ</a>
+    <a href="#routes"><span>04</span>Routes</a>
+    <a href="#faq"><span>05</span>FAQ</a>
   </nav>
   <div class="drawer-more">
     <p>Popular</p>
@@ -1669,43 +1668,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="step s3"><span class="step-dot">3</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-moveday.webp')" aria-hidden="true"></div><span class="step-num">Step 03</span><h3>Move day</h3><p>The crew arrives on schedule, in uniform, with materials, mats and a plan.</p></div></div>
       <div class="step s4"><span class="step-dot">4</span><div class="step-body"><div class="step-illo" style="--illo: url('/assets/images/lab/step-settle.webp')" aria-hidden="true"></div><span class="step-num">Step 04</span><h3>Settle in</h3><p>We don't leave until furniture is placed, beds are built, and you've signed off.</p></div></div>
     </div>
-  </div>
-</section>
-
-<section class="section coverage" id="coverage">
-  <div class="wrap cov-grid">
-    <div class="cov-copy reveal">
-      <span class="eyebrow">Coverage</span>
-      <h2>From New York, <em>to every state.</em></h2>
-      <p class="cov-lede">These are some of the routes we run out of New York, and we cover all 48 continental states and D.C. Pick yours to see it on the map.</p>
-      <div class="cov-picker">
-        <div class="field"><label for="r-from">Moving from</label><select id="r-from" class="state-select"><option value="">Choose state</option></select></div>
-        <button type="button" class="cov-swap" id="r-swap" aria-label="Swap from and to"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg></button>
-        <div class="field"><label for="r-to">Moving to</label><select id="r-to" class="state-select"><option value="">Choose state</option></select></div>
-      </div>
-      <p class="cov-result is-hint" id="r-result" aria-live="polite"><i>→</i><span>Every route between the 48 continental states and D.C.</span></p>
-      <button type="button" class="btn" id="r-go" disabled>Get a price for this route <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-    </div>
-    <div class="cov-map reveal" id="cov-map" data-network="New York>Florida,Georgia,South Carolina,North Carolina,Texas,California,Illinois">
-      <svg id="us-map" viewBox="0 0 951 606" role="img" aria-label="Map of the continental United States showing moving routes">
-        <g class="us-states"></g>
-        <g class="map-net" aria-hidden="true"></g>
-        <path class="map-arc" d=""/>
-        <path class="map-arc-done" d=""/>
-        <g class="map-pins"></g>
-      </svg>
-      <span class="map-label" id="map-from" hidden></span>
-      <span class="map-label is-to" id="map-to" hidden></span>
-      <span class="map-truck" hidden aria-hidden="true"><svg viewBox="0 0 64 36"><rect x="1" y="3" width="39" height="23" rx="3" fill="currentColor"/><path d="M42 10h10.5a3 3 0 0 1 2.2 1l6.3 7.2V26H42z" fill="currentColor"/><path d="M45 13.5h7l4.4 5H45z" fill="#fff" opacity=".9"/><circle cx="13" cy="28" r="5.5" fill="#111" stroke="#fff" stroke-width="2.5"/><circle cx="51" cy="28" r="5.5" fill="#111" stroke="#fff" stroke-width="2.5"/></svg></span>
-      <span class="map-tip" hidden></span>
-      <span class="map-count" aria-live="polite"><i>✓</i><span><b id="map-count-n">0</b> of 49 · every state + D.C. covered</span></span>
-      <p class="map-note"><span><b></b>Moving from</span><span><b class="is-to"></b>Moving to</span><span>48 states + D.C.</span></p>
-    </div>
-    <div class="cov-browse">
-        <p>Movers by state</p>
-        <div class="chips is-collapsed" id="chips"></div>
-        <button type="button" class="chips-more" id="chips-more">Show all 48 states + D.C. ↓</button>
-      </div>
   </div>
 </section>
 
@@ -2226,6 +2188,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   // fields.
   (function () {
     var box = document.getElementById('cov-map'), svg = document.getElementById('us-map');
+    if (!svg) return;
     var group = svg.querySelector('.us-states'), pins = svg.querySelector('.map-pins');
     var arc = svg.querySelector('.map-arc'), done = svg.querySelector('.map-arc-done');
     var truck = box.querySelector('.map-truck'), tip = box.querySelector('.map-tip');
