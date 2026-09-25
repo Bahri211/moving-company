@@ -93,6 +93,13 @@ const PAGES = [
     ticker: 'Weekly departures to Florida',
     formTo: 'Florida',
     network: 'New York>Florida,Georgia,South Carolina,North Carolina,Texas,California,Illinois',
+    // Footer Services column: plain text, no links, worded for this page.
+    footerServices: [
+      'New York City to Florida',
+      'Pickup across all five boroughs',
+      'Delivery anywhere in Florida',
+      'Packing, crating &amp; storage',
+    ],
     formName: 'NYC to Florida page',
     routesEyebrow: 'NYC to Florida',
     routesH2: 'Where we deliver <em>in Florida.</em>',
