@@ -39,20 +39,13 @@ const PAGES = [
     ticker: 'Flat-rate routes nationwide',
     formTo: '',
     coverage: 'wave',
-    // Services as plain cards (no links), worded for moves out of New York.
-    services: {
-      eyebrow: 'From New York',
-      h2: 'From New York to <em>anywhere in the US.</em>',
-      p: 'A studio in Queens or a five-bedroom house in Westchester — we plan the crew, the truck and the packing around your home and the road to your new one, in any of the 48 continental states or D.C.',
-      tiles: {
-        'Long distance': 'From your New York door to any state in the continental US, on one truck from pickup to delivery.',
-        'White glove': 'We pack up your New York home, move it, unpack and arrange — and hang the art before we leave.',
-        'Residential': 'Walk-ups, co-ops, condos and houses across the five boroughs. Taken apart, moved, rebuilt.',
-        'Commercial': 'New York offices moved out over a weekend, and working in the new city by Monday.',
-        'Packing &amp; crating': 'Careful packing for city apartments, and custom crates for art, glass and antiques.',
-        'Storage between homes': 'When your New York move-out and new move-in dates don\u2019t line up, we hold everything until you\u2019re ready.',
-      },
-    },
+    // Footer Services column: plain text, no links, worded for this page.
+    footerServices: [
+      'New York to anywhere in the US',
+      'Long distance moves from NYC',
+      'All 48 states + D.C.',
+      'Packing, crating &amp; storage',
+    ],
     formName: 'NYC Long Distance Movers page',
     routesEyebrow: 'From New York',
     routesH2: 'Popular routes <em>out of NYC.</em>',
@@ -569,6 +562,10 @@ function nycPage(page) {
   html = swapOnce(html, '<li><a href="#services">White glove</a></li>',
     '<li><a href="/nyc-long-distance-movers/">NYC long distance</a></li><li><a href="/nyc-to-florida-long-distance-movers/">NYC to Florida</a></li><li><a href="/nyc-to-north-carolina-and-georgia-movers/">NYC to NC &amp; GA</a></li><li><a href="/nyc-long-distance-movers-to-texas-california-chicago-and-boston/">NYC to TX, CA, Chicago &amp; Boston</a></li>', 'footer services');
   html = swapOnce(html, '<li><a href="#reviews">Reviews</a></li>', '', 'footer reviews');
+  if (page.footerServices) {
+    html = html.replace(/(<div><h4>Services<\/h4><ul>)[\s\S]*?(<\/ul><\/div>)/,
+      (m, open, close) => open + page.footerServices.map(t => `<li><span>${t}</span></li>`).join('') + close);
+  }
   html = swapOnce(html, '<li><a href="/privacy-policy">Privacy</a></li>', '<li><a href="/privacy-policy">Privacy</a></li><li><a href="/terms-of-service">Terms</a></li>', 'footer legal');
 
   // ---- no palette switcher
