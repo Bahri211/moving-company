@@ -1141,9 +1141,6 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
   html { scroll-behavior: auto; }
 }
 </style>
-<!-- estimator:css -->
-<link rel="stylesheet" href="/assets/estimator/truck-estimator.css" />
-<!-- /estimator:css -->
 </head>
 <body>
 
@@ -1383,18 +1380,6 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
     </div>
   </div>
 </section>
-
-<!-- estimator:section -->
-<section class="section" id="estimator">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div><span class="eyebrow">Truck-fill estimator</span><h2>How much are you <em>moving?</em></h2></div>
-      <p>Add the things in your home and watch the truck fill up. You'll get a rough load size and crew size, then we'll turn it into a fixed, written price.</p>
-    </div>
-    <div class="te" data-truck-estimator data-quote="#quote"></div>
-  </div>
-</section>
-<!-- /estimator:section -->
 
 <section class="section coverage" id="coverage">
   <div class="wrap cov-grid">
@@ -1749,7 +1734,6 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
         $('q-size').value ? 'Home size: ' + $('q-size').value : null,
         date.value ? 'Planned move date: ' + date.value : null,
         form.dataset.service ? 'Service: ' + form.dataset.service : null,
-        form.dataset.inventory ? 'Estimated inventory: ' + form.dataset.inventory : null,
         'SMS opt-in: Yes',
         'Form: ' + (form.dataset.name || 'design lab (2-step bar)'),
         'Landing page: ' + window.location.pathname + (document.documentElement.dataset.palette ? ' · palette ' + document.documentElement.dataset.palette : ''),
@@ -2210,8 +2194,5 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
   })();
 })();
 </script>
-<!-- estimator:js -->
-<script src="/assets/estimator/truck-estimator.js" defer></script>
-<!-- /estimator:js -->
 </body>
 </html>
