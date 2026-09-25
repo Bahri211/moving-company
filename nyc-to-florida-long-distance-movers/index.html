@@ -408,7 +408,7 @@ html.drawer-open { overflow: hidden; }
   display: grid; place-items: center; background: var(--tint); color: var(--ink);
 }
 .qs2-back svg { width: 18px; height: 18px; }
-.consent { grid-column: 1 / -1; display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.2rem 0.3rem 0.1rem; font-size: 0.8rem; line-height: 1.45; color: var(--muted); cursor: pointer; }
+.consent { grid-column: 1 / -1; order: 5; display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.2rem 0.3rem 0.1rem; font-size: 0.8rem; line-height: 1.45; color: var(--muted); cursor: pointer; }
 .consent input { flex: none; width: 20px; height: 20px; margin: 0; accent-color: var(--accent); cursor: pointer; }
 .consent.is-error { color: #d93025; }
 .consent a { color: inherit; }
@@ -812,7 +812,7 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   .qs2-head span { font-size: 0.8rem; }
   .qs2-back { width: 36px; height: 36px; }
   /* The disclosure's first sentence stays; the rest opens on "Read more". */
-  .consent { font-size: 0.76rem; }
+  .consent { font-size: 0.76rem; order: 0; padding: 0.1rem 0.2rem; }
   .consent-more:not(.is-open) { display: none; }
   .consent-toggle { display: inline; font-size: 0.76rem; }
   .q-done { padding: 0.8rem 0.6rem; gap: 0.9rem; }
@@ -1229,11 +1229,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
         <div class="field"><label for="q-phone">Phone</label><input id="q-phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(555) 123-4567" /></div>
         <div class="field"><label for="q-email">Email</label><input id="q-email" type="email" autocomplete="email" inputmode="email" placeholder="you@email.com" /></div>
-        <button class="btn" type="submit" id="q-send">Send my quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
         <label class="consent" for="q-sms">
           <input type="checkbox" id="q-sms" />
           <span>I agree to receive SMS messages from 50STATEMOVERS INC about my quote.<span class="consent-more" id="q-sms-more"> Msg &amp; data rates may apply. Message frequency varies. Reply STOP to opt out at any time. See our <a href="/privacy-policy" target="_blank">Privacy Policy</a>.</span> <button type="button" class="consent-toggle" id="q-sms-toggle" aria-expanded="false" aria-controls="q-sms-more">Read more</button></span>
         </label>
+        <button class="btn" type="submit" id="q-send">Send my quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
       <p class="q-error" id="q-error" role="alert"></p>
     </form>
@@ -1580,7 +1580,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         $('q-route').textContent = $('q-from').value + ' → ' + $('q-to').value + ($('q-size').value ? ' · ' + $('q-size').value : '');
         if (fine) $('q-phone').focus({ preventScroll: true });
       }
-      form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      // The whole card, consent included, between the header and the call dock.
+      window.scrollTo({ top: quoteTop(), behavior: 'smooth' });
     }
     $('q-back').addEventListener('click', function () { showStep(1); });
 
