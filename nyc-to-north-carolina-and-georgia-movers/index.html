@@ -1272,6 +1272,9 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
 .pd h3 { font-size: 1.55rem; }
 .pd-arrow { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--tint); color: var(--accent-ink); }
 .pd-arrow svg { width: 24px; height: 24px; }
+.pd-states { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0.6rem 0 0; padding: 0; list-style: none; }
+.pd-states li { padding: 0.35rem 0.8rem; border-radius: 999px; background: var(--tint); color: var(--ink); font-size: 0.82rem; font-weight: 700; }
+.pd-states li.more { background: none; box-shadow: inset 0 0 0 1px var(--line); color: var(--muted); }
 @media (max-width: 760px) {
   .pd-grid { grid-template-columns: 1fr; }
   .pd-arrow { justify-self: center; transform: rotate(90deg); }
@@ -1555,12 +1558,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="wrap">
     <div class="section-head reveal">
       <div><span class="eyebrow">NYC to the Carolinas &amp; Georgia</span><h2>We pick up in New York City <em>and deliver across the South.</em></h2></div>
-      <p>Our trucks run south from New York on I-95 and I-85 every week. Wherever you are packing up in the city, the same crew and the same truck take you all the way to your new door in North Carolina, South Carolina, Georgia or anywhere else in the Southeast.</p>
+      <p>Our trucks run south from New York on I-95 and I-85 every week. Wherever you are packing up in the city, the same crew and the same truck take you all the way to your new door in the Carolinas, Georgia or wherever else the South is calling you.</p>
     </div>
     <div class="pd-grid">
       <div class="rc pd reveal"><span class="rc-meta">We pick up</span><h3>Anywhere in New York City</h3><p>Manhattan, Brooklyn, Queens, the Bronx and Staten Island. Walk-ups, doorman buildings and co-ops with service-elevator bookings and insurance certificates, all handled before moving day.</p></div>
       <div class="pd-arrow reveal" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-      <div class="rc pd reveal"><span class="rc-meta">We deliver</span><h3>North Carolina, South Carolina, Georgia &amp; more</h3><p>From the mountains to the coast, and anywhere else across the Southeast: city apartments, growing suburbs, lake houses and historic districts. Tell us the address and the access, and we plan the unload around it.</p></div>
+      <div class="rc pd reveal"><span class="rc-meta">We deliver</span><h3>The Carolinas, Georgia &amp; beyond</h3><p>Across the Southeast, from mountain towns to the coast. City apartment, new build in the suburbs or a house on the lake: tell us the address and the access, and we plan the unload around it.</p><ul class="pd-states"><li>North Carolina</li><li>South Carolina</li><li>Georgia</li><li class="more">+ neighboring states</li></ul></div>
     </div>
     <div class="facts reveal">
       <h3>Direct routes, explained</h3>
