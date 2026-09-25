@@ -38,7 +38,7 @@ const PAGES = [
     lede: 'Leaving New York for anywhere in the continental US? One flat, written price for the whole route, and one licensed crew from your door in the city to your new one.',
     ticker: 'Flat-rate routes nationwide',
     formTo: '',
-    network: 'New York>Florida,California,Texas,North Carolina,Georgia,Illinois,Massachusetts,Colorado,Arizona,Washington,Tennessee',
+    coverage: 'wave',
     formName: 'NYC Long Distance Movers page',
     routesEyebrow: 'From New York',
     routesH2: 'Popular routes <em>out of NYC.</em>',
@@ -494,7 +494,7 @@ function nycPage(page) {
   // ---- nav and drawer: Routes in place of Reviews
   html = swapOnce(html, '<a href="#reviews">Reviews</a><a href="#faq">FAQ</a>', '<a href="#routes">Routes</a><a href="#faq">FAQ</a>', 'nav reviews');
   html = swapOnce(html, '<a href="#reviews"><span>05</span>Reviews</a>', '<a href="#routes"><span>05</span>Routes</a>', 'drawer reviews');
-  html = swapOnce(html, '<small><i></i>Real people answering now · 24/7</small>', '<small><i></i>Talk to a real person · (888) 505-1086</small>', 'drawer foot');
+  html = swapOnce(html, '<small><i></i>Real people answering now · 24/7</small>', '<small><i></i>Talk to a real person · +1 (888) 505-1086</small>', 'drawer foot');
 
   // ---- hero
   html = swapOnce(html, '<section class="hero">', `<section class="hero${page.long ? ' hero-long' : ''}">`, 'hero section');
@@ -514,8 +514,10 @@ function nycPage(page) {
   // ---- map plays this page's route
   html = swapOnce(html, '<h2>Every state, <em>every route.</em></h2>', '<h2>From New York, <em>to every state.</em></h2>', 'coverage h2');
   html = swapOnce(html, 'We move homes between all 48 continental states and D.C. — these are just some of the routes we run. Pick yours to see it on the map.',
-    'These are some of the routes we run out of New York, and we cover all 48 continental states and D.C. Pick yours to see it on the map.', 'coverage lede');
-  html = swapOnce(html, '<div class="cov-map reveal" id="cov-map">', `<div class="cov-map reveal" id="cov-map" data-network="${page.network}">`, 'map');
+    page.coverage
+      ? 'We move homes from New York to every one of the 48 continental states and D.C. Pick your route to see it on the map.'
+      : 'These are some of the routes we run out of New York, and we cover all 48 continental states and D.C. Pick yours to see it on the map.', 'coverage lede');
+  html = swapOnce(html, '<div class="cov-map reveal" id="cov-map">', `<div class="cov-map reveal" id="cov-map"${page.coverage ? ` data-coverage="${page.coverage}" data-home="New York"` : ` data-network="${page.network}"`}>`, 'map');
 
   // ---- no reviews section; the page's FAQ
   html = swapBlock(html, '<section class="section" id="reviews">', '</section>\n\n', '', 'reviews section');

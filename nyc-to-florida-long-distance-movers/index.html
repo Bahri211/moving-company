@@ -761,6 +761,31 @@ html.drawer-open { overflow: hidden; }
 .map-net circle.is-hub { fill: var(--dark); stroke: var(--surface); stroke-width: 3; }
 @keyframes netFlow { to { stroke-dashoffset: -21; } }
 .cov-map.has-route .map-net { opacity: 0.18; }
+/* Coverage wave (data-coverage="wave"): no lines — every state fills in
+   turn, rippling out from the home state, and a badge confirms the total. */
+.cov-map.is-wave .us-states path { transition: fill 0.5s ease; }
+.cov-map.is-wave .us-states path.is-covered { fill: color-mix(in srgb, var(--accent) 45%, var(--surface)); }
+.cov-map.is-wave .us-states path.is-home { fill: var(--dark); }
+.cov-map.is-wave .us-states path.is-covered:hover { fill: var(--accent); }
+.cov-map.is-wave.has-route .us-states path.is-covered:not(.is-from):not(.is-to) { fill: color-mix(in srgb, var(--accent) 16%, var(--surface)); }
+.map-home { fill: var(--surface); stroke: var(--dark); stroke-width: 3.5; }
+.map-home-ring { fill: none; stroke: var(--accent-ink); stroke-width: 3; transform-box: fill-box; transform-origin: center; animation: ping 2.2s ease-out infinite; }
+.cov-map.has-route .map-home, .cov-map.has-route .map-home-ring { display: none; }
+.map-count {
+  position: absolute; left: 50%; bottom: 3.2rem; translate: -50% 0; z-index: 2;
+  display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.55rem 1rem 0.55rem 0.55rem; border-radius: 999px;
+  background: var(--dark); color: var(--on-dark); box-shadow: 0 16px 34px -16px rgba(0, 0, 0, 0.55);
+  font-size: 0.9rem; font-weight: 600; white-space: nowrap; opacity: 0; transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.map-count b { font-size: 1.05rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.map-count i { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: #2fb36a; color: #fff; font-style: normal; font-size: 0.8rem; }
+.cov-map.is-counting .map-count { opacity: 1; transform: none; }
+.cov-map.has-route .map-count { opacity: 0; }
+@media (max-width: 768px) {
+  .map-count { bottom: 2.4rem; font-size: 0.8rem; padding: 0.4rem 0.8rem 0.4rem 0.4rem; }
+  .map-count i { width: 22px; height: 22px; }
+}
 .map-arc { fill: none; stroke: var(--dark); stroke-width: 2.5; stroke-dasharray: 2 7; stroke-linecap: round; opacity: 0.55; }
 .map-arc-done { fill: none; stroke: var(--accent-ink); stroke-width: 4; stroke-linecap: round; }
 .map-pin { fill: var(--surface); stroke: var(--dark); stroke-width: 3.5; }
@@ -1386,10 +1411,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <nav class="nav-links" aria-label="Main">
       <a href="#services">Services</a><a href="#moving-day">Moving day</a><a href="#coverage">Coverage</a><a href="#routes">Routes</a><a href="#faq">FAQ</a>
     </nav>
-    <a href="tel:+18885051086" class="nav-phone">(888) 505-1086</a>
+    <a href="tel:+18885051086" class="nav-phone">+1 (888) 505-1086</a>
     <a href="#quote" class="btn">Free quote</a>
-    <a href="tel:+18885051086" class="nav-call" aria-label="Call (888) 505-1086">
-      <span class="nav-call-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span><span class="nav-call-num">(888) 505-1086</span>
+    <a href="tel:+18885051086" class="nav-call" aria-label="Call +1 (888) 505-1086">
+      <span class="nav-call-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span><span class="nav-call-num">+1 (888) 505-1086</span>
     </a>
     <button type="button" class="nav-icon menu-btn" id="menu-btn" aria-label="Open menu" aria-controls="drawer" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
@@ -1421,8 +1446,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
   <div class="drawer-foot">
     <a href="#quote" class="btn">Get my free quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-    <a href="tel:+18885051086" class="btn btn-ghost">Call (888) 505-1086</a>
-    <small><i></i>Talk to a real person · (888) 505-1086</small>
+    <a href="tel:+18885051086" class="btn btn-ghost">Call +1 (888) 505-1086</a>
+    <small><i></i>Talk to a real person · +1 (888) 505-1086</small>
   </div>
 </dialog>
 
@@ -1487,9 +1512,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h2>Talk to a moving specialist. <em>Free, no pressure.</em></h2>
         <p>Straight answers about your dates, your home and your route — from a real person, with no obligation to book.</p>
       </div>
-      <a class="talk-call" href="tel:+18885051086" aria-label="Call a moving specialist at (888) 505-1086">
+      <a class="talk-call" href="tel:+18885051086" aria-label="Call a moving specialist at +1 (888) 505-1086">
         <span class="talk-call-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg></span>
-        <span class="talk-call-txt"><small>Call now</small><b>(888) 505-1086</b></span>
+        <span class="talk-call-txt"><small>Call now</small><b>+1 (888) 505-1086</b></span>
       </a>
     </div>
     <div class="proof reveal">
@@ -1663,6 +1688,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="map-label is-to" id="map-to" hidden></span>
       <span class="map-truck" hidden aria-hidden="true"><svg viewBox="0 0 64 36"><rect x="1" y="3" width="39" height="23" rx="3" fill="currentColor"/><path d="M42 10h10.5a3 3 0 0 1 2.2 1l6.3 7.2V26H42z" fill="currentColor"/><path d="M45 13.5h7l4.4 5H45z" fill="#fff" opacity=".9"/><circle cx="13" cy="28" r="5.5" fill="#111" stroke="#fff" stroke-width="2.5"/><circle cx="51" cy="28" r="5.5" fill="#111" stroke="#fff" stroke-width="2.5"/></svg></span>
       <span class="map-tip" hidden></span>
+      <span class="map-count" aria-live="polite"><i>✓</i><span><b id="map-count-n">0</b> of 49 · every state + D.C. covered</span></span>
       <p class="map-note"><span><b></b>Moving from</span><span><b class="is-to"></b>Moving to</span><span>48 states + D.C.</span></p>
     </div>
     <div class="cov-browse">
@@ -1679,9 +1705,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="eyebrow">FAQ</span>
       <h2>NYC to Florida, <em>answered.</em></h2>
       <p>What New Yorkers ask before booking. If yours isn't here, call — a real person picks up.</p>
-<a href="tel:+18885051086" class="faq-person" aria-label="Talk to a moving specialist, free and no pressure: call (888) 505-1086">
+<a href="tel:+18885051086" class="faq-person" aria-label="Talk to a moving specialist, free and no pressure: call +1 (888) 505-1086">
         <span class="faq-person-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/><path d="M21 16v2a4 4 0 0 1-4 4h-5"/></svg></span>
-        <div><small>Talk to a moving specialist <em>Free, no pressure</em></small><b>(888) 505-1086</b></div>
+        <div><small>Talk to a moving specialist <em>Free, no pressure</em></small><b>+1 (888) 505-1086</b></div>
         <span class="faq-person-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg></span>
       </a>
     </div>
@@ -1734,7 +1760,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <ul id="svc-points"></ul>
   <div class="svc-actions">
     <button type="button" class="btn" id="svc-go">Get a quote for this <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-    <a href="tel:+18885051086" class="btn btn-ghost">Call (888) 505-1086</a>
+    <a href="tel:+18885051086" class="btn btn-ghost">Call +1 (888) 505-1086</a>
   </div>
 </dialog>
 
@@ -1745,9 +1771,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </a>
 
 <div class="callbar">
-  <a href="tel:+18885051086" class="call-pill" aria-label="Call us 24/7 at (888) 505-1086">
+  <a href="tel:+18885051086" class="call-pill" aria-label="Call us 24/7 at +1 (888) 505-1086">
     <span class="call-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg></span>
-    <span class="call-txt"><small><i></i>Call us · 24/7</small><b>(888) 505-1086</b></span>
+    <span class="call-txt"><small><i></i>Call us · 24/7</small><b>+1 (888) 505-1086</b></span>
   </a>
   <a href="#quote" class="btn">Free quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
 </div>
@@ -1960,11 +1986,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           form.innerHTML =
             '<div class="q-done" role="status">' +
             '<span class="q-done-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>' +
-            '<div><h3>Quote request received!</h3><p>We’ll send your fixed price today. Can’t wait? Call <a href="tel:+18885051086">(888) 505-1086</a>.</p></div></div>';
+            '<div><h3>Quote request received!</h3><p>We’ll send your fixed price today. Can’t wait? Call <a href="tel:+18885051086">+1 (888) 505-1086</a>.</p></div></div>';
           return;
         }
         return res.json().catch(function () { return {}; }).then(function (d) { fail(d.error || 'Something went wrong. Please try again or call us.'); });
-      }).catch(function () { fail('Could not connect. Please call us at (888) 505-1086.'); });
+      }).catch(function () { fail('Could not connect. Please call us at +1 (888) 505-1086.'); });
     });
   })();
 
@@ -2239,7 +2265,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var bow = Math.max(36, len * 0.28);
       return { d: 'M' + a[1] + ' ' + a[2] + ' Q' + ((a[1] + b[1]) / 2 + nx * bow) + ' ' + ((a[2] + b[2]) / 2 + ny * bow) + ' ' + b[1] + ' ' + b[2], dx: dx, dy: dy, len: len };
     }
+    function drawWave() {
+      var home = box.dataset.home || 'New York', h = map.s[home];
+      box.classList.add('is-wave');
+      var order = Object.keys(map.s).map(function (n) {
+        var p = map.s[n]; return { n: n, d: Math.hypot(p[1] - h[1], p[2] - h[2]) };
+      }).sort(function (a, b) { return a.d - b.d; });
+      net.innerHTML = '<circle class="map-home-ring" cx="' + h[1] + '" cy="' + h[2] + '" r="9"/><circle class="map-home" cx="' + h[1] + '" cy="' + h[2] + '" r="8"/>';
+      var countEl = document.getElementById('map-count-n');
+      function fillAll() {
+        order.forEach(function (o) { var el = group.querySelector('[data-s="' + o.n + '"]'); el.classList.add(o.n === home ? 'is-home' : 'is-covered'); });
+        countEl.textContent = order.length; box.classList.add('is-counting');
+      }
+      new IntersectionObserver(function (en, obs) {
+        if (!en[0].isIntersecting) return;
+        obs.disconnect(); net.classList.add('is-drawn');
+        if (reduce) return fillAll();
+        box.classList.add('is-counting');
+        order.forEach(function (o, i) {
+          setTimeout(function () {
+            group.querySelector('[data-s="' + o.n + '"]').classList.add(o.n === home ? 'is-home' : 'is-covered');
+            countEl.textContent = i + 1;
+          }, 200 + i * 45);
+        });
+      }, { threshold: 0.35 }).observe(box);
+    }
     function drawNetwork() {
+      if (box.dataset.coverage === 'wave') return drawWave();
       var paths = '', dots = {}, hubs = {};
       NETWORK.split(';').forEach(function (group) {
         var parts = group.split('>'), from = parts[0].trim(), a = map.s[from];
