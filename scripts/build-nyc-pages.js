@@ -38,7 +38,7 @@ const PAGES = [
     lede: 'Leaving New York for anywhere in the continental US? One flat, written price for the whole route, and one licensed crew from your door in the city to your new one.',
     ticker: 'Flat-rate routes nationwide',
     formTo: '',
-    demo: 'New York|California',
+    network: 'New York>Florida,California,Texas,North Carolina,Georgia,Illinois,Massachusetts,Colorado,Arizona,Washington,Tennessee',
     formName: 'NYC Long Distance Movers page',
     routesEyebrow: 'From New York',
     routesH2: 'Popular routes <em>out of NYC.</em>',
@@ -85,7 +85,7 @@ const PAGES = [
     lede: 'New York to the Sunshine State on one binding price. Your things stay on our truck with our crew for the whole drive down I-95, and trucks head south every week.',
     ticker: 'Weekly departures to Florida',
     formTo: 'Florida',
-    demo: 'New York|Florida',
+    network: 'New York>Florida,Georgia,South Carolina,North Carolina,Texas,California,Illinois',
     formName: 'NYC to Florida page',
     routesEyebrow: 'NYC to Florida',
     routesH2: 'Where we deliver <em>in Florida.</em>',
@@ -136,7 +136,7 @@ const PAGES = [
     lede: 'New York to the Carolinas and Georgia every week, on a direct route with one crew and one flat price that is written down before we load.',
     ticker: 'Weekly direct routes to NC &amp; GA',
     formTo: '',
-    demo: 'New York|Georgia',
+    network: 'New York>North Carolina,Georgia,South Carolina,Tennessee,Florida,Texas,Illinois',
     formName: 'NYC to North Carolina and Georgia page',
     routesEyebrow: 'NYC to NC &amp; GA',
     routesH2: 'Where we deliver <em>in the Carolinas and Georgia.</em>',
@@ -188,7 +188,7 @@ const PAGES = [
     lede: 'From a four-hour drive to Boston to the full crossing to Los Angeles: four of our busiest routes out of New York, each on one binding price with one crew.',
     ticker: 'Texas · California · Chicago · Boston',
     formTo: '',
-    demo: 'New York|California',
+    network: 'New York>Texas,California,Illinois,Massachusetts',
     formName: 'NYC to Texas, California, Chicago and Boston page',
     routesEyebrow: 'Four routes from NYC',
     routesH2: 'Four routes, <em>four different drives.</em>',
@@ -504,7 +504,10 @@ function nycPage(page) {
   html = swapOnce(html, '<section class="section" id="services"', routesSection(page) + '<section class="section" id="services"', 'services section');
 
   // ---- map plays this page's route
-  html = swapOnce(html, '<div class="cov-map reveal" id="cov-map">', `<div class="cov-map reveal" id="cov-map" data-demo="${page.demo}">`, 'map');
+  html = swapOnce(html, '<h2>Every state, <em>every route.</em></h2>', '<h2>From New York, <em>to every state.</em></h2>', 'coverage h2');
+  html = swapOnce(html, 'We move homes between all 48 continental states and D.C. — these are just some of the routes we run. Pick yours to see it on the map.',
+    'These are some of the routes we run out of New York, and we cover all 48 continental states and D.C. Pick yours to see it on the map.', 'coverage lede');
+  html = swapOnce(html, '<div class="cov-map reveal" id="cov-map">', `<div class="cov-map reveal" id="cov-map" data-network="${page.network}">`, 'map');
 
   // ---- no reviews section; the page's FAQ
   html = swapBlock(html, '<section class="section" id="reviews">', '</section>\n\n', '', 'reviews section');

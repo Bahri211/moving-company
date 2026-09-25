@@ -695,6 +695,19 @@ html.drawer-open { overflow: hidden; }
 .us-states path:hover { fill: color-mix(in srgb, var(--accent) 22%, var(--surface)); }
 .us-states path.is-from { fill: var(--dark); }
 .us-states path.is-to { fill: var(--accent); }
+/* Route network: faint arcs with dashes flowing along them, so the map says
+   "all over the country" before anyone picks a route. It steps back once a
+   route is chosen. */
+.map-net { transition: opacity 0.4s ease; }
+.map-net path { fill: none; stroke: var(--accent-ink); stroke-width: 2.4; stroke-linecap: round; opacity: 0; transition: opacity 0.6s ease; }
+.map-net path.is-flow { stroke: var(--accent-ink); stroke-width: 4.5; stroke-dasharray: 5 16; animation: netFlow 1.6s linear infinite; }
+.map-net.is-drawn path { opacity: 0.35; }
+.map-net.is-drawn path.is-flow { opacity: 0.9; }
+.map-net circle { fill: var(--surface); stroke: var(--accent-ink); stroke-width: 3; opacity: 0; transition: opacity 0.4s ease; }
+.map-net.is-drawn circle { opacity: 1; }
+.map-net circle.is-hub { fill: var(--dark); stroke: var(--surface); stroke-width: 3; }
+@keyframes netFlow { to { stroke-dashoffset: -21; } }
+.cov-map.has-route .map-net { opacity: 0.18; }
 .map-arc { fill: none; stroke: var(--dark); stroke-width: 2.5; stroke-dasharray: 2 7; stroke-linecap: round; opacity: 0.55; }
 .map-arc-done { fill: none; stroke: var(--accent-ink); stroke-width: 4; stroke-linecap: round; }
 .map-pin { fill: var(--surface); stroke: var(--dark); stroke-width: 3.5; }
@@ -1560,8 +1573,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="wrap cov-grid">
     <div class="cov-copy reveal">
       <span class="eyebrow">Coverage</span>
-      <h2>From Maine to California, <em>we're already there.</em></h2>
-      <p class="cov-lede">Pick your route — or tap two states on the map.</p>
+      <h2>From New York, <em>to every state.</em></h2>
+      <p class="cov-lede">These are some of the routes we run out of New York, and we cover all 48 continental states and D.C. Pick yours to see it on the map.</p>
       <div class="cov-picker">
         <div class="field"><label for="r-from">Moving from</label><select id="r-from" class="state-select"><option value="">Choose state</option></select></div>
         <button type="button" class="cov-swap" id="r-swap" aria-label="Swap from and to"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg></button>
@@ -1570,9 +1583,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p class="cov-result is-hint" id="r-result" aria-live="polite"><i>→</i><span>Every route between the 48 continental states and D.C.</span></p>
       <button type="button" class="btn" id="r-go" disabled>Get a price for this route <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     </div>
-    <div class="cov-map reveal" id="cov-map" data-demo="New York|California">
-      <svg id="us-map" viewBox="0 0 951 606" role="img" aria-label="Map of the continental United States showing your moving route">
+    <div class="cov-map reveal" id="cov-map" data-network="New York>Florida,California,Texas,North Carolina,Georgia,Illinois,Massachusetts,Colorado,Arizona,Washington,Tennessee">
+      <svg id="us-map" viewBox="0 0 951 606" role="img" aria-label="Map of the continental United States showing moving routes">
         <g class="us-states"></g>
+        <g class="map-net" aria-hidden="true"></g>
         <path class="map-arc" d=""/>
         <path class="map-arc-done" d=""/>
         <g class="map-pins"></g>
@@ -2111,8 +2125,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var selFrom = document.getElementById('r-from'), selTo = document.getElementById('r-to');
     var result = document.getElementById('r-result'), go = document.getElementById('r-go');
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var map = null, anim = 0, demoed = false, touched = false;
-    var demoRoute = (box.dataset.demo || 'New York|Florida').split('|');
+    var map = null, anim = 0, touched = false;
+    var net = svg.querySelector('.map-net');
+    // Routes to show before anyone picks one: "From>To,To;From>To" (a page
+    // can set its own on data-network).
+    var NETWORK = box.dataset.network ||
+      'New York>Florida,California,Texas,North Carolina,Illinois;California>Texas,Washington,Arizona,Colorado;Illinois>Georgia,Minnesota;Florida>Texas,Georgia;Massachusetts>Virginia;Washington>Montana';
 
     function load() {
       if (window.US_MAP) return draw();
@@ -2128,8 +2146,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       group.innerHTML = Object.keys(map.s).map(function (n) {
         return '<path data-s="' + n + '" d="' + map.s[n][0] + '"/>';
       }).join('');
-      if (!touched) demo();
-      else if (onScreen) { pending = false; render(true); }
+      drawNetwork();
+      if (!touched) return;
+      if (onScreen) { pending = false; render(true); }
       else { pending = true; render(false); }
     }
     new IntersectionObserver(function (en, obs) {
@@ -2139,6 +2158,42 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     function pct(x, y) { return { l: (x / map.w * 100) + '%', t: (y / map.h * 100) + '%' }; }
     function place(el, x, y) { var p = pct(x, y); el.style.left = p.l; el.style.top = p.t; }
 
+    // Arc between two state centres that bows out sideways like a flight
+    // path: upward on east–west routes, out to the east on north–south ones.
+    function arcPath(a, b) {
+      var dx = b[1] - a[1], dy = b[2] - a[2], len = Math.sqrt(dx * dx + dy * dy);
+      var nx = -dy / len, ny = dx / len;
+      if (Math.abs(ny) < 0.35 ? nx < 0 : ny > 0) { nx = -nx; ny = -ny; }
+      var bow = Math.max(36, len * 0.28);
+      return { d: 'M' + a[1] + ' ' + a[2] + ' Q' + ((a[1] + b[1]) / 2 + nx * bow) + ' ' + ((a[2] + b[2]) / 2 + ny * bow) + ' ' + b[1] + ' ' + b[2], dx: dx, dy: dy, len: len };
+    }
+    function drawNetwork() {
+      var paths = '', dots = {}, hubs = {};
+      NETWORK.split(';').forEach(function (group) {
+        var parts = group.split('>'), from = parts[0].trim(), a = map.s[from];
+        if (!a) return;
+        hubs[from] = a;
+        parts[1].split(',').forEach(function (to, i) {
+          var b = map.s[to.trim()];
+          if (!b) return;
+          var d = arcPath(a, b).d;
+          paths += '<path d="' + d + '"/><path class="is-flow" style="animation-delay:-' + (i * 0.3).toFixed(1) + 's" d="' + d + '"/>';
+          dots[to.trim()] = b;
+        });
+      });
+      var circles = Object.keys(dots).filter(function (n) { return !hubs[n]; }).map(function (n) {
+        return '<circle cx="' + dots[n][1] + '" cy="' + dots[n][2] + '" r="6"/>';
+      }).join('') + Object.keys(hubs).map(function (n) {
+        return '<circle class="is-hub" cx="' + hubs[n][1] + '" cy="' + hubs[n][2] + '" r="9"/>';
+      }).join('');
+      net.innerHTML = paths + circles;
+      // Fade in when the map first comes into view.
+      new IntersectionObserver(function (en, obs) {
+        if (!en[0].isIntersecting) return;
+        obs.disconnect(); net.classList.add('is-drawn');
+      }, { threshold: 0.3 }).observe(box);
+    }
+
     function render(animate, from, to) {
       from = from || selFrom.value; to = to || selTo.value;
       if (!map) return;
@@ -2147,6 +2202,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       pins.innerHTML = ''; lblFrom.hidden = lblTo.hidden = truck.hidden = true;
       arc.setAttribute('d', ''); done.setAttribute('d', '');
       var a = map.s[from], b = map.s[to];
+      box.classList.toggle('has-route', !!a);
       if (a) {
         group.querySelector('[data-s="' + from + '"]').classList.add('is-from');
         lblFrom.textContent = from; place(lblFrom, a[1], a[2]); lblFrom.hidden = false;
@@ -2157,14 +2213,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       }
       if (a) pins.innerHTML += '<circle class="map-pin" cx="' + a[1] + '" cy="' + a[2] + '" r="7"/>';
       if (!a || !b || to === from) return;
-      // The arc bows out sideways from the straight line, like a flight path:
-      // upward on east–west routes, out to the east on north–south ones.
-      var dx = b[1] - a[1], dy = b[2] - a[2], len = Math.sqrt(dx * dx + dy * dy);
-      var nx = -dy / len, ny = dx / len;
-      if (Math.abs(ny) < 0.35 ? nx < 0 : ny > 0) { nx = -nx; ny = -ny; }
-      var bow = Math.max(36, len * 0.28);
-      var mx = (a[1] + b[1]) / 2 + nx * bow, my = (a[2] + b[2]) / 2 + ny * bow;
-      var d = 'M' + a[1] + ' ' + a[2] + ' Q' + mx + ' ' + my + ' ' + b[1] + ' ' + b[2];
+      var path = arcPath(a, b), d = path.d, dx = path.dx, dy = path.dy, len = path.len;
       arc.setAttribute('d', d); done.setAttribute('d', d);
       var total = done.getTotalLength();
       done.style.strokeDasharray = total + ' ' + total;
@@ -2233,7 +2282,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var n = e.target.getAttribute && e.target.getAttribute('data-s');
       if (!n) return;
       tip.hidden = true;
-      if (!selFrom.value || selTo.value || !touched) { selFrom.value = n; selTo.value = ''; }
+      if (!selFrom.value || selTo.value) { selFrom.value = n; selTo.value = ''; }
       else selTo.value = n;
       changed();
     });
@@ -2248,22 +2297,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
     group.addEventListener('pointerleave', function () { tip.hidden = true; });
 
-    // A sample route plays once when the map first shows, fields untouched.
-    function demo() {
-      if (demoed || touched) return;
-      new IntersectionObserver(function (en, obs) {
-        if (!en[0].isIntersecting) return;
-        obs.disconnect(); demoed = true;
-        if (!touched) render(true, demoRoute[0], demoRoute[1]);
-      }, { threshold: 0.5 }).observe(box);
-    }
-
     go.addEventListener('click', function () {
       var qf = document.getElementById('q-from'), qt = document.getElementById('q-to');
       if (qf && qt) { qf.value = selFrom.value; qt.value = selTo.value; }
       goToQuote();
     });
-    window.addEventListener('resize', function () { if (map && (selFrom.value || demoed)) render(false, selFrom.value || (touched ? '' : demoRoute[0]), selTo.value || (touched ? '' : demoRoute[1])); });
+    window.addEventListener('resize', function () { if (map && selFrom.value) render(false); });
   })();
 })();
 </script>
