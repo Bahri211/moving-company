@@ -1,0 +1,155 @@
+/* Truck-fill estimator. Uses the page's colour tokens when it has them, with
+   fallbacks so it also stands on its own. See truck-estimator.js. */
+.te {
+  --te-accent: var(--accent, #e9541f);
+  --te-accent-ink: var(--accent-ink, #c8431a);
+  --te-on-accent: var(--on-accent, #fff);
+  --te-ink: var(--ink, #111a2b);
+  --te-muted: var(--muted, #5d6474);
+  --te-surface: var(--surface, #fff);
+  --te-tint: var(--tint, #ede5d8);
+  --te-line: var(--line, rgba(17, 26, 43, 0.12));
+  --te-dark: var(--dark, #0c1628);
+  --te-bg: var(--bg, #f6f1e9);
+  --te-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --te-fill: 0;
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 1.5rem; align-items: start;
+  color: var(--te-ink);
+}
+.te *, .te *::before, .te *::after { box-sizing: border-box; }
+:where(.te) button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent; }
+.te .te-cta { font-weight: 700; color: var(--te-on-accent); }
+.te :focus-visible { outline: 3px solid var(--te-accent-ink); outline-offset: 2px; }
+
+/* ---- Rooms and items */
+.te-picker { min-width: 0; padding: 0.6rem; border-radius: 24px; background: var(--te-surface); box-shadow: 0 1px 0 var(--te-line), 0 24px 50px -36px rgba(0, 0, 0, 0.35); }
+.te-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0.4rem; }
+.te-tab {
+  display: inline-flex; align-items: center; gap: 0.45rem; min-height: 44px; padding: 0 1rem;
+  border: 0; border-radius: 999px; background: var(--te-tint); cursor: pointer;
+  font-size: 0.92rem; font-weight: 600; transition: background 0.2s, color 0.2s;
+}
+.te-tab:hover { background: color-mix(in srgb, var(--te-tint) 70%, var(--te-ink) 8%); }
+.te-tab[aria-selected="true"] { background: var(--te-dark); color: var(--te-surface); }
+.te-badge { min-width: 1.4rem; height: 1.4rem; padding: 0 0.35rem; border-radius: 999px; display: grid; place-items: center; background: var(--te-accent); color: var(--te-on-accent); font-size: 0.72rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.te-badge[hidden] { display: none; }
+.te-panel { padding: 0.4rem 0.4rem 0.6rem; }
+.te-panel:focus { outline: none; }
+.te-group + .te-group { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--te-line); }
+.te-group-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.4rem 0.6rem 0.2rem; }
+.te-group-head h3 { margin: 0; font-size: 1.05rem; letter-spacing: -0.01em; }
+.te-group-head h3:focus { outline: none; }
+.te-group-head h3:focus-visible { outline: 3px solid var(--te-accent-ink); outline-offset: 3px; border-radius: 4px; }
+.te-del { min-height: 44px; padding: 0 0.8rem; border: 0; border-radius: 999px; background: none; color: var(--te-muted); font-size: 0.86rem; font-weight: 600; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.te-del:hover { color: var(--te-ink); }
+.te-items { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.1rem 1rem; }
+.te-item { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; min-height: 60px; padding: 0.35rem 0.6rem; border-radius: 14px; transition: background 0.2s; }
+.te-item.has-n { background: color-mix(in srgb, var(--te-accent) 9%, transparent); }
+.te-name { display: grid; font-weight: 600; font-size: 0.95rem; line-height: 1.25; }
+.te-name small { color: var(--te-muted); font-weight: 500; font-size: 0.78rem; }
+.te-step { display: inline-flex; align-items: center; gap: 0.15rem; flex: none; }
+.te-btn {
+  width: 44px; height: 44px; display: grid; place-items: center; padding: 0;
+  border: 1.5px solid var(--te-line); border-radius: 50%; background: var(--te-surface); cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+.te-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; }
+.te-btn:hover { border-color: var(--te-ink); }
+.te-btn:active { transform: scale(0.92); }
+.te-btn-add { background: var(--te-dark); border-color: var(--te-dark); color: var(--te-surface); }
+.te-btn-add:hover { background: color-mix(in srgb, var(--te-dark) 85%, #fff); }
+.te-btn[aria-disabled="true"] { opacity: 0.35; cursor: default; }
+.te-btn[aria-disabled="true"]:hover { border-color: var(--te-line); }
+.te-btn[aria-disabled="true"]:active { transform: none; }
+.te-n { min-width: 2.2rem; text-align: center; font-weight: 800; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.te-n.is-bump { animation: teBump 0.3s var(--te-ease); }
+@keyframes teBump { 40% { transform: scale(1.3); color: var(--te-accent-ink); } }
+.te-add-inst {
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: calc(100% - 1.2rem); min-height: 52px; margin: 0.8rem 0.6rem 0;
+  border: 1.5px dashed color-mix(in srgb, var(--te-ink) 30%, transparent); border-radius: 14px; background: none; cursor: pointer;
+  font-weight: 700; font-size: 0.95rem; transition: background 0.2s, border-color 0.2s;
+}
+.te-add-inst:hover { background: var(--te-tint); border-color: var(--te-ink); }
+.te-add-inst svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; }
+
+/* ---- Truck and result */
+.te-side { position: sticky; top: var(--te-top, 84px); display: grid; gap: 0; border-radius: 24px; background: var(--te-surface); box-shadow: 0 1px 0 var(--te-line), 0 24px 50px -36px rgba(0, 0, 0, 0.35); overflow: hidden; }
+.te-live { padding: 1.4rem 1.4rem 1rem; background: linear-gradient(180deg, var(--te-tint), var(--te-surface)); }
+.te-truck-wrap { position: relative; }
+.te-truck { display: block; width: 100%; height: auto; overflow: visible; }
+.te-cargo { fill: var(--te-surface); stroke: var(--te-dark); stroke-width: 3.5; }
+.te-hold { fill: color-mix(in srgb, var(--te-tint) 55%, var(--te-surface)); }
+.te-ticks path { stroke: color-mix(in srgb, var(--te-ink) 22%, transparent); stroke-width: 2; stroke-linecap: round; }
+.te-load { transform: translateX(calc((var(--te-fill) - 1) * 273px)); transition: transform 0.7s var(--te-ease); }
+.te-load-fill { fill: var(--te-accent); }
+.te-box { fill: none; stroke: rgba(255, 255, 255, 0.34); stroke-width: 1.5; }
+.te-tape { stroke: rgba(255, 255, 255, 0.34); stroke-width: 2.5; }
+.te-load-edge { fill: color-mix(in srgb, var(--te-accent) 70%, #000); }
+.te-doors { stroke: color-mix(in srgb, var(--te-ink) 18%, transparent); stroke-width: 2; stroke-dasharray: 3 5; stroke-linecap: round; }
+.te-cab { fill: var(--te-dark); }
+.te-window { fill: color-mix(in srgb, var(--te-tint) 80%, #fff); }
+.te-chassis { fill: var(--te-dark); }
+.te-wheel circle { fill: var(--te-dark); }
+.te-wheel .te-hub { fill: var(--te-surface); }
+.te-pct {
+  position: absolute; left: 36.5%; top: 43%; translate: -50% -50%; pointer-events: none;
+  padding: 0.25rem 0.65rem; border-radius: 999px; background: var(--te-dark); color: var(--te-surface);
+  font-weight: 800; font-size: 0.9rem; font-variant-numeric: tabular-nums; box-shadow: 0 6px 16px -8px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.3s;
+}
+.te.is-empty .te-pct { opacity: 0; }
+.te-total { display: grid; justify-items: center; text-align: center; margin-top: 0.9rem; }
+.te-total-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--te-muted); }
+.te-total-n { font-size: clamp(2rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.te-meter-label { font-size: 0.9rem; color: var(--te-muted); font-weight: 600; }
+.te-details { padding: 0.4rem 1.4rem 1.4rem; }
+.te-large { margin: 0 0 0.8rem; padding: 0.7rem 0.9rem; border-radius: 12px; background: color-mix(in srgb, var(--te-accent) 14%, var(--te-surface)); color: var(--te-ink); font-weight: 700; font-size: 0.92rem; text-align: center; }
+.te-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin: 0; }
+.te-stats div { padding: 0.8rem 0.6rem; border-radius: 14px; background: var(--te-bg); text-align: center; }
+.te-stats dt { font-size: 0.74rem; font-weight: 700; color: var(--te-muted); }
+.te-stats dd { margin: 0.2rem 0 0; font-weight: 800; font-size: 1.02rem; }
+.te-hint { margin: 0.9rem 0 0; color: var(--te-muted); font-size: 0.92rem; text-align: center; }
+.te-hint[hidden] { display: none; }
+.te-note { margin: 0.9rem 0 0; color: var(--te-muted); font-size: 0.85rem; line-height: 1.45; text-align: center; }
+.te-actions { display: grid; gap: 0.4rem; margin-top: 1rem; }
+.te-cta { width: 100%; min-height: 56px; }
+.te-cta:not(.btn) { border: 0; border-radius: 999px; background: var(--te-accent); color: var(--te-on-accent); font-weight: 700; cursor: pointer; }
+.te-cta svg { width: 18px; height: 18px; }
+.te-reset { min-height: 44px; border: 0; border-radius: 999px; background: none; color: var(--te-muted); font-weight: 600; font-size: 0.92rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.te-reset:hover { color: var(--te-ink); }
+.te-sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---- Tablets: items in one column */
+@media (max-width: 1080px) {
+  .te-items { grid-template-columns: 1fr; }
+}
+
+/* ---- Phones: truck and running total stick to the top while the list
+   scrolls; the full result follows the list. */
+@media (max-width: 768px) {
+  .te { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
+  .te-side { display: contents; }
+  .te-live {
+    order: -1; position: sticky; top: var(--te-top, 72px); z-index: 5;
+    display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: center; gap: 0.9rem;
+    padding: 0.7rem 0.9rem; border-radius: 18px; background: var(--te-surface);
+    box-shadow: 0 1px 0 var(--te-line), 0 14px 30px -18px rgba(0, 0, 0, 0.4);
+  }
+  .te-total { margin: 0; justify-items: start; text-align: left; }
+  .te-total-label { font-size: 0.66rem; }
+  .te-total-n { font-size: 1.55rem; }
+  .te-meter-label { font-size: 0.8rem; }
+  .te-pct { font-size: 0.72rem; padding: 0.15rem 0.45rem; }
+  .te-picker { padding: 0.4rem; border-radius: 20px; }
+  .te-tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 0 -0.4rem; padding: 0.4rem 0.8rem; scroll-padding: 0 0.8rem; }
+  .te-tabs::-webkit-scrollbar { display: none; }
+  .te-tab { flex: none; }
+  .te-item { padding: 0.3rem 0.4rem; }
+  .te-details { padding: 1.2rem; border-radius: 20px; background: var(--te-surface); box-shadow: 0 1px 0 var(--te-line), 0 24px 50px -36px rgba(0, 0, 0, 0.35); }
+  .te-stats dd { font-size: 0.95rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .te-load, .te-pct, .te-item, .te-tab, .te-btn { transition: none; }
+  .te-n.is-bump { animation: none; }
+}
