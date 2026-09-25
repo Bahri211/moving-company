@@ -335,6 +335,14 @@ ${facts}
 `;
 }
 
+// The lab's FAQ call card, as it is there: "Talk to a moving specialist ·
+// Free, no pressure" over the number.
+const FAQ_CALL = (() => {
+  const m = LAB.match(/      <a href="tel:\+18885051086" class="faq-person"[\s\S]*?<\/a>/);
+  if (!m) throw new Error('build-nyc-pages: FAQ call card not found in design-lab/index.html');
+  return m[0].trimStart();
+})();
+
 function faqSection(page) {
   return `<section class="section" id="faq" style="padding-top: 2rem;">
   <div class="wrap faq-grid">
@@ -342,7 +350,7 @@ function faqSection(page) {
       <span class="eyebrow">FAQ</span>
       <h2>${page.faqH2}</h2>
       <p>What New Yorkers ask before booking. If yours isn't here, call — a real person picks up.</p>
-      <a href="tel:+18885051086" class="btn">Call (888) 505-1086</a>
+${FAQ_CALL}
     </div>
     <div class="reveal">
 ${page.faq.map(([q, a], i) => `      <details${i === 0 ? ' open' : ''}><summary>${q}</summary><p>${a}</p></details>`).join('\n')}
