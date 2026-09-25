@@ -340,9 +340,12 @@ html.drawer-open { overflow: hidden; }
 }
 
 /* Hero --------------------------------------------------------------------- */
-.hero { position: relative; overflow: clip; margin-top: -76px; padding: calc(76px + 4.5rem) 0 2.5rem; min-height: min(880px, calc(100svh - 38px)); display: flex; flex-direction: column; color: #fff; isolation: isolate; }
+.hero { position: relative; overflow: clip; background: var(--dark); margin-top: -76px; padding: calc(76px + 4.5rem) 0 2.5rem; min-height: min(880px, calc(100svh - 38px)); display: flex; flex-direction: column; color: #fff; isolation: isolate; }
 .hero::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
+  /* --photo-h holds the photo at its step-one height when step two makes the
+     hero taller, so the picture doesn't zoom. */
+  height: var(--photo-h, auto);
   /* Parallax: the script sinks the photo at a fraction of the scroll. */
   transform: translate3d(0, var(--hero-shift, 0px), 0); will-change: transform;
   background:
@@ -401,6 +404,14 @@ html.drawer-open { overflow: hidden; }
 .field.is-error { box-shadow: inset 0 0 0 2px #d93025; animation: nudge 0.35s ease; }
 @keyframes nudge { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 .qs2-head { grid-column: 1 / -1; display: flex; align-items: center; gap: 0.8rem; padding: 0.15rem 0.2rem 0.2rem; }
+/* Wide screens: the heading joins the fields' row, so step two is barely
+   taller than step one and the hero photo stays in view above it. */
+@media (min-width: 1101px) {
+  .qstep-2 { grid-template-columns: minmax(0, 15rem) 1fr 1fr auto; }
+  .qs2-head { grid-column: auto; padding: 0 0.4rem 0 0.1rem; }
+  .qs2-head b { font-size: 0.98rem; line-height: 1.25; }
+  .consent { padding-top: 0; }
+}
 .qs2-head b { display: block; font-size: 1.05rem; letter-spacing: -0.02em; }
 .qs2-head span { display: block; font-size: 0.85rem; color: var(--muted); }
 .qs2-back {
@@ -1576,15 +1587,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       this.textContent = open ? 'Show less' : 'Read more';
     });
 
+    // Step two is a little taller. On large screens the hero keeps its card's
+    // top edge where it was and grows downward instead, so the photo above
+    // the card doesn't disappear behind it.
+    var hero = document.querySelector('.hero');
     function showStep(n) {
+      var before = form.getBoundingClientRect().top, photoH = hero.offsetHeight;
+      hero.style.minHeight = ''; hero.style.removeProperty('--photo-h');
       step1.hidden = n !== 1; step2.hidden = n !== 2;
+      var rise = before - form.getBoundingClientRect().top;
+      if (n === 2 && rise > 0 && window.matchMedia('(min-width: 769px)').matches) {
+        hero.style.setProperty('--photo-h', photoH + 'px');
+        hero.style.minHeight = (hero.offsetHeight + rise) + 'px';
+      }
       clearFlags();
       if (n === 2) {
         $('q-route').textContent = $('q-from').value + ' → ' + $('q-to').value + ($('q-size').value ? ' · ' + $('q-size').value : '');
         if (fine) $('q-phone').focus({ preventScroll: true });
       }
-      // The whole card, consent included, between the header and the call dock.
-      window.scrollTo({ top: quoteTop(), behavior: 'smooth' });
+      // The whole card, consent included, between the header and the call
+      // dock — but only when part of it is hidden. On desktop it already
+      // fits, and scrolling would just slide the hero photo away.
+      var navH = document.getElementById('nav').offsetHeight;
+      var dock = document.querySelector('.callbar');
+      var limit = dock && dock.offsetParent !== null ? dock.getBoundingClientRect().top : window.innerHeight;
+      var r = form.getBoundingClientRect();
+      if (r.top < navH || r.bottom > limit - 8) window.scrollTo({ top: quoteTop(), behavior: 'smooth' });
     }
     $('q-back').addEventListener('click', function () { showStep(1); });
 
