@@ -1786,7 +1786,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   // Quote selects and coverage chips come from the one list.
   document.querySelectorAll('.state-select').forEach(function (sel) {
-    STATES.forEach(function (s) { sel.add(new Option(s, s)); });
+    STATES.forEach(function (s) { sel.add(new Option(s === 'New York' ? 'New York City' : s, s)); });
   });
   var chips = document.getElementById('chips');
   STATES.forEach(function (s) {
@@ -2220,6 +2220,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var arc = svg.querySelector('.map-arc'), done = svg.querySelector('.map-arc-done');
     var truck = box.querySelector('.map-truck'), tip = box.querySelector('.map-tip');
     var lblFrom = document.getElementById('map-from'), lblTo = document.getElementById('map-to');
+    // These pages pick up in the city, so New York reads as New York City.
+    var place_ = function (s) { return s === 'New York' ? 'New York City' : s; };
     var selFrom = document.getElementById('r-from'), selTo = document.getElementById('r-to');
     var result = document.getElementById('r-result'), go = document.getElementById('r-go');
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2329,11 +2331,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       box.classList.toggle('has-route', !!a);
       if (a) {
         group.querySelector('[data-s="' + from + '"]').classList.add('is-from');
-        lblFrom.textContent = from; place(lblFrom, a[1], a[2]); lblFrom.hidden = false;
+        lblFrom.textContent = place_(from); place(lblFrom, a[1], a[2]); lblFrom.hidden = false;
       }
       if (b && to !== from) {
         group.querySelector('[data-s="' + to + '"]').classList.add('is-to');
-        lblTo.textContent = to; place(lblTo, b[1], b[2]); lblTo.hidden = false;
+        lblTo.textContent = place_(to); place(lblTo, b[1], b[2]); lblTo.hidden = false;
       }
       if (a) pins.innerHTML += '<circle class="map-pin" cx="' + a[1] + '" cy="' + a[2] + '" r="7"/>';
       if (!a || !b || to === from) return;
@@ -2366,8 +2368,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var f = selFrom.value, t = selTo.value;
       var set = function (hint, icon, text) { result.classList.toggle('is-hint', hint); result.innerHTML = '<i>' + icon + '</i><span>' + text + '</span>'; };
       go.disabled = !(f && t && f !== t);
-      if (f && t && f === t) set(true, 'i', 'That’s a move within ' + f + ' — we specialise in state to state. Call us and we’ll help.');
-      else if (f && t) set(false, '✓', 'Yes — we move ' + f + ' → ' + t + ', door to door with one crew.');
+      if (f && t && f === t) set(true, 'i', 'That’s a move within ' + place_(f) + ' — we specialise in state to state. Call us and we’ll help.');
+      else if (f && t) set(false, '✓', 'Yes — we move ' + place_(f) + ' → ' + place_(t) + ', door to door with one crew.');
       else if (f) set(true, '→', 'Now pick where you’re moving to.');
       else set(true, '→', 'Every route between the 48 continental states and D.C.');
     }
@@ -2416,7 +2418,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var n = e.target.getAttribute && e.target.getAttribute('data-s');
       if (!n || e.pointerType !== 'mouse') { tip.hidden = true; return; }
       var r = box.getBoundingClientRect();
-      tip.textContent = n; tip.hidden = false;
+      tip.textContent = place_(n); tip.hidden = false;
       tip.style.left = (e.clientX - r.left) + 'px'; tip.style.top = (e.clientY - r.top) + 'px';
     });
     group.addEventListener('pointerleave', function () { tip.hidden = true; });

@@ -575,6 +575,18 @@ function nycPage(page) {
   }
   html = swapOnce(html, '<li><a href="/privacy-policy">Privacy</a></li>', '<li><a href="/privacy-policy">Privacy</a></li><li><a href="/terms-of-service">Terms</a></li>', 'footer legal');
 
+  // ---- these pages pick up in the city: New York reads as New York City in
+  // the state pickers, the map labels and the route line (values stay 'New York')
+  html = swapOnce(html, "STATES.forEach(function (s) { sel.add(new Option(s, s)); });",
+    "STATES.forEach(function (s) { sel.add(new Option(s === 'New York' ? 'New York City' : s, s)); });", 'nyc option');
+  html = swapOnce(html, "    var lblFrom = document.getElementById('map-from'), lblTo = document.getElementById('map-to');\n",
+    "    var lblFrom = document.getElementById('map-from'), lblTo = document.getElementById('map-to');\n    // These pages pick up in the city, so New York reads as New York City.\n    var place_ = function (s) { return s === 'New York' ? 'New York City' : s; };\n", 'nyc helper');
+  html = swapOnce(html, 'lblFrom.textContent = from;', 'lblFrom.textContent = place_(from);', 'nyc from label');
+  html = swapOnce(html, 'lblTo.textContent = to;', 'lblTo.textContent = place_(to);', 'nyc to label');
+  html = swapOnce(html, 'tip.textContent = n;', 'tip.textContent = place_(n);', 'nyc tip');
+  html = swapOnce(html, "'That’s a move within ' + f + ' —", "'That’s a move within ' + place_(f) + ' —", 'nyc within');
+  html = swapOnce(html, "'Yes — we move ' + f + ' → ' + t + ',", "'Yes — we move ' + place_(f) + ' → ' + place_(t) + ',", 'nyc route line');
+
   // ---- no palette switcher
   html = swapBlock(html, '<div class="lab" role="group"', '<span class="lab-name" id="lab-name">Ember</span>\n</div>\n', '', 'palette switcher');
 
