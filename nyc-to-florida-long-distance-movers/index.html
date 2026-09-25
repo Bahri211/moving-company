@@ -1267,6 +1267,16 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
 .routes { background: var(--bg); }
 .rc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 .rc-grid.rc-four { grid-template-columns: repeat(4, 1fr); }
+.pd-grid { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem; }
+.pd { height: 100%; padding: 2rem; }
+.pd h3 { font-size: 1.55rem; }
+.pd-arrow { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--tint); color: var(--accent-ink); }
+.pd-arrow svg { width: 24px; height: 24px; }
+@media (max-width: 760px) {
+  .pd-grid { grid-template-columns: 1fr; }
+  .pd-arrow { justify-self: center; transform: rotate(90deg); }
+  .pd { padding: 1.4rem; }
+}
 .rc { display: flex; flex-direction: column; gap: 0.35rem; padding: 1.5rem; border-radius: 20px; background: var(--surface); box-shadow: 0 1px 0 var(--line), 0 18px 40px -32px rgba(0, 0, 0, 0.35); text-decoration: none; }
 .rc h3 { display: flex; align-items: center; gap: 0.45rem; font-size: 1.3rem; }
 .rc-pin { flex: none; width: 20px; height: 20px; color: var(--accent-ink); }
@@ -1544,16 +1554,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section routes" id="routes">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyebrow">NYC to Florida</span><h2>Where we deliver <em>in Florida.</em></h2></div>
-      <p>Trucks leave New York for Florida every week. These are the cities we deliver to most often, with the rough road distance from Manhattan.</p>
+      <div><span class="eyebrow">NYC to Florida</span><h2>From any New York address <em>to anywhere in Florida.</em></h2></div>
+      <p>Trucks leave New York for Florida every week. Wherever you are packing up in the city, and wherever you are settling in the Sunshine State, the same crew and the same truck make the whole trip.</p>
     </div>
-    <div class="rc-grid">
-      <div class="rc reveal"><span class="rc-meta">about 1,280 miles</span><h3>Miami</h3><p>High-rise condos here book service elevators by the hour and ask for insurance certificates, just like Manhattan co-ops. We arrange both before the truck arrives.</p></div>
-      <div class="rc reveal"><span class="rc-meta">about 1,250 miles</span><h3>Fort Lauderdale</h3><p>From Las Olas apartments to houses along the canals, we plan the unload around the building's rules and any gated-community access list.</p></div>
-      <div class="rc reveal"><span class="rc-meta">about 1,210 miles</span><h3>West Palm Beach</h3><p>A favourite for New Yorkers taking the whole household south for good. We deliver on the island and across the mainland neighborhoods alike.</p></div>
-      <div class="rc reveal"><span class="rc-meta">about 1,070 miles</span><h3>Orlando</h3><p>Newer suburbs around Orlando often come with HOA move-in rules about trucks and hours. Tell us yours and the crew works within them.</p></div>
-      <div class="rc reveal"><span class="rc-meta">about 1,140 miles</span><h3>Tampa</h3><p>Tampa Bay moves reach St. Petersburg and Clearwater too. We confirm the delivery address and the access before the truck leaves New York.</p></div>
-      <div class="rc reveal"><span class="rc-meta">about 940 miles</span><h3>Jacksonville</h3><p>The nearest of the big Florida cities to New York, and usually the shortest delivery window on the whole route.</p></div>
+    <div class="pd-grid">
+      <div class="rc pd reveal"><span class="rc-meta">We pick up</span><h3>Anywhere in New York City</h3><p>Manhattan, Brooklyn, Queens, the Bronx and Staten Island. Walk-ups, doorman buildings and co-ops with service-elevator bookings and insurance certificates, all handled before moving day.</p></div>
+      <div class="pd-arrow reveal" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="rc pd reveal"><span class="rc-meta">We deliver</span><h3>Everywhere in Florida</h3><p>From the Panhandle to the Keys, the Atlantic coast to the Gulf. Condos, gated communities and houses with HOA rules: tell us the address and the access, and we plan the unload around it.</p></div>
     </div>
     <div class="facts reveal">
       <h3>Secure transit, explained</h3>
