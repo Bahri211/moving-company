@@ -973,7 +973,10 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
       linear-gradient(180deg, rgba(var(--wash), 0.45) 0%, rgba(var(--wash), 0) 28%, rgba(var(--wash), 0) 60%, rgba(var(--wash), 0.8) 100%),
       var(--dark) url('/assets/images/nyc/hero-desktop.webp') 28% 62% / cover no-repeat;
   }
-  .hero-copy { padding-left: max(0px, calc(100% - 38rem)); }
+  /* A right-hand column of fixed width, whatever the screen: percentage
+     padding measured against the whole window squeezed it on wide screens. */
+  .hero-copy { display: grid; grid-template-columns: minmax(0, 38rem); justify-content: end; }
+  .hero-copy > .hero-badge { justify-self: start; }
 }
 @media (max-width: 768px) {
   .hero::before {
