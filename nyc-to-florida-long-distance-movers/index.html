@@ -1610,9 +1610,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       // fits, and scrolling would just slide the hero photo away.
       var navH = document.getElementById('nav').offsetHeight;
       var dock = document.querySelector('.callbar');
-      var limit = dock && dock.offsetParent !== null ? dock.getBoundingClientRect().top : window.innerHeight;
+      var docked = dock && getComputedStyle(dock).display !== 'none';
+      var limit = docked ? dock.getBoundingClientRect().top - 8 : window.innerHeight;
       var r = form.getBoundingClientRect();
-      if (r.top < navH || r.bottom > limit - 8) window.scrollTo({ top: quoteTop(), behavior: 'smooth' });
+      if (r.top < navH || r.bottom > limit) window.scrollTo({ top: quoteTop(), behavior: 'smooth' });
     }
     $('q-back').addEventListener('click', function () { showStep(1); });
 
@@ -1706,7 +1707,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   function quoteTop() {
     var navH = document.getElementById('nav').offsetHeight;
     var dock = document.querySelector('.callbar');
-    var dockH = dock && dock.offsetParent !== null ? window.innerHeight - dock.getBoundingClientRect().top : 0;
+    var dockH = dock && getComputedStyle(dock).display !== 'none' ? window.innerHeight - dock.getBoundingClientRect().top : 0;
     var r = quoteCard.getBoundingClientRect();
     var gap = Math.max(12, (window.innerHeight - navH - dockH - r.height) / 2);
     return Math.max(0, Math.round(window.scrollY + r.top - navH - gap));
