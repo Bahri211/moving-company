@@ -82,7 +82,7 @@ src="https://www.facebook.com/tr?id=1413801450690954&ev=PageView&noscript=1"
 <link rel="icon" type="image/png" href="/assets/images/48-state-movers-logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Inter+Tight:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="/assets/images/nyc/hero-desktop.webp" media="(min-width: 769px)">
 <link rel="preload" as="image" href="/assets/images/nyc/hero-mobile.webp" media="(max-width: 768px)">
 <style>
@@ -143,24 +143,38 @@ src="https://www.facebook.com/tr?id=1413801450690954&ev=PageView&noscript=1"
   --accent-ink: #0b78b8;
 }
 
+/* Depth: one ladder of shadows for every card on the page. */
+:root {
+  --ring: 0 0 0 1px var(--line);
+  --shadow-sm: 0 1px 2px rgba(10, 16, 28, 0.06), 0 2px 6px -2px rgba(10, 16, 28, 0.06);
+  --shadow-md: 0 1px 2px rgba(10, 16, 28, 0.05), 0 12px 32px -14px rgba(10, 16, 28, 0.22);
+  --shadow-lg: 0 2px 4px rgba(10, 16, 28, 0.04), 0 30px 60px -24px rgba(10, 16, 28, 0.32);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 /* Base --------------------------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0; background: var(--bg); color: var(--ink);
   font: 400 1rem/1.6 Inter, system-ui, sans-serif;
+  font-feature-settings: "cv11", "ss03";
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
   overflow-x: clip;
   transition: background 0.4s ease, color 0.4s ease;
 }
 img { display: block; max-width: 100%; }
 a { color: inherit; }
-h1, h2, h3 { font-family: Inter, system-ui, sans-serif; font-weight: 800; letter-spacing: -0.035em; line-height: 1.06; margin: 0; }
-h3 { letter-spacing: -0.025em; font-weight: 700; }
+/* Headings in Inter Tight: the same family, cut narrower for display sizes. */
+h1, h2, h3 { font-family: "Inter Tight", Inter, system-ui, sans-serif; font-weight: 800; letter-spacing: -0.022em; line-height: 1.04; margin: 0; text-wrap: balance; }
+h3 { letter-spacing: -0.012em; font-weight: 700; }
+p { text-wrap: pretty; }
 /* Accent words read in the deeper accent on light grounds; on dark ones
    (hero photo, story band, CTA band) the bright accent shows. */
 h1 em, h2 em { font-style: normal; color: var(--accent-ink); }
 .hero h1 em, .story h2 em, .cta-box h2 em { color: var(--accent); }
 p { margin: 0; }
+::selection { background: var(--accent); color: var(--on-accent); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
 .wrap { width: min(1240px, 100% - 3rem); margin-inline: auto; }
 .eyebrow {
@@ -171,20 +185,33 @@ p { margin: 0; }
 .section { padding: 7rem 0; }
 .section-head { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: end; margin-bottom: 3.5rem; }
 .section-head h2 { font-size: clamp(2.3rem, 4.6vw, 3.9rem); margin-top: 1rem; }
+.section-head > p { padding-left: 1.4rem; border-left: 2px solid var(--line); }
+.story .section-head > p { border-left-color: rgba(255, 255, 255, 0.14); }
 .section-head p { color: var(--muted); font-size: 1.08rem; max-width: 34rem; }
 
 .btn {
+  position: relative; overflow: hidden; isolation: isolate;
   display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
   min-height: 52px; padding: 0 1.6rem; border: 0; border-radius: 999px;
   background: var(--accent); color: var(--on-accent);
-  font: 600 1rem Inter, sans-serif; text-decoration: none; cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
+  font: 600 1rem Inter, sans-serif; letter-spacing: -0.005em; text-decoration: none; cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 10px 24px -12px color-mix(in srgb, var(--accent) 80%, #000);
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
 }
-.btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+/* A light sweep crosses the button on hover. */
+.btn::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.28) 50%, transparent 65%);
+  transform: translateX(-120%);
+}
+.btn:hover::after { transform: translateX(120%); transition: transform 0.7s var(--ease); }
+.btn:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 16px 30px -12px color-mix(in srgb, var(--accent) 85%, #000); }
+.btn:active { transform: translateY(0); }
 .btn svg { width: 18px; height: 18px; transition: transform 0.2s; }
 .btn:hover svg { transform: translateX(3px); }
 .btn-ghost { background: transparent; color: currentColor; box-shadow: inset 0 0 0 1.5px currentColor; }
-.btn-ghost:hover { background: rgba(255, 255, 255, 0.1); }
+.btn-ghost::after { display: none; }
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.1); box-shadow: inset 0 0 0 1.5px currentColor; }
 
 /* Ticker ------------------------------------------------------------------- */
 .ticker { background: var(--dark); color: var(--on-dark); overflow: hidden; font-size: 0.8rem; font-weight: 500; }
@@ -232,6 +259,21 @@ p { margin: 0; }
 .nav-links { display: flex; gap: 1.8rem; margin-left: auto; }
 .nav-links a { text-decoration: none; font-size: 0.93rem; font-weight: 500; color: var(--muted); transition: color 0.2s; }
 .nav-links a:hover { color: var(--ink); }
+/* The section in view gets a small accent dot under its link. */
+.nav-links a { position: relative; }
+.nav-links a::after {
+  content: ""; position: absolute; left: 50%; bottom: -9px; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--accent); translate: -50% 0; scale: 0; transition: scale 0.3s var(--ease);
+}
+.nav-links a.is-current { color: var(--ink); }
+.nav-links a.is-current::after { scale: 1; }
+/* Reading progress along the bottom edge of the solid nav. */
+.nav-progress {
+  position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; pointer-events: none;
+  background: var(--accent); transform-origin: 0 50%; transform: scaleX(var(--read, 0));
+  opacity: 0; transition: opacity 0.3s;
+}
+.nav.is-solid .nav-progress { opacity: 1; }
 .nav-phone { font-weight: 700; text-decoration: none; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
 .nav .btn { min-height: 44px; padding: 0 1.2rem; font-size: 0.92rem; }
 
@@ -340,7 +382,7 @@ html.drawer-open { overflow: hidden; }
 }
 
 /* Hero --------------------------------------------------------------------- */
-.hero { position: relative; overflow: clip; background: var(--dark); margin-top: -76px; padding: calc(76px + 4.5rem) 0 2.5rem; min-height: min(880px, calc(100svh - 38px)); display: flex; flex-direction: column; color: #fff; isolation: isolate; }
+.hero { position: relative; overflow: clip; background: var(--dark); margin-top: -76px; padding: calc(76px + 3.75rem) 0 2.25rem; min-height: min(880px, calc(100svh - 38px)); display: flex; flex-direction: column; color: #fff; isolation: isolate; }
 .hero::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
   /* --photo-h holds the photo at its step-one height when step two makes the
@@ -386,9 +428,24 @@ html.drawer-open { overflow: hidden; }
 .quote-card {
   position: relative;
   background: var(--surface); color: var(--ink);
-  border-radius: 22px; padding: 1.1rem;
-  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.45);
+  border-radius: 24px; padding: 1.1rem;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset, 0 2px 6px rgba(0, 0, 0, 0.08), 0 40px 80px -30px rgba(0, 0, 0, 0.5);
 }
+/* Card header (desktop): the offer on the left, the two steps on the right. */
+.qhead { display: flex; align-items: center; gap: 1.2rem; padding: 0.15rem 0.4rem 0.95rem; margin-bottom: 0.95rem; border-bottom: 1px solid var(--line); }
+.qhead > b { font: 700 1.05rem/1.2 "Inter Tight", Inter, sans-serif; letter-spacing: -0.02em; }
+.qh-time { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.84rem; font-weight: 500; color: var(--muted); }
+.qh-time svg { width: 15px; height: 15px; }
+.qh-steps { display: flex; align-items: center; gap: 0.5rem; margin: 0 0 0 auto; padding: 0; list-style: none; font-size: 0.84rem; font-weight: 600; color: var(--muted); }
+.qh-steps li { display: inline-flex; align-items: center; gap: 0.45rem; transition: color 0.3s; }
+.qh-steps li + li::before { content: ""; width: 28px; height: 1.5px; margin-right: 0.1rem; background: var(--line); }
+.qh-steps i {
+  width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+  font: normal 700 0.72rem Inter, sans-serif; background: var(--tint); color: var(--muted); transition: background 0.3s, color 0.3s;
+}
+.qh-steps li.is-on { color: var(--ink); }
+.qh-steps li.is-on i { background: var(--accent); color: var(--on-accent); }
+.qh-steps li.is-done i { background: #2f9e5b; color: #fff; }
 .qstep { display: grid; gap: 0.6rem; align-items: stretch; }
 .qstep[hidden] { display: none; }
 .qstep-1 { grid-template-columns: repeat(4, minmax(0, 1fr)) auto; }
@@ -433,7 +490,8 @@ html.drawer-open { overflow: hidden; }
 .q-done p { margin-top: 0.2rem; font-size: 0.95rem; color: var(--muted); }
 .q-done a { color: var(--ink); font-weight: 700; }
 .field { position: relative; display: flex; flex-direction: column; justify-content: center; padding: 0.7rem 1rem; border-radius: 14px; background: var(--tint); transition: box-shadow 0.2s; }
-.field:focus-within { box-shadow: inset 0 0 0 2px var(--accent); }
+.field:hover { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 18%, transparent); }
+.field:focus-within { box-shadow: inset 0 0 0 2px var(--accent), 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent); }
 .field label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 .field select, .field input {
   appearance: none; border: 0; background: transparent; padding: 0.15rem 0 0; width: 100%;
@@ -447,7 +505,7 @@ html.drawer-open { overflow: hidden; }
 .stats { padding: 3rem 0 3.5rem; }
 /* Proof strip: four checkable facts in one slim bar, the licence first with a
    link to the carrier's FMCSA record. Swipes as a row on phones. */
-.proof { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--surface); border-radius: 22px; box-shadow: 0 1px 0 var(--line), 0 24px 48px -36px rgba(0, 0, 0, 0.4); }
+.proof { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--surface); border-radius: 22px; box-shadow: var(--shadow-md); }
 .proof-item { display: flex; align-items: flex-start; gap: 0.9rem; padding: 1.4rem 1.5rem; min-width: 0; }
 .proof-item + .proof-item { border-left: 1px solid var(--line); }
 .proof-ico { flex: none; width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; background: var(--tint); color: var(--accent-ink); }
@@ -469,12 +527,23 @@ html.drawer-open { overflow: hidden; }
   background: var(--surface); text-decoration: none; isolation: isolate;
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.tile:hover { transform: translateY(-4px); }
+.tile { box-shadow: var(--shadow-sm); transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease); }
+.tile:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+/* Line art watermark in the corner of the plain tiles. */
+.tile-mark { position: absolute; right: -1.2rem; bottom: -1.6rem; z-index: -1; width: 10rem; height: 10rem; opacity: 0.07; transition: transform 0.6s var(--ease), opacity 0.4s; pointer-events: none; }
+.tile:hover .tile-mark { transform: translate(-6px, -6px) rotate(-4deg); opacity: 0.12; }
+.tile-more { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.35rem; font-size: 0.88rem; font-weight: 700; letter-spacing: -0.005em; }
+.tile-more svg { width: 15px; height: 15px; transition: transform 0.25s; }
+.tile:hover .tile-more svg { transform: translateX(4px); }
+.tile-feats { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.9rem; padding: 0; list-style: none; }
+.tile-feats li { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.34rem 0.7rem; border-radius: 999px; background: var(--tint); font-size: 0.8rem; font-weight: 600; }
+.tile-feats li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-ink); }
 .tile h3 { font-size: 1.7rem; }
 .tile p { font-size: 0.95rem; color: var(--muted); max-width: 30rem; }
 .tile-photo { color: #fff; }
 .tile-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
 .tile-photo:hover img { transform: scale(1.05); }
+.tile-photo .tile-tag { background: rgba(255, 255, 255, 0.16); color: #fff; backdrop-filter: blur(8px); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22); }
 .tile-photo::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(var(--wash), 0) 30%, rgba(var(--wash), 0.88) 100%); }
 .tile-photo p { color: rgba(255, 255, 255, 0.85); }
 .tile-tag { position: absolute; top: 1.3rem; left: 1.3rem; padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; background: var(--accent); color: var(--on-accent); }
@@ -496,28 +565,54 @@ html.drawer-open { overflow: hidden; }
 .t-3 { grid-column: span 4; }
 .t-4 { grid-column: span 4; }
 .t-5 { grid-column: span 4; }
-.t-6 { grid-column: span 12; grid-row: span 1; flex-direction: row; align-items: flex-end; justify-content: space-between; }
+.t-6 { grid-column: span 12; grid-row: span 1; flex-direction: row; align-items: center; justify-content: space-between; padding: 2.2rem 2.4rem; }
 .t-6 h3 { font-size: 2rem; }
 .t-6 > div { max-width: 46%; }
 .t-6 img { position: absolute; top: 0; right: 0; bottom: 0; width: 50%; height: 100%; object-fit: cover; z-index: -1;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 35%); mask-image: linear-gradient(90deg, transparent, #000 35%); }
 .t-6 .tile-arrow { background: rgba(255, 255, 255, 0.7); }
-.big-num { font-size: 3.6rem; line-height: 1; margin-bottom: auto; font-weight: 800; letter-spacing: -0.05em; }
+.big-num { font: 800 3.6rem/1 "Inter Tight", Inter, sans-serif; margin-bottom: auto; letter-spacing: -0.05em; }
+.tile-dark .big-num { color: transparent; -webkit-text-stroke: 1.5px var(--on-dark-muted); }
+.tile-accent .big-num { color: transparent; -webkit-text-stroke: 1.5px color-mix(in srgb, var(--on-accent-2) 55%, transparent); }
 
 /* Moving day story: pinned heading, cards scroll sideways ------------------- */
-.story { background: var(--dark); color: var(--on-dark); }
+.story {
+  position: relative; isolation: isolate; color: var(--on-dark);
+  background:
+    radial-gradient(60rem 30rem at 100% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
+    radial-gradient(50rem 30rem at 0% 100%, color-mix(in srgb, var(--accent-2) 10%, transparent), transparent 70%),
+    var(--dark);
+}
 .story .eyebrow { color: var(--on-dark-muted); }
 .story .eyebrow::before { background: var(--accent); }
 .story .section-head p { color: var(--on-dark-muted); }
-.rail { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(280px, 1fr); gap: 1.1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 1.2rem; scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+.rail { display: grid; grid-auto-flow: column; grid-auto-columns: max(260px, calc((100% - 3 * 1.1rem) / 3.4)); gap: 1.1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 0.4rem; scrollbar-width: none; overscroll-behavior-x: contain; }
+.rail::-webkit-scrollbar { display: none; }
+/* Rail controls: a progress track and prev / next buttons. */
+.rail-bar { display: flex; align-items: center; gap: 1.2rem; margin-top: 2rem; }
+.rail-count { font: 700 0.85rem Inter, sans-serif; font-variant-numeric: tabular-nums; color: var(--on-dark-muted); min-width: 4.2rem; }
+.rail-count b { color: var(--on-dark); }
+.rail-track { flex: 1; height: 2px; border-radius: 2px; background: rgba(255, 255, 255, 0.14); overflow: hidden; }
+.rail-track i { display: block; height: 100%; width: var(--w, 30%); background: var(--accent); translate: var(--x, 0) 0; border-radius: 2px; }
+.rail-btns { display: flex; gap: 0.5rem; }
+.rail-btns button {
+  width: 48px; height: 48px; border-radius: 50%; border: 0; padding: 0; cursor: pointer;
+  display: grid; place-items: center; background: rgba(255, 255, 255, 0.08); color: var(--on-dark);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14); transition: background 0.25s, color 0.25s, opacity 0.25s;
+}
+.rail-btns button:hover:not(:disabled) { background: var(--accent); color: var(--on-accent); box-shadow: none; }
+.rail-btns button:disabled { opacity: 0.35; cursor: default; }
+.rail-btns svg { width: 18px; height: 18px; }
 .frame { scroll-snap-align: start; }
-.frame-img { position: relative; aspect-ratio: 3 / 4; border-radius: 20px; overflow: hidden; }
+.frame-img { position: relative; aspect-ratio: 3 / 4; border-radius: 20px; overflow: hidden; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 30px 50px -30px rgba(0, 0, 0, 0.7); }
+.frame-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0, 0, 0, 0.25), transparent 30%); pointer-events: none; }
 .frame-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
 .frame:hover .frame-img img { transform: scale(1.05); }
 .frame-num {
   position: absolute; top: 1rem; left: 1rem; width: 46px; height: 46px; border-radius: 50%;
   display: grid; place-items: center; background: var(--accent); color: var(--on-accent);
-  font: 600 1.15rem Inter, sans-serif;
+  font: 700 1.05rem Inter, sans-serif; z-index: 1;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 30%, transparent);
 }
 .frame h3 { font-size: 1.45rem; margin: 1.2rem 0 0.4rem; }
 .frame p { color: var(--on-dark-muted); font-size: 0.95rem; }
@@ -639,37 +734,67 @@ html.drawer-open { overflow: hidden; }
 
 /* Reviews ------------------------------------------------------------------ */
 .rev-grid { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 1rem; }
-.rev { background: var(--surface); border-radius: 22px; padding: 1.8rem; display: flex; flex-direction: column; gap: 1.2rem; }
+.rev { position: relative; background: var(--surface); border-radius: 22px; padding: 1.8rem; display: flex; flex-direction: column; gap: 1.2rem; box-shadow: var(--shadow-sm); transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease); }
+.rev:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+/* A large opening quote mark behind the featured review. */
+.rev-feature::before {
+  content: "\201C"; position: absolute; top: -1.4rem; right: 1.4rem; pointer-events: none;
+  font: 700 13rem/1 Georgia, "Times New Roman", serif; color: currentColor; opacity: 0.16;
+}
+.rev-src { margin-left: auto; align-self: center; padding: 0.25rem 0.6rem; border-radius: 999px; background: var(--tint); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em; color: var(--muted); }
+.rev-feature .rev-src { background: rgba(255, 255, 255, 0.18); color: inherit; }
 .rev blockquote { margin: 0; font-size: 1rem; }
-.rev-feature { grid-row: span 2; background: var(--accent); color: var(--on-accent); justify-content: space-between; }
+.rev-feature { grid-row: span 2; overflow: hidden; color: var(--on-accent); justify-content: space-between;
+  background: radial-gradient(40rem 24rem at 100% 0%, rgba(255, 255, 255, 0.18), transparent 60%), var(--accent); }
 .rev-feature blockquote { font: 600 clamp(1.25rem, 2vw, 1.7rem)/1.4 Inter, sans-serif; letter-spacing: -0.02em; }
 .stars { color: var(--accent-ink); letter-spacing: 0.15em; font-size: 0.95rem; }
 .rev-feature .stars { color: inherit; }
 .who { display: flex; align-items: center; gap: 0.8rem; margin-top: auto; }
-.who i { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font: normal 600 1rem Inter, sans-serif; background: var(--tint); color: var(--ink); }
+.who i { flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font: normal 700 1rem Inter, sans-serif; background: var(--dark); color: var(--on-dark); box-shadow: 0 0 0 3px var(--surface), 0 0 0 4px var(--line); }
+.rev-feature .who i { box-shadow: none; }
 .rev-feature .who i { background: rgba(255, 255, 255, 0.22); color: inherit; }
 .who b { display: block; font-size: 0.95rem; }
 .who small { display: block; font-size: 0.8rem; opacity: 0.7; }
-.rev-score { display: flex; align-items: center; gap: 1.4rem; }
-.rev-score strong { font: 800 4.2rem/1 Inter, sans-serif; letter-spacing: -0.06em; }
+.rev-score { display: flex; align-items: center; gap: 1.4rem; padding: 1.2rem 1.6rem; border-radius: 22px; background: var(--surface); box-shadow: var(--shadow-sm); justify-self: end; }
+.rev-score strong { font: 800 4.2rem/1 "Inter Tight", Inter, sans-serif; letter-spacing: -0.06em; }
 
 /* FAQ ---------------------------------------------------------------------- */
 .faq-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 4rem; }
 .faq-aside { position: sticky; top: 110px; align-self: start; }
 .faq-aside h2 { font-size: clamp(2.3rem, 4.6vw, 3.6rem); margin: 1rem 0 1.2rem; }
 .faq-aside p { color: var(--muted); margin-bottom: 1.8rem; }
+/* Questions carry a small running number. */
+.faq-grid > div:last-child { counter-reset: faq; }
+details { counter-increment: faq; }
+summary::before { content: counter(faq, decimal-leading-zero); flex: none; width: 2rem; font: 700 0.78rem Inter, sans-serif; letter-spacing: 0.04em; color: var(--accent-ink); font-variant-numeric: tabular-nums; }
+details[open] summary { color: var(--ink); }
+summary:hover::after { background: color-mix(in srgb, var(--accent) 22%, var(--tint)); }
+.faq-person { display: flex; align-items: center; gap: 0.9rem; max-width: 26rem; margin: -0.6rem 0 0; padding: 0.9rem 0.9rem 0.9rem 1rem; border-radius: 20px; background: var(--surface); box-shadow: var(--shadow-sm); text-decoration: none; transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease); }
+.faq-person:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.faq-person-go { position: relative; flex: none; width: 48px; height: 48px; margin-left: auto; border-radius: 50%; display: grid; place-items: center; background: #2fb36a; color: #fff; box-shadow: 0 10px 20px -10px rgba(47, 179, 106, 0.8); transition: transform 0.25s; }
+.faq-person-go svg { width: 20px; height: 20px; }
+.faq-person-go::before { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid #2fb36a; animation: faqRing 2.4s var(--ease) infinite; }
+@keyframes faqRing { from { opacity: 0.7; transform: scale(1); } to { opacity: 0; transform: scale(1.5); } }
+.faq-person:hover .faq-person-go { transform: scale(1.06); }
+.faq-person-ico { position: relative; flex: none; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--dark); color: var(--on-dark); }
+.faq-person-ico svg { width: 22px; height: 22px; }
+.faq-person-ico::after { content: ""; position: absolute; right: 0; bottom: 0; width: 12px; height: 12px; border-radius: 50%; background: #3fcf7a; box-shadow: 0 0 0 3px var(--surface); }
+.faq-person b { display: block; margin-top: 0.1rem; font: 800 1.3rem/1.15 "Inter Tight", Inter, sans-serif; letter-spacing: -0.015em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.faq-person small { display: block; font-size: 0.82rem; font-weight: 500; color: var(--muted); }
 details { border-bottom: 1px solid var(--line); }
 summary {
-  list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem;
+  list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem;
   padding: 1.4rem 0; font: 600 1.12rem/1.4 Inter, sans-serif; letter-spacing: -0.01em;
 }
 summary::-webkit-details-marker { display: none; }
 summary::after {
-  content: "+"; flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
+  content: "+"; flex: none; margin-left: auto; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
   background: var(--tint); font: 400 1.4rem Inter, sans-serif; transition: transform 0.3s, background 0.3s;
 }
 details[open] summary::after { transform: rotate(45deg); background: var(--accent); color: var(--on-accent); }
-details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
+details p { padding: 0 3.5rem 1.6rem 3rem; color: var(--muted); }
+details[open] p { animation: faqIn 0.4s var(--ease); }
+@keyframes faqIn { from { opacity: 0; transform: translateY(-6px); } }
 
 /* CTA band ------------------------------------------------------------------ */
 .cta { padding: 0 0 7rem; }
@@ -685,9 +810,15 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
 .cta-box h2 { font-size: clamp(2.4rem, 5.4vw, 4.6rem); }
 .cta-box p { margin-top: 1rem; color: rgba(255, 255, 255, 0.82); font-size: 1.1rem; max-width: 30rem; }
 .cta-actions { display: flex; flex-direction: column; gap: 0.7rem; }
+.cta-box { box-shadow: var(--shadow-lg); }
+.cta-ticks { display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem; margin: 1.6rem 0 0; padding: 0; list-style: none; font-size: 0.92rem; font-weight: 600; }
+.cta-ticks li { display: inline-flex; align-items: center; gap: 0.45rem; }
+.cta-ticks svg { width: 17px; height: 17px; color: var(--accent); }
+.cta-actions small { display: flex; align-items: center; justify-content: center; gap: 0.45rem; margin-top: 0.3rem; font-size: 0.82rem; color: rgba(255, 255, 255, 0.72); }
+.cta-actions small i { width: 8px; height: 8px; border-radius: 50%; background: #3fcf7a; box-shadow: 0 0 0 4px rgba(63, 207, 122, 0.2); }
 
 /* Footer ------------------------------------------------------------------- */
-.foot { background: var(--dark); color: var(--on-dark); padding: 5rem 0 2.5rem; }
+.foot { background: radial-gradient(50rem 26rem at 0% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%), var(--dark); color: var(--on-dark); padding: 5rem 0 2.5rem; }
 .foot-top { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 2.5rem; }
 .foot .logo { color: var(--on-dark); }
 .foot-top p { color: var(--on-dark-muted); font-size: 0.93rem; margin-top: 1rem; max-width: 22rem; }
@@ -695,7 +826,9 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
 .foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.55rem; }
 .foot li a { text-decoration: none; font-size: 0.95rem; }
 .foot li a:hover { color: var(--accent); }
-.foot-mark { margin: 4rem 0 1.5rem; font: 900 clamp(2.4rem, 9.4vw, 8.4rem)/0.85 Inter, sans-serif; letter-spacing: -0.06em; color: var(--dark-2); white-space: nowrap; overflow: hidden; }
+.foot-mark { margin: 4rem 0 1.5rem; font: 800 clamp(2.4rem, 10.2vw, 9.2rem)/0.85 "Inter Tight", Inter, sans-serif; letter-spacing: -0.06em; white-space: nowrap; overflow: hidden;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--on-dark) 16%, var(--dark)), var(--dark) 92%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.foot li a { transition: color 0.2s; }
 .foot-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.82rem; color: var(--on-dark-muted); }
 
 /* Design lab palette switcher --------------------------------------------- */
@@ -817,6 +950,7 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   .hero-lede, .hero-points { display: none; }
   .quote { padding-top: 1.1rem; }
   .quote-card { padding: 0.6rem; border-radius: 18px; }
+  .qhead { display: none; }
   .qstep { gap: 0.45rem; }
   .qstep-2 { grid-template-columns: 1fr; }
   .qs2-head b { font-size: 0.98rem; }
@@ -852,7 +986,7 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   .proof-ico { width: 40px; height: 40px; }
   .bento { grid-template-columns: 1fr 1fr; grid-auto-rows: auto; gap: 0.7rem; }
   .tile { grid-column: span 2 !important; grid-row: auto !important; min-height: 220px; padding: 1.3rem; border-radius: 18px; }
-  .t-1, .t-2 { min-height: 290px; }
+  .t-1, .t-2 { min-height: 340px; }
   .t-3, .t-4 { grid-column: span 1 !important; min-height: 210px; }
   .t-3 h3, .t-4 h3 { font-size: 1.2rem; }
   .t-3 p, .t-4 p { font-size: 0.84rem; }
@@ -863,6 +997,19 @@ details p { padding: 0 3.5rem 1.6rem 0; color: var(--muted); }
   .t-6 > div { max-width: none; }
   .t-6 img { width: 100%; height: 55%; -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent); mask-image: linear-gradient(180deg, #000 55%, transparent); }
   .rail { grid-auto-columns: 78%; margin-right: -1rem; padding-right: 1rem; }
+  .rail-bar { margin-top: 1.4rem; gap: 0.9rem; }
+  .rail-btns { display: none; }
+  .tile-mark { width: 8rem; height: 8rem; }
+  .tile-more { font-size: 0.84rem; }
+  .t-6 { padding: 11rem 1.3rem 1.3rem; }
+  .tile-feats li { font-size: 0.76rem; }
+  .section-head > p { padding-left: 1rem; }
+  .rev-score { justify-self: start; padding: 1rem 1.2rem; }
+  .rev-feature::before { font-size: 9rem; top: -1rem; }
+  summary::before { width: 1.7rem; }
+  details p { padding: 0 0 1.4rem 0; }
+  .faq-person { margin-top: -0.4rem; }
+  .cta-ticks { margin-top: 1.2rem; font-size: 0.86rem; }
   /* Phones: the road wiggles down the left edge, bending from one dot to the
      next, with each step open beside its bend. */
   .route { display: block; margin-top: 0.5rem; }
@@ -1165,6 +1312,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 <header class="nav" id="nav">
+  <span class="nav-progress" aria-hidden="true"></span>
   <div class="wrap nav-inner">
     <a href="/" class="logo" aria-label="50STATEMOVERS home"><img src="/assets/images/48-state-movers-logo-removebg-preview.png" alt="" /><span class="logo-name">50STATEMOVERS</span></a>
     <nav class="nav-links" aria-label="Main">
@@ -1226,6 +1374,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div class="wrap quote" id="quote">
     <form class="quote-card" id="lab-form" novalidate data-from="New York" data-to="Florida" data-name="NYC to Florida page">
+      <div class="qhead">
+        <b>Get your fixed price</b>
+        <span class="qh-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Takes about a minute</span>
+        <ol class="qh-steps" aria-label="Quote steps">
+          <li class="is-on" id="qh-1"><i>1</i>Your move</li>
+          <li id="qh-2"><i>2</i>Where to send it</li>
+        </ol>
+      </div>
       <div class="qstep qstep-1">
         <div class="field"><label for="q-from">Moving from</label><select id="q-from" class="state-select"><option value="">Choose state</option></select></div>
         <div class="field"><label for="q-to">Moving to</label><select id="q-to" class="state-select"><option value="">Choose state</option></select></div>
@@ -1315,23 +1471,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <a href="/long-distance-movers/" class="tile tile-photo t-1 reveal">
         <img src="/assets/images/lab/street-loading.webp" alt="Two movers carrying wrapped furniture to a box truck" loading="lazy" />
         <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <span class="tile-tag">Door to door</span>
         <h3>Long distance</h3>
         <p>Cross-country and interstate relocations, door to door, on one truck from pickup to delivery.</p>
+        <span class="tile-more">Explore long distance <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </a>
       <a href="#quote" class="tile tile-photo t-2 reveal" data-service="white-glove" aria-haspopup="dialog">
         <img src="/assets/images/lab/wrapped-sunroom.webp" alt="Furniture wrapped in blue blankets in a sunroom" loading="lazy" />
         <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <span class="tile-tag">Full service</span>
         <h3>White glove</h3>
         <p>We pack, move, unpack, arrange — and hang the art before we leave.</p>
+        <span class="tile-more">What’s included <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </a>
       <a href="#quote" class="tile tile-dark t-3 reveal" data-service="residential" aria-haspopup="dialog">
         <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <svg class="tile-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
         <span class="big-num">01</span>
         <h3>Residential</h3>
         <p>Studios to five-bedroom homes. Taken apart, moved, rebuilt.</p>
       </a>
       <a href="#quote" class="tile tile-accent t-4 reveal" data-service="commercial" aria-haspopup="dialog">
         <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <svg class="tile-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
         <span class="big-num">02</span>
         <h3>Commercial</h3>
         <p>Offices moved over a weekend — working by Monday.</p>
@@ -1345,7 +1507,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <a href="#quote" class="tile tile-plain t-6 reveal" data-service="storage" aria-haspopup="dialog">
         <img src="/assets/images/lab/loading-ramp.webp" alt="Mover loading a wrapped piece into the truck" loading="lazy" />
         <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        <div><h3>Storage between homes</h3><p>Climate-controlled, monitored around the clock, inventoried and insured — for a week or a year.</p></div>
+        <div><h3>Storage between homes</h3><p>Climate-controlled, monitored around the clock, inventoried and insured — for a week or a year.</p>
+          <ul class="tile-feats"><li>Climate-controlled</li><li>Inventoried</li><li>Insured</li><li>Delivered when you say</li></ul></div>
       </a>
     </div>
   </div>
@@ -1355,19 +1518,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="wrap">
     <div class="section-head reveal">
       <div><span class="eyebrow">On moving day</span><h2>One move, <em>start to finish.</em></h2></div>
-      <p>Photographs from our own crews. This is what the four parts of your day look like — swipe through.</p>
+      <p>Photographs from our own crews. This is what the four parts of your day look like, from the first runner down to the last bed built.</p>
     </div>
     <div class="rail reveal">
       <article class="frame"><div class="frame-img"><img src="/assets/images/lab/runner-hall.webp" alt="Blue floor runner laid down a hallway" loading="lazy" /><span class="frame-num">1</span></div>
         <h3>Floors protected</h3><p>Runners down and door jambs padded before a single box is carried.</p></article>
       <article class="frame"><div class="frame-img"><img src="/assets/images/lab/wrapped-furniture.webp" alt="Furniture wrapped in moving blankets" loading="lazy" /><span class="frame-num">2</span></div>
         <h3>Everything wrapped</h3><p>Blankets, shrink and tape on every piece — not only the fragile ones.</p></article>
-      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/truck-loaded.webp" alt="Truck interior stacked and strapped with wrapped items" loading="lazy" /><span class="frame-num">3</span></div>
-        <h3>Loaded &amp; strapped</h3><p>Stacked in tiers and strapped row by row, so nothing shifts over the miles.</p></article>
-      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/truck-branded.webp" alt="50STATEMOVERS truck parked outside a house" loading="lazy" /><span class="frame-num">4</span></div>
+      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/truck-branded.webp" alt="50STATEMOVERS truck parked outside a house" loading="lazy" /><span class="frame-num">3</span></div>
         <h3>At your new door</h3><p>Unloaded into the rooms you point to, on the date in your contract.</p></article>
       <article class="frame"><div class="frame-img"><img src="/assets/images/lab/kitchen.webp" alt="Mover helping a customer unpack in her kitchen" loading="lazy" /><span class="frame-num">✓</span></div>
         <h3>Settled in</h3><p>Beds built, furniture placed, and we don't leave until you've signed off.</p></article>
+    </div>
+    <div class="rail-bar reveal">
+      <span class="rail-count" id="rail-count" aria-hidden="true"><b>01</b> / 05</span>
+      <span class="rail-track" aria-hidden="true"><i id="rail-thumb"></i></span>
+      <div class="rail-btns">
+        <button type="button" id="rail-prev" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></button>
+        <button type="button" id="rail-next" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
     </div>
   </div>
 </section>
@@ -1445,10 +1614,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="cta">
   <div class="wrap">
     <div class="cta-box reveal">
-      <div><h2>Ready when <em>you</em> are.</h2><p>Tell us where you're going. You'll have a fixed, written price the same day.</p></div>
+      <div><h2>Ready when <em>you</em> are.</h2><p>Tell us where you're going. You'll have a fixed, written price the same day.</p>
+        <ul class="cta-ticks"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Binding written price</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Our own crews</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>$1M liability coverage</li></ul></div>
       <div class="cta-actions">
         <a href="#quote" class="btn">Get my fixed price <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <a href="tel:+18885051086" class="btn btn-ghost">+1 (888) 505-1086</a>
+        <small><i></i>Real people answering · 24/7</small>
       </div>
     </div>
   </div>
@@ -1540,8 +1711,48 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   // Nav turns solid once it leaves the hero.
   var nav = document.getElementById('nav');
-  var onScroll = function () { nav.classList.toggle('is-solid', window.scrollY > 60); };
+  var onScroll = function () {
+    nav.classList.toggle('is-solid', window.scrollY > 60);
+    if (window.scrollY < 300) document.querySelectorAll('.nav-links a.is-current').forEach(function (a) { a.classList.remove('is-current'); });
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    nav.style.setProperty('--read', max > 0 ? Math.min(1, window.scrollY / max).toFixed(4) : 0);
+  };
   onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Photo rail: prev / next step one card; the track and counter follow the scroll.
+  (function () {
+    var rail = document.querySelector('.rail'); if (!rail) return;
+    var prev = document.getElementById('rail-prev'), next = document.getElementById('rail-next');
+    var thumb = document.getElementById('rail-thumb'), count = document.getElementById('rail-count');
+    var cards = rail.children, n = cards.length;
+    function stepW() { return cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : rail.clientWidth; }
+    function sync() {
+      var max = rail.scrollWidth - rail.clientWidth, x = rail.scrollLeft;
+      var vis = rail.clientWidth / rail.scrollWidth;
+      thumb.style.setProperty('--w', (vis * 100).toFixed(2) + '%');
+      thumb.style.setProperty('--x', (max > 0 ? (x / max) * ((1 - vis) / vis) * 100 : 0).toFixed(2) + '%');
+      var i = max > 0 && x >= max - 4 ? n - 1 : Math.round(x / stepW());
+      count.innerHTML = '<b>' + String(i + 1).padStart(2, '0') + '</b> / ' + String(n).padStart(2, '0');
+      prev.disabled = x <= 4; next.disabled = x >= max - 4;
+    }
+    prev.addEventListener('click', function () { rail.scrollBy({ left: -stepW(), behavior: 'smooth' }); });
+    next.addEventListener('click', function () { rail.scrollBy({ left: stepW(), behavior: 'smooth' }); });
+    rail.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+  })();
+
+  // Nav: the link for the section in view is marked.
+  if ('IntersectionObserver' in window) {
+    var navLinks = document.querySelectorAll('.nav-links a');
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        navLinks.forEach(function (a) { a.classList.toggle('is-current', a.getAttribute('href') === '#' + en.target.id); });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    navLinks.forEach(function (a) { var t = document.querySelector(a.getAttribute('href')); if (t) spy.observe(t); });
+  }
 
   // Quote form: route and details, then phone, email and SMS consent, sent to
   // the same /api/contact endpoint and in the same shape as the live form.
@@ -1595,6 +1806,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var before = form.getBoundingClientRect().top, photoH = hero.offsetHeight;
       hero.style.minHeight = ''; hero.style.removeProperty('--photo-h');
       step1.hidden = n !== 1; step2.hidden = n !== 2;
+      $('qh-1').className = n === 1 ? 'is-on' : 'is-done';
+      $('qh-1').querySelector('i').textContent = n === 1 ? '1' : '✓';
+      $('qh-2').className = n === 2 ? 'is-on' : '';
       var rise = before - form.getBoundingClientRect().top;
       if (n === 2 && rise > 0 && window.matchMedia('(min-width: 769px)').matches) {
         hero.style.setProperty('--photo-h', photoH + 'px');
