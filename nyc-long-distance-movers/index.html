@@ -771,6 +771,20 @@ html.drawer-open { overflow: hidden; }
 .map-home { fill: var(--surface); stroke: var(--dark); stroke-width: 3.5; }
 .map-home-ring { fill: none; stroke: var(--accent-ink); stroke-width: 3; transform-box: fill-box; transform-origin: center; animation: ping 2.2s ease-out infinite; }
 .cov-map.has-route .map-home, .cov-map.has-route .map-home-ring { display: none; }
+/* Coverage burst (data-coverage="burst"): a route draws from New York City
+   to every state and D.C., nearest first, and each state lights up as its
+   line lands. Afterwards small dots keep running random routes, so the map
+   reads as one network that reaches everywhere, not a list of chosen lanes. */
+.cov-map.is-burst .map-net { pointer-events: none; }
+.cov-map.is-burst .map-net .burst-arcs path { fill: none; stroke: var(--accent-ink); stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0.55; animation: none; transition: stroke-dashoffset 0.7s cubic-bezier(0.33, 1, 0.68, 1), opacity 1.2s ease; }
+.cov-map.is-burst .map-net.is-drawn .burst-arcs path { stroke-dashoffset: 0; }
+.cov-map.is-burst .map-net.is-settled .burst-arcs path { opacity: 0.22; transition-delay: 0s !important; }
+.cov-map.is-burst .burst-dots circle { fill: var(--surface); stroke: var(--accent-ink); stroke-width: 2.5; opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0.2); transition: opacity 0.3s ease, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.cov-map.is-burst .burst-dots circle.is-in { opacity: 1; transform: none; }
+.cov-map.is-burst .burst-live circle { fill: var(--accent-ink); stroke: var(--surface); stroke-width: 2; }
+.cov-map.is-burst .us-states path.is-covered { animation: stateLand 0.6s ease; }
+@keyframes stateLand { from { fill: var(--accent); } }
+.cov-map.is-burst.has-route .map-net { opacity: 0.12; }
 .map-count {
   position: absolute; left: 50%; bottom: 3.2rem; translate: -50% 0; z-index: 2;
   display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.55rem 1rem 0.55rem 0.55rem; border-radius: 999px;
@@ -1677,7 +1691,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p class="cov-result is-hint" id="r-result" aria-live="polite"><i>→</i><span>Every route between the 48 continental states and D.C.</span></p>
       <button type="button" class="btn" id="r-go" disabled>Get a price for this route <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     </div>
-    <div class="cov-map reveal" id="cov-map" data-coverage="wave" data-home="New York">
+    <div class="cov-map reveal" id="cov-map" data-coverage="burst" data-home="New York">
       <svg id="us-map" viewBox="0 0 951 606" role="img" aria-label="Map of the continental United States showing moving routes">
         <g class="us-states"></g>
         <g class="map-net" aria-hidden="true"></g>
@@ -2293,8 +2307,66 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         });
       }, { threshold: 0.35 }).observe(box);
     }
+    function drawBurst() {
+      var home = box.dataset.home || 'New York', h = map.s[home];
+      box.classList.add('is-wave', 'is-burst');
+      var order = Object.keys(map.s).filter(function (n) { return n !== home; }).map(function (n) {
+        var p = map.s[n]; return { n: n, p: p, dist: Math.hypot(p[1] - h[1], p[2] - h[2]), d: arcPath(h, p).d };
+      }).sort(function (a, b) { return a.dist - b.dist; });
+      var STEP = 55, DRAW = 700;
+      net.innerHTML =
+        '<g class="burst-arcs">' + order.map(function (o, i) {
+          return '<path pathLength="1" style="transition-delay:' + (150 + i * STEP) + 'ms" d="' + o.d + '"/>';
+        }).join('') + '</g>' +
+        '<g class="burst-dots">' + order.map(function (o) {
+          return '<circle cx="' + o.p[1] + '" cy="' + o.p[2] + '" r="4.5"/>';
+        }).join('') + '</g>' +
+        '<g class="burst-live"></g>' +
+        '<circle class="map-home-ring" cx="' + h[1] + '" cy="' + h[2] + '" r="9"/><circle class="map-home" cx="' + h[1] + '" cy="' + h[2] + '" r="8"/>';
+      var dots = net.querySelectorAll('.burst-dots circle'), live = net.querySelector('.burst-live');
+      var countEl = document.getElementById('map-count-n');
+      function land(i) {
+        group.querySelector('[data-s="' + order[i].n + '"]').classList.add('is-covered');
+        dots[i].classList.add('is-in');
+        countEl.textContent = i + 2;
+      }
+      // Once every state is reached, dots keep running random routes out of
+      // New York City while the map is on screen.
+      var visible = false;
+      function runner() {
+        if (!visible || document.hidden || box.classList.contains('has-route')) return;
+        var o = order[Math.floor(Math.random() * order.length)];
+        var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('r', '4');
+        var m = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
+        m.setAttribute('dur', (1.2 + o.dist / 500).toFixed(2) + 's');
+        m.setAttribute('path', o.d); m.setAttribute('fill', 'freeze');
+        c.appendChild(m); live.appendChild(c);
+        if (m.beginElement) m.beginElement();
+        setTimeout(function () { c.remove(); }, (1.2 + o.dist / 500) * 1000 + 50);
+      }
+      new IntersectionObserver(function (en) { visible = en[0].isIntersecting; }).observe(box);
+      new IntersectionObserver(function (en, obs) {
+        if (!en[0].isIntersecting) return;
+        obs.disconnect();
+        group.querySelector('[data-s="' + home + '"]').classList.add('is-home');
+        box.classList.add('is-counting'); countEl.textContent = 1;
+        if (reduce) {
+          net.classList.add('is-drawn', 'is-settled');
+          order.forEach(function (o, i) { land(i); });
+          return;
+        }
+        requestAnimationFrame(function () { net.classList.add('is-drawn'); });
+        order.forEach(function (o, i) { setTimeout(function () { land(i); }, 150 + i * STEP + DRAW); });
+        setTimeout(function () {
+          net.classList.add('is-settled');
+          setInterval(runner, 450);
+        }, 150 + order.length * STEP + DRAW + 400);
+      }, { threshold: 0.35 }).observe(box);
+    }
     function drawNetwork() {
       if (box.dataset.coverage === 'wave') return drawWave();
+      if (box.dataset.coverage === 'burst') return drawBurst();
       var paths = '', dots = {}, hubs = {};
       NETWORK.split(';').forEach(function (group) {
         var parts = group.split('>'), from = parts[0].trim(), a = map.s[from];
