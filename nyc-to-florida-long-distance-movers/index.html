@@ -1761,14 +1761,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     STATES.forEach(function (s) { sel.add(new Option(s, s)); });
   });
   var chips = document.getElementById('chips');
-  STATES.forEach(function (s) {
-    var a = document.createElement('a');
-    a.className = 'chip'; a.href = '/moving-from-' + slug(s) + '/'; a.textContent = s;
-    chips.appendChild(a);
-  });
-  var more = document.getElementById('chips-more');
-  function expandChips() { chips.classList.remove('is-collapsed'); more.hidden = true; }
-  more.addEventListener('click', expandChips);
+  if (chips) {
+    STATES.forEach(function (s) {
+      var a = document.createElement('a');
+      a.className = 'chip'; a.href = '/moving-from-' + slug(s) + '/'; a.textContent = s;
+      chips.appendChild(a);
+    });
+    var more = document.getElementById('chips-more');
+    more.addEventListener('click', function () { chips.classList.remove('is-collapsed'); more.hidden = true; });
+  }
 
   // Palette switcher, remembered per browser. Only the lab has one; pages
   // built from this template keep the palette set on <html>.
