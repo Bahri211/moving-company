@@ -39,6 +39,20 @@ const PAGES = [
     ticker: 'Flat-rate routes nationwide',
     formTo: '',
     coverage: 'wave',
+    // Services as plain cards (no links), worded for moves out of New York.
+    services: {
+      eyebrow: 'From New York',
+      h2: 'From New York to <em>anywhere in the US.</em>',
+      p: 'A studio in Queens or a five-bedroom house in Westchester — we plan the crew, the truck and the packing around your home and the road to your new one, in any of the 48 continental states or D.C.',
+      tiles: {
+        'Long distance': 'From your New York door to any state in the continental US, on one truck from pickup to delivery.',
+        'White glove': 'We pack up your New York home, move it, unpack and arrange — and hang the art before we leave.',
+        'Residential': 'Walk-ups, co-ops, condos and houses across the five boroughs. Taken apart, moved, rebuilt.',
+        'Commercial': 'New York offices moved out over a weekend, and working in the new city by Monday.',
+        'Packing &amp; crating': 'Careful packing for city apartments, and custom crates for art, glass and antiques.',
+        'Storage between homes': 'When your New York move-out and new move-in dates don\u2019t line up, we hold everything until you\u2019re ready.',
+      },
+    },
     formName: 'NYC Long Distance Movers page',
     routesEyebrow: 'From New York',
     routesH2: 'Popular routes <em>out of NYC.</em>',
@@ -401,6 +415,9 @@ const EXTRA_CSS = `<style>
       var(--dark) url('/assets/images/nyc/hero-mobile.webp') center -86vw / 100% auto no-repeat;
   }
 }
+/* Static service cards: no hover lift or zoom, since they don't open. */
+.tile-static, .tile-static:hover { transform: none; cursor: default; }
+.tile-static:hover img { transform: none; }
 .hero-tag { display: inline-flex; align-items: center; gap: 0.55rem; margin: -0.4rem 0 1.1rem; font-size: clamp(1.1rem, 1.7vw, 1.4rem); font-weight: 700; letter-spacing: -0.015em; color: #fff; }
 .hero-tag::before { content: ""; width: 26px; height: 3px; border-radius: 3px; background: var(--accent); }
 /* Titles here run longer than the lab's, so they sit a size down and stay
@@ -507,6 +524,27 @@ function nycPage(page) {
     `<form class="quote-card" id="lab-form" novalidate data-from="New York"${page.formTo ? ` data-to="${page.formTo}"` : ''} data-name="${esc(page.formName)}">`, 'form');
   html = swapOnce(html, '<span class="qn-rating">★ 4.96 from 2,400+ reviews · </span>', '', 'quote note rating');
 
+
+  // ---- services: plain cards worded for the page (no links, no service sheets)
+  if (page.services) {
+    const sv = page.services;
+    const start = html.indexOf('<section class="section" id="services"');
+    const end = html.indexOf('</section>', start) + '</section>'.length;
+    if (start === -1) throw new Error('build-nyc-pages: services section not found');
+    let sec = html.slice(start, end);
+    sec = swapOnce(sec, '<span class="eyebrow">What we do</span><h2>Services built around <em>your</em> move.</h2>',
+      `<span class="eyebrow">${sv.eyebrow}</span><h2>${sv.h2}</h2>`, 'services head');
+    sec = sec.replace(/(<div class="section-head reveal">[\s\S]*?<\/div>\s*)<p>[\s\S]*?<\/p>/, `$1<p>${sv.p}</p>`);
+    // Links become plain cards: no href, no sheet, no arrows or "explore" lines.
+    sec = sec.replace(/<a href="[^"]*" class="tile ([^"]*)"[^>]*>/g, '<div class="tile tile-static $1">').replace(/<\/a>/g, '</div>');
+    sec = sec.replace(/\s*<span class="tile-arrow"[^>]*><svg[\s\S]*?<\/svg><\/span>/g, '').replace(/\s*<span class="tile-more">[\s\S]*?<\/svg><\/span>/g, '');
+    for (const [name, text] of Object.entries(sv.tiles)) {
+      const re = new RegExp('(<h3>' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '</h3>\\s*(?:<p>|<\\/h3><p>)?)([\\s\\S]*?)(</p>)');
+      if (!re.test(sec)) throw new Error(`build-nyc-pages: service tile "${name}" not found`);
+      sec = sec.replace(re, (m, a, b, c) => a + text + c);
+    }
+    html = html.slice(0, start) + sec + html.slice(end);
+  }
 
   // ---- the page's own routes section, after the proof strip
   html = swapOnce(html, '<section class="section" id="services"', routesSection(page) + '<section class="section" id="services"', 'services section');
