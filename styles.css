@@ -2324,15 +2324,6 @@ footer {
   text-align: center;
 }
 
-/* ——— SCROLL REVEAL ——— */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.reveal.visible { opacity: 1; transform: none; }
-
 /* ——— SHORT DESKTOP SCREENS ———
    A 1366x768 laptop, or a 1080p screen at 125–150% Windows scaling, leaves
    only ~610–660px of viewport. The quote form has to fit inside that, so it

@@ -1003,8 +1003,6 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
 }
 
 /* Scroll reveal ------------------------------------------------------------ */
-.reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
-.reveal.is-in { opacity: 1; transform: none; }
 
 /* Responsive --------------------------------------------------------------- */
 @media (min-width: 769px) and (max-height: 860px) {
@@ -1233,7 +1231,6 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
-  .reveal { opacity: 1; transform: none; }
   html { scroll-behavior: auto; }
 }
 </style>

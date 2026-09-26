@@ -268,40 +268,6 @@
       label.textContent = expanded ? 'Show fewer' : collapsedLabel;
     });
   }
-
-  // ---- scroll reveal (same targets and stagger as index.html) -------------
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  var staggerSelectors = ['.trust-item', '.svc-row', '.service-card', '.process-step', '.gallery-item', '.footer-col', '.faq-item'];
-  staggerSelectors.forEach(function (sel) {
-    document.querySelectorAll(sel).forEach(function (el) {
-      var siblings = [].slice.call(el.parentElement.children).filter(function (c) { return c.matches(sel); });
-      var idx = siblings.indexOf(el);
-      if (idx > 0) el.style.transitionDelay = Math.min(idx * 0.09, 0.36) + 's';
-    });
-  });
-
-  var revealTargets = document.querySelectorAll(
-    '.section-header, .svc-intro, .trust-item, .svc-row, .service-card, .process-step, .gallery-item, .faq-item, ' +
-    '.footer-brand, .footer-col, .cs-text, .cs-ctas, .states-grid'
-  );
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
-
-  revealTargets.forEach(function (el) {
-    if (el.getBoundingClientRect().top < window.innerHeight) {
-      el.classList.add('reveal', 'visible');
-    } else {
-      el.classList.add('reveal');
-      observer.observe(el);
-    }
-  });
 })();
 
 /* Collapsible rows (state pages only) — price drivers, local notes, quirks.

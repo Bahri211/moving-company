@@ -1915,41 +1915,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     nav.classList.toggle('scrolled', window.scrollY > 24);
   }, { passive: true });
 
-  // Scroll reveal
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const staggerSelectors = ['.trust-item', '.svc-row', '.process-step', '.gallery-item', '.footer-col', '.faq-item'];
-    staggerSelectors.forEach(sel => {
-      document.querySelectorAll(sel).forEach(el => {
-        const siblings = [...el.parentElement.children].filter(c => c.matches(sel));
-        const idx = siblings.indexOf(el);
-        if (idx > 0) el.style.transitionDelay = `${Math.min(idx * 0.09, 0.36)}s`;
-      });
-    });
-
-    const revealTargets = document.querySelectorAll(
-      '.section-header, .svc-intro, .trust-item, .svc-row, .process-step, .gallery-item, .faq-item, .footer-brand, .footer-col, .cs-text, .cs-ctas, .states-grid'
-    );
-
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
-
-    revealTargets.forEach(el => {
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight) {
-        el.classList.add('reveal', 'visible');
-      } else {
-        el.classList.add('reveal');
-        revealObserver.observe(el);
-      }
-    });
-  }
-
   /* Services: on phones the six rows collapse to an index and open one at a
      time — six paragraphs open at once was the longest scroll on the page.
      Wired here rather than in the markup so a browser without JS just gets
