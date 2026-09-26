@@ -1,0 +1,81 @@
+/* "Drag the truck" route slider. See route-slider.js. */
+.rs {
+  --rs-navy: #0f2b44;
+  --rs-accent: var(--accent, #e9541f);
+  --rs-ink: var(--ink, #0f2b44);
+  --rs-muted: var(--muted, #5d6474);
+  --rs-surface: var(--surface, #fff);
+  --rs-line: var(--line, rgba(15, 43, 68, 0.12));
+  border-radius: 24px; overflow: hidden; background: var(--rs-surface);
+  box-shadow: 0 1px 0 var(--rs-line), 0 30px 60px -40px rgba(15, 43, 68, 0.45);
+  color: var(--rs-ink);
+}
+.rs *, .rs *::before, .rs *::after { box-sizing: border-box; }
+
+/* Stage: horizontal drags drive the truck, vertical swipes scroll the page. */
+.rs-stage {
+  position: relative; height: 300px; overflow: hidden;
+  touch-action: pan-y; user-select: none; -webkit-user-select: none; cursor: grab;
+}
+.rs.is-dragging .rs-stage { cursor: grabbing; }
+.rs-scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+.rs-truck {
+  position: absolute; left: 0; bottom: 1.6%; height: 34%; aspect-ratio: 2 / 1; padding: 0; border: 0; background: none;
+  cursor: grab; touch-action: pan-y; will-change: transform; -webkit-tap-highlight-color: transparent;
+}
+.rs-truck svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.rs-truck:focus { outline: none; }
+.rs-truck:focus-visible { outline: 3px solid var(--rs-accent); outline-offset: 4px; border-radius: 12px; }
+.rs.is-moving .rs-truck svg { animation: rsBob 0.32s ease-in-out infinite alternate; }
+@keyframes rsBob { to { transform: translateY(-1.5%); } }
+
+/* Journey label */
+.rs-step {
+  position: absolute; left: 14px; top: 14px; margin: 0; max-width: calc(100% - 28px);
+  display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.5rem 0.9rem 0.5rem 0.5rem;
+  border-radius: 999px; background: rgba(255, 255, 255, 0.94); box-shadow: 0 8px 22px -12px rgba(15, 43, 68, 0.45);
+  font-size: 0.92rem; font-weight: 600; color: var(--rs-navy); pointer-events: none;
+}
+.rs-day { flex: none; padding: 0.22rem 0.6rem; border-radius: 999px; background: var(--rs-navy); color: #fff; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.02em; }
+.rs-day:empty { display: none; }
+.rs-where { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rs-step.is-new { animation: rsStep 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes rsStep { from { opacity: 0.3; transform: translateY(-4px); } }
+
+/* First-visit hint, gone after the first move */
+.rs-hint {
+  position: absolute; left: 3%; bottom: 40%; display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.4rem 0.75rem; border-radius: 999px; background: var(--rs-accent); color: #fff;
+  font-size: 0.8rem; font-weight: 700; pointer-events: none; transition: opacity 0.3s;
+  animation: rsNudge 1.6s ease-in-out infinite;
+}
+.rs-hint svg { width: 15px; height: 15px; }
+.rs.has-moved .rs-hint { opacity: 0; animation: none; }
+@keyframes rsNudge { 50% { transform: translateX(6px); } }
+
+/* Arrival pin over the new home */
+.rs-pin { opacity: 0; transform: translateY(-14px); transform-box: fill-box; transition: opacity 0.35s, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.rs.is-arrived .rs-pin { opacity: 1; transform: none; }
+
+/* Footer: progress and the promise */
+.rs-foot { display: grid; gap: 0.8rem; padding: 1rem 1.1rem 1.1rem; }
+.rs-track { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 0.7rem; font-size: 0.82rem; font-weight: 700; }
+.rs-bar { position: relative; height: 6px; border-radius: 999px; background: color-mix(in srgb, var(--rs-navy) 12%, transparent); }
+.rs-fill { position: absolute; inset: 0; border-radius: inherit; background: var(--rs-accent); transform-origin: left; transform: scaleX(0); }
+.rs-tick { position: absolute; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--rs-surface); border: 2px solid var(--rs-navy); }
+.rs-tagline { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin: 0; font-weight: 700; font-size: 0.98rem; color: var(--rs-navy); text-align: center; }
+.rs-tagline svg { flex: none; width: 20px; height: 20px; color: var(--rs-accent); }
+
+@media (min-width: 769px) {
+  .rs-stage { height: 380px; }
+  .rs-step { left: 20px; top: 20px; font-size: 1rem; }
+  .rs-foot { grid-template-columns: 1fr auto; align-items: center; gap: 2rem; padding: 1.1rem 1.5rem; }
+  .rs-tagline { justify-content: flex-end; font-size: 1.02rem; }
+}
+@media (min-width: 1100px) { .rs-stage { height: 420px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .rs.is-moving .rs-truck svg, .rs-step.is-new, .rs-hint { animation: none; }
+  .rs-pin { transition: opacity 0.2s; transform: none; }
+}
