@@ -1222,8 +1222,11 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
   .hero::before {
     background:
       linear-gradient(270deg, rgba(var(--wash), 0.88) 0%, rgba(var(--wash), 0.62) 36%, rgba(var(--wash), 0) 62%),
-      linear-gradient(180deg, rgba(var(--wash), 0.45) 0%, rgba(var(--wash), 0) 28%, rgba(var(--wash), 0) 60%, rgba(var(--wash), 0.8) 100%),
-      var(--dark) url('/assets/images/nyc/hero-desktop.webp') 28% 62% / cover no-repeat;
+      linear-gradient(180deg, rgba(var(--wash), 0.45) 0%, rgba(var(--wash), 0) 24%, rgba(var(--wash), 0) 88%, var(--dark) 100%),
+      var(--dark) url('/assets/images/nyc/hero-desktop.webp') 28% 88% / cover no-repeat;
+    /* The photo stops above the quote form and fades into the band it sits
+       on, so the whole truck shows between the nav and the form. */
+    bottom: auto; height: calc(var(--photo-h, 100%) - 190px);
   }
   /* A right-hand column of fixed width, whatever the screen: percentage
      padding measured against the whole window squeezed it on wide screens. */
