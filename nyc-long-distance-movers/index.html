@@ -497,6 +497,14 @@ html.drawer-open { overflow: hidden; }
   appearance: none; border: 0; background: transparent; padding: 0.15rem 0 0; width: 100%;
   font: 600 1.02rem Inter, sans-serif; color: var(--ink); outline: none; cursor: pointer;
 }
+/* Move date: a native date field laid invisibly over the whole box, so a tap
+   anywhere opens the phone's or browser's own picker. The date it holds is
+   shown in English beside the label, whatever language the device uses. */
+.field-date { cursor: pointer; }
+.field-date input { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; opacity: 0; cursor: pointer; }
+.field-date input::-webkit-calendar-picker-indicator { position: absolute; inset: 0; width: auto; height: auto; margin: 0; opacity: 0; cursor: pointer; }
+.date-show { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding-top: 0.15rem; font: 600 1.02rem Inter, sans-serif; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; }
+.date-show::after { content: ""; flex: none; width: 18px; height: 18px; opacity: 0.55; background: currentColor; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cpath d='M16 2v4M8 2v4M3 10h18'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cpath d='M16 2v4M8 2v4M3 10h18'/%3E%3C/svg%3E") center / contain no-repeat; }
 .quote-card .btn { min-height: 64px; border-radius: 14px; padding: 0 1.8rem; font-size: 1.02rem; }
 .qn-rating { display: none; }
 .quote-note { display: block; text-align: center; margin-top: 0.9rem; font-size: 0.84rem; font-weight: 500; color: rgba(255, 255, 255, 0.82); }
@@ -1009,7 +1017,7 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
   .nav-links { display: none; }
   .nav-phone { margin-left: auto; }
   .menu-btn { display: grid; }
-  .qstep-1 { grid-template-columns: 1fr 1fr; }
+  .qstep-1 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .qstep-1 .btn { grid-column: 1 / -1; }
   .proof { grid-template-columns: 1fr 1fr; }
   .proof-item:nth-child(3) { border-left: 0; }
@@ -1519,7 +1527,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="field"><label for="q-to">Moving to</label><select id="q-to" class="state-select"><option value="">Choose state</option></select></div>
         <div class="field"><label for="q-size">Home size</label>
           <select id="q-size"><option value="">Choose size</option><option>Studio</option><option>1 Bedroom</option><option>2 Bedrooms</option><option>3 Bedrooms</option><option>4 Bedrooms</option><option>5+ Bedrooms</option><option>Office / Commercial</option></select></div>
-        <div class="field"><label for="q-date">Move date</label><input id="q-date" type="text" inputmode="none" placeholder="MM/DD/YYYY" autocomplete="off" /></div>
+        <div class="field field-date"><label for="q-date">Move date</label><span class="date-show is-empty" id="q-date-show" aria-hidden="true">Choose date</span><input id="q-date" type="date" autocomplete="off" /></div>
         <button class="btn" type="submit">Get my price <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
       <div class="qstep qstep-2" hidden>
@@ -1924,25 +1932,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     form.addEventListener('input', function (e) { var f = fieldOf(e.target); if (f) f.classList.remove('is-error'); errorEl.textContent = ''; });
     form.addEventListener('change', function (e) { var f = e.target.closest && fieldOf(e.target); if (f) f.classList.remove('is-error'); });
 
-    // Move date: a native date field draws itself in the visitor's OS language,
-    // so it rests as text with an English hint and turns into a date field only
-    // while in use — phones still get their picker. Same as the live form.
-    var date = $('q-date'), lastPointer = '';
-    function toDate() {
-      if (date.type === 'date') return;
-      var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(date.value);
-      date.type = 'date'; date.value = m ? m[3] + '-' + m[1] + '-' + m[2] : '';
+    // Move date: a real native date field, invisible over the whole box.
+    // Clicks open the picker anywhere on it; the chosen date is shown in
+    // English, and past dates can't be picked.
+    var date = $('q-date'), dateShow = $('q-date-show');
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    var now = new Date();
+    date.min = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
+    function showDate() {
+      var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date.value);
+      dateShow.classList.toggle('is-empty', !m);
+      // Phones drop the weekday so the date fits its half of the form.
+      var opts = { month: 'short', day: 'numeric', year: 'numeric' };
+      if (!window.matchMedia('(max-width: 768px)').matches) opts.weekday = 'short';
+      dateShow.textContent = m ? new Date(+m[1], m[2] - 1, +m[3]).toLocaleDateString('en-US', opts) : 'Choose date';
     }
-    function toText() {
-      if (date.type !== 'date') return;
-      var v = date.value;
-      date.type = 'text';
-      date.value = /^\d{4}-\d{2}-\d{2}$/.test(v) ? v.slice(5, 7) + '/' + v.slice(8, 10) + '/' + v.slice(0, 4) : '';
-    }
-    date.addEventListener('pointerdown', function (e) { lastPointer = e.pointerType; toDate(); });
-    date.addEventListener('focus', toDate);
-    date.addEventListener('blur', toText);
-    date.addEventListener('click', function () { if (lastPointer === 'mouse' && date.showPicker) { try { date.showPicker(); } catch (err) {} } });
+    // MM/DD/YYYY for the lead email, as before.
+    function dateText() { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date.value); return m ? m[2] + '/' + m[3] + '/' + m[1] : ''; }
+    date.addEventListener('input', showDate);
+    date.addEventListener('change', showDate);
+    date.addEventListener('click', function () { if (date.showPicker) { try { date.showPicker(); } catch (err) {} } });
 
     $('q-sms-toggle').addEventListener('click', function (e) {
       e.preventDefault();
@@ -1986,7 +1995,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      toText();
       clearFlags();
 
       if (!step1.hidden) {
@@ -2011,7 +2019,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         'Moving from: ' + $('q-from').value,
         'Moving to: ' + $('q-to').value,
         $('q-size').value ? 'Home size: ' + $('q-size').value : null,
-        date.value ? 'Planned move date: ' + date.value : null,
+        dateText() ? 'Planned move date: ' + dateText() : null,
         form.dataset.service ? 'Service: ' + form.dataset.service : null,
         'SMS opt-in: Yes',
         'Form: ' + (form.dataset.name || 'design lab (2-step bar)'),
