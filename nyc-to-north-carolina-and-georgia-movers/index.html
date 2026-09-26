@@ -748,6 +748,7 @@ html.drawer-open { overflow: hidden; }
 .us-states path:hover { fill: color-mix(in srgb, var(--accent) 22%, var(--surface)); }
 .us-states path.is-from { fill: var(--dark); }
 .us-states path.is-to { fill: var(--accent); }
+.us-states path.is-home, .us-states path.is-home:hover { fill: var(--dark); }
 /* Route network: faint arcs with dashes flowing along them, so the map says
    "all over the country" before anyone picks a route. It steps back once a
    route is chosen. */
@@ -758,9 +759,7 @@ html.drawer-open { overflow: hidden; }
 .map-net.is-drawn path.is-flow { opacity: 0.9; }
 .map-net circle { fill: var(--surface); stroke: var(--accent-ink); stroke-width: 3; opacity: 0; transition: opacity 0.4s ease; }
 .map-net.is-drawn circle { opacity: 1; }
-.map-net circle.is-hub { fill: var(--dark); stroke: var(--surface); stroke-width: 4.5; }
-.map-net circle.is-hub-ring { fill: none; stroke: var(--accent-ink); stroke-width: 3; transform-box: fill-box; transform-origin: center; animation: ping 2.2s ease-out infinite; }
-@media (prefers-reduced-motion: reduce) { .map-net circle.is-hub-ring { animation: none; opacity: 0; } }
+.map-net circle.is-hub { fill: var(--dark); stroke: var(--surface); stroke-width: 3; }
 @keyframes netFlow { to { stroke-dashoffset: -21; } }
 .cov-map.has-route .map-net { opacity: 0.18; }
 /* Coverage wave (data-coverage="wave"): no lines — every state fills in
@@ -2325,9 +2324,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var circles = Object.keys(dots).filter(function (n) { return !hubs[n]; }).map(function (n) {
         return '<circle cx="' + dots[n][1] + '" cy="' + dots[n][2] + '" r="6"/>';
       }).join('') + Object.keys(hubs).map(function (n) {
-        return '<circle class="is-hub-ring" cx="' + hubs[n][1] + '" cy="' + hubs[n][2] + '" r="15"/><circle class="is-hub" cx="' + hubs[n][1] + '" cy="' + hubs[n][2] + '" r="15"/>';
+        return '<circle class="map-home-ring" cx="' + hubs[n][1] + '" cy="' + hubs[n][2] + '" r="9"/><circle class="map-home" cx="' + hubs[n][1] + '" cy="' + hubs[n][2] + '" r="8"/>';
       }).join('');
       net.innerHTML = paths + circles;
+      // The home state fills navy, as on the NYC Long Distance Movers map.
+      Object.keys(hubs).forEach(function (n) { var el = group.querySelector('[data-s="' + n + '"]'); if (el) el.classList.add('is-home'); });
       // Fade in when the map first comes into view.
       new IntersectionObserver(function (en, obs) {
         if (!en[0].isIntersecting) return;
