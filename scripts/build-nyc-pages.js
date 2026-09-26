@@ -587,12 +587,6 @@ function nycPage(page) {
   html = swapOnce(html, "'That’s a move within ' + f + ' —", "'That’s a move within ' + place_(f) + ' —", 'nyc within');
   html = swapOnce(html, "'Yes — we move ' + f + ' → ' + t + ',", "'Yes — we move ' + place_(f) + ' → ' + place_(t) + ',", 'nyc route line');
 
-  // ---- the "drag the truck" route slider is on trial in the design lab only:
-  // strip it from the generated pages until it is approved
-  html = swapBlock(html, '<!-- route-slider:css -->', '<!-- /route-slider:css -->\n', '', 'route slider css');
-  html = swapBlock(html, '<!-- route-slider:section -->', '<!-- /route-slider:section -->\n\n', '', 'route slider section');
-  html = swapBlock(html, '<!-- route-slider:js -->', '<!-- /route-slider:js -->\n', '', 'route slider js');
-
   // ---- no palette switcher
   html = swapBlock(html, '<div class="lab" role="group"', '<span class="lab-name" id="lab-name">Ember</span>\n</div>\n', '', 'palette switcher');
 

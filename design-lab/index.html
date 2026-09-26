@@ -1141,9 +1141,6 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
   html { scroll-behavior: auto; }
 }
 </style>
-<!-- route-slider:css -->
-<link rel="stylesheet" href="/assets/route-slider/route-slider.css" />
-<!-- /route-slider:css -->
 </head>
 <body>
 
@@ -1383,35 +1380,6 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
     </div>
   </div>
 </section>
-
-<!-- route-slider:section -->
-<section class="section" id="route-slider">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div><span class="eyebrow">Door to door</span><h2>One truck, <em>all the way.</em></h2></div>
-      <p>Drag the truck from a New York street to your new front door. The crew that loads your home is the crew that unloads it.</p>
-    </div>
-    <div class="rs" data-route-slider data-route="florida"></div>
-    <!-- Lab only: preview each route page's version. -->
-    <div class="rs-lab" role="group" aria-label="Preview route">
-      <button type="button" data-rs="florida" aria-pressed="true">Florida</button><button type="button" data-rs="carolinas" aria-pressed="false">NC &amp; GA</button><button type="button" data-rs="texas" aria-pressed="false">Texas</button><button type="button" data-rs="california" aria-pressed="false">California</button><button type="button" data-rs="chicago" aria-pressed="false">Chicago</button><button type="button" data-rs="boston" aria-pressed="false">Boston</button>
-    </div>
-    <style>
-      .rs-lab { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
-      .rs-lab button { min-height: 44px; padding: 0 1rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); font: 600 0.9rem Inter, sans-serif; color: var(--ink); cursor: pointer; }
-      .rs-lab button[aria-pressed="true"] { background: var(--dark); color: var(--on-dark); border-color: var(--dark); }
-    </style>
-    <script>
-      document.querySelector('.rs-lab').addEventListener('click', function (e) {
-        var b = e.target.closest('[data-rs]'), rs = document.querySelector('[data-route-slider]');
-        if (!b || !rs.routeSlider) return;
-        rs.routeSlider.setRoute(b.dataset.rs);
-        this.querySelectorAll('[data-rs]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
-      });
-    </script>
-  </div>
-</section>
-<!-- /route-slider:section -->
 
 <section class="section coverage" id="coverage">
   <div class="wrap cov-grid">
@@ -2226,8 +2194,5 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
   })();
 })();
 </script>
-<!-- route-slider:js -->
-<script src="/assets/route-slider/route-slider.js" defer></script>
-<!-- /route-slider:js -->
 </body>
 </html>
