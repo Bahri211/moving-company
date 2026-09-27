@@ -28,7 +28,8 @@ const SERVICE_PAGES = [
   'long-distance-movers', 'interstate-movers', 'state-to-state-movers',
   // NYC pages, built by scripts/build-nyc-pages.js.
   'nyc-long-distance-movers', 'nyc-to-florida-long-distance-movers',
-  'nyc-to-north-carolina-and-georgia-movers', 'nyc-long-distance-movers-to-texas-california-chicago-and-boston',
+  'nyc-to-north-carolina-and-georgia-movers',
+  'nyc-to-texas-long-distance-movers', 'nyc-to-california-long-distance-movers', 'nyc-to-chicago-movers', 'nyc-to-boston-movers',
 ];
 const pages = [];
 for (const entry of fs.readdirSync(ROOT)) {

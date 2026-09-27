@@ -16,6 +16,16 @@
       "source": "/privacy-policy-sms-terms/",
       "destination": "/privacy-policy",
       "permanent": true
+    },
+    {
+      "source": "/nyc-long-distance-movers-to-texas-california-chicago-and-boston",
+      "destination": "/nyc-to-texas-long-distance-movers/",
+      "permanent": true
+    },
+    {
+      "source": "/nyc-long-distance-movers-to-texas-california-chicago-and-boston/",
+      "destination": "/nyc-to-texas-long-distance-movers/",
+      "permanent": true
     }
   ]
 }
