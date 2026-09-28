@@ -627,6 +627,7 @@ html.drawer-open { overflow: hidden; }
 .big-num { font: 800 3.6rem/1 "Inter Tight", Inter, sans-serif; margin-bottom: auto; letter-spacing: -0.05em; }
 .tile-dark .big-num { color: transparent; -webkit-text-stroke: 1.5px var(--on-dark-muted); }
 .tile-accent .big-num { color: transparent; -webkit-text-stroke: 1.5px color-mix(in srgb, var(--on-accent-2) 55%, transparent); }
+.tile-plain .big-num { color: transparent; -webkit-text-stroke: 1.5px color-mix(in srgb, var(--ink) 45%, transparent); }
 
 /* Moving day story: pinned heading, cards scroll sideways ------------------- */
 .story {
@@ -1082,7 +1083,7 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
   .t-3, .t-4 { grid-column: span 1 !important; min-height: 210px; }
   .t-3 h3, .t-4 h3 { font-size: 1.2rem; }
   .t-3 p, .t-4 p { font-size: 0.84rem; }
-  .t-3 .big-num, .t-4 .big-num { font-size: 2.4rem; }
+  .t-3 .big-num, .t-4 .big-num, .t-5 .big-num { font-size: 2.4rem; }
   .tile h3 { font-size: 1.45rem; }
   .tile-arrow { width: 38px; height: 38px; top: 1rem; right: 1rem; }
   .t-6 { flex-direction: column; align-items: flex-start; gap: 1.2rem; padding-top: 11rem; }
@@ -1258,6 +1259,11 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
 .tile-static, .tile-static:hover { transform: none; cursor: default; }
 .tile-static:hover img { transform: none; }
 .hero-tag { display: inline-flex; align-items: center; gap: 0.55rem; margin: -0.4rem 0 1.1rem; font-size: clamp(1.1rem, 1.7vw, 1.4rem); font-weight: 700; letter-spacing: -0.015em; color: #fff; }
+/* "Full service. One crew. Coast to coast." — three short beats under the lede. */
+.hero-promise { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.85rem; margin: 1.15rem 0 0; font-family: "Inter Tight", Inter, sans-serif; font-weight: 800; font-size: clamp(1.05rem, 1.45vw, 1.25rem); letter-spacing: -0.012em; color: #fff; }
+.hero-promise span { display: inline-flex; align-items: center; gap: 0.85rem; }
+.hero-promise + .hero-points { margin-top: 1.25rem; }
+.hero-promise span + span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 .hero-tag::before { content: ""; width: 26px; height: 3px; border-radius: 3px; background: var(--accent); }
 /* Titles here run longer than the lab's, so they sit a size down and stay
    left of the truck. */
@@ -1480,6 +1486,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h1>NYC to Texas<br><em>Long Distance Movers</em></h1>
     <p class="hero-tag">Weekly direct routes to Houston, Dallas and Austin</p>
     <p class="hero-lede">New York City to the Lone Star State on one binding price. The crew that loads your apartment drives it the 1,600-odd miles southwest and carries it into your new home.</p>
+    <p class="hero-promise"><span>Full service.</span><span>One crew.</span><span>Coast to coast.</span></p>
     <div class="hero-points">
       <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Price locked at booking</span>
       <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>$1M coverage</span>
@@ -1589,11 +1596,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="map-count" aria-live="polite"><i>✓</i><span><b id="map-count-n">0</b> of 49 · every state + D.C. covered</span></span>
       <p class="map-note"><span><b></b>Moving from</span><span><b class="is-to"></b>Moving to</span><span>48 states + D.C.</span></p>
     </div>
-    <div class="cov-browse">
-        <p>Movers by state</p>
-        <div class="chips is-collapsed" id="chips"></div>
-        <button type="button" class="chips-more" id="chips-more">Show all 48 states + D.C. ↓</button>
-      </div>
   </div>
 </section>
 
@@ -1658,9 +1660,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h3>Commercial</h3>
         <p>Offices moved over a weekend — working by Monday.</p>
       </a>
-      <a href="#quote" class="tile tile-photo t-5 reveal" data-service="packing" aria-haspopup="dialog">
-        <img src="/assets/images/lab/crew-packing.webp" alt="Crew taping boxes and wrapping chairs in a living room" loading="lazy" />
+      <a href="#quote" class="tile tile-plain t-5 reveal" data-service="packing" aria-haspopup="dialog">
         <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <span class="big-num">03</span>
         <h3>Packing &amp; crating</h3>
         <p>Museum-grade packing and custom crates built on site.</p>
       </a>
@@ -1761,7 +1763,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="foot-top">
       <div><a href="/" class="logo"><img src="/assets/images/48-state-movers-logo-removebg-preview.png" alt="" />50STATEMOVERS INC</a>
         <p>Honest, fixed-price quotes with no hidden fees — and a crew that treats your home like their own.</p></div>
-      <div><h4>Services</h4><ul><li><a href="/long-distance-movers/">Long distance</a></li><li><a href="/interstate-movers/">Interstate</a></li><li><a href="/state-to-state-movers/">State to state</a></li><li><a href="/nyc-long-distance-movers/">NYC long distance</a></li><li><a href="/nyc-to-north-carolina-and-georgia-movers/">NYC to NC &amp; GA</a></li></ul></div>
+      <div><h4>Services</h4><ul><li><a href="/long-distance-movers/">Long distance</a></li><li><a href="/interstate-movers/">Interstate</a></li><li><a href="/state-to-state-movers/">State to state</a></li><li><a href="/nyc-long-distance-movers/">NYC long distance</a></li><li><a href="/nyc-to-texas-long-distance-movers/">NYC to Texas long distance</a></li></ul></div>
       <div><h4>Company</h4><ul><li><a href="/moving-companies-by-state/">Movers by state</a></li><li><a href="#faq">FAQ</a></li><li><a href="/privacy-policy">Privacy</a></li><li><a href="/terms-of-service">Terms</a></li></ul></div>
       <div><h4>Contact</h4><ul><li><a href="tel:+18885051086">+1 (888) 505-1086</a></li><li><a href="mailto:contact@50statemovers.com">contact@50statemovers.com</a></li><li><span>Nationwide, USA</span></li></ul></div>
     </div>
@@ -2264,6 +2266,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     function draw() {
       if (map) return;
       map = window.US_MAP;
+      // These pages start in New York City: put New York's point on the city
+      // (Manhattan) instead of the middle of the state, for the dot and the routes.
+      if (map.s['New York']) { map.s['New York'][1] = 858; map.s['New York'][2] = 208; }
       svg.setAttribute('viewBox', '0 0 ' + map.w + ' ' + map.h);
       group.innerHTML = Object.keys(map.s).map(function (n) {
         return '<path data-s="' + n + '" d="' + map.s[n][0] + '"/>';
