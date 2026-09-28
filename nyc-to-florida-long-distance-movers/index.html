@@ -1259,11 +1259,6 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
 .tile-static, .tile-static:hover { transform: none; cursor: default; }
 .tile-static:hover img { transform: none; }
 .hero-tag { display: inline-flex; align-items: center; gap: 0.55rem; margin: -0.4rem 0 1.1rem; font-size: clamp(1.1rem, 1.7vw, 1.4rem); font-weight: 700; letter-spacing: -0.015em; color: #fff; }
-/* "Full service. One crew. Coast to coast." — three short beats under the lede. */
-.hero-promise { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.85rem; margin: 1.15rem 0 0; font-family: "Inter Tight", Inter, sans-serif; font-weight: 800; font-size: clamp(1.05rem, 1.45vw, 1.25rem); letter-spacing: -0.012em; color: #fff; }
-.hero-promise span { display: inline-flex; align-items: center; gap: 0.85rem; }
-.hero-promise + .hero-points { margin-top: 1.25rem; }
-.hero-promise span + span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 .hero-tag::before { content: ""; width: 26px; height: 3px; border-radius: 3px; background: var(--accent); }
 /* Titles here run longer than the lab's, so they sit a size down and stay
    left of the truck. */
@@ -1478,7 +1473,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h1>NYC to Florida<br><em>Long Distance Movers</em></h1>
     <p class="hero-tag">Secure transit and weekly departures</p>
     <p class="hero-lede">New York City to the Sunshine State on one binding price. Your things stay on our truck with our crew for the whole drive down I-95, and trucks head south every week.</p>
-    <p class="hero-promise"><span>Full service.</span><span>One crew.</span><span>Coast to coast.</span></p>
     <div class="hero-points">
       <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Price locked at booking</span>
       <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>$1M coverage</span>
@@ -1602,16 +1596,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="pd-arrow reveal" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
       <div class="rc pd reveal"><span class="rc-meta">We deliver</span><h3>Everywhere in Florida</h3><p>From the Panhandle to the Keys, the Atlantic coast to the Gulf. Condos, gated communities and houses with HOA rules: tell us the address and the access, and we plan the unload around it.</p></div>
     </div>
-    <div class="facts reveal">
-      <h3>Secure transit, explained</h3>
-      <ul>
-        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>One truck, no transfers</b><span>Your shipment is loaded in New York City and stays on the same truck to Florida. It is not unloaded at a warehouse hub and reloaded onto somebody else's trailer.</span></div></li>
-        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Our crew, not a broker's</b><span>The people who load your home work for us, and nobody resells your move to another company once you have booked.</span></div></li>
-        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Tagged and inventoried</b><span>Every item gets a tag and a line on a signed inventory at pickup, and is checked off the same list as it comes off the truck in Florida.</span></div></li>
-        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Wrapped for a long, warm drive</b><span>Blankets and shrink wrap on every piece, stacked in tiers and strapped row by row for a thousand miles of highway and the Florida heat at the far end.</span></div></li>
-      </ul>
-      <p class="facts-note">Because trucks head south from New York City every week, your move date is set around your plans, not around waiting for a trailer to fill up.</p>
-    </div>
   </div>
 </section>
 
@@ -1691,6 +1675,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <button type="button" id="rail-prev" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></button>
         <button type="button" id="rail-next" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="section notes" id="notes" style="padding-top: 4rem; padding-bottom: 0;">
+  <div class="wrap">
+    <div class="facts reveal" style="margin-top: 0;">
+      <h3>Secure transit, explained</h3>
+      <ul>
+        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>One truck, no transfers</b><span>Your shipment is loaded in New York City and stays on the same truck to Florida. It is not unloaded at a warehouse hub and reloaded onto somebody else's trailer.</span></div></li>
+        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Our crew, not a broker's</b><span>The people who load your home work for us, and nobody resells your move to another company once you have booked.</span></div></li>
+        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Tagged and inventoried</b><span>Every item gets a tag and a line on a signed inventory at pickup, and is checked off the same list as it comes off the truck in Florida.</span></div></li>
+        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Wrapped for a long, warm drive</b><span>Blankets and shrink wrap on every piece, stacked in tiers and strapped row by row for a thousand miles of highway and the Florida heat at the far end.</span></div></li>
+      </ul>
+      <p class="facts-note">Because trucks head south from New York City every week, your move date is set around your plans, not around waiting for a trailer to fill up.</p>
     </div>
   </div>
 </section>

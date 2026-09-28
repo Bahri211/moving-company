@@ -1259,11 +1259,6 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
 .tile-static, .tile-static:hover { transform: none; cursor: default; }
 .tile-static:hover img { transform: none; }
 .hero-tag { display: inline-flex; align-items: center; gap: 0.55rem; margin: -0.4rem 0 1.1rem; font-size: clamp(1.1rem, 1.7vw, 1.4rem); font-weight: 700; letter-spacing: -0.015em; color: #fff; }
-/* "Full service. One crew. Coast to coast." — three short beats under the lede. */
-.hero-promise { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.85rem; margin: 1.15rem 0 0; font-family: "Inter Tight", Inter, sans-serif; font-weight: 800; font-size: clamp(1.05rem, 1.45vw, 1.25rem); letter-spacing: -0.012em; color: #fff; }
-.hero-promise span { display: inline-flex; align-items: center; gap: 0.85rem; }
-.hero-promise + .hero-points { margin-top: 1.25rem; }
-.hero-promise span + span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 .hero-tag::before { content: ""; width: 26px; height: 3px; border-radius: 3px; background: var(--accent); }
 /* Titles here run longer than the lab's, so they sit a size down and stay
    left of the truck. */
@@ -1486,7 +1481,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h1>NYC to California<br><em>Long Distance Movers</em></h1>
     <p class="hero-tag">Coast to coast with one crew</p>
     <p class="hero-lede">The longest drive we run: close to 2,900 miles from a New York City street to your new California home, on one binding price, with the same crew and the same truck the whole way.</p>
-    <p class="hero-promise"><span>Full service.</span><span>One crew.</span><span>Coast to coast.</span></p>
     <div class="hero-points">
       <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Price locked at booking</span>
       <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>$1M coverage</span>
@@ -1610,16 +1604,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="pd-arrow reveal" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
       <div class="rc pd reveal"><span class="rc-meta">We deliver</span><h3>Everywhere in California</h3><p>Los Angeles and Orange County, San Diego, the Bay Area, Sacramento and the Central Valley. Hillside streets, condo towers and gated communities: tell us the address and the access, and we plan the unload around it.</p></div>
     </div>
-    <div class="facts reveal">
-      <h3>What a cross-country move needs</h3>
-      <ul>
-        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Packed for a week on the road</b><span>Furniture is blanket-wrapped and shrink-wrapped, boxes are stacked in tiers and every row is strapped, because a load that crosses the Rockies has to arrive the way it left.</span></div></li>
-        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Ready for the border inspection</b><span>California agricultural stations check for plants, soil and fresh produce. We tell you what to leave out at the survey so nothing holds up the truck.</span></div></li>
-        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>A signed inventory at both ends</b><span>Every item is tagged in New York City and checked off the same list in California, which settles any question after nearly 3,000 miles.</span></div></li>
-        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Storage for mismatched dates</b><span>Leases and closings on opposite coasts rarely line up. We can hold your shipment in climate-controlled storage and deliver when you are ready.</span></div></li>
-      </ul>
-      <p class="facts-note">Heading somewhere else? We also move New York City homes to <a href="/nyc-to-texas-long-distance-movers/">Texas</a>, <a href="/nyc-to-chicago-movers/">Chicago</a>, <a href="/nyc-to-boston-movers/">Boston</a>, <a href="/nyc-to-florida-long-distance-movers/">Florida</a> and <a href="/nyc-to-north-carolina-and-georgia-movers/">the Carolinas and Georgia</a>, and to every other state from our <a href="/nyc-long-distance-movers/">NYC long distance movers</a> page.</p>
-    </div>
   </div>
 </section>
 
@@ -1699,6 +1683,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <button type="button" id="rail-prev" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></button>
         <button type="button" id="rail-next" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="section notes" id="notes" style="padding-top: 4rem; padding-bottom: 0;">
+  <div class="wrap">
+    <div class="facts reveal" style="margin-top: 0;">
+      <h3>What a cross-country move needs</h3>
+      <ul>
+        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Packed for a week on the road</b><span>Furniture is blanket-wrapped and shrink-wrapped, boxes are stacked in tiers and every row is strapped, because a load that crosses the Rockies has to arrive the way it left.</span></div></li>
+        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Ready for the border inspection</b><span>California agricultural stations check for plants, soil and fresh produce. We tell you what to leave out at the survey so nothing holds up the truck.</span></div></li>
+        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>A signed inventory at both ends</b><span>Every item is tagged in New York City and checked off the same list in California, which settles any question after nearly 3,000 miles.</span></div></li>
+        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Storage for mismatched dates</b><span>Leases and closings on opposite coasts rarely line up. We can hold your shipment in climate-controlled storage and deliver when you are ready.</span></div></li>
+      </ul>
+      <p class="facts-note">Heading somewhere else? We also move New York City homes to <a href="/nyc-to-texas-long-distance-movers/">Texas</a>, <a href="/nyc-to-chicago-movers/">Chicago</a>, <a href="/nyc-to-boston-movers/">Boston</a>, <a href="/nyc-to-florida-long-distance-movers/">Florida</a> and <a href="/nyc-to-north-carolina-and-georgia-movers/">the Carolinas and Georgia</a>, and to every other state from our <a href="/nyc-long-distance-movers/">NYC long distance movers</a> page.</p>
     </div>
   </div>
 </section>

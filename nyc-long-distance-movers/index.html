@@ -1282,11 +1282,6 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
 .tile-static, .tile-static:hover { transform: none; cursor: default; }
 .tile-static:hover img { transform: none; }
 .hero-tag { display: inline-flex; align-items: center; gap: 0.55rem; margin: -0.4rem 0 1.1rem; font-size: clamp(1.1rem, 1.7vw, 1.4rem); font-weight: 700; letter-spacing: -0.015em; color: #fff; }
-/* "Full service. One crew. Coast to coast." — three short beats under the lede. */
-.hero-promise { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.85rem; margin: 1.15rem 0 0; font-family: "Inter Tight", Inter, sans-serif; font-weight: 800; font-size: clamp(1.05rem, 1.45vw, 1.25rem); letter-spacing: -0.012em; color: #fff; }
-.hero-promise span { display: inline-flex; align-items: center; gap: 0.85rem; }
-.hero-promise + .hero-points { margin-top: 1.25rem; }
-.hero-promise span + span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 .hero-tag::before { content: ""; width: 26px; height: 3px; border-radius: 3px; background: var(--accent); }
 /* Titles here run longer than the lab's, so they sit a size down and stay
    left of the truck. */
@@ -1511,7 +1506,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h1>NYC Long Distance<br><em>Movers</em></h1>
     <p class="hero-tag">Flat-rate routes nationwide</p>
     <p class="hero-lede">Leaving New York City for anywhere in the continental US? One flat, written price for the whole route, and one licensed crew from your door in the city to your new one.</p>
-    <p class="hero-promise"><span>Full service.</span><span>One crew.</span><span>Coast to coast.</span></p>
     <div class="hero-points">
       <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Price locked at booking</span>
       <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>$1M coverage</span>
@@ -1642,16 +1636,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </ul>
       </div>
     </div>
-    <div class="facts reveal">
-      <h3>Moving out of a New York City building</h3>
-      <ul>
-        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Certificate of insurance</b><span>Most co-ops, condos and managed rentals in Manhattan and Brooklyn will not let a crew through the lobby without one. Send us the building's sample and we arrange it before move day.</span></div></li>
-        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Freight elevator and move window</b><span>Buildings hand out weekday slots for the service elevator. Book yours early; we schedule the crew and the truck around it, not the other way round.</span></div></li>
-        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Curb space for the truck</b><span>A long distance truck needs room at the curb. We plan the arrival time and the loading spot so nobody carries your sofa half a block to reach it.</span></div></li>
-        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Walk-ups and brownstones</b><span>Four flights and a turning staircase are an everyday job in this city. Tell us the floor and the stairs when you book, and the estimate accounts for them.</span></div></li>
-      </ul>
-      <p class="facts-note">A flat rate on a long distance move is a binding written estimate: the price is worked out from your inventory and the route before anything is loaded, and it is the price you pay at delivery. No hourly meter running while the truck sits in traffic on the Cross Bronx Expressway.</p>
-    </div>
   </div>
 </section>
 
@@ -1731,6 +1715,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <button type="button" id="rail-prev" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></button>
         <button type="button" id="rail-next" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="section notes" id="notes" style="padding-top: 4rem; padding-bottom: 0;">
+  <div class="wrap">
+    <div class="facts reveal" style="margin-top: 0;">
+      <h3>Moving out of a New York City building</h3>
+      <ul>
+        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Certificate of insurance</b><span>Most co-ops, condos and managed rentals in Manhattan and Brooklyn will not let a crew through the lobby without one. Send us the building's sample and we arrange it before move day.</span></div></li>
+        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Freight elevator and move window</b><span>Buildings hand out weekday slots for the service elevator. Book yours early; we schedule the crew and the truck around it, not the other way round.</span></div></li>
+        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Curb space for the truck</b><span>A long distance truck needs room at the curb. We plan the arrival time and the loading spot so nobody carries your sofa half a block to reach it.</span></div></li>
+        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div><b>Walk-ups and brownstones</b><span>Four flights and a turning staircase are an everyday job in this city. Tell us the floor and the stairs when you book, and the estimate accounts for them.</span></div></li>
+      </ul>
+      <p class="facts-note">A flat rate on a long distance move is a binding written estimate: the price is worked out from your inventory and the route before anything is loaded, and it is the price you pay at delivery. No hourly meter running while the truck sits in traffic on the Cross Bronx Expressway.</p>
     </div>
   </div>
 </section>
