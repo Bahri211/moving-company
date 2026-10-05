@@ -71,19 +71,6 @@ const PAGES = [
     lede: 'Leaving the District for another state? One binding, written price for the whole move, and one licensed crew from your D.C. door to your new one.',
     ticker: 'Long distance from Washington, D.C.',
     formName: 'Long Distance Movers Washington DC page',
-    routesEyebrow: 'From the District',
-    routesH2: 'Where D.C. households <em>move next.</em>',
-    routesP: 'Every move out of Washington crosses a state line, so every one of them is ours to carry under our federal licence. These are the moves we run most often from the District.',
-    cards: [
-      { name: 'Maryland &amp; Virginia', meta: 'from a few miles',
-        text: 'Bethesda, Silver Spring, Arlington and Alexandria. Even a short hop over the line is an interstate move, priced on a binding estimate rather than by the hour.' },
-      { name: 'Up I-95 to the Northeast', meta: 'about 140–440 miles',
-        text: 'Philadelphia, New York and Boston in a day. Their buildings want reserved elevators, insurance certificates and curb permits, much like D.C., and we arrange them at both ends.' },
-      { name: 'The Carolinas, Georgia &amp; Florida', meta: 'about 270–1,050 miles',
-        text: 'Charlotte, Raleigh, Atlanta and on to Orlando and Miami — the busiest run out of the District, packed for the heat at the far end.' },
-      { name: 'Texas &amp; the West Coast', meta: 'about 1,350–2,800 miles',
-        text: 'Dallas, Austin, Denver, Los Angeles and Seattle. Your home stays on our truck for the whole drive, with a delivery window written into your contract.' },
-    ],
     factsTitle: 'Moving out of a Washington, D.C. building',
     facts: [
       ['Emergency No Parking signs', 'D.C. has no loading zones you can count on. The District\'s transportation department issues temporary no-parking signs for move day; we tell you when to apply so the curb is clear when the truck pulls up.'],
@@ -393,7 +380,8 @@ function routesSection(page) {
       ? `      <a class="rc rc-link reveal" href="${c.href}">${inner}<span class="rc-go">Read more ${ARROW}</span></a>`
       : `      <div class="rc reveal">${inner}</div>`;
   }).join('\n');
-  return `<section class="section routes" id="routes">
+  // Sits right above the notes box, which brings its own top spacing.
+  return `<section class="section routes" id="routes" style="padding-bottom: 0;">
   <div class="wrap">
     <div class="section-head reveal">
       <div><span class="eyebrow">${page.routesEyebrow}</span><h2>${page.routesH2}</h2></div>
@@ -485,7 +473,16 @@ function buildPage(page) {
   }
 
   // ---- routes: this page's cards in place of the "all 48 states" banner
-  html = swapBlock(html, '<section class="section routes" id="routes">', '</section>', routesSection(page), 'routes section');
+  // The D.C. page has none; on the nationwide pages they sit after On moving
+  // day, just above the notes box.
+  html = swapBlock(html, '<section class="section routes" id="routes">', '</section>\n\n', '', 'routes section');
+  if (page.cards) {
+    html = swapOnce(html, '<section class="section notes" id="notes"', routesSection(page) + '\n\n<section class="section notes" id="notes"', 'notes section');
+  } else {
+    html = swapOnce(html, '<a href="#routes">Routes</a>', '', 'nav routes');
+    html = swapOnce(html, '    <a href="#routes"><span>05</span>Routes</a>\n', '', 'drawer routes');
+    html = swapOnce(html, '<a href="#faq"><span>06</span>FAQ</a>', '<a href="#faq"><span>05</span>FAQ</a>', 'drawer faq number');
+  }
 
   // ---- notes box
   html = swapBlock(html, '<div class="facts reveal" style="margin-top: 0;">', '</p>\n    </div>', notesSection(page), 'facts');
@@ -497,9 +494,9 @@ function buildPage(page) {
     (m, a, b) => a + page.faq.map(([q, ans], i) => `      <details${i === 0 ? ' open' : ''}><summary>${q}</summary><p>${ans}</p></details>`).join('\n') + '\n' + b);
   if (!html.includes(page.faq[0][0])) throw new Error('build-moving-services-pages: FAQ list not swapped');
 
-  // ---- footer: the four pages
+  // ---- footer: the cluster (the nationwide pages leave out the D.C. page)
   html = html.replace(/(<div><h4>Services<\/h4><ul>)[\s\S]*?(<\/ul><\/div>)/,
-    (m, open, close) => open + CLUSTER.map(([h, t]) => `<li><a href="${h}">${t}</a></li>`).join('') + close);
+    (m, open, close) => open + CLUSTER.filter(([h]) => page.city || h !== DC).map(([h, t]) => `<li><a href="${h}">${t}</a></li>`).join('') + close);
 
   // ---- scripts: New York City labels and the Manhattan point are NYC-only
   html = swapOnce(html, "sel.add(new Option(s === 'New York' ? 'New York City' : s, s));", 'sel.add(new Option(s, s));', 'nyc option');
