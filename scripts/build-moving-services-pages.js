@@ -46,6 +46,7 @@ const NATIONWIDE = {
   from: '',
   coverageH2: 'Every state, <em>every route.</em>',
   coverageP: 'We move homes between all 48 continental states and D.C. Pick your route to see it on the map.',
+  coverage: 'burst',
 };
 
 /* ------------------------------------------------------------ copy per page */
@@ -114,7 +115,6 @@ const PAGES = [
     crumb: 'Long-Distance Moving Services',
     serviceType: 'Long-distance moving',
     ...NATIONWIDE,
-    network: 'New York>Florida,California,Texas,North Carolina,Illinois;California>Texas,Washington,Arizona,Colorado;Illinois>Georgia,Minnesota;Florida>Texas,Georgia;Massachusetts>Virginia;Washington>Montana',
     tag: 'Everything your move needs, one crew',
     lede: 'Packing, crating, storage and delivery between any of the 48 states — chosen to fit your home and priced together on one binding written estimate.',
     ticker: 'Full-service long-distance moves',
@@ -170,7 +170,6 @@ const PAGES = [
     crumb: 'Cross-Country Moving Services',
     serviceType: 'Cross-country moving',
     ...NATIONWIDE,
-    network: 'New York>California,Washington,Arizona;Florida>California,Washington;Massachusetts>California;Illinois>California,Oregon;Georgia>Colorado;Texas>Washington',
     tag: 'Coast to coast on one truck',
     lede: 'From one coast to the other in a single move: your home stays on our truck with our crew for the whole drive, on a binding price written down before we load.',
     ticker: 'Coast-to-coast moves',
@@ -226,7 +225,6 @@ const PAGES = [
     crumb: 'Interstate Moving Services',
     serviceType: 'Interstate moving',
     ...NATIONWIDE,
-    network: 'New York>New Jersey,Pennsylvania,Massachusetts;Washington D.C.>Virginia,Maryland,North Carolina;Illinois>Indiana,Wisconsin;Texas>Oklahoma,Louisiana;California>Nevada,Arizona,Oregon',
     tag: 'Licensed for every state line',
     lede: 'Next door or across the country, any move over a state line is an interstate move. We hold the federal authority to carry it, with one crew and one binding written price.',
     ticker: 'Licensed interstate carrier',
@@ -413,7 +411,19 @@ function buildPage(page) {
   html = swapOnce(html, '<h2>From New York City, <em>to every state.</em></h2>', `<h2>${page.coverageH2}</h2>`, 'coverage h2');
   html = swapOnce(html, 'We move homes from New York City to every one of the 48 continental states and D.C. Pick your route to see it on the map.', page.coverageP, 'coverage lede');
   html = swapOnce(html, 'data-coverage="burst" data-home="New York"',
-    page.coverage ? `data-coverage="${page.coverage}" data-home="${page.from}"` : `data-network="${page.network}"`, 'map');
+    `data-coverage="${page.coverage}"${page.from ? ` data-home="${page.from}"` : ''}`, 'map');
+  // With no home state (the nationwide pages) the burst rolls out from the
+  // middle of the map: no state is marked as home and no home dot is drawn.
+  if (!page.from) {
+    html = swapOnce(html, "var home = box.dataset.home || 'New York', h = map.s[home];\n      box.classList.add('is-wave', 'is-burst');",
+      "var home = box.dataset.home || '', one = map.s[home] ? 1 : 0, h = map.s[home] || [null, map.w / 2, map.h / 2];\n      box.classList.add('is-wave', 'is-burst');", 'burst home');
+    html = swapOnce(html, "'<g class=\"burst-live\"></g>' +\n        '<circle class=\"map-home-ring\" cx=\"' + h[1] + '\" cy=\"' + h[2] + '\" r=\"9\"/><circle class=\"map-home\" cx=\"' + h[1] + '\" cy=\"' + h[2] + '\" r=\"8\"/>';",
+      "'<g class=\"burst-live\"></g>' +\n        (one ? '<circle class=\"map-home-ring\" cx=\"' + h[1] + '\" cy=\"' + h[2] + '\" r=\"9\"/><circle class=\"map-home\" cx=\"' + h[1] + '\" cy=\"' + h[2] + '\" r=\"8\"/>' : '');", 'burst home dot');
+    html = swapOnce(html, 'countEl.textContent = order.length + 1;', 'countEl.textContent = order.length + one;', 'burst settle count');
+    html = swapOnce(html, "group.querySelector('[data-s=\"' + home + '\"]').classList.add('is-home');\n        box.classList.add('is-counting'); countEl.textContent = 1;",
+      "if (one) group.querySelector('[data-s=\"' + home + '\"]').classList.add('is-home');\n        box.classList.add('is-counting'); countEl.textContent = one;", 'burst start count');
+    html = swapOnce(html, 'countEl.textContent = next + 2;', 'countEl.textContent = next + 1 + one;', 'burst tick count');
+  }
 
   // ---- routes: this page's cards in place of the "all 48 states" banner
   html = swapBlock(html, '<section class="section routes" id="routes">', '</section>', routesSection(page), 'routes section');

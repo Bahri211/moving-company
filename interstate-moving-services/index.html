@@ -1566,7 +1566,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p class="cov-result is-hint" id="r-result" aria-live="polite"><i>→</i><span>Every route between the 48 continental states and D.C.</span></p>
       <button type="button" class="btn" id="r-go" disabled>Get a price for this route <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     </div>
-    <div class="cov-map reveal" id="cov-map" data-network="New York>New Jersey,Pennsylvania,Massachusetts;Washington D.C.>Virginia,Maryland,North Carolina;Illinois>Indiana,Wisconsin;Texas>Oklahoma,Louisiana;California>Nevada,Arizona,Oregon">
+    <div class="cov-map reveal" id="cov-map" data-coverage="burst">
       <svg id="us-map" viewBox="0 0 951 606" role="img" aria-label="Map of the continental United States showing moving routes">
         <g class="us-states"></g>
         <g class="map-net" aria-hidden="true"></g>
@@ -2307,7 +2307,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       }, { threshold: 0.35 }).observe(box);
     }
     function drawBurst() {
-      var home = box.dataset.home || 'New York', h = map.s[home];
+      var home = box.dataset.home || '', one = map.s[home] ? 1 : 0, h = map.s[home] || [null, map.w / 2, map.h / 2];
       box.classList.add('is-wave', 'is-burst');
       var order = Object.keys(map.s).filter(function (n) { return n !== home; }).map(function (n) {
         var p = map.s[n]; return { n: n, p: p, dist: Math.hypot(p[1] - h[1], p[2] - h[2]), d: arcPath(h, p).d };
@@ -2354,7 +2354,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           return '<circle cx="' + o.p[1] + '" cy="' + o.p[2] + '" r="4.5"/>';
         }).join('') + '</g>' +
         '<g class="burst-live"></g>' +
-        '<circle class="map-home-ring" cx="' + h[1] + '" cy="' + h[2] + '" r="9"/><circle class="map-home" cx="' + h[1] + '" cy="' + h[2] + '" r="8"/>';
+        (one ? '<circle class="map-home-ring" cx="' + h[1] + '" cy="' + h[2] + '" r="9"/><circle class="map-home" cx="' + h[1] + '" cy="' + h[2] + '" r="8"/>' : '');
       var dots = net.querySelectorAll('.burst-dots circle'), live = net.querySelector('.burst-live');
       var countEl = document.getElementById('map-count-n');
 
@@ -2365,7 +2365,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           group.querySelector('[data-s="' + o.n + '"]').classList.add('is-covered');
           dots[i].classList.add('is-in');
         });
-        countEl.textContent = order.length + 1;
+        countEl.textContent = order.length + one;
         wave.remove();
         net.classList.add('is-drawn', 'is-settled');
       }
@@ -2389,8 +2389,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       new IntersectionObserver(function (en, obs) {
         if (!en[0].isIntersecting) return;
         obs.disconnect();
-        group.querySelector('[data-s="' + home + '"]').classList.add('is-home');
-        box.classList.add('is-counting'); countEl.textContent = 1;
+        if (one) group.querySelector('[data-s="' + home + '"]').classList.add('is-home');
+        box.classList.add('is-counting'); countEl.textContent = one;
         if (reduce) return settle();
         requestAnimationFrame(function () { net.classList.add('is-drawn'); });
         var start = performance.now(), next = 0;
@@ -2399,7 +2399,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           front(R * Math.sin(k * Math.PI / 2));
           while (next < order.length && arrive(order[next].dist) <= t) {
             dots[next].classList.add('is-in');
-            countEl.textContent = next + 2;
+            countEl.textContent = next + 1 + one;
             next++;
           }
           if (k < 1) return requestAnimationFrame(tick);
