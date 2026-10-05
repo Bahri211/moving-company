@@ -2318,8 +2318,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     function drawBurst() {
       var home = box.dataset.home || '', one = map.s[home] ? 1 : 0, h = map.s[home] || [null, map.w / 2, map.h / 2];
       box.classList.add('is-wave', 'is-burst');
+      var west = Object.keys(map.s).sort(function (a, b) { return map.s[a][1] - map.s[b][1]; });
+      var pair = function (n) { var i = west.indexOf(n), k = west.length; return west[(i + Math.floor(k / (i % 2 ? 3 : 2))) % k]; };
       var order = Object.keys(map.s).filter(function (n) { return n !== home; }).map(function (n) {
-        var p = map.s[n]; return { n: n, p: p, dist: Math.hypot(p[1] - h[1], p[2] - h[2]), d: arcPath(h, p).d };
+        var p = map.s[n], r = arcPath(one ? h : map.s[pair(n)], p); return { n: n, p: p, dist: Math.hypot(p[1] - h[1], p[2] - h[2]), d: r.d, len: r.len };
       }).sort(function (a, b) { return a.dist - b.dist; });
 
       // One colour wave rolls out from New York City: a soft-edged fill with
@@ -2384,7 +2386,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var visible = false;
       function runner() {
         if (!visible || document.hidden || box.classList.contains('has-route')) return;
-        var o = order[Math.floor(Math.random() * order.length)], dur = 1.2 + o.dist / 500;
+        var o = order[Math.floor(Math.random() * order.length)], dur = 1.2 + (one ? o.dist : o.len) / 500;
         var c = document.createElementNS(NS, 'circle');
         c.setAttribute('r', '4');
         var m = document.createElementNS(NS, 'animateMotion');

@@ -61,6 +61,7 @@ const PAGES = [
     crumb: 'Long Distance Movers Washington DC',
     serviceType: 'Long distance moving',
     city: true,
+    hero: 'dc',
     badge: 'D.C.',
     from: 'Washington D.C.',
     coverageH2: 'From Washington, D.C., <em>to every state.</em>',
@@ -271,6 +272,51 @@ const PAGES = [
   },
 ];
 
+/* ---------------------------------------------------------------- hero css */
+
+// Hero photos per page. The D.C. truck stands in the middle of Pennsylvania
+// Avenue with the Capitol behind it: the photo is drawn wider than the hero
+// and pinned left, which moves the truck right of the copy; the wash comes
+// from the left, and on desktop the photo stops above the quote form (as on
+// the NYC pages) so the whole truck shows.
+const HERO_CSS = {
+  dc: `/* D.C. hero: the truck on Pennsylvania Avenue, the Capitol behind. */
+@media (min-width: 769px) {
+  .hero::before {
+    background:
+      linear-gradient(90deg, rgba(var(--wash), 0.9) 0%, rgba(var(--wash), 0.7) 34%, rgba(var(--wash), 0) 54%),
+      linear-gradient(180deg, rgba(var(--wash), 0.45) 0%, rgba(var(--wash), 0) 24%, rgba(var(--wash), 0) 88%, var(--dark) 100%),
+      var(--dark) url('/assets/images/dc/hero-desktop.webp') 0% 96% / max(128%, 1640px) auto no-repeat;
+    bottom: auto; height: calc(var(--photo-h, 100%) - 190px);
+  }
+}
+@media (max-width: 768px) {
+  .hero::before {
+    background:
+      linear-gradient(180deg,
+        rgba(var(--wash), 0.6) 0,
+        rgba(var(--wash), 0.05) 17vw,
+        rgba(var(--wash), 0) 44vw,
+        rgba(var(--wash), 0.88) 58vw,
+        var(--dark) 72vw),
+      var(--dark) url('/assets/images/dc/hero-mobile.webp') center -96vw / 100% auto no-repeat;
+  }
+}
+@media (max-width: 768px) and (max-height: 640px) {
+  .hero::before {
+    background:
+      linear-gradient(180deg,
+        rgba(var(--wash), 0.6) 0,
+        rgba(var(--wash), 0.05) 12vw,
+        rgba(var(--wash), 0) 38vw,
+        rgba(var(--wash), 0.88) 52vw,
+        var(--dark) 66vw),
+      var(--dark) url('/assets/images/dc/hero-mobile.webp') center -101vw / 100% auto no-repeat;
+  }
+}
+`,
+};
+
 /* ------------------------------------------------------------------ helpers */
 
 function swapOnce(html, from, to, label) {
@@ -386,12 +432,15 @@ function buildPage(page) {
   html = html.replace(/<title>[^<]*<\/title>/, `<title>${page.title}</title>`);
   html = swapOnce(html, '<meta name="twitter:card" content="summary_large_image" />',
     `<meta property="og:site_name" content="50STATEMOVERS INC" />\n<meta property="og:locale" content="en_US" />\n<meta name="twitter:card" content="summary_large_image" />\n<meta name="twitter:title" content="${esc(page.title)}" />\n<meta name="twitter:description" content="${esc(page.description)}" />`, 'twitter card');
+  const heroDesk = page.hero ? `/assets/images/${page.hero}/hero-desktop.webp` : '/assets/images/lab/hero-mountain.webp';
+  const heroMob = page.hero ? `/assets/images/${page.hero}/hero-mobile.webp` : '/assets/images/lab/hero-mountain-mobile.webp';
   html = swapOnce(html, '<link rel="preload" as="image" href="/assets/images/nyc/hero-desktop.webp" media="(min-width: 769px)">',
-    '<link rel="preload" as="image" href="/assets/images/lab/hero-mountain.webp" media="(min-width: 769px)">', 'preload desktop');
+    `<link rel="preload" as="image" href="${heroDesk}" media="(min-width: 769px)">`, 'preload desktop');
   html = swapOnce(html, '<link rel="preload" as="image" href="/assets/images/nyc/hero-mobile.webp" media="(max-width: 768px)">',
-    '<link rel="preload" as="image" href="/assets/images/lab/hero-mountain-mobile.webp" media="(max-width: 768px)">', 'preload mobile');
-  // The NYC street photo and its positioning go; the lab's own hero stays.
-  html = swapBlock(html, '/* NYC hero.', '/* Static service cards', '/* Static service cards', 'NYC hero css');
+    `<link rel="preload" as="image" href="${heroMob}" media="(max-width: 768px)">`, 'preload mobile');
+  // The NYC street photo and its positioning go: the page's own photo takes
+  // its place, or the lab's own hero stays.
+  html = swapBlock(html, '/* NYC hero.', '/* Static service cards', (page.hero ? HERO_CSS[page.hero] : '') + '/* Static service cards', 'NYC hero css');
   html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, schema(page));
 
   // ---- ticker, drawer
@@ -412,9 +461,19 @@ function buildPage(page) {
   html = swapOnce(html, 'We move homes from New York City to every one of the 48 continental states and D.C. Pick your route to see it on the map.', page.coverageP, 'coverage lede');
   html = swapOnce(html, 'data-coverage="burst" data-home="New York"',
     `data-coverage="${page.coverage}"${page.from ? ` data-home="${page.from}"` : ''}`, 'map');
-  // With no home state (the nationwide pages) the burst rolls out from the
-  // middle of the map: no state is marked as home and no home dot is drawn.
+  // With no home state (the nationwide pages) the colour wave rolls out from
+  // the middle of the map, but no route starts there: each state's line comes
+  // from a state on the far side of the country (states taken west to east,
+  // each paired a third or half of the way along), and the running dots
+  // follow those lines. No state is marked as home and no home dot is drawn.
   if (!page.from) {
+    html = swapOnce(html, "        var p = map.s[n]; return { n: n, p: p, dist: Math.hypot(p[1] - h[1], p[2] - h[2]), d: arcPath(h, p).d };",
+      "        var p = map.s[n], r = arcPath(one ? h : map.s[pair(n)], p); return { n: n, p: p, dist: Math.hypot(p[1] - h[1], p[2] - h[2]), d: r.d, len: r.len };", 'burst arcs');
+    html = swapOnce(html, "      box.classList.add('is-wave', 'is-burst');\n",
+      "      box.classList.add('is-wave', 'is-burst');\n" +
+      "      var west = Object.keys(map.s).sort(function (a, b) { return map.s[a][1] - map.s[b][1]; });\n" +
+      "      var pair = function (n) { var i = west.indexOf(n), k = west.length; return west[(i + Math.floor(k / (i % 2 ? 3 : 2))) % k]; };\n", 'burst pairs');
+    html = swapOnce(html, 'dur = 1.2 + o.dist / 500;', 'dur = 1.2 + (one ? o.dist : o.len) / 500;', 'runner speed');
     html = swapOnce(html, "var home = box.dataset.home || 'New York', h = map.s[home];\n      box.classList.add('is-wave', 'is-burst');",
       "var home = box.dataset.home || '', one = map.s[home] ? 1 : 0, h = map.s[home] || [null, map.w / 2, map.h / 2];\n      box.classList.add('is-wave', 'is-burst');", 'burst home');
     html = swapOnce(html, "'<g class=\"burst-live\"></g>' +\n        '<circle class=\"map-home-ring\" cx=\"' + h[1] + '\" cy=\"' + h[2] + '\" r=\"9\"/><circle class=\"map-home\" cx=\"' + h[1] + '\" cy=\"' + h[2] + '\" r=\"8\"/>';",
