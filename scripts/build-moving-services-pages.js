@@ -275,29 +275,19 @@ const PAGES = [
 /* ---------------------------------------------------------------- hero css */
 
 // Hero photos per page. The D.C. truck crosses a Potomac bridge with the
-// Capitol and the Monument on the skyline: the truck sits right of the copy,
-// the wash comes from the left, and on desktop the photo stops above the quote form (as on
+// Capitol and the Monument on the skyline. On desktop the photo is pinned to
+// the right edge at a set width, so on wider screens the truck moves clear of
+// the copy and the space on the left runs into the dark wash; and on desktop the photo stops above the quote form (as on
 // the NYC pages) so the whole truck shows.
 const HERO_CSS = {
   dc: `/* D.C. hero: the truck on a Potomac bridge, the Capitol on the skyline. */
 @media (min-width: 769px) {
   .hero::before {
     background:
-      linear-gradient(90deg, rgba(var(--wash), 0.9) 0%, rgba(var(--wash), 0.7) 34%, rgba(var(--wash), 0) 54%),
+      linear-gradient(90deg, var(--dark) calc(100% - max(1260px, 66%)), rgba(var(--wash), 0.9) calc(100% - max(1260px, 66%) + 180px), rgba(var(--wash), 0.62) max(40%, calc(100% - max(1260px, 66%) + 380px)), rgba(var(--wash), 0) max(56%, calc(100% - max(1260px, 66%) + 620px))),
       linear-gradient(180deg, rgba(var(--wash), 0.45) 0%, rgba(var(--wash), 0) 24%, rgba(var(--wash), 0) 88%, var(--dark) 100%),
-      var(--dark) url('/assets/images/dc/hero-desktop.webp') 0% 60% / max(118%, 1500px) auto no-repeat;
+      var(--dark) url('/assets/images/dc/hero-desktop.webp') right 62% / max(1260px, 66%) auto no-repeat;
     bottom: auto; height: calc(var(--photo-h, 100%) - 190px);
-  }
-}
-/* Wide screens: the copy column stays centred, so the photo keeps the size
-   it has at 1440px and sits against the right edge, with the truck still
-   beside the copy. What is left on the left runs into the dark wash. */
-@media (min-width: 1600px) {
-  .hero::before {
-    background:
-      linear-gradient(90deg, var(--dark) calc(100% - max(1600px, 83%)), rgba(var(--wash), 0.9) calc(100% - max(1600px, 83%) + 220px), rgba(var(--wash), 0.7) 42%, rgba(var(--wash), 0) 60%),
-      linear-gradient(180deg, rgba(var(--wash), 0.45) 0%, rgba(var(--wash), 0) 24%, rgba(var(--wash), 0) 88%, var(--dark) 100%),
-      var(--dark) url('/assets/images/dc/hero-desktop.webp') right 60% / max(1600px, 83%) auto no-repeat;
   }
 }
 @media (max-width: 768px) {
@@ -309,7 +299,7 @@ const HERO_CSS = {
         rgba(var(--wash), 0) 44vw,
         rgba(var(--wash), 0.88) 58vw,
         var(--dark) 72vw),
-      var(--dark) url('/assets/images/dc/hero-mobile.webp') center -86vw / 100% auto no-repeat;
+      var(--dark) url('/assets/images/dc/hero-mobile.webp') center -64vw / 100% auto no-repeat;
   }
 }
 @media (max-width: 768px) and (max-height: 640px) {
@@ -321,7 +311,7 @@ const HERO_CSS = {
         rgba(var(--wash), 0) 38vw,
         rgba(var(--wash), 0.88) 52vw,
         var(--dark) 66vw),
-      var(--dark) url('/assets/images/dc/hero-mobile.webp') center -90vw / 100% auto no-repeat;
+      var(--dark) url('/assets/images/dc/hero-mobile.webp') center -68vw / 100% auto no-repeat;
   }
 }
 `,
