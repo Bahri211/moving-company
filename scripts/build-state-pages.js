@@ -3186,6 +3186,11 @@ const staticPages = [
   { loc: '/nyc-to-california-long-distance-movers/', priority: '0.8', changefreq: 'monthly' },
   { loc: '/nyc-to-chicago-movers/', priority: '0.8', changefreq: 'monthly' },
   { loc: '/nyc-to-boston-movers/', priority: '0.8', changefreq: 'monthly' },
+  // D.C. and moving-services pages, built by scripts/build-moving-services-pages.js.
+  { loc: '/long-distance-movers-washington-dc/', priority: '0.9', changefreq: 'monthly' },
+  { loc: '/long-distance-moving-services/', priority: '0.8', changefreq: 'monthly' },
+  { loc: '/cross-country-moving-services/', priority: '0.8', changefreq: 'monthly' },
+  { loc: '/interstate-moving-services/', priority: '0.8', changefreq: 'monthly' },
   { loc: '/privacy-policy', priority: '0.3', changefreq: 'yearly' },
   { loc: '/terms-of-service', priority: '0.3', changefreq: 'yearly' },
 ];
