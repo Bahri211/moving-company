@@ -1273,6 +1273,10 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
    takes the card's width and the space kept for the photo on phones goes. */
 .t-6.t-noimg > div { max-width: 52rem; }
 @media (max-width: 768px) { .t-6.t-noimg { padding-top: 1.6rem; } }
+/* A moving-day frame without its photo (until the new one arrives): a soft
+   panel with a faint check mark keeps the row even. */
+.frame-noimg { background: linear-gradient(160deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)); display: grid; place-items: center; }
+.frame-noimg::before { content: ""; width: 38%; aspect-ratio: 1; background: rgba(255, 255, 255, 0.12); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E") center / contain no-repeat; }
 /* Static service cards: no hover lift or zoom, since they don't open. */
 .tile-static, .tile-static:hover { transform: none; cursor: default; }
 .tile-static:hover img { transform: none; }
@@ -1687,7 +1691,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h3>Everything wrapped</h3><p>Blankets, shrink and tape on every piece — not only the fragile ones.</p></article>
       <article class="frame"><div class="frame-img"><img src="/assets/images/lab/truck-branded.webp" alt="50STATEMOVERS truck parked outside a house" loading="lazy" /><span class="frame-num">3</span></div>
         <h3>At your new door</h3><p>Unloaded into the rooms you point to, on the date in your contract.</p></article>
-      <article class="frame"><div class="frame-img"><img src="/assets/images/lab/kitchen.webp" alt="Mover helping a customer unpack in her kitchen" loading="lazy" /><span class="frame-num">✓</span></div>
+      <article class="frame"><div class="frame-img frame-noimg"><span class="frame-num">✓</span></div>
         <h3>Settled in</h3><p>Beds built, furniture placed, and we don't leave until you've signed off.</p></article>
     </div>
     <div class="rail-bar reveal">
