@@ -97,11 +97,11 @@ const PAGES = [
   {
     slug: 'long-distance-moving-services',
     noTalk: true,
+    noStoragePhoto: true,
     // Photos in What we do: [template src, new src, alt, focus].
     photos: [
       ['/assets/images/lab/street-loading.webp', '/assets/images/nyc-florida/long-distance.webp', 'White box truck parked on a residential street', '50% 45%'],
       ['/assets/images/lab/wrapped-sunroom.webp', '/assets/images/nyc-florida/slide-7.webp', 'Two movers wheeling boxes up the ramp into a moving truck', '40% 40%'],
-      ['/assets/images/lab/loading-ramp.webp', '/assets/images/lab/truck-loaded.webp', 'Furniture wrapped in blue moving blankets, stacked and strapped', '50% 50%'],
     ],
     // The three small What we do cards get a photo each: [src, alt, focus].
     tilePhotos: {
@@ -497,6 +497,14 @@ function buildPage(page) {
   // ---- the "Talk to a moving specialist" band under the hero, where a page
   // asks for it to go; the trust strip below it stays
   if (page.noTalk) html = swapBlock(html, '    <div class="talk reveal">', '    <div class="proof reveal">', '    <div class="proof reveal">', 'talk band');
+
+  // ---- Storage between homes without its photo: the copy takes the card's
+  // width, and on phones the space kept for the photo goes
+  if (page.noStoragePhoto) {
+    html = swapOnce(html, '        <img src="/assets/images/lab/loading-ramp.webp" alt="Mover loading a wrapped piece into the truck" loading="lazy" />\n', '', 'storage photo');
+    html = swapOnce(html, 'class="tile tile-plain t-6 reveal"', 'class="tile tile-plain t-6 t-noimg reveal"', 'storage tile');
+    html = swapOnce(html, '/* Static service cards', '.t-6.t-noimg > div { max-width: 52rem; }\n@media (max-width: 768px) { .t-6.t-noimg { padding-top: 1.6rem; } }\n/* Static service cards', 'storage css');
+  }
 
   // ---- the page's own photos in What we do and On moving day
   for (const [from, to, alt, pos] of page.photos || []) {
