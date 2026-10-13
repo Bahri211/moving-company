@@ -1289,17 +1289,18 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
   .rm-row { gap: 2rem; }
 }
 @media (max-width: 768px) {
-  /* Phones: all four photos on screen at once, two by two, each with its
-     caption underneath. */
+  /* Phones: big alternating rows - the photo takes 58% of the width beside
+     a short caption, swapping sides each row. */
   .real-moves { padding: 0.5rem 0 3rem; }
-  .rm-head { margin-bottom: 1.1rem; }
+  .rm-head { margin-bottom: 1.2rem; }
   .rm-head h2 { font-size: 1.75rem; }
-  .rm-rows { grid-template-columns: 1fr 1fr; gap: 1.1rem 0.7rem; }
-  .rm-row, .rm-flip { display: block; }
-  .rm-img { aspect-ratio: 4 / 5; border-radius: 16px; box-shadow: 0 14px 30px -22px rgba(0, 0, 0, 0.5); }
-  .rm-text { padding: 0.6rem 0.1rem 0; }
-  .rm-text h3 { font-size: 1rem; line-height: 1.2; letter-spacing: -0.01em; }
-  .rm-text p { margin-top: 0.25rem; font-size: 0.8rem; line-height: 1.4; }
+  .rm-rows { gap: 1.1rem; }
+  .rm-row { grid-template-columns: 58% 1fr; gap: 0.9rem; align-items: center; }
+  .rm-flip { grid-template-columns: 1fr 58%; }
+  .rm-flip .rm-img { order: 2; }
+  .rm-img { aspect-ratio: 4 / 5; border-radius: 18px; box-shadow: 0 14px 30px -22px rgba(0, 0, 0, 0.5); }
+  .rm-text h3 { font-size: 1.12rem; line-height: 1.2; letter-spacing: -0.015em; }
+  .rm-text p { margin-top: 0.4rem; font-size: 0.86rem; line-height: 1.45; }
   .rm-text .rm-long { display: none; }
   .rm-text .rm-short { display: block; }
   .rm-text .btn { display: none; }
