@@ -113,8 +113,8 @@ const PAGES = [
     },
     // On moving day, in order: [src, alt, focus, title, text]. The last frame gets the check mark.
     frames: [
-      ['/assets/images/lab/runner-hall.webp', 'Blue floor runner laid down a hallway', '50% 50%', 'Floors protected', 'Runners down and door jambs padded before a single box is carried.'],
       ['/assets/images/nyc-florida/settled-in.webp', 'Furniture wrapped in plastic and blankets in an empty living room', '50% 50%', 'Everything wrapped', 'Blankets, shrink and tape on every piece — not only the fragile ones.'],
+      ['/assets/images/lab/runner-hall.webp', 'Blue floor runner laid down a hallway', '50% 50%', 'Floors protected', 'Runners down and door jambs padded before a single box is carried.'],
       ['/assets/images/nyc-florida/storage.webp', 'Boxes, bags and storage tubs ready to load', '40% 50%', 'Ready to load', 'Every box labelled by room and on the inventory before it goes on the truck.'],
       ['/assets/images/nyc-florida/slide-2.webp', 'Two movers loading furniture into a truck from a garage', '50% 40%', 'Loaded by your crew', 'The crew that packs your home loads the truck, tier by tier, and strapped row by row.'],
       ['/assets/images/nyc-florida/new-door.webp', 'Moving truck parked outside a house on delivery day', '74% 50%', 'At your new door', 'Unloaded into the rooms you point to, on the date in your contract.'],
