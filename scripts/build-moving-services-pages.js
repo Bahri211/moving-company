@@ -62,7 +62,6 @@ const PAGES = [
     serviceType: 'Long distance moving',
     city: true,
     hero: 'dc',
-    formBg: '/assets/images/dc/form-bg.webp',
     badge: 'D.C.',
     from: 'Washington D.C.',
     coverageH2: 'From Washington, D.C., <em>to every state.</em>',
@@ -305,29 +304,6 @@ const HERO_CSS = {
 `,
 };
 
-/* ----------------------------------------------------------- form photo */
-
-// Trial: a photo behind the quote form, under a navy tint so the fields and
-// the white text stay legible. The fields keep their own light boxes.
-const formBgCss = url => `/* Quote form over a photo (trial). */
-.quote-card {
-  background: linear-gradient(180deg, rgba(var(--wash), 0.74) 0%, rgba(var(--wash), 0.86) 100%), var(--dark) url('${url}') center 58% / cover no-repeat;
-  color: #fff;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14) inset, 0 2px 6px rgba(0, 0, 0, 0.12), 0 40px 80px -30px rgba(0, 0, 0, 0.6);
-}
-.quote-card .qhead { border-bottom-color: rgba(255, 255, 255, 0.16); }
-.quote-card .qh-time, .quote-card .qh-steps { color: rgba(255, 255, 255, 0.72); }
-.quote-card .qh-steps li.is-on { color: #fff; }
-.quote-card .qh-steps li + li::before { background: rgba(255, 255, 255, 0.25); }
-.quote-card .qh-steps i { background: rgba(255, 255, 255, 0.16); color: #fff; }
-.quote-card .qh-steps li.is-on i { background: var(--accent); color: var(--on-accent); }
-.quote-card .qs2-head span, .quote-card .consent { color: rgba(255, 255, 255, 0.8); }
-.quote-card .consent-toggle { color: #fff; }
-.quote-card .consent.is-error { color: #ffb4ab; }
-.quote-card .q-error { color: #ffb4ab; }
-.quote-card .field { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18); }
-`;
-
 /* ------------------------------------------------------------------ helpers */
 
 function swapOnce(html, from, to, label) {
@@ -452,7 +428,7 @@ function buildPage(page) {
     `<link rel="preload" as="image" href="${heroMob}" media="(max-width: 768px)">`, 'preload mobile');
   // The NYC street photo and its positioning go: the page's own photo takes
   // its place, or the lab's own hero stays.
-  html = swapBlock(html, '/* NYC hero.', '/* Static service cards', (page.hero ? HERO_CSS[page.hero] : '') + (page.formBg ? formBgCss(page.formBg) : '') + '/* Static service cards', 'NYC hero css');
+  html = swapBlock(html, '/* NYC hero.', '/* Static service cards', (page.hero ? HERO_CSS[page.hero] : '') + '/* Static service cards', 'NYC hero css');
   html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, schema(page));
 
   // ---- ticker, drawer
