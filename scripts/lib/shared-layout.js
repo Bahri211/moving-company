@@ -8,6 +8,7 @@
  *     fitted over a blurred copy; text kept for screen readers); Long distance
  *     opens its sheet instead of leaving the page; Storage has no photo
  *   - On moving day: six frames, Everything wrapped first
+ *   - phones: the headline and the quote form sit a little lower in the hero
  *
  * Every step checks whether it has already been made, so this can run over a
  * page that already has it (the NYC pages are edited in place, and the
@@ -56,9 +57,14 @@ const CSS = `/* Shared layout: photo-only What we do cards. The whole photo show
   .tile-only { min-height: 0 !important; aspect-ratio: 4 / 3; }
   .t-1.tile-only, .t-5.tile-only { aspect-ratio: 16 / 10; }
   .t-6.t-noimg { padding-top: 1.6rem; }
+  /* The headline and the quote form sit a little lower in the hero. */
+  .hero { padding-top: calc(55vw + 3.7rem); }
   /* The call + Free quote dock waits until the hero form has scrolled away. */
   .callbar { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s; }
   .callbar:not(.is-on) { transform: translateY(calc(100% + 1rem)); opacity: 0; pointer-events: none; }
+}
+@media (max-width: 768px) and (max-height: 640px) {
+  .hero { padding-top: calc(49vw + 1.6rem); }
 }
 `;
 const CSS_MARK = '/* Shared layout: photo-only What we do cards.';
@@ -73,7 +79,13 @@ const tilePic = (src, alt) => `<span class="tile-pic" style="--pic: url('${src}'
 
 function applySharedLayout(html) {
   // Styles, once, at the end of the page's first <style>.
-  if (!html.includes(CSS_MARK)) html = swap(html, '</style>', CSS + '</style>', 'first </style>');
+  // An older copy of these styles is swapped for the current one.
+  const old = html.indexOf(CSS_MARK);
+  if (old !== -1) {
+    const end = html.indexOf('</style>', old);
+    html = html.slice(0, old) + html.slice(end);
+  }
+  html = swap(html, '</style>', CSS + '</style>', 'first </style>');
 
   // No "Talk to a moving specialist" band; the trust strip below it stays.
   const talk = html.indexOf('    <div class="talk reveal">');

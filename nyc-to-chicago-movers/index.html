@@ -1218,9 +1218,14 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
   .tile-only { min-height: 0 !important; aspect-ratio: 4 / 3; }
   .t-1.tile-only, .t-5.tile-only { aspect-ratio: 16 / 10; }
   .t-6.t-noimg { padding-top: 1.6rem; }
+  /* The headline and the quote form sit a little lower in the hero. */
+  .hero { padding-top: calc(55vw + 3.7rem); }
   /* The call + Free quote dock waits until the hero form has scrolled away. */
   .callbar { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s; }
   .callbar:not(.is-on) { transform: translateY(calc(100% + 1rem)); opacity: 0; pointer-events: none; }
+}
+@media (max-width: 768px) and (max-height: 640px) {
+  .hero { padding-top: calc(49vw + 1.6rem); }
 }
 </style>
 <style>
