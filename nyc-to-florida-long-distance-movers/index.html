@@ -1269,6 +1269,10 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
   .hero-slides i { transition: none; }
   .hero-slides i.is-zoom { animation: none; }
 }
+/* Storage card without its photo (until the new one arrives): the copy
+   takes the card's width and the space kept for the photo on phones goes. */
+.t-6.t-noimg > div { max-width: 52rem; }
+@media (max-width: 768px) { .t-6.t-noimg { padding-top: 1.6rem; } }
 /* Static service cards: no hover lift or zoom, since they don't open. */
 .tile-static, .tile-static:hover { transform: none; cursor: default; }
 .tile-static:hover img { transform: none; }
@@ -1661,8 +1665,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h3>Packing &amp; crating</h3>
         <p>Museum-grade packing and custom crates built on site.</p>
       </a>
-      <a href="#quote" class="tile tile-plain t-6 reveal" data-service="storage" aria-haspopup="dialog">
-        <img src="/assets/images/lab/loading-ramp.webp" alt="Mover loading a wrapped piece into the truck" loading="lazy" />
+      <a href="#quote" class="tile tile-plain t-6 t-noimg reveal" data-service="storage" aria-haspopup="dialog">
         <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         <div><h3>Storage between homes</h3><p>Climate-controlled, monitored around the clock, inventoried and insured — for a week or a year.</p>
           <ul class="tile-feats"><li>Climate-controlled</li><li>Inventoried</li><li>Insured</li><li>Delivered when you say</li></ul></div>
