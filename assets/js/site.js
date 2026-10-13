@@ -126,37 +126,6 @@
     });
   }
 
-  // Planned move date: a native date field draws its placeholder and value in
-  // the visitor's OS language (Arabic on an Arabic Mac, etc.). It rests as a
-  // text field with an English MM/DD/YYYY hint, becomes a real date field when
-  // touched so phones still get their native picker, and writes the chosen
-  // date back as MM/DD/YYYY — which is also what goes into the quote email.
-  (function () {
-    var input = $('qf-date');
-    if (!input) return;
-    var lastPointer = '';
-    function toDate() {
-      if (input.type === 'date') return;
-      var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(input.value);
-      input.type = 'date';
-      input.value = m ? m[3] + '-' + m[1] + '-' + m[2] : '';
-    }
-    function toText() {
-      if (input.type !== 'date') return;
-      var v = input.value;
-      input.type = 'text';
-      input.value = /^\d{4}-\d{2}-\d{2}$/.test(v) ? v.slice(5, 7) + '/' + v.slice(8, 10) + '/' + v.slice(0, 4) : '';
-    }
-    input.addEventListener('pointerdown', function (e) { lastPointer = e.pointerType; toDate(); });
-    input.addEventListener('focus', toDate);
-    input.addEventListener('blur', toText);
-    // Desktop: open the calendar on click. Touch devices open their own picker.
-    input.addEventListener('click', function () {
-      if (lastPointer === 'mouse' && input.showPicker) { try { input.showPicker(); } catch (err) {} }
-    });
-    // Enter pressed inside the field submits without a blur: normalise first.
-    document.addEventListener('submit', function (e) { if (e.target === form) toText(); }, true);
-  })();
 
   [['qf-from', 'error-from'], ['qf-to', 'error-to'], ['qf-name', 'error-name'],
    ['qf-email', 'error-email'], ['qf-phone', 'error-phone']].forEach(function (pair) {
@@ -226,7 +195,6 @@
       'Moving from: ' + from,
       'Moving to: ' + to,
       $('qf-size').value ? 'Home size: ' + $('qf-size').value : null,
-      $('qf-date').value ? 'Planned move date: ' + $('qf-date').value : null,
       $('qf-notes') && $('qf-notes').value.trim() ? 'Notes: ' + $('qf-notes').value.trim() : null,
       sms ? 'SMS opt-in: ' + (sms.checked ? 'Yes' : 'No') : null,
       steps ? 'Form: 3-step, phone + email (test)' : null,

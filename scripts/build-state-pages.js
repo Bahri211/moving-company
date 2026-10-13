@@ -685,7 +685,7 @@ function quoteFormSteps(originState) {
       </fieldset>
 
       <fieldset class="qs-step" aria-label="Your move" hidden>
-        <div class="form-row form-row-2">
+        <div class="form-row">
           <div>
             <label for="qf-size">Home size</label>
             <select id="qf-size">
@@ -698,10 +698,6 @@ function quoteFormSteps(originState) {
               <option>5+ Bedrooms</option>
               <option>Office / Commercial</option>
             </select>
-          </div>
-          <div>
-            <label for="qf-date">Move date</label>
-            <input type="text" id="qf-date" placeholder="MM/DD/YYYY" autocomplete="off" />
           </div>
         </div>
         <div class="qs-nav">

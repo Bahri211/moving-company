@@ -1272,6 +1272,20 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
 /* Static service cards: no hover lift or zoom, since they don't open. */
 .tile-static, .tile-static:hover { transform: none; cursor: default; }
 .tile-static:hover img { transform: none; }
+/* Quote form: no move date; SMS consent in the row on wide screens. */
+@media (min-width: 1101px) {
+  .qstep-1 { grid-template-columns: repeat(3, minmax(0, 1fr)) auto; }
+}
+@media (max-width: 1100px) {
+  .qstep-1 #q-size { width: 100%; }
+  .qstep-1 .field:nth-of-type(3) { grid-column: 1 / -1; }
+}
+@media (min-width: 1101px) {
+  .qstep-2 { grid-template-columns: minmax(0, 13rem) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 17rem) auto; align-items: center; }
+  .consent { grid-column: auto; order: 0; align-items: center; padding: 0 0.2rem; font-size: 0.78rem; line-height: 1.4; }
+  .consent-more:not(.is-open) { display: none; }
+  .consent-toggle { display: inline; font-size: 0.78rem; }
+}
 .hero-tag { display: inline-flex; align-items: center; gap: 0.55rem; margin: -0.4rem 0 1.1rem; font-size: clamp(1.1rem, 1.7vw, 1.4rem); font-weight: 700; letter-spacing: -0.015em; color: #fff; }
 .hero-tag::before { content: ""; width: 26px; height: 3px; border-radius: 3px; background: var(--accent); }
 /* Titles here run longer than the lab's, so they sit a size down and stay
@@ -1514,7 +1528,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="field"><label for="q-to">Moving to</label><select id="q-to" class="state-select"><option value="">Choose state</option></select></div>
         <div class="field"><label for="q-size">Home size</label>
           <select id="q-size"><option value="">Choose size</option><option>Studio</option><option>1 Bedroom</option><option>2 Bedrooms</option><option>3 Bedrooms</option><option>4 Bedrooms</option><option>5+ Bedrooms</option><option>Office / Commercial</option></select></div>
-        <div class="field field-date"><label for="q-date">Move date</label><span class="date-show is-empty" id="q-date-show" aria-hidden="true">Choose date</span><input id="q-date" type="date" autocomplete="off" /></div>
         <button class="btn" type="submit">Get my price <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
       <div class="qstep qstep-2" hidden>
@@ -1920,26 +1933,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     form.addEventListener('input', function (e) { var f = fieldOf(e.target); if (f) f.classList.remove('is-error'); errorEl.textContent = ''; });
     form.addEventListener('change', function (e) { var f = e.target.closest && fieldOf(e.target); if (f) f.classList.remove('is-error'); });
 
-    // Move date: a real native date field, invisible over the whole box.
-    // Clicks open the picker anywhere on it; the chosen date is shown in
-    // English, and past dates can't be picked.
-    var date = $('q-date'), dateShow = $('q-date-show');
-    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
-    var now = new Date();
-    date.min = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
-    function showDate() {
-      var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date.value);
-      dateShow.classList.toggle('is-empty', !m);
-      // Phones drop the weekday so the date fits its half of the form.
-      var opts = { month: 'short', day: 'numeric', year: 'numeric' };
-      if (!window.matchMedia('(max-width: 768px)').matches) opts.weekday = 'short';
-      dateShow.textContent = m ? new Date(+m[1], m[2] - 1, +m[3]).toLocaleDateString('en-US', opts) : 'Choose date';
-    }
-    // MM/DD/YYYY for the lead email, as before.
-    function dateText() { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date.value); return m ? m[2] + '/' + m[3] + '/' + m[1] : ''; }
-    date.addEventListener('input', showDate);
-    date.addEventListener('change', showDate);
-    date.addEventListener('click', function () { if (date.showPicker) { try { date.showPicker(); } catch (err) {} } });
 
     $('q-sms-toggle').addEventListener('click', function (e) {
       e.preventDefault();
@@ -2007,7 +2000,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         'Moving from: ' + $('q-from').value,
         'Moving to: ' + $('q-to').value,
         $('q-size').value ? 'Home size: ' + $('q-size').value : null,
-        dateText() ? 'Planned move date: ' + dateText() : null,
         form.dataset.service ? 'Service: ' + form.dataset.service : null,
         'SMS opt-in: Yes',
         'Form: ' + (form.dataset.name || 'design lab (2-step bar)'),

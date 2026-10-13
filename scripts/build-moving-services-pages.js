@@ -304,28 +304,6 @@ const HERO_CSS = {
 `,
 };
 
-/* ---------------------------------------------------------------- form css */
-
-// The quote form without its move-date field: step one is from, to and home
-// size. On a two-column form (up to 1100px) home size takes a row of its own.
-// On wide screens step two puts the SMS consent beside phone and email, kept
-// short behind "Read more" as it is on phones.
-const FORM_CSS = `/* Quote form: no move date; SMS consent in the row on wide screens. */
-@media (min-width: 1101px) {
-  .qstep-1 { grid-template-columns: repeat(3, minmax(0, 1fr)) auto; }
-}
-@media (max-width: 1100px) {
-  .qstep-1 #q-size { width: 100%; }
-  .qstep-1 .field:nth-of-type(3) { grid-column: 1 / -1; }
-}
-@media (min-width: 1101px) {
-  .qstep-2 { grid-template-columns: minmax(0, 13rem) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 17rem) auto; align-items: center; }
-  .consent { grid-column: auto; order: 0; align-items: center; padding: 0 0.2rem; font-size: 0.78rem; line-height: 1.4; }
-  .consent-more:not(.is-open) { display: none; }
-  .consent-toggle { display: inline; font-size: 0.78rem; }
-}
-`;
-
 /* ------------------------------------------------------------------ helpers */
 
 function swapOnce(html, from, to, label) {
@@ -450,7 +428,7 @@ function buildPage(page) {
     `<link rel="preload" as="image" href="${heroMob}" media="(max-width: 768px)">`, 'preload mobile');
   // The NYC street photo and its positioning go: the page's own photo takes
   // its place, or the lab's own hero stays.
-  html = swapBlock(html, '/* NYC hero.', '/* Static service cards', (page.hero ? HERO_CSS[page.hero] : '') + FORM_CSS + '/* Static service cards', 'NYC hero css');
+  html = swapBlock(html, '/* NYC hero.', '/* Static service cards', (page.hero ? HERO_CSS[page.hero] : '') + '/* Static service cards', 'NYC hero css');
   html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, schema(page));
 
   // ---- ticker, drawer
@@ -465,11 +443,6 @@ function buildPage(page) {
   html = swapBlock(html, '<p class="hero-lede">', '</p>', `<p class="hero-lede">${page.lede}</p>`, 'hero lede');
   html = swapOnce(html, 'data-from="New York" data-name="NYC Long Distance Movers page"',
     `${page.from ? `data-from="${page.from}" ` : ''}data-name="${esc(page.formName)}"`, 'form');
-
-  // ---- no move date: the field, its script and its line in the lead email
-  html = swapOnce(html, '        <div class="field field-date"><label for="q-date">Move date</label><span class="date-show is-empty" id="q-date-show" aria-hidden="true">Choose date</span><input id="q-date" type="date" autocomplete="off" /></div>\n', '', 'date field');
-  html = swapBlock(html, '    // Move date: a real native date field', "date.addEventListener('click', function () { if (date.showPicker) { try { date.showPicker(); } catch (err) {} } });\n", '', 'date script');
-  html = swapOnce(html, "        dateText() ? 'Planned move date: ' + dateText() : null,\n", '', 'date in lead');
 
   // ---- coverage map
   html = swapOnce(html, '<h2>From New York City, <em>to every state.</em></h2>', `<h2>${page.coverageH2}</h2>`, 'coverage h2');

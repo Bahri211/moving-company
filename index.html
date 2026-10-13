@@ -904,7 +904,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </fieldset>
 
       <fieldset class="qs-step" aria-label="Your move" hidden>
-        <div class="form-row form-row-2">
+        <div class="form-row">
           <div>
             <label for="qf-size">Home size</label>
             <select id="qf-size">
@@ -917,10 +917,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <option>5+ Bedrooms</option>
               <option>Office / Commercial</option>
             </select>
-          </div>
-          <div>
-            <label for="qf-date">Move date</label>
-            <input type="text" id="qf-date" placeholder="MM/DD/YYYY" autocomplete="off" />
           </div>
         </div>
         <div class="qs-nav">
@@ -1713,38 +1709,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     else if (e.target.closest('.qs-back')) showStep(qsCurrent - 1);
   });
 
-  // Planned move date: a native date field draws its placeholder and value in
-  // the visitor's OS language (Arabic on an Arabic Mac, etc.). It rests as a
-  // text field with an English MM/DD/YYYY hint, becomes a real date field when
-  // touched so phones still get their native picker, and writes the chosen
-  // date back as MM/DD/YYYY — which is also what goes into the quote email.
-  (function () {
-    var input = document.getElementById('qf-date');
-    if (!input) return;
-    var lastPointer = '';
-    function toDate() {
-      if (input.type === 'date') return;
-      var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(input.value);
-      input.type = 'date';
-      input.value = m ? m[3] + '-' + m[1] + '-' + m[2] : '';
-    }
-    function toText() {
-      if (input.type !== 'date') return;
-      var v = input.value;
-      input.type = 'text';
-      input.value = /^\d{4}-\d{2}-\d{2}$/.test(v) ? v.slice(5, 7) + '/' + v.slice(8, 10) + '/' + v.slice(0, 4) : '';
-    }
-    input.addEventListener('pointerdown', function (e) { lastPointer = e.pointerType; toDate(); });
-    input.addEventListener('focus', toDate);
-    input.addEventListener('blur', toText);
-    // Desktop: open the calendar on click. Touch devices open their own picker.
-    input.addEventListener('click', function () {
-      if (lastPointer === 'mouse' && input.showPicker) { try { input.showPicker(); } catch (err) {} }
-    });
-    // Enter pressed inside the field submits without a blur: normalise first.
-    document.addEventListener('submit', function (e) { if (e.target === input.form) toText(); }, true);
-  })();
-
   async function submitQuote(e) {
     e.preventDefault();
     const form = e.target;
@@ -1789,12 +1753,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
 
     const size = document.getElementById('qf-size').value;
-    const date = document.getElementById('qf-date').value;
     const message = [
       `Moving from: ${from}`,
       `Moving to: ${to}`,
       size  ? `Home size: ${size}`          : null,
-      date  ? `Planned move date: ${date}`  : null,
       `SMS opt-in: ${smsConsent.checked ? 'Yes' : 'No'}`,
       'Form: 3-step, phone + email (homepage)',
       `Landing page: ${window.location.pathname}`,
