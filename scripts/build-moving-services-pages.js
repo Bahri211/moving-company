@@ -23,6 +23,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { applySharedLayout } = require('./lib/shared-layout');
 
 const ROOT = path.join(__dirname, '..');
 const SITE = 'https://www.50statemovers.com';
@@ -51,41 +52,10 @@ const NATIONWIDE = {
 
 /* ------------------------------------------------------------ copy per page */
 
-// Layout settings every page here shares: no "Talk to a specialist" band, the
-// phone dock only once the hero form has gone, photo-only What we do cards
-// (White glove keeps its text, Storage has none), and six On moving day frames.
-const SHARED = {
-  noTalk: true,
-  dockOnScroll: true,
-  noStoragePhoto: true,
-  photoOnlyLongDistance: true,
-  // Photos in What we do: [template src, new src, alt, focus].
-  photos: [
-    ['/assets/images/lab/street-loading.webp', '/assets/images/nyc-florida/long-distance.webp', 'White box truck parked on a residential street', '50% 45%'],
-    ['/assets/images/lab/wrapped-sunroom.webp', '/assets/images/nyc-florida/slide-7.webp', 'Two movers wheeling boxes up the ramp into a moving truck', '40% 40%'],
-  ],
-  // The three small What we do cards get a photo each: [src, alt, focus].
-  tilePhotos: {
-    residential: ['/assets/images/nyc-florida/slide-6.webp', 'Moving truck parked in the driveway of a house', '55% 55%'],
-    commercial: ['/assets/images/nyc-florida/slide-5.webp', 'Shelving, tubs and boxes secured inside a moving truck', '50% 40%'],
-    packing: ['/assets/images/nyc-florida/slide-4.webp', 'Boxes packed floor to ceiling in the back of a moving truck', '50% 40%'],
-  },
-  // On moving day, in order: [src, alt, focus, title, text]. The last frame gets the check mark.
-  frames: [
-    ['/assets/images/nyc-florida/settled-in.webp', 'Furniture wrapped in plastic and blankets in an empty living room', '50% 50%', 'Everything wrapped', 'Blankets, shrink and tape on every piece — not only the fragile ones.'],
-    ['/assets/images/lab/runner-hall.webp', 'Blue floor runner laid down a hallway', '50% 50%', 'Floors protected', 'Runners down and door jambs padded before a single box is carried.'],
-    ['/assets/images/nyc-florida/storage.webp', 'Boxes, bags and storage tubs ready to load', '40% 50%', 'Ready to load', 'Every box labelled by room and on the inventory before it goes on the truck.'],
-    ['/assets/images/nyc-florida/slide-2.webp', 'Two movers loading furniture into a truck from a garage', '50% 40%', 'Loaded by your crew', 'The crew that packs your home loads the truck, tier by tier, and strapped row by row.'],
-    ['/assets/images/nyc-florida/new-door.webp', 'Moving truck parked outside a house on delivery day', '74% 50%', 'At your new door', 'Unloaded into the rooms you point to, on the date in your contract.'],
-    ['/assets/images/nyc-florida/slide-3.webp', 'Moving truck ramp leading to the door of a new house', '30% 50%', 'Settled in', 'Beds built, furniture placed, and we don\'t leave until you\'ve signed off.'],
-  ],
-};
-
 
 const PAGES = [
   {
     slug: 'long-distance-movers-washington-dc',
-    ...SHARED,
     title: 'Long Distance Movers Washington DC | Binding Prices — 50STATEMOVERS INC',
     description:
       'Long distance movers in Washington, DC: one licensed crew from your D.C. door to any state, a binding written estimate and $1M liability coverage.',
@@ -128,7 +98,6 @@ const PAGES = [
   },
   {
     slug: 'long-distance-moving-services',
-    ...SHARED,
     title: 'Long-Distance Moving Services | Packing & Storage — 50STATEMOVERS INC',
     description:
       'Long-distance moving services in all 48 states: packing, crating, furniture disassembly, climate-controlled storage and delivery, on one binding written estimate.',
@@ -184,7 +153,6 @@ const PAGES = [
   },
   {
     slug: 'cross-country-moving-services',
-    ...SHARED,
     title: 'Cross-Country Moving Services | Coast-to-Coast Movers — 50STATEMOVERS INC',
     description:
       'Cross-country moving services coast to coast across all 48 states. One licensed crew, one truck with no transfers, and one binding written estimate.',
@@ -240,7 +208,6 @@ const PAGES = [
   },
   {
     slug: 'interstate-moving-services',
-    ...SHARED,
     title: 'Interstate Moving Services | Licensed State-to-State Movers — 50STATEMOVERS INC',
     description:
       'Interstate moving services from a licensed carrier (USDOT 4575745). Moves across any state line in the lower 48, on one binding written estimate.',
@@ -338,27 +305,6 @@ const HERO_CSS = {
 }
 `,
 };
-
-/* ------------------------------------------------------------ split tiles */
-
-// What we do cards that get a photo (tilePhotos): the photo on top, the text
-// on a plain panel below, so a busy photo never sits under the words.
-const SPLIT_CSS = `/* What we do: photo-only cards. The whole photo shows, fitted inside the
-   card, with a blurred copy of it filling any space at the sides; the text is
-   kept for screen readers only. Clicking still opens the card. */
-.tile-only { padding: 0; gap: 0; background: var(--dark); }
-.tile-pic { position: absolute; inset: 0; display: block; overflow: hidden; background: var(--dark); }
-.tile-pic::before { content: ""; position: absolute; inset: -20px; background: var(--pic) center / cover no-repeat; filter: blur(18px) brightness(0.85); transform: scale(1.1); }
-.tile-pic img { position: relative; display: block; width: 100%; height: 100%; object-fit: contain; transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
-.tile-only:hover .tile-pic img { transform: scale(1.03); }
-.tile-only h3, .tile-only p, .tile-only .tile-more, .tile-only .tile-tag { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-.tile-only .tile-arrow { z-index: 1; background: rgba(255, 255, 255, 0.88); color: var(--ink); }
-@media (max-width: 768px) {
-  .tile-only { min-height: 0 !important; aspect-ratio: 4 / 3; }
-  .t-1.tile-only { aspect-ratio: 16 / 10; }
-  .t-5.tile-only { aspect-ratio: 16 / 10; }
-}
-`;
 
 /* ------------------------------------------------------------------ helpers */
 
@@ -484,7 +430,7 @@ function buildPage(page) {
     `<link rel="preload" as="image" href="${heroMob}" media="(max-width: 768px)">`, 'preload mobile');
   // The NYC street photo and its positioning go: the page's own photo takes
   // its place, or the lab's own hero stays.
-  html = swapBlock(html, '/* NYC hero.', '/* Static service cards', (page.hero ? HERO_CSS[page.hero] : '') + (page.tilePhotos ? SPLIT_CSS : '') + '/* Static service cards', 'NYC hero css');
+  html = swapBlock(html, '/* NYC hero.', '/* Static service cards', (page.hero ? HERO_CSS[page.hero] : '') + '/* Static service cards', 'NYC hero css');
   html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, schema(page));
 
   // ---- ticker, drawer
@@ -492,75 +438,8 @@ function buildPage(page) {
   html = swapBlock(html, '<div class="drawer-more">', '</div>',
     `<div class="drawer-more">\n    <p>Popular</p>\n${CLUSTER.map(([h, t]) => `    <a href="${h}">${t}</a>`).join('\n')}\n  </div>`, 'drawer more');
 
-  // ---- the "Talk to a moving specialist" band under the hero, where a page
-  // asks for it to go; the trust strip below it stays
-  if (page.noTalk) html = swapBlock(html, '    <div class="talk reveal">', '    <div class="proof reveal">', '    <div class="proof reveal">', 'talk band');
-
-  // ---- Storage between homes without its photo: the copy takes the card's
-  // width, and on phones the space kept for the photo goes
-  if (page.noStoragePhoto) {
-    html = swapOnce(html, '        <img src="/assets/images/lab/loading-ramp.webp" alt="Mover loading a wrapped piece into the truck" loading="lazy" />\n', '', 'storage photo');
-    html = swapOnce(html, 'class="tile tile-plain t-6 reveal"', 'class="tile tile-plain t-6 t-noimg reveal"', 'storage tile');
-    html = swapOnce(html, '/* Static service cards', '.t-6.t-noimg > div { max-width: 52rem; }\n@media (max-width: 768px) { .t-6.t-noimg { padding-top: 1.6rem; } }\n/* Static service cards', 'storage css');
-  }
-
-  // ---- the page's own photos in What we do and On moving day
-  for (const [from, to, alt, pos] of page.photos || []) {
-    html = html.replace(new RegExp('<img src="' + from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '" alt="[^"]*"', 'g'), m => {
-      return `<img src="${to}" alt="${alt}" style="object-position: ${pos};"`;
-    });
-    if (!html.includes(to)) throw new Error(`build-moving-services-pages: photo ${from} not found`);
-  }
-
-  // ---- Long distance card: the photo alone fills the card, like the small
-  // cards below it (White glove keeps its text over the photo)
-  if (page.photoOnlyLongDistance) {
-    html = html.replace(/<a href="([^"]*)" class="tile tile-photo t-1 reveal">\n        <img src="([^"]*)" alt="([^"]*)" style="[^"]*"[^>]*\/>\n([\s\S]*?)<\/a>/, (m, href, src, alt, inner) => {
-      inner = inner.replace(/\s*<span class="tile-tag">[^<]*<\/span>/, '');
-      return `<a href="#quote" class="tile tile-split tile-only t-1 reveal" data-service="long-distance" aria-haspopup="dialog">\n        <span class="tile-pic" style="--pic: url('${src}');"><img src="${src}" alt="${alt}" loading="lazy" /></span>\n${inner}</a>`;
-    });
-    if (!html.includes('tile-only t-1')) throw new Error('build-moving-services-pages: Long distance card not found');
-    // It opens its own sheet like the other cards instead of leaving the page.
-    html = swapOnce(html, '  var SERVICES = {\n', `  var SERVICES = {
-    'long-distance': ['Long distance', 'Moves between any of the 48 states, on one truck with one crew from pickup to delivery.',
-      ['One binding written price for the whole route', 'Your things stay on our truck, no transfers', 'Every item on a signed inventory', 'Delivery window written into your contract']],
-`, 'services list');
-  }
-
-  // ---- photos on the small What we do cards: the photo alone fills the
-  // card, with no text on it or under it (the heading stays for screen
-  // readers); the outline number and the line drawing step aside
-  for (const [svc, [src, alt, pos]] of Object.entries(page.tilePhotos || {})) {
-    const re = new RegExp('<a href="#quote" class="tile tile-(?:dark|accent|plain) (t-[3-5]) reveal" data-service="' + svc + '" aria-haspopup="dialog">([\\s\\S]*?)</a>');
-    if (!re.test(html)) throw new Error(`build-moving-services-pages: tile ${svc} not found`);
-    html = html.replace(re, (m, t, inner) => {
-      inner = inner.replace(/\s*<svg class="tile-mark"[\s\S]*?<\/svg>/, '').replace(/\s*<span class="big-num">[^<]*<\/span>/, '');
-      return `<a href="#quote" class="tile tile-split tile-only ${t} reveal" data-service="${svc}" aria-haspopup="dialog">\n        <span class="tile-pic" style="--pic: url('${src}');"><img src="${src}" alt="${alt}" loading="lazy" /></span>${inner}</a>`;
-    });
-  }
-
-  // ---- On moving day: the page's own frames
-  if (page.frames) {
-    const frames = page.frames.map(([src, alt, pos, t, d], i) =>
-      `      <article class="frame"><div class="frame-img"><img src="${src}" alt="${alt}" loading="lazy" style="object-position: ${pos};" /><span class="frame-num">${i === page.frames.length - 1 ? '✓' : i + 1}</span></div>\n        <h3>${t}</h3><p>${d}</p></article>`).join('\n');
-    html = swapBlock(html, '    <div class="rail reveal">', '    </div>\n    <div class="rail-bar reveal">', `    <div class="rail reveal">\n${frames}\n    </div>\n    <div class="rail-bar reveal">`, 'rail');
-  }
-
-  // ---- phones: the call + Free quote dock waits until the hero form has
-  // scrolled away, then slides up (and goes again if the form comes back)
-  if (page.dockOnScroll) {
-    html = swapOnce(html, '/* Static service cards', `@media (max-width: 768px) {
-  .callbar { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s; }
-  .callbar:not(.is-on) { transform: translateY(calc(100% + 1rem)); opacity: 0; pointer-events: none; }
-}
-/* Static service cards`, 'dock css');
-    html = swapOnce(html, "      if (lab) lab.classList.toggle('is-on', !formOn);\n",
-      "      if (lab) lab.classList.toggle('is-on', !formOn);\n      if (callbar) callbar.classList.toggle('is-on', !formOn);\n", 'dock toggle');
-    html = swapOnce(html, "  var lab = document.querySelector('.lab'), pill = document.querySelector('.float-cta');\n",
-      "  var lab = document.querySelector('.lab'), pill = document.querySelector('.float-cta'), callbar = document.querySelector('.callbar');\n", 'dock var');
-    html = swapOnce(html, "  } else { if (lab) lab.classList.add('is-on'); pill.classList.add('is-on'); }",
-      "  } else { if (lab) lab.classList.add('is-on'); pill.classList.add('is-on'); if (callbar) callbar.classList.add('is-on'); }", 'dock fallback');
-  }
+  // ---- the layout all the new-design pages share (scripts/lib/shared-layout.js)
+  html = applySharedLayout(html);
 
   // ---- hero
   html = swapOnce(html, '<section class="hero">', '<section class="hero hero-long">', 'hero section');
