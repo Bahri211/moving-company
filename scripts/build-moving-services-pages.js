@@ -97,13 +97,26 @@ const PAGES = [
   {
     slug: 'long-distance-moving-services',
     noTalk: true,
-    // Photos swapped in What we do and On moving day: [template src, new src, alt, focus].
+    // Photos in What we do: [template src, new src, alt, focus].
     photos: [
       ['/assets/images/lab/street-loading.webp', '/assets/images/nyc-florida/long-distance.webp', 'White box truck parked on a residential street', '50% 45%'],
       ['/assets/images/lab/wrapped-sunroom.webp', '/assets/images/nyc-florida/slide-7.webp', 'Two movers wheeling boxes up the ramp into a moving truck', '40% 40%'],
       ['/assets/images/lab/loading-ramp.webp', '/assets/images/lab/truck-loaded.webp', 'Furniture wrapped in blue moving blankets, stacked and strapped', '50% 50%'],
-      ['/assets/images/lab/truck-branded.webp', '/assets/images/nyc-florida/new-door.webp', 'Moving truck parked outside a house on delivery day', '74% 50%'],
-      ['/assets/images/lab/kitchen.webp', '/assets/images/nyc-florida/settled-in.webp', 'Furniture wrapped in plastic and blankets in an empty living room', '50% 50%'],
+    ],
+    // The three small What we do cards get a photo each: [src, alt, focus].
+    tilePhotos: {
+      residential: ['/assets/images/nyc-florida/slide-6.webp', 'Moving truck parked in the driveway of a house', '55% 55%'],
+      commercial: ['/assets/images/nyc-florida/slide-5.webp', 'Shelving, tubs and boxes secured inside a moving truck', '50% 40%'],
+      packing: ['/assets/images/nyc-florida/slide-4.webp', 'Boxes packed floor to ceiling in the back of a moving truck', '50% 40%'],
+    },
+    // On moving day, in order: [src, alt, focus, title, text]. The last frame gets the check mark.
+    frames: [
+      ['/assets/images/lab/runner-hall.webp', 'Blue floor runner laid down a hallway', '50% 50%', 'Floors protected', 'Runners down and door jambs padded before a single box is carried.'],
+      ['/assets/images/nyc-florida/settled-in.webp', 'Furniture wrapped in plastic and blankets in an empty living room', '50% 50%', 'Everything wrapped', 'Blankets, shrink and tape on every piece — not only the fragile ones.'],
+      ['/assets/images/nyc-florida/storage.webp', 'Boxes, bags and storage tubs ready to load', '40% 50%', 'Ready to load', 'Every box labelled by room and on the inventory before it goes on the truck.'],
+      ['/assets/images/nyc-florida/slide-2.webp', 'Two movers loading furniture into a truck from a garage', '50% 40%', 'Loaded by your crew', 'The crew that packs your home loads the truck, tier by tier, and strapped row by row.'],
+      ['/assets/images/nyc-florida/new-door.webp', 'Moving truck parked outside a house on delivery day', '74% 50%', 'At your new door', 'Unloaded into the rooms you point to, on the date in your contract.'],
+      ['/assets/images/nyc-florida/slide-3.webp', 'Moving truck ramp leading to the door of a new house', '30% 50%', 'Settled in', 'Beds built, furniture placed, and we don\'t leave until you\'ve signed off.'],
     ],
     title: 'Long-Distance Moving Services | Packing & Storage — 50STATEMOVERS INC',
     description:
@@ -455,6 +468,24 @@ function buildPage(page) {
       return `<img src="${to}" alt="${alt}" style="object-position: ${pos};"`;
     });
     if (!html.includes(to)) throw new Error(`build-moving-services-pages: photo ${from} not found`);
+  }
+
+  // ---- photos on the small What we do cards: they become photo cards, the
+  // outline number and the line drawing step aside
+  for (const [svc, [src, alt, pos]] of Object.entries(page.tilePhotos || {})) {
+    const re = new RegExp('<a href="#quote" class="tile tile-(?:dark|accent|plain) (t-[3-5]) reveal" data-service="' + svc + '" aria-haspopup="dialog">([\\s\\S]*?)</a>');
+    if (!re.test(html)) throw new Error(`build-moving-services-pages: tile ${svc} not found`);
+    html = html.replace(re, (m, t, inner) => {
+      inner = inner.replace(/\s*<svg class="tile-mark"[\s\S]*?<\/svg>/, '').replace(/\s*<span class="big-num">[^<]*<\/span>/, '');
+      return `<a href="#quote" class="tile tile-photo ${t} reveal" data-service="${svc}" aria-haspopup="dialog">\n        <img src="${src}" alt="${alt}" loading="lazy" style="object-position: ${pos};" />${inner}</a>`;
+    });
+  }
+
+  // ---- On moving day: the page's own frames
+  if (page.frames) {
+    const frames = page.frames.map(([src, alt, pos, t, d], i) =>
+      `      <article class="frame"><div class="frame-img"><img src="${src}" alt="${alt}" loading="lazy" style="object-position: ${pos};" /><span class="frame-num">${i === page.frames.length - 1 ? '✓' : i + 1}</span></div>\n        <h3>${t}</h3><p>${d}</p></article>`).join('\n');
+    html = swapBlock(html, '    <div class="rail reveal">', '    </div>\n    <div class="rail-bar reveal">', `    <div class="rail reveal">\n${frames}\n    </div>\n    <div class="rail-bar reveal">`, 'rail');
   }
 
   // ---- hero
