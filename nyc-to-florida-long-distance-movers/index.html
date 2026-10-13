@@ -1633,13 +1633,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p>An apartment or a full office, one room or five bedrooms — we plan the crew, the truck and the packing around what you're actually moving, and where it needs to go.</p>
     </div>
     <div class="bento">
-      <a href="/long-distance-movers/" class="tile tile-photo t-1 reveal">
+      <a href="#quote" class="tile tile-photo t-1 reveal" data-service="long-distance" aria-haspopup="dialog">
         <img src="/assets/images/nyc-florida/long-distance.webp" alt="White box truck parked on a residential street" loading="lazy" style="object-position: 50% 45%;" />
         <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         <span class="tile-tag">Door to door</span>
         <h3>Long distance</h3>
         <p>Cross-country and interstate relocations, door to door, on one truck from pickup to delivery.</p>
-        <span class="tile-more">Explore long distance <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <span class="tile-more">What’s included <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </a>
       <a href="#quote" class="tile tile-photo t-2 reveal" data-service="white-glove" aria-haspopup="dialog">
         <img src="/assets/images/lab/wrapped-sunroom.webp" alt="Furniture wrapped in blue blankets in a sunroom" loading="lazy" />
@@ -2080,6 +2080,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   // Service tiles without a page of their own open a short sheet; its button
   // goes to the quote form and notes the service on the lead.
   var SERVICES = {
+    'long-distance': ['Long distance', 'New York City to Florida, or any of the 48 states, on one truck with one crew from pickup to delivery.',
+      ['One binding written price for the whole route', 'Your things stay on our truck, no transfers', 'Every item on a signed inventory', 'Delivery window written into your contract']],
     'white-glove': ['White glove', 'The full-service option: we pack, move, unpack and set your home up before we leave.',
       ['Everything packed and unpacked for you', 'Furniture placed and beds rebuilt', 'Pictures and mirrors hung', 'Packing materials taken away']],
     'residential': ['Residential', 'Studio apartments to five-bedroom homes, moved by one crew from door to door.',
