@@ -96,6 +96,7 @@ const PAGES = [
   },
   {
     slug: 'long-distance-moving-services',
+    noTalk: true,
     title: 'Long-Distance Moving Services | Packing & Storage — 50STATEMOVERS INC',
     description:
       'Long-distance moving services in all 48 states: packing, crating, furniture disassembly, climate-controlled storage and delivery, on one binding written estimate.',
@@ -435,6 +436,10 @@ function buildPage(page) {
   html = html.split('<span>Flat-rate routes nationwide</span>').join(`<span>${page.ticker}</span>`);
   html = swapBlock(html, '<div class="drawer-more">', '</div>',
     `<div class="drawer-more">\n    <p>Popular</p>\n${CLUSTER.map(([h, t]) => `    <a href="${h}">${t}</a>`).join('\n')}\n  </div>`, 'drawer more');
+
+  // ---- the "Talk to a moving specialist" band under the hero, where a page
+  // asks for it to go; the trust strip below it stays
+  if (page.noTalk) html = swapBlock(html, '    <div class="talk reveal">', '    <div class="proof reveal">', '    <div class="proof reveal">', 'talk band');
 
   // ---- hero
   html = swapOnce(html, '<section class="hero">', '<section class="hero hero-long">', 'hero section');
