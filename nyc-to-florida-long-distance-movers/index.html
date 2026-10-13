@@ -1269,6 +1269,40 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
   .hero-slides i { transition: none; }
   .hero-slides i.is-zoom { animation: none; }
 }
+/* Real moves: a photo mosaic straight under the trust strip, so the first
+   scroll shows actual trucks, crews and loads, with the price button beside
+   the heading. Phones get a swipeable row. */
+.real-moves { padding: 0.5rem 0 4.5rem; }
+.rm-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; margin-bottom: 1.8rem; }
+.rm-head h2 { margin-top: 0.8rem; font-size: clamp(2rem, 3.6vw, 3rem); }
+.rm-cta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; flex: none; }
+.rm-cta .btn svg { width: 18px; height: 18px; }
+.rm-call { font-size: 0.9rem; font-weight: 600; color: var(--muted); text-decoration: none; }
+.rm-call:hover { color: var(--ink); }
+.rm-grid { display: grid; grid-template-columns: 1.35fr 1fr 1fr; grid-template-rows: 250px 250px; gap: 0.9rem; }
+.rm-tile { position: relative; margin: 0; border-radius: 20px; overflow: hidden; background: var(--dark); box-shadow: 0 18px 40px -30px rgba(0, 0, 0, 0.5); }
+.rm-big { grid-row: span 2; }
+.rm-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.rm-tile:hover img { transform: scale(1.04); }
+.rm-tile figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 3rem 1.2rem 1.1rem; background: linear-gradient(180deg, transparent, rgba(8, 18, 32, 0.85)); color: #fff; }
+.rm-tile b { display: block; font: 700 1.08rem/1.25 "Inter Tight", Inter, sans-serif; letter-spacing: -0.01em; }
+.rm-tile span { display: block; margin-top: 0.25rem; font-size: 0.86rem; line-height: 1.4; color: rgba(255, 255, 255, 0.82); }
+.rm-big b { font-size: 1.45rem; }
+.rm-big span { font-size: 0.95rem; max-width: 26rem; }
+@media (max-width: 900px) {
+  .rm-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 300px 210px 210px; }
+  .rm-big { grid-column: span 2; grid-row: auto; }
+}
+@media (max-width: 768px) {
+  .real-moves { padding: 0.5rem 0 3rem; }
+  .rm-head { flex-direction: column; align-items: flex-start; gap: 1rem; margin-bottom: 1.2rem; }
+  .rm-head h2 { font-size: 2rem; }
+  .rm-cta { display: none; }
+  .rm-grid { display: grid; grid-template-columns: none; grid-template-rows: none; grid-auto-flow: column; grid-auto-columns: 80%; gap: 0.7rem; overflow-x: auto; scroll-snap-type: x mandatory; margin-right: -1rem; padding-right: 1rem; scrollbar-width: none; }
+  .rm-grid::-webkit-scrollbar { display: none; }
+  .rm-tile, .rm-big { grid-column: auto; grid-row: auto; height: 320px; scroll-snap-align: start; border-radius: 18px; }
+  .rm-big b { font-size: 1.15rem; }
+}
 /* Static service cards: no hover lift or zoom, since they don't open. */
 .tile-static, .tile-static:hover { transform: none; cursor: default; }
 .tile-static:hover img { transform: none; }
@@ -1569,6 +1603,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <span class="proof-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span>
         <div><strong>$1M liability coverage</strong><small>Full Value Protection available for your belongings.</small></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="section real-moves" id="real-moves" aria-label="Real moves">
+  <div class="wrap">
+    <div class="rm-head">
+      <div><span class="eyebrow">Real moves</span><h2>Packed with care, <em>delivered in Florida.</em></h2></div>
+      <div class="rm-cta">
+        <a href="#quote" class="btn">Get my price <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a href="tel:+18885051086" class="rm-call">or call +1 (888) 505-1086</a>
+      </div>
+    </div>
+    <div class="rm-grid">
+      <figure class="rm-tile rm-big"><img src="/assets/images/nyc-florida/slide-4.webp" alt="Boxes packed floor to ceiling in the back of a moving truck" loading="lazy" style="object-position: 50% 40%;" /><figcaption><b>Packed tight for the long drive</b><span>Loaded in tiers and strapped row by row, so nothing shifts on I-95.</span></figcaption></figure>
+      <figure class="rm-tile"><img src="/assets/images/nyc-florida/slide-2.webp" alt="Two movers loading furniture into a truck from a driveway" loading="lazy" style="object-position: 50% 35%;" /><figcaption><b>Two-person crews</b><span>The people who load your home are the people who deliver it.</span></figcaption></figure>
+      <figure class="rm-tile"><img src="/assets/images/nyc-florida/settled-in.webp" alt="Furniture wrapped in plastic and blankets in an empty room" loading="lazy" style="object-position: 50% 55%;" /><figcaption><b>Wrapped before it moves</b><span>Blankets and stretch wrap on every piece, not just the fragile ones.</span></figcaption></figure>
+      <figure class="rm-tile"><img src="/assets/images/nyc-florida/slide-5.webp" alt="Moving truck interior with shelving, tubs and boxes secured" loading="lazy" style="object-position: 50% 50%;" /><figcaption><b>Every load organized</b><span>Tagged, inventoried and checked off the same list at delivery.</span></figcaption></figure>
+      <figure class="rm-tile"><img src="/assets/images/nyc-florida/slide-3.webp" alt="Moving truck ramp leading to the door of a new house" loading="lazy" style="object-position: 30% 50%;" /><figcaption><b>Right to your new door</b><span>Ramp down and unloaded into the rooms you point to in Florida.</span></figcaption></figure>
     </div>
   </div>
 </section>
