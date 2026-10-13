@@ -505,9 +505,14 @@ function buildPage(page) {
   if (page.photoOnlyLongDistance) {
     html = html.replace(/<a href="([^"]*)" class="tile tile-photo t-1 reveal">\n        <img src="([^"]*)" alt="([^"]*)" style="[^"]*"[^>]*\/>\n([\s\S]*?)<\/a>/, (m, href, src, alt, inner) => {
       inner = inner.replace(/\s*<span class="tile-tag">[^<]*<\/span>/, '');
-      return `<a href="${href}" class="tile tile-split tile-only t-1 reveal">\n        <span class="tile-pic" style="--pic: url('${src}');"><img src="${src}" alt="${alt}" loading="lazy" /></span>\n${inner}</a>`;
+      return `<a href="#quote" class="tile tile-split tile-only t-1 reveal" data-service="long-distance" aria-haspopup="dialog">\n        <span class="tile-pic" style="--pic: url('${src}');"><img src="${src}" alt="${alt}" loading="lazy" /></span>\n${inner}</a>`;
     });
     if (!html.includes('tile-only t-1')) throw new Error('build-moving-services-pages: Long distance card not found');
+    // It opens its own sheet like the other cards instead of leaving the page.
+    html = swapOnce(html, '  var SERVICES = {\n', `  var SERVICES = {
+    'long-distance': ['Long distance', 'Moves between any of the 48 states, on one truck with one crew from pickup to delivery.',
+      ['One binding written price for the whole route', 'Your things stay on our truck, no transfers', 'Every item on a signed inventory', 'Delivery window written into your contract']],
+`, 'services list');
   }
 
   // ---- photos on the small What we do cards: the photo alone fills the
