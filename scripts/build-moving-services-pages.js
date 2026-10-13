@@ -97,6 +97,14 @@ const PAGES = [
   {
     slug: 'long-distance-moving-services',
     noTalk: true,
+    // Photos swapped in What we do and On moving day: [template src, new src, alt, focus].
+    photos: [
+      ['/assets/images/lab/street-loading.webp', '/assets/images/nyc-florida/long-distance.webp', 'White box truck parked on a residential street', '50% 45%'],
+      ['/assets/images/lab/wrapped-sunroom.webp', '/assets/images/nyc-florida/slide-7.webp', 'Two movers wheeling boxes up the ramp into a moving truck', '40% 40%'],
+      ['/assets/images/lab/loading-ramp.webp', '/assets/images/lab/truck-loaded.webp', 'Furniture wrapped in blue moving blankets, stacked and strapped', '50% 50%'],
+      ['/assets/images/lab/truck-branded.webp', '/assets/images/nyc-florida/new-door.webp', 'Moving truck parked outside a house on delivery day', '74% 50%'],
+      ['/assets/images/lab/kitchen.webp', '/assets/images/nyc-florida/settled-in.webp', 'Furniture wrapped in plastic and blankets in an empty living room', '50% 50%'],
+    ],
     title: 'Long-Distance Moving Services | Packing & Storage — 50STATEMOVERS INC',
     description:
       'Long-distance moving services in all 48 states: packing, crating, furniture disassembly, climate-controlled storage and delivery, on one binding written estimate.',
@@ -440,6 +448,14 @@ function buildPage(page) {
   // ---- the "Talk to a moving specialist" band under the hero, where a page
   // asks for it to go; the trust strip below it stays
   if (page.noTalk) html = swapBlock(html, '    <div class="talk reveal">', '    <div class="proof reveal">', '    <div class="proof reveal">', 'talk band');
+
+  // ---- the page's own photos in What we do and On moving day
+  for (const [from, to, alt, pos] of page.photos || []) {
+    html = html.replace(new RegExp('<img src="' + from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '" alt="[^"]*"', 'g'), m => {
+      return `<img src="${to}" alt="${alt}" style="object-position: ${pos};"`;
+    });
+    if (!html.includes(to)) throw new Error(`build-moving-services-pages: photo ${from} not found`);
+  }
 
   // ---- hero
   html = swapOnce(html, '<section class="hero">', '<section class="hero hero-long">', 'hero section');
