@@ -432,7 +432,7 @@ function buildPage(page) {
     `<link rel="preload" as="image" href="${heroMob}" media="(max-width: 768px)">`, 'preload mobile');
   // The NYC street photo and its positioning go: the page's own photo takes
   // its place, or the lab's own hero stays.
-  html = swapBlock(html, '/* NYC hero.', '/* Static service cards', (page.hero ? HERO_CSS[page.hero] : '') + (page.formLowerMobile ? '@media (max-width: 768px) { .quote { padding-top: 2.4rem; } }\n@media (max-width: 768px) and (max-height: 640px) { .quote { padding-top: 1.6rem; } }\n' : '') + '/* Static service cards', 'NYC hero css');
+  html = swapBlock(html, '/* NYC hero.', '/* Static service cards', (page.hero ? HERO_CSS[page.hero] : '') + (page.formLowerMobile ? '@media (max-width: 768px) { .quote { padding-top: 3.6rem; } }\n@media (max-width: 768px) and (max-height: 640px) { .quote { padding-top: 2rem; } }\n' : '') + '/* Static service cards', 'NYC hero css');
   html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, schema(page));
 
   // ---- ticker, drawer
