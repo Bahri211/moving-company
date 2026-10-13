@@ -1211,8 +1211,7 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
   .hero::before {
     background:
       linear-gradient(270deg, rgba(var(--wash), 0.88) 0%, rgba(var(--wash), 0.62) 36%, rgba(var(--wash), 0) 62%),
-      linear-gradient(180deg, rgba(var(--wash), 0.45) 0%, rgba(var(--wash), 0) 24%, rgba(var(--wash), 0) 88%, var(--dark) 100%),
-      var(--dark) url('/assets/images/nyc/hero-desktop.webp') 28% 88% / cover no-repeat;
+      linear-gradient(180deg, rgba(var(--wash), 0.45) 0%, rgba(var(--wash), 0) 24%, rgba(var(--wash), 0) 88%, var(--dark) 100%);
     /* The photo stops above the quote form and fades into the band it sits
        on, so the whole truck shows between the nav and the form. */
     bottom: auto; height: calc(var(--photo-h, 100%) - 190px);
@@ -1230,8 +1229,7 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
         rgba(var(--wash), 0.05) 17vw,
         rgba(var(--wash), 0) 44vw,
         rgba(var(--wash), 0.88) 58vw,
-        var(--dark) 72vw),
-      var(--dark) url('/assets/images/nyc/hero-mobile.webp') center -80vw / 100% auto no-repeat;
+        var(--dark) 72vw);
   }
 }
 @media (max-width: 768px) and (max-height: 640px) {
@@ -1242,9 +1240,36 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
         rgba(var(--wash), 0.05) 12vw,
         rgba(var(--wash), 0) 38vw,
         rgba(var(--wash), 0.88) 52vw,
-        var(--dark) 66vw),
-      var(--dark) url('/assets/images/nyc/hero-mobile.webp') center -86vw / 100% auto no-repeat;
+        var(--dark) 66vw);
   }
+}
+/* Hero slideshow (this page only): the photos sit on their own layer under
+   the tint, crossfading every few seconds with a slow zoom. The first slide is
+   the NYC street photo, so the page paints as before; the rest load after the
+   page has. The layer has the photo's box and follows the same parallax. */
+.hero-slides { position: absolute; inset: 0; z-index: -2; height: var(--photo-h, auto); overflow: hidden; transform: translate3d(0, var(--hero-shift, 0px), 0); will-change: transform; }
+.hero-slides i { position: absolute; inset: 0; opacity: 0; background-image: var(--d, none); background-position: var(--pd, center); background-size: cover; background-repeat: no-repeat; transition: opacity 1.4s ease; }
+.hero-slides i.is-on { opacity: 1; }
+.hero-slides i.is-top { z-index: 1; }
+.hero-slides i.is-zoom { animation: slide-zoom 6.5s ease-out both; }
+@keyframes slide-zoom { from { transform: scale(1.07); } to { transform: scale(1); } }
+@supports (animation-timeline: scroll()) {
+  .hero-slides { animation: hero-sink linear both; animation-timeline: scroll(root block); animation-range: 0 100vh; }
+}
+@media (min-width: 769px) {
+  .hero-slides { bottom: auto; height: calc(var(--photo-h, 100%) - 190px); }
+}
+@media (max-width: 768px) {
+  .hero-slides { bottom: auto; height: 72vw; }
+  .hero-slides i { background-image: var(--m, none); background-position: var(--pm, center); background-size: var(--sm, cover); }
+}
+@media (max-width: 768px) and (max-height: 640px) {
+  .hero-slides { height: 66vw; }
+  .hero-slides i:first-child { --pm: center -86vw; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-slides i { transition: none; }
+  .hero-slides i.is-zoom { animation: none; }
 }
 /* Static service cards: no hover lift or zoom, since they don't open. */
 .tile-static, .tile-static:hover { transform: none; cursor: default; }
@@ -1468,6 +1493,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <main>
 <section class="hero">
+  <div class="hero-slides" id="hero-slides" aria-hidden="true">
+    <i class="is-on" style="--d: url('/assets/images/nyc/hero-desktop.webp'); --m: url('/assets/images/nyc/hero-mobile.webp'); --pd: 28% 88%; --pm: center -80vw; --sm: 100% auto;"></i>
+    <i data-d="/assets/images/nyc-florida/slide-1.webp" data-m="/assets/images/nyc-florida/slide-1-m.webp" style="--pd: 30% 70%; --pm: 60% 60%;"></i>
+    <i data-d="/assets/images/nyc-florida/slide-2.webp" data-m="/assets/images/nyc-florida/slide-2-m.webp" style="--pd: 50% 28%; --pm: 50% 55%;"></i>
+    <i data-d="/assets/images/nyc-florida/slide-3.webp" data-m="/assets/images/nyc-florida/slide-3-m.webp" style="--pd: 30% 50%; --pm: 30% 50%;"></i>
+    <i data-d="/assets/images/nyc-florida/slide-4.webp" data-m="/assets/images/nyc-florida/slide-4-m.webp" style="--pd: 50% 30%; --pm: 50% 40%;"></i>
+    <i data-d="/assets/images/nyc-florida/slide-5.webp" data-m="/assets/images/nyc-florida/slide-5-m.webp" style="--pd: 50% 50%; --pm: 50% 50%;"></i>
+    <i data-d="/assets/images/nyc-florida/slide-6.webp" data-m="/assets/images/nyc-florida/slide-6-m.webp" style="--pd: 50% 60%; --pm: 60% 55%;"></i>
+  </div>
   <div class="wrap hero-copy">
     <span class="hero-badge"><b>NYC</b> Licensed interstate carrier · USDOT 4575745</span>
     <h1>NYC to Florida<br><em>Long Distance Movers</em></h1>
@@ -2427,6 +2461,39 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
     window.addEventListener('resize', function () { if (map && selFrom.value) render(false); });
   })();
+})();
+</script>
+<script>
+/* Hero slideshow: the other photos load once the page has, then one fades
+   in every 5 seconds while the hero is on screen. Reduced motion: the first
+   photo stays. */
+(function () {
+  var box = document.getElementById('hero-slides');
+  if (!box || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var slides = box.children, at = 0, timer = 0, ready = false, visible = true;
+  function load() {
+    for (var i = 1; i < slides.length; i++) {
+      slides[i].style.setProperty('--d', "url('" + slides[i].dataset.d + "')");
+      slides[i].style.setProperty('--m', "url('" + slides[i].dataset.m + "')");
+      new Image().src = matchMedia('(max-width: 768px)').matches ? slides[i].dataset.m : slides[i].dataset.d;
+    }
+    ready = true; start();
+  }
+  function next() {
+    var cur = slides[at];
+    at = (at + 1) % slides.length;
+    var el = slides[at];
+    // The incoming photo goes on top, so the fade works going back to the first too.
+    cur.classList.remove('is-top');
+    el.classList.remove('is-zoom'); void el.offsetWidth; el.classList.add('is-on', 'is-zoom', 'is-top');
+    setTimeout(function () { cur.classList.remove('is-on', 'is-zoom'); }, 1400);
+  }
+  function start() { if (ready && visible && !document.hidden && !timer) timer = setInterval(next, 5000); }
+  function stop() { clearInterval(timer); timer = 0; }
+  new IntersectionObserver(function (en) { visible = en[0].isIntersecting; visible ? start() : stop(); }).observe(box);
+  document.addEventListener('visibilitychange', function () { document.hidden ? stop() : start(); });
+  if (document.readyState === 'complete') setTimeout(load, 1200);
+  else addEventListener('load', function () { setTimeout(load, 1200); });
 })();
 </script>
 </body>
