@@ -97,6 +97,7 @@ const PAGES = [
   {
     slug: 'long-distance-moving-services',
     noTalk: true,
+    dockOnScroll: true,
     noStoragePhoto: true,
     photoOnlyLongDistance: true,
     // Photos in What we do: [template src, new src, alt, focus].
@@ -532,6 +533,22 @@ function buildPage(page) {
     const frames = page.frames.map(([src, alt, pos, t, d], i) =>
       `      <article class="frame"><div class="frame-img"><img src="${src}" alt="${alt}" loading="lazy" style="object-position: ${pos};" /><span class="frame-num">${i === page.frames.length - 1 ? '✓' : i + 1}</span></div>\n        <h3>${t}</h3><p>${d}</p></article>`).join('\n');
     html = swapBlock(html, '    <div class="rail reveal">', '    </div>\n    <div class="rail-bar reveal">', `    <div class="rail reveal">\n${frames}\n    </div>\n    <div class="rail-bar reveal">`, 'rail');
+  }
+
+  // ---- phones: the call + Free quote dock waits until the hero form has
+  // scrolled away, then slides up (and goes again if the form comes back)
+  if (page.dockOnScroll) {
+    html = swapOnce(html, '/* Static service cards', `@media (max-width: 768px) {
+  .callbar { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s; }
+  .callbar:not(.is-on) { transform: translateY(calc(100% + 1rem)); opacity: 0; pointer-events: none; }
+}
+/* Static service cards`, 'dock css');
+    html = swapOnce(html, "      if (lab) lab.classList.toggle('is-on', !formOn);\n",
+      "      if (lab) lab.classList.toggle('is-on', !formOn);\n      if (callbar) callbar.classList.toggle('is-on', !formOn);\n", 'dock toggle');
+    html = swapOnce(html, "  var lab = document.querySelector('.lab'), pill = document.querySelector('.float-cta');\n",
+      "  var lab = document.querySelector('.lab'), pill = document.querySelector('.float-cta'), callbar = document.querySelector('.callbar');\n", 'dock var');
+    html = swapOnce(html, "  } else { if (lab) lab.classList.add('is-on'); pill.classList.add('is-on'); }",
+      "  } else { if (lab) lab.classList.add('is-on'); pill.classList.add('is-on'); if (callbar) callbar.classList.add('is-on'); }", 'dock fallback');
   }
 
   // ---- hero

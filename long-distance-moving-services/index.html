@@ -1248,6 +1248,10 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
 }
 .t-6.t-noimg > div { max-width: 52rem; }
 @media (max-width: 768px) { .t-6.t-noimg { padding-top: 1.6rem; } }
+@media (max-width: 768px) {
+  .callbar { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s; }
+  .callbar:not(.is-on) { transform: translateY(calc(100% + 1rem)); opacity: 0; pointer-events: none; }
+}
 /* Static service cards: no hover lift or zoom, since they don't open. */
 .tile-static, .tile-static:hover { transform: none; cursor: default; }
 .tile-static:hover img { transform: none; }
@@ -2137,13 +2141,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   // Palette switcher (phones) and desktop quote pill show once the hero form is off screen.
   // Desktop quote pill: same, but it also steps aside for the closing CTA band
   // and the footer, which carry their own quote buttons.
-  var lab = document.querySelector('.lab'), pill = document.querySelector('.float-cta');
+  var lab = document.querySelector('.lab'), pill = document.querySelector('.float-cta'), callbar = document.querySelector('.callbar');
   var quoteCard = document.querySelector('.quote-card'), endZones = [document.querySelector('.cta-box'), document.querySelector('.foot')];
   if ('IntersectionObserver' in window) {
     var seen = new Map();
     var sync = function () {
       var formOn = seen.get(quoteCard), endOn = endZones.some(function (el) { return seen.get(el); });
       if (lab) lab.classList.toggle('is-on', !formOn);
+      if (callbar) callbar.classList.toggle('is-on', !formOn);
       pill.classList.toggle('is-on', !formOn && !endOn);
     };
     var watch = new IntersectionObserver(function (entries) {
@@ -2151,7 +2156,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       sync();
     });
     [quoteCard].concat(endZones).forEach(function (el) { watch.observe(el); });
-  } else { if (lab) lab.classList.add('is-on'); pill.classList.add('is-on'); }
+  } else { if (lab) lab.classList.add('is-on'); pill.classList.add('is-on'); if (callbar) callbar.classList.add('is-on'); }
 
   // Scroll-driven: hero parallax, and the truck on the process road. Parallax
   // is skipped under reduced motion; the truck is tied to the scroll like a
