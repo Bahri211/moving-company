@@ -51,9 +51,41 @@ const NATIONWIDE = {
 
 /* ------------------------------------------------------------ copy per page */
 
+// Layout settings every page here shares: no "Talk to a specialist" band, the
+// phone dock only once the hero form has gone, photo-only What we do cards
+// (White glove keeps its text, Storage has none), and six On moving day frames.
+const SHARED = {
+  noTalk: true,
+  dockOnScroll: true,
+  noStoragePhoto: true,
+  photoOnlyLongDistance: true,
+  // Photos in What we do: [template src, new src, alt, focus].
+  photos: [
+    ['/assets/images/lab/street-loading.webp', '/assets/images/nyc-florida/long-distance.webp', 'White box truck parked on a residential street', '50% 45%'],
+    ['/assets/images/lab/wrapped-sunroom.webp', '/assets/images/nyc-florida/slide-7.webp', 'Two movers wheeling boxes up the ramp into a moving truck', '40% 40%'],
+  ],
+  // The three small What we do cards get a photo each: [src, alt, focus].
+  tilePhotos: {
+    residential: ['/assets/images/nyc-florida/slide-6.webp', 'Moving truck parked in the driveway of a house', '55% 55%'],
+    commercial: ['/assets/images/nyc-florida/slide-5.webp', 'Shelving, tubs and boxes secured inside a moving truck', '50% 40%'],
+    packing: ['/assets/images/nyc-florida/slide-4.webp', 'Boxes packed floor to ceiling in the back of a moving truck', '50% 40%'],
+  },
+  // On moving day, in order: [src, alt, focus, title, text]. The last frame gets the check mark.
+  frames: [
+    ['/assets/images/nyc-florida/settled-in.webp', 'Furniture wrapped in plastic and blankets in an empty living room', '50% 50%', 'Everything wrapped', 'Blankets, shrink and tape on every piece — not only the fragile ones.'],
+    ['/assets/images/lab/runner-hall.webp', 'Blue floor runner laid down a hallway', '50% 50%', 'Floors protected', 'Runners down and door jambs padded before a single box is carried.'],
+    ['/assets/images/nyc-florida/storage.webp', 'Boxes, bags and storage tubs ready to load', '40% 50%', 'Ready to load', 'Every box labelled by room and on the inventory before it goes on the truck.'],
+    ['/assets/images/nyc-florida/slide-2.webp', 'Two movers loading furniture into a truck from a garage', '50% 40%', 'Loaded by your crew', 'The crew that packs your home loads the truck, tier by tier, and strapped row by row.'],
+    ['/assets/images/nyc-florida/new-door.webp', 'Moving truck parked outside a house on delivery day', '74% 50%', 'At your new door', 'Unloaded into the rooms you point to, on the date in your contract.'],
+    ['/assets/images/nyc-florida/slide-3.webp', 'Moving truck ramp leading to the door of a new house', '30% 50%', 'Settled in', 'Beds built, furniture placed, and we don\'t leave until you\'ve signed off.'],
+  ],
+};
+
+
 const PAGES = [
   {
     slug: 'long-distance-movers-washington-dc',
+    ...SHARED,
     title: 'Long Distance Movers Washington DC | Binding Prices — 50STATEMOVERS INC',
     description:
       'Long distance movers in Washington, DC: one licensed crew from your D.C. door to any state, a binding written estimate and $1M liability coverage.',
@@ -96,30 +128,7 @@ const PAGES = [
   },
   {
     slug: 'long-distance-moving-services',
-    noTalk: true,
-    dockOnScroll: true,
-    noStoragePhoto: true,
-    photoOnlyLongDistance: true,
-    // Photos in What we do: [template src, new src, alt, focus].
-    photos: [
-      ['/assets/images/lab/street-loading.webp', '/assets/images/nyc-florida/long-distance.webp', 'White box truck parked on a residential street', '50% 45%'],
-      ['/assets/images/lab/wrapped-sunroom.webp', '/assets/images/nyc-florida/slide-7.webp', 'Two movers wheeling boxes up the ramp into a moving truck', '40% 40%'],
-    ],
-    // The three small What we do cards get a photo each: [src, alt, focus].
-    tilePhotos: {
-      residential: ['/assets/images/nyc-florida/slide-6.webp', 'Moving truck parked in the driveway of a house', '55% 55%'],
-      commercial: ['/assets/images/nyc-florida/slide-5.webp', 'Shelving, tubs and boxes secured inside a moving truck', '50% 40%'],
-      packing: ['/assets/images/nyc-florida/slide-4.webp', 'Boxes packed floor to ceiling in the back of a moving truck', '50% 40%'],
-    },
-    // On moving day, in order: [src, alt, focus, title, text]. The last frame gets the check mark.
-    frames: [
-      ['/assets/images/nyc-florida/settled-in.webp', 'Furniture wrapped in plastic and blankets in an empty living room', '50% 50%', 'Everything wrapped', 'Blankets, shrink and tape on every piece — not only the fragile ones.'],
-      ['/assets/images/lab/runner-hall.webp', 'Blue floor runner laid down a hallway', '50% 50%', 'Floors protected', 'Runners down and door jambs padded before a single box is carried.'],
-      ['/assets/images/nyc-florida/storage.webp', 'Boxes, bags and storage tubs ready to load', '40% 50%', 'Ready to load', 'Every box labelled by room and on the inventory before it goes on the truck.'],
-      ['/assets/images/nyc-florida/slide-2.webp', 'Two movers loading furniture into a truck from a garage', '50% 40%', 'Loaded by your crew', 'The crew that packs your home loads the truck, tier by tier, and strapped row by row.'],
-      ['/assets/images/nyc-florida/new-door.webp', 'Moving truck parked outside a house on delivery day', '74% 50%', 'At your new door', 'Unloaded into the rooms you point to, on the date in your contract.'],
-      ['/assets/images/nyc-florida/slide-3.webp', 'Moving truck ramp leading to the door of a new house', '30% 50%', 'Settled in', 'Beds built, furniture placed, and we don\'t leave until you\'ve signed off.'],
-    ],
+    ...SHARED,
     title: 'Long-Distance Moving Services | Packing & Storage — 50STATEMOVERS INC',
     description:
       'Long-distance moving services in all 48 states: packing, crating, furniture disassembly, climate-controlled storage and delivery, on one binding written estimate.',
@@ -175,6 +184,7 @@ const PAGES = [
   },
   {
     slug: 'cross-country-moving-services',
+    ...SHARED,
     title: 'Cross-Country Moving Services | Coast-to-Coast Movers — 50STATEMOVERS INC',
     description:
       'Cross-country moving services coast to coast across all 48 states. One licensed crew, one truck with no transfers, and one binding written estimate.',
@@ -230,6 +240,7 @@ const PAGES = [
   },
   {
     slug: 'interstate-moving-services',
+    ...SHARED,
     title: 'Interstate Moving Services | Licensed State-to-State Movers — 50STATEMOVERS INC',
     description:
       'Interstate moving services from a licensed carrier (USDOT 4575745). Moves across any state line in the lower 48, on one binding written estimate.',
