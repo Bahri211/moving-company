@@ -98,6 +98,7 @@ const PAGES = [
     slug: 'long-distance-moving-services',
     noTalk: true,
     noStoragePhoto: true,
+    photoOnlyLongDistance: true,
     // Photos in What we do: [template src, new src, alt, focus].
     photos: [
       ['/assets/images/lab/street-loading.webp', '/assets/images/nyc-florida/long-distance.webp', 'White box truck parked on a residential street', '50% 45%'],
@@ -330,35 +331,20 @@ const HERO_CSS = {
 
 // What we do cards that get a photo (tilePhotos): the photo on top, the text
 // on a plain panel below, so a busy photo never sits under the words.
-const SPLIT_CSS = `/* What we do: small cards with the photo on top and the text below it. */
-.tile-split { padding: 0; justify-content: flex-start; gap: 0; background: var(--surface); color: var(--ink); }
-/* The whole photo shows, fitted inside its box; a blurred copy of the same
-   photo fills the space either side, so portrait shots aren't cropped. */
-.tile-pic { position: relative; display: block; width: 100%; height: 58%; flex: none; overflow: hidden; background: var(--dark); }
+const SPLIT_CSS = `/* What we do: photo-only cards. The whole photo shows, fitted inside the
+   card, with a blurred copy of it filling any space at the sides; the text is
+   kept for screen readers only. Clicking still opens the card. */
+.tile-only { padding: 0; gap: 0; background: var(--dark); }
+.tile-pic { position: absolute; inset: 0; display: block; overflow: hidden; background: var(--dark); }
 .tile-pic::before { content: ""; position: absolute; inset: -20px; background: var(--pic) center / cover no-repeat; filter: blur(18px) brightness(0.85); transform: scale(1.1); }
-.tile-pic img { position: relative; display: block; width: 100%; height: 100%; object-fit: contain; }
-.tile-split h3 { margin: 1rem 1.4rem 0; font-size: 1.35rem; }
-.tile-split p { margin: 0.3rem 1.4rem 1.2rem; font-size: 0.9rem; color: var(--muted); }
-.tile-split .tile-arrow { background: rgba(255, 255, 255, 0.88); color: var(--ink); }
-.bento:has(.tile-split) { grid-template-rows: 250px 250px 360px; }
-@media (max-width: 1100px) {
-  .bento:has(.tile-split) { grid-template-rows: 220px 220px 290px 240px; }
-  /* The full-width card: photo on the left half, text beside it. */
-  .t-5.tile-split { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto 1fr; }
-  .t-5.tile-split .tile-pic { grid-row: 1 / -1; height: 100%; }
-  .t-5.tile-split h3 { grid-column: 2; grid-row: 2; margin: 0 1.6rem; align-self: end; }
-  .t-5.tile-split p { grid-column: 2; grid-row: 3; margin: 0.35rem 1.6rem 0; align-self: start; }
-}
+.tile-pic img { position: relative; display: block; width: 100%; height: 100%; object-fit: contain; transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.tile-only:hover .tile-pic img { transform: scale(1.03); }
+.tile-only h3, .tile-only p, .tile-only .tile-more, .tile-only .tile-tag { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.tile-only .tile-arrow { z-index: 1; background: rgba(255, 255, 255, 0.88); color: var(--ink); }
 @media (max-width: 768px) {
-  .bento:has(.tile-split) { grid-template-rows: none; }
-  .tile-split { min-height: 0 !important; }
-  .tile-pic { height: auto; aspect-ratio: 4 / 3; }
-  .tile-split h3 { margin: 0.75rem 0.9rem 0; font-size: 1.05rem !important; }
-  .tile-split p { margin: 0.25rem 0.9rem 0.95rem; font-size: 0.8rem !important; }
-  .t-5.tile-split { display: flex; }
-  .t-5.tile-split .tile-pic { height: auto; aspect-ratio: 4 / 3; }
-  .t-5.tile-split h3 { margin: 0.75rem 0.9rem 0; align-self: auto; }
-  .t-5.tile-split p { margin: 0.25rem 0.9rem 0.95rem; align-self: auto; }
+  .tile-only { min-height: 0 !important; aspect-ratio: 4 / 3; }
+  .t-1.tile-only { aspect-ratio: 16 / 10; }
+  .t-5.tile-only { aspect-ratio: 16 / 10; }
 }
 `;
 
@@ -514,15 +500,25 @@ function buildPage(page) {
     if (!html.includes(to)) throw new Error(`build-moving-services-pages: photo ${from} not found`);
   }
 
-  // ---- photos on the small What we do cards: the photo fills the top of the
-  // card on its own and the text sits on a plain panel below it, so busy
-  // photos stay readable; the outline number and the line drawing step aside
+  // ---- Long distance card: the photo alone fills the card, like the small
+  // cards below it (White glove keeps its text over the photo)
+  if (page.photoOnlyLongDistance) {
+    html = html.replace(/<a href="([^"]*)" class="tile tile-photo t-1 reveal">\n        <img src="([^"]*)" alt="([^"]*)" style="[^"]*"[^>]*\/>\n([\s\S]*?)<\/a>/, (m, href, src, alt, inner) => {
+      inner = inner.replace(/\s*<span class="tile-tag">[^<]*<\/span>/, '');
+      return `<a href="${href}" class="tile tile-split tile-only t-1 reveal">\n        <span class="tile-pic" style="--pic: url('${src}');"><img src="${src}" alt="${alt}" loading="lazy" /></span>\n${inner}</a>`;
+    });
+    if (!html.includes('tile-only t-1')) throw new Error('build-moving-services-pages: Long distance card not found');
+  }
+
+  // ---- photos on the small What we do cards: the photo alone fills the
+  // card, with no text on it or under it (the heading stays for screen
+  // readers); the outline number and the line drawing step aside
   for (const [svc, [src, alt, pos]] of Object.entries(page.tilePhotos || {})) {
     const re = new RegExp('<a href="#quote" class="tile tile-(?:dark|accent|plain) (t-[3-5]) reveal" data-service="' + svc + '" aria-haspopup="dialog">([\\s\\S]*?)</a>');
     if (!re.test(html)) throw new Error(`build-moving-services-pages: tile ${svc} not found`);
     html = html.replace(re, (m, t, inner) => {
       inner = inner.replace(/\s*<svg class="tile-mark"[\s\S]*?<\/svg>/, '').replace(/\s*<span class="big-num">[^<]*<\/span>/, '');
-      return `<a href="#quote" class="tile tile-split ${t} reveal" data-service="${svc}" aria-haspopup="dialog">\n        <span class="tile-pic" style="--pic: url('${src}');"><img src="${src}" alt="${alt}" loading="lazy" /></span>${inner}</a>`;
+      return `<a href="#quote" class="tile tile-split tile-only ${t} reveal" data-service="${svc}" aria-haspopup="dialog">\n        <span class="tile-pic" style="--pic: url('${src}');"><img src="${src}" alt="${alt}" loading="lazy" /></span>${inner}</a>`;
     });
   }
 
