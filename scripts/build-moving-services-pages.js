@@ -261,13 +261,13 @@ const PAGES = [
 
 /* ---------------------------------------------------------------- hero css */
 
-// Hero photos per page. The D.C. page shows a loaded truck in a driveway,
-// ramp down, one landscape photo for desktop and phone. On desktop the photo is pinned to
+// Hero photos per page. The D.C. truck crosses a Potomac bridge with the
+// Capitol and the Monument on the skyline. On desktop the photo is pinned to
 // the right edge at a set width, so on wider screens the truck moves clear of
 // the copy and the space on the left runs into the dark wash; and on desktop the photo stops above the quote form (as on
 // the NYC pages) so the whole truck shows.
 const HERO_CSS = {
-  dc: `/* D.C. hero: a loaded truck in a driveway, ramp down. */
+  dc: `/* D.C. hero: the truck on a Potomac bridge, the Capitol on the skyline. */
 @media (min-width: 769px) {
   .hero::before {
     background:
@@ -286,7 +286,7 @@ const HERO_CSS = {
         rgba(var(--wash), 0) 44vw,
         rgba(var(--wash), 0.88) 58vw,
         var(--dark) 72vw),
-      var(--dark) url('/assets/images/dc/hero-mobile.webp') 64% 0 / 135% auto no-repeat;
+      var(--dark) url('/assets/images/dc/hero-mobile.webp') center -64vw / 100% auto no-repeat;
   }
 }
 @media (max-width: 768px) and (max-height: 640px) {
@@ -298,7 +298,7 @@ const HERO_CSS = {
         rgba(var(--wash), 0) 38vw,
         rgba(var(--wash), 0.88) 52vw,
         var(--dark) 66vw),
-      var(--dark) url('/assets/images/dc/hero-mobile.webp') 64% 0 / 135% auto no-repeat;
+      var(--dark) url('/assets/images/dc/hero-mobile.webp') center -68vw / 100% auto no-repeat;
   }
 }
 `,
