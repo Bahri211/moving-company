@@ -1269,14 +1269,6 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
   .hero-slides i { transition: none; }
   .hero-slides i.is-zoom { animation: none; }
 }
-/* Storage card without its photo (until the new one arrives): the copy
-   takes the card's width and the space kept for the photo on phones goes. */
-.t-6.t-noimg > div { max-width: 52rem; }
-@media (max-width: 768px) { .t-6.t-noimg { padding-top: 1.6rem; } }
-/* A moving-day frame without its photo (until the new one arrives): a soft
-   panel with a faint check mark keeps the row even. */
-.frame-noimg { background: linear-gradient(160deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)); display: grid; place-items: center; }
-.frame-noimg::before { content: ""; width: 38%; aspect-ratio: 1; background: rgba(255, 255, 255, 0.12); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E") center / contain no-repeat; }
 /* Static service cards: no hover lift or zoom, since they don't open. */
 .tile-static, .tile-static:hover { transform: none; cursor: default; }
 .tile-static:hover img { transform: none; }
@@ -1501,6 +1493,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="hero">
   <div class="hero-slides" id="hero-slides" aria-hidden="true">
     <i class="is-on" style="--d: url('/assets/images/nyc-florida/slide-1.webp'); --m: url('/assets/images/nyc-florida/slide-1-m.webp'); --pd: 30% 70%; --pm: 60% 60%;"></i>
+    <i data-d="/assets/images/nyc-florida/slide-7.webp" data-m="/assets/images/nyc-florida/slide-7-m.webp" style="--pd: 40% 40%; --pm: 40% 45%;"></i>
     <i data-d="/assets/images/nyc-florida/slide-2.webp" data-m="/assets/images/nyc-florida/slide-2-m.webp" style="--pd: 50% 28%; --pm: 50% 55%;"></i>
     <i data-d="/assets/images/nyc-florida/slide-3.webp" data-m="/assets/images/nyc-florida/slide-3-m.webp" style="--pd: 30% 50%; --pm: 30% 50%;"></i>
     <i data-d="/assets/images/nyc-florida/slide-4.webp" data-m="/assets/images/nyc-florida/slide-4-m.webp" style="--pd: 50% 30%; --pm: 50% 40%;"></i>
@@ -1669,7 +1662,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h3>Packing &amp; crating</h3>
         <p>Museum-grade packing and custom crates built on site.</p>
       </a>
-      <a href="#quote" class="tile tile-plain t-6 t-noimg reveal" data-service="storage" aria-haspopup="dialog">
+      <a href="#quote" class="tile tile-plain t-6 reveal" data-service="storage" aria-haspopup="dialog">
+        <img src="/assets/images/nyc-florida/storage.webp" alt="Boxes and storage tubs stacked ready for storage" loading="lazy" />
         <span class="tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         <div><h3>Storage between homes</h3><p>Climate-controlled, monitored around the clock, inventoried and insured — for a week or a year.</p>
           <ul class="tile-feats"><li>Climate-controlled</li><li>Inventoried</li><li>Insured</li><li>Delivered when you say</li></ul></div>
@@ -1691,7 +1685,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h3>Everything wrapped</h3><p>Blankets, shrink and tape on every piece — not only the fragile ones.</p></article>
       <article class="frame"><div class="frame-img"><img src="/assets/images/nyc-florida/new-door.webp" alt="Moving truck parked outside a house on delivery day" loading="lazy" style="object-position: 74% 50%;" /><span class="frame-num">3</span></div>
         <h3>At your new door</h3><p>Unloaded into the rooms you point to, on the date in your contract.</p></article>
-      <article class="frame"><div class="frame-img frame-noimg"><span class="frame-num">✓</span></div>
+      <article class="frame"><div class="frame-img"><img src="/assets/images/nyc-florida/settled-in.webp" alt="Furniture wrapped in plastic and blankets in an empty living room" loading="lazy" /><span class="frame-num">✓</span></div>
         <h3>Settled in</h3><p>Beds built, furniture placed, and we don't leave until you've signed off.</p></article>
     </div>
     <div class="rail-bar reveal">
