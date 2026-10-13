@@ -332,28 +332,31 @@ const HERO_CSS = {
 // on a plain panel below, so a busy photo never sits under the words.
 const SPLIT_CSS = `/* What we do: small cards with the photo on top and the text below it. */
 .tile-split { padding: 0; justify-content: flex-start; gap: 0; background: var(--surface); color: var(--ink); }
-.tile-split img { display: block; width: 100%; height: 58%; flex: none; object-fit: cover; transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
-.tile-split:hover img { transform: scale(1.04); }
+/* The whole photo shows, fitted inside its box; a blurred copy of the same
+   photo fills the space either side, so portrait shots aren't cropped. */
+.tile-pic { position: relative; display: block; width: 100%; height: 58%; flex: none; overflow: hidden; background: var(--dark); }
+.tile-pic::before { content: ""; position: absolute; inset: -20px; background: var(--pic) center / cover no-repeat; filter: blur(18px) brightness(0.85); transform: scale(1.1); }
+.tile-pic img { position: relative; display: block; width: 100%; height: 100%; object-fit: contain; }
 .tile-split h3 { margin: 1rem 1.4rem 0; font-size: 1.35rem; }
 .tile-split p { margin: 0.3rem 1.4rem 1.2rem; font-size: 0.9rem; color: var(--muted); }
 .tile-split .tile-arrow { background: rgba(255, 255, 255, 0.88); color: var(--ink); }
-.bento:has(.tile-split) { grid-template-rows: 250px 250px 300px; }
+.bento:has(.tile-split) { grid-template-rows: 250px 250px 360px; }
 @media (max-width: 1100px) {
   .bento:has(.tile-split) { grid-template-rows: 220px 220px 290px 240px; }
   /* The full-width card: photo on the left half, text beside it. */
   .t-5.tile-split { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto 1fr; }
-  .t-5.tile-split img { grid-row: 1 / -1; height: 100%; }
+  .t-5.tile-split .tile-pic { grid-row: 1 / -1; height: 100%; }
   .t-5.tile-split h3 { grid-column: 2; grid-row: 2; margin: 0 1.6rem; align-self: end; }
   .t-5.tile-split p { grid-column: 2; grid-row: 3; margin: 0.35rem 1.6rem 0; align-self: start; }
 }
 @media (max-width: 768px) {
   .bento:has(.tile-split) { grid-template-rows: none; }
   .tile-split { min-height: 0 !important; }
-  .tile-split img { height: auto; aspect-ratio: 4 / 3; }
+  .tile-pic { height: auto; aspect-ratio: 4 / 3; }
   .tile-split h3 { margin: 0.75rem 0.9rem 0; font-size: 1.05rem !important; }
   .tile-split p { margin: 0.25rem 0.9rem 0.95rem; font-size: 0.8rem !important; }
   .t-5.tile-split { display: flex; }
-  .t-5.tile-split img { height: auto; aspect-ratio: 16 / 9; }
+  .t-5.tile-split .tile-pic { height: auto; aspect-ratio: 4 / 3; }
   .t-5.tile-split h3 { margin: 0.75rem 0.9rem 0; align-self: auto; }
   .t-5.tile-split p { margin: 0.25rem 0.9rem 0.95rem; align-self: auto; }
 }
@@ -511,7 +514,7 @@ function buildPage(page) {
     if (!re.test(html)) throw new Error(`build-moving-services-pages: tile ${svc} not found`);
     html = html.replace(re, (m, t, inner) => {
       inner = inner.replace(/\s*<svg class="tile-mark"[\s\S]*?<\/svg>/, '').replace(/\s*<span class="big-num">[^<]*<\/span>/, '');
-      return `<a href="#quote" class="tile tile-split ${t} reveal" data-service="${svc}" aria-haspopup="dialog">\n        <img src="${src}" alt="${alt}" loading="lazy" style="object-position: ${pos};" />${inner}</a>`;
+      return `<a href="#quote" class="tile tile-split ${t} reveal" data-service="${svc}" aria-haspopup="dialog">\n        <span class="tile-pic" style="--pic: url('${src}');"><img src="${src}" alt="${alt}" loading="lazy" /></span>${inner}</a>`;
     });
   }
 
