@@ -1265,6 +1265,23 @@ details[open] p { animation: faqIn 0.4s var(--ease); }
       var(--dark) url('/assets/images/dc/hero-mobile.webp') center -68vw / 100% auto no-repeat;
   }
 }
+/* Quote form over a photo (trial). */
+.quote-card {
+  background: linear-gradient(180deg, rgba(var(--wash), 0.74) 0%, rgba(var(--wash), 0.86) 100%), var(--dark) url('/assets/images/dc/form-bg.webp') center 58% / cover no-repeat;
+  color: #fff;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14) inset, 0 2px 6px rgba(0, 0, 0, 0.12), 0 40px 80px -30px rgba(0, 0, 0, 0.6);
+}
+.quote-card .qhead { border-bottom-color: rgba(255, 255, 255, 0.16); }
+.quote-card .qh-time, .quote-card .qh-steps { color: rgba(255, 255, 255, 0.72); }
+.quote-card .qh-steps li.is-on { color: #fff; }
+.quote-card .qh-steps li + li::before { background: rgba(255, 255, 255, 0.25); }
+.quote-card .qh-steps i { background: rgba(255, 255, 255, 0.16); color: #fff; }
+.quote-card .qh-steps li.is-on i { background: var(--accent); color: var(--on-accent); }
+.quote-card .qs2-head span, .quote-card .consent { color: rgba(255, 255, 255, 0.8); }
+.quote-card .consent-toggle { color: #fff; }
+.quote-card .consent.is-error { color: #ffb4ab; }
+.quote-card .q-error { color: #ffb4ab; }
+.quote-card .field { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18); }
 /* Static service cards: no hover lift or zoom, since they don't open. */
 .tile-static, .tile-static:hover { transform: none; cursor: default; }
 .tile-static:hover img { transform: none; }
